@@ -1,42 +1,40 @@
-
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/Order');
-const Product = require('../models/Product');
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-router.post('/', async (req, res) => {
-    const newOrder = new Order({ ...req.body, orderId: 'INV-' + Date.now() });
-    await newOrder.save();
-    // Potong Stok
-    for (const item of req.body.items) {
-        await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.qty } });
-    }
-    res.json({ success: true, order: newOrder });
+const JWT_SECRET = process.env.JWT_SECRET || "ALFI123";
+
+// REGISTER
+router.post('/register', async (req, res) => {
+    try {
+        const { username, email, password, role, adminKey } = req.body;
+        const exists = await User.findOne({ email });
+        if (exists) return res.status(400).json({ success: false, message: "Email sudah terdaftar!" });
+
+        const hashed = await bcrypt.hash(password, 10);
+        let finalRole = role;
+        if (adminKey === "ALFI_ADMIN_PRO") finalRole = 'admin';
+
+        const newUser = new User({ username, email, password: hashed, role: finalRole });
+        await newUser.save();
+        res.json({ success: true, message: "Berhasil Daftar!" });
+    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });
 
-router.get('/history/:email', async (req, res) => {
-    const data = await Order.find({ buyerEmail: req.params.email }).sort({createdAt: -1});
-    res.json(data);
-});
+// LOGIN
+router.post('/login', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) return res.status(400).json({ success: false, message: "Email tidak ditemukan!" });
 
-router.get('/seller/:id', async (req, res) => {
-    const data = await Order.find({ sellerId: req.params.id }).sort({createdAt: -1});
-    res.json(data);
-});
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) return res.status(400).json({ success: false, message: "Password salah!" });
 
-router.get('/all', async (req, res) => {
-    const data = await Order.find().sort({createdAt: -1});
-    res.json(data);
-});
-
-router.patch('/:id/status', async (req, res) => {
-    const updated = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json({ success: true, order: updated });
-});
-
-router.delete('/:id', async (req, res) => {
-    await Order.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
+        const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
+        res.json({ success: true, token, user: { id: user._id, username: user.username, role: user.role, email: user.email } });
+    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });
 
 module.exports = router;
