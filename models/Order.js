@@ -1,18 +1,9 @@
 const mongoose = require('mongoose');
 const OrderSchema = new mongoose.Schema({
-    orderId: String,
-    buyerEmail: String,
-    sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    items: Array,
-    total: Number,
-    paymentProof: String,
-    packingProof: String, // Bukti video/foto dari Seller
-    unboxingProof: String, // Bukti video/foto dari Buyer
-    status: { 
-        type: String, 
-        enum: ['Waiting_Payment', 'Escrow_Held', 'Seller_Packing', 'Shipped', 'Unboxing_Check', 'Completed', 'Cancelled'],
-        default: 'Waiting_Payment' 
-    },
+    orderId: String, buyerEmail: String, buyerName: String, sellerId: String,
+    items: Array, total: Number, paymentProof: String, packingProof: String, unboxingProof: String,
+    status: { type: String, default: 'Waiting_Payment' }, // Waiting_Payment, Escrow_Held, Shipped, Complained, Completed, Cancelled
+    complainReason: String, complainVideo: String,
     createdAt: { type: Date, default: Date.now }
 });
 module.exports = mongoose.model('Order', OrderSchema);
