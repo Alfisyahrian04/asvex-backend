@@ -3,46 +3,39 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 
-// 1. BUAT PESANAN & POTONG STOK
 router.post('/', async (req, res) => {
-    try {
-        const { items } = req.body;
-        // Validasi Stok
-        for (const item of items) {
-            const p = await Product.findById(item._id);
-            if (!p || p.stock < item.qty) return res.status(400).json({ success: false, message: `Stok ${p.name} tidak cukup!` });
-        }
-        // Simpan Order
-        const newOrder = new Order({ ...req.body, orderId: 'INV-' + Date.now(), status: 'Pending' });
-        await newOrder.save();
-        // POTONG STOK
-        for (const item of items) {
-            await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.qty } });
-        }
-        res.json({ success: true, order: newOrder });
-    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+    const newOrder = new Order({ ...req.body, orderId: 'INV-' + Date.now() });
+    await newOrder.save();
+    // Potong Stok
+    for (const item of req.body.items) {
+        await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.qty } });
+    }
+    res.json({ success: true, order: newOrder });
 });
 
-// 2. AMBIL SEMUA PESANAN
-router.get('/', async (req, res) => {
-    const orders = await Order.find().sort({ createdAt: -1 });
-    res.json(orders);
+router.get('/history/:email', async (req, res) => {
+    const data = await Order.find({ buyerEmail: req.params.email }).sort({createdAt: -1});
+    res.json(data);
 });
 
-// 3. UPDATE STATUS (PROSES/KIRIM/SELESAI)
+router.get('/seller/:id', async (req, res) => {
+    const data = await Order.find({ sellerId: req.params.id }).sort({createdAt: -1});
+    res.json(data);
+});
+
+router.get('/all', async (req, res) => {
+    const data = await Order.find().sort({createdAt: -1});
+    res.json(data);
+});
+
 router.patch('/:id/status', async (req, res) => {
-    try {
-        const updated = await Order.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
-        res.json({ success: true, order: updated });
-    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+    const updated = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ success: true, order: updated });
 });
 
-// 4. HAPUS / CANCEL PESANAN
 router.delete('/:id', async (req, res) => {
-    try {
-        await Order.findByIdAndDelete(req.params.id);
-        res.json({ success: true, message: "Pesanan dihapus" });
-    } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+    await Order.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
 });
 
 module.exports = router;
