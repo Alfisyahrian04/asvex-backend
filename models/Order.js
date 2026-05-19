@@ -1,41 +1,18 @@
 const mongoose = require('mongoose');
-
 const OrderSchema = new mongoose.Schema({
-    orderId: { 
-        type: String, 
-        required: true 
-    },
-    customerName: { 
-        type: String, 
-        required: true 
-    },
-    address: { 
-        type: String, 
-        required: true 
-    },
-    items: { 
-        type: Array, 
-        required: true 
-    }, // Menyimpan daftar HP yang dibeli
-    total: { 
-        type: Number, 
-        required: true 
-    },
-    paymentMethod: { 
-        type: String, 
-        default: 'Transfer Bank' 
-    },
-    paymentProof: { 
-        type: String 
-    }, // TEMPAT MENYIMPAN FOTO BUKTI TRANSFER (BASE64)
+    orderId: String,
+    buyerEmail: String,
+    sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    items: Array,
+    total: Number,
+    paymentProof: String,
+    packingProof: String, // Bukti video/foto dari Seller
+    unboxingProof: String, // Bukti video/foto dari Buyer
     status: { 
         type: String, 
-        default: 'Pending' 
+        enum: ['Waiting_Payment', 'Escrow_Held', 'Seller_Packing', 'Shipped', 'Unboxing_Check', 'Completed', 'Cancelled'],
+        default: 'Waiting_Payment' 
     },
-    createdAt: { 
-        type: Date, 
-        default: Date.now 
-    }
+    createdAt: { type: Date, default: Date.now }
 });
-
 module.exports = mongoose.model('Order', OrderSchema);
