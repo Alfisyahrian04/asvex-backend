@@ -9,16 +9,17 @@ const UserSchema = new mongoose.Schema({
     
     // Simpan Info Bank & Wallet secara Terpisah (Poin 6)
     bankInfo: {
-        provider: { type: String, default: null }, // BCA, Mandiri, dll
+        provider: { type: String, default: null }, // BCA, Mandiri, BRI, BNI
         accNumber: { type: String, default: null },
         accName: { type: String, default: null }
     },
     walletInfo: {
-        provider: { type: String, default: null }, // Dana, Gopay, dll
+        provider: { type: String, default: null }, // Dana, Gopay, OVO
         phone: { type: String, default: null },
         accName: { type: String, default: null }
     },
     
+    // Fitur Ganti Password (Poin 10)
     otp: { type: String, default: null },
     otpExpires: { type: Date, default: null }
 });
