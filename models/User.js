@@ -4,7 +4,13 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['buyer', 'seller', 'admin'], default: 'buyer' },
-    otp: { type: String, default: null },
-    otpExpires: { type: Date, default: null }
+    status: { type: String, enum: ['active', 'banned'], default: 'active' },
+    bankAccount: {
+        provider: String, // BCA, Mandiri, Dana, etc
+        accountNumber: String,
+        accountName: String
+    },
+    otp: String,
+    otpExpires: Date
 });
 module.exports = mongoose.model('User', UserSchema);
