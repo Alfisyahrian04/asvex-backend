@@ -15,11 +15,10 @@ router.post('/', async (req, res) => {
 router.patch('/:id/complete', async (req, res) => {
     const { rating, comment } = req.body;
     const order = await Order.findByIdAndUpdate(req.params.id, { 
-        status: 'Completed', 
+        status: 'Completed', isRated: true,
         review: { rating, comment, date: new Date() } 
     }, { new: true });
     
-    // Update Akumulasi Rating Product
     for (const item of order.items) {
         const p = await Product.findById(item._id);
         const newTotal = p.totalReviews + 1;
@@ -31,6 +30,11 @@ router.patch('/:id/complete', async (req, res) => {
 
 router.get('/user/:id', async (req, res) => {
     const data = await Order.find({ buyerId: req.params.id }).sort({createdAt: -1});
+    res.json(data);
+});
+
+router.get('/seller/:id', async (req, res) => {
+    const data = await Order.find({ sellerId: req.params.id }).sort({createdAt: -1});
     res.json(data);
 });
 
