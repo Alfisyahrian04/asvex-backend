@@ -4,10 +4,9 @@ const ProductSchema = new mongoose.Schema({
     sellerName: String,
     name: String, brand: String, price: Number, category: String, image: String, stock: Number,
     description: String,
-    specs: {
-        ram: String, storage: String, processor: String, 
-        camFront: String, camBack: String, battery: String
-    },
-    variants: { type: Array, default: [] } // Array of colors: ["Black", "Gold"]
+    specs: { ram: String, internal: String, processor: String, camFront: String, camBack: String, battery: String },
+    variants: Array, // ["Black", "Gold"]
+    avgRating: { type: Number, default: 0 },
+    totalReviews: { type: Number, default: 0 }
 });
 module.exports = mongoose.model('Product', ProductSchema);
