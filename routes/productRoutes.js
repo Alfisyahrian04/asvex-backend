@@ -1,27 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const { protect, authorize } = require('../middleware/auth');
 
+// 1. Get All Products (Untuk Buyer)
 router.get('/', async (req, res) => {
-    const data = await Product.find().sort({createdAt: -1});
-    res.json(data);
+    const products = await Product.find({ stock: { $gt: 0 } }).sort({ createdAt: -1 });
+    res.json(products);
 });
 
-router.post('/', async (req, res) => {
+// 2. Upload Produk (Hanya Seller)
+router.post('/', protect, authorize('seller', 'admin'), async (req, res) => {
     try {
-        const p = new Product(req.body);
-        await p.save();
-        res.json({ success: true, product: p });
-    } catch (e) { res.status(500).json({ message: e.message }); }
+        const { price } = req.body;
+        // HITUNG PPN 11% OTOMATIS
+        const tax = price * 0.11;
+        const priceWithTax = price + tax;
+
+        const product = new Product({
+            ...req.body,
+            sellerId: req.user._id,
+            sellerName: req.user.username,
+            priceWithTax: Math.round(priceWithTax)
+        });
+
+        await product.save();
+        res.status(201).json({ success: true, product });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
-router.patch('/:id/status', async (req, res) => {
-    const data = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true});
-    res.json({ success: true, product: data });
-});
-
-router.delete('/:id', async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id);
+// 3. Update Stok (Hanya Seller Pemilik Produk)
+router.patch('/:id/stock', protect, authorize('seller', 'admin'), async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (product.sellerId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+        return res.status(403).json({ message: "Bukan produk Anda!" });
+    }
+    product.stock = req.body.stock;
+    await product.save();
     res.json({ success: true });
 });
 
