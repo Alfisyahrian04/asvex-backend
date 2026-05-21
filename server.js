@@ -1,25 +1,25 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+const http = require('http');
+const { Server } = require('socket.io');
 
-const app = express();
-app.use(cors());
-// Limit besar untuk menampung bukti transfer & video unboxing (Base64)
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ MongoDB Connected Successfully"))
-    .catch(err => console.log("❌ MongoDB Error:", err));
+io.on('connection', (socket) => {
+    console.log('User Connected: ' + socket.id);
 
-// Route Setup
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/products', require('./routes/productRoutes'));
-app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/chats', require('./routes/chatRoutes'));
+    // Join Room Chat
+    socket.on('join_chat', (roomId) => {
+        socket.join(roomId);
+    });
 
-app.get('/', (req, res) => res.send("AL GADGET PRO API - ONLINE 🚀"));
+    // Kirim Pesan Realtime
+    socket.on('send_message', (data) => {
+        // data: { roomId, message, senderName }
+        socket.to(data.roomId).emit('receive_message', data);
+    });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    socket.on('disconnect', () => console.log('User Disconnected'));
+});
+
+// Gunakan server.listen sebagai ganti app.listen
+server.listen(PORT, () => console.log(`🚀 Server Ultimate Running on ${PORT}`));
