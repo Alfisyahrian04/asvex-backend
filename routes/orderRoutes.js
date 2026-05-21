@@ -1,164 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
-const Product = require('../models/Product');
+const User = require('../models/User');
+const { protect, authorize } = require('../middleware/auth');
 
-// ======================================================
-// 1. ENDPOINT: BUAT PESANAN BARU (CHECKOUT BUYER)
-// ======================================================
-router.post('/', async (req, res) => {
+router.post('/', protect, async (req, res) => {
     try {
-        const { items } = req.body;
+        const { items, total } = req.body;
+        
+        // HITUNG POTONGAN ADMIN 3%
+        const adminFee = total * 0.03;
+        const sellerIncome = total - adminFee;
 
-        // --- PROTEKSI STOK MINUS (Poin 11 & 13) ---
-        for (const item of items) {
-            const p = await Product.findById(item._id);
-            if (!p || p.stock < item.qty) {
-                return res.status(400).json({ 
-                    success: false, 
-                    message: `Stok ${item.name} tidak mencukupi atau sudah habis!` 
-                });
-            }
-        }
-
-        // Simpan pesanan ke database
         const newOrder = new Order({
             ...req.body,
-            status: 'Waiting_Payment'
-        });
-        const savedOrder = await newOrder.save();
-
-        // --- POTONG STOK OTOMATIS (Poin 13) ---
-        for (const item of items) {
-            await Product.findByIdAndUpdate(item._id, { 
-                $inc: { stock: -item.qty } 
-            });
-        }
-
-        res.status(201).json({ success: true, order: savedOrder });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// ======================================================
-// 2. ENDPOINT: SELESAIKAN ORDER & RATING (POIN 3 & 9)
-// ======================================================
-router.patch('/:id/complete', async (req, res) => {
-    try {
-        const { score, comment } = req.body;
-        const order = await Order.findById(req.params.id);
-
-        if (!order) return res.status(404).json({ message: "Order tidak ditemukan" });
-        if (order.isRated) return res.status(400).json({ message: "Anda sudah memberikan rating!" });
-
-        // Update Status Order ke Completed
-        const updatedOrder = await Order.findByIdAndUpdate(req.params.id, { 
-            status: 'Completed', 
-            isRated: true,
-            review: { score: Number(score), comment, date: new Date() } 
-        }, { new: true });
-        
-        // --- UPDATE AKUMULASI RATING PRODUK (Poin 3) ---
-        for (const item of updatedOrder.items) {
-            const p = await Product.findById(item._id);
-            if (p) {
-                const newTotalReviews = (p.totalReviews || 0) + 1;
-                const newAvgRating = (((p.avgRating || 0) * (p.totalReviews || 0)) + Number(score)) / newTotalReviews;
-                
-                await Product.findByIdAndUpdate(item._id, { 
-                    avgRating: newAvgRating, 
-                    totalReviews: newTotalReviews 
-                });
-            }
-        }
-
-        res.json({ success: true, order: updatedOrder });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// ======================================================
-// 3. ENDPOINT: STATS PENDAPATAN SELLER (POIN 5 - GOJEK STYLE)
-// ======================================================
-router.get('/seller-stats/:id', async (req, res) => {
-    try {
-        // Hanya menghitung dana yang sudah lunas/cair ke seller
-        const orders = await Order.find({ 
-            sellerId: req.params.id, 
-            status: { $in: ['Completed', 'Funds_Released'] } 
+            orderId: 'INV-' + Date.now(),
+            buyerId: req.user._id,
+            buyerName: req.user.username,
+            adminFee: Math.round(adminFee),
+            sellerIncome: Math.round(sellerIncome)
         });
 
-        const now = new Date();
-        const startDay = new Date(now.setHours(0,0,0,0));
-        const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-        const daily = orders.filter(o => o.createdAt >= startDay).reduce((a, b) => a + b.total, 0);
-        const monthly = orders.filter(o => o.createdAt >= startMonth).reduce((a, b) => a + b.total, 0);
-        const totalAllTime = orders.reduce((a, b) => a + b.total, 0);
-
-        res.json({ 
-            daily, 
-            monthly, 
-            total: totalAllTime, 
-            count: orders.length 
-        });
+        await newOrder.save();
+        res.json({ success: true, order: newOrder });
     } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        res.status(500).json(err);
     }
 });
 
-// ======================================================
-// 4. ENDPOINT: AMBIL DATA (BUYER, SELLER, ADMIN)
-// ======================================================
+// CAIRKAN DANA KE SELLER (Hanya Admin setelah status Completed)
+router.post('/:id/release-funds', protect, authorize('admin'), async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order.status !== 'Completed') return res.status(400).json({ message: "Order belum selesai!" });
 
-// Ambil History Pesanan Buyer (History Fix)
-router.get('/user/:id', async (req, res) => {
-    try {
-        const orders = await Order.find({ buyerId: req.params.id }).sort({ createdAt: -1 });
-        res.json(orders);
-    } catch (err) { res.status(500).json([]); }
-});
-
-// Ambil Pesanan Masuk Seller
-router.get('/seller/:id', async (req, res) => {
-    try {
-        const orders = await Order.find({ sellerId: req.params.id }).sort({ createdAt: -1 });
-        res.json(orders);
-    } catch (err) { res.status(500).json([]); }
-});
-
-// Ambil Semua Pesanan (Admin)
-router.get('/all', async (req, res) => {
-    try {
-        const orders = await Order.find().sort({ createdAt: -1 });
-        res.json(orders);
-    } catch (err) { res.status(500).json([]); }
-});
-
-// ======================================================
-// 5. ENDPOINT: UPDATE STATUS & DELETE (ADMIN/SELLER)
-// ======================================================
-
-// Update Status (Proses, Kirim, Upload Bukti Cair, dll)
-router.patch('/:id/status', async (req, res) => {
-    try {
-        const updated = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json({ success: true, order: updated });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// Hapus/Cancel Pesanan (Poin 13)
-router.delete('/:id', async (req, res) => {
-    try {
-        await Order.findByIdAndDelete(req.params.id);
-        res.json({ success: true, message: "Data pesanan berhasil dihapus" });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
+    // Tambah Saldo Seller
+    const seller = await User.findById(order.sellerId);
+    seller.balance += order.sellerIncome;
+    
+    order.status = 'Completed'; // Final Status
+    await seller.save();
+    await order.save();
+    
+    res.json({ success: true, message: "Dana berhasil dicairkan ke Seller" });
 });
 
 module.exports = router;
