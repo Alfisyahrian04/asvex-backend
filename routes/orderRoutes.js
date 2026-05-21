@@ -1,47 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
-const User = require('../models/User');
-const { protect, authorize } = require('../middleware/auth');
+const Product = require('../models/Product');
 
-router.post('/', protect, async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const { items, total } = req.body;
-        
-        // HITUNG POTONGAN ADMIN 3%
-        const adminFee = total * 0.03;
+        const { total, items } = req.body;
+        const adminFee = Math.round(total * 0.03); // Potongan 3%
         const sellerIncome = total - adminFee;
-
-        const newOrder = new Order({
-            ...req.body,
-            orderId: 'INV-' + Date.now(),
-            buyerId: req.user._id,
-            buyerName: req.user.username,
-            adminFee: Math.round(adminFee),
-            sellerIncome: Math.round(sellerIncome)
-        });
-
+        const newOrder = new Order({ ...req.body, adminFee, sellerIncome, orderId: 'INV-' + Date.now() });
         await newOrder.save();
+        for (const item of items) { await Product.findByIdAndUpdate(item._id, { $inc: { stock: -item.qty } }); }
         res.json({ success: true, order: newOrder });
-    } catch (err) {
-        res.status(500).json(err);
-    }
+    } catch (e) { res.status(500).json({ message: e.message }); }
 });
 
-// CAIRKAN DANA KE SELLER (Hanya Admin setelah status Completed)
-router.post('/:id/release-funds', protect, authorize('admin'), async (req, res) => {
-    const order = await Order.findById(req.params.id);
-    if (order.status !== 'Completed') return res.status(400).json({ message: "Order belum selesai!" });
-
-    // Tambah Saldo Seller
-    const seller = await User.findById(order.sellerId);
-    seller.balance += order.sellerIncome;
-    
-    order.status = 'Completed'; // Final Status
-    await seller.save();
-    await order.save();
-    
-    res.json({ success: true, message: "Dana berhasil dicairkan ke Seller" });
+router.get('/user/:id', async (req, res) => res.json(await Order.find({ buyerId: req.params.id }).sort({createdAt:-1})));
+router.get('/all', async (req, res) => res.json(await Order.find().sort({createdAt:-1})));
+router.patch('/:id/status', async (req, res) => {
+    const o = await Order.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    res.json({ success: true, order: o });
 });
-
 module.exports = router;
