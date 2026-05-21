@@ -1,27 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const Chat = require('../models/Chat');
+const Chat = require('../models/Chat'); // Buat model Chat: senderId, receiverId, roomId, message
+const { protect } = require('../middleware/auth');
 
-router.post('/', async (req, res) => {
-    const c = new Chat(req.body);
-    await c.save();
-    res.json(c);
+// 1. Ambil History Chat berdasarkan Room
+router.get('/:roomId', protect, async (req, res) => {
+    const messages = await Chat.find({ roomId: req.params.roomId }).sort({ createdAt: 1 });
+    res.json(messages);
 });
 
-router.get('/:roomId', async (req, res) => {
-    const data = await Chat.find({ roomId: req.params.roomId }).sort({createdAt: 1});
-    res.json(data);
-});
-
-router.get('/rooms/:userId', async (req, res) => {
-    const data = await Chat.find({ $or: [{senderId: req.params.userId}, {receiverId: req.params.userId}] }).sort({createdAt: -1});
-    const roomMap = new Map();
-    data.forEach(item => {
-        if (!roomMap.has(item.roomId)) {
-            roomMap.set(item.roomId, item);
-        }
+// 2. Simpan Chat Baru
+router.post('/', protect, async (req, res) => {
+    const { roomId, receiverId, message } = req.body;
+    const chat = new Chat({
+        roomId,
+        senderId: req.user._id,
+        senderName: req.user.username,
+        receiverId,
+        message
     });
-    res.json(Array.from(roomMap.values()));
+    await chat.save();
+    res.json(chat);
 });
 
 module.exports = router;
