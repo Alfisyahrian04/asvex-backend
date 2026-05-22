@@ -1,6 +1,3 @@
-const BASE_URL =
-'https://asvex-backend-production.up.railway.app/api/v1';
-
 const token =
 localStorage.getItem('token');
 
@@ -16,22 +13,39 @@ JSON.parse(
 localStorage.getItem('user')
 );
 
-const usernameEl =
+const username =
 document.getElementById(
 'username'
 );
 
-if(usernameEl){
+if(user){
 
-usernameEl.innerText =
-user?.username || 'User';
+username.innerText =
+user.username;
 
 }
 
-const productContainer =
+const productList =
 document.getElementById(
 'product-list'
 );
+
+const cartCount =
+document.getElementById(
+'cart-count'
+);
+
+function updateCartCount(){
+
+const cart =
+JSON.parse(
+localStorage.getItem('cart')
+) || [];
+
+cartCount.innerText =
+cart.length;
+
+}
 
 async function loadProducts(){
 
@@ -39,43 +53,20 @@ try{
 
 const response =
 await fetch(
-`${BASE_URL}/products`
+'https://asvex-backend-production.up.railway.app/api/products'
 );
 
 const data =
 await response.json();
 
-if(!response.ok){
-
-throw new Error();
-
-}
-
-renderProducts(
-data.products || data
-);
-
-}catch(err){
-
-console.log(err);
-
-productContainer.innerHTML = `
-<div class="empty-product">
-Produk tidak tersedia
-</div>
-`;
-
-}
-
-}
-
-function renderProducts(products){
+const products =
+data.products || data;
 
 if(!products.length){
 
-productContainer.innerHTML = `
+productList.innerHTML = `
 <div class="empty-product">
-Belum ada produk
+Produk kosong
 </div>
 `;
 
@@ -83,27 +74,24 @@ return;
 
 }
 
-productContainer.innerHTML =
+productList.innerHTML =
 products.map(product=>`
 
 <div class="product-card">
 
-<div class="product-image">
-
 <img
 src="${product.image}"
 alt="${product.name}"
+class="product-image"
 />
 
-</div>
-
-<div class="product-info">
+<div class="product-content">
 
 <h3>
 ${product.name}
 </h3>
 
-<p class="price">
+<p class="product-price">
 Rp ${Number(product.price)
 .toLocaleString('id-ID')}
 </p>
@@ -113,7 +101,7 @@ class="buy-btn"
 onclick='addToCart(${JSON.stringify(product)})'
 >
 
-+ Keranjang
+Tambah Keranjang
 
 </button>
 
@@ -123,9 +111,19 @@ onclick='addToCart(${JSON.stringify(product)})'
 
 `).join('');
 
+}catch(error){
+
+productList.innerHTML = `
+<div class="empty-product">
+Gagal memuat produk
+</div>
+`;
+
 }
 
-function addToCart(product){
+}
+
+window.addToCart = function(product){
 
 let cart =
 JSON.parse(
@@ -142,32 +140,10 @@ JSON.stringify(cart)
 updateCartCount();
 
 alert(
-'Produk ditambahkan'
+'Produk masuk keranjang'
 );
 
-}
-
-function updateCartCount(){
-
-const cart =
-JSON.parse(
-localStorage.getItem('cart')
-) || [];
-
-const cartCount =
-document.getElementById(
-'cart-count'
-);
-
-if(cartCount){
-
-cartCount.innerText =
-cart.length;
-
-}
-
-}
+};
 
 updateCartCount();
-
 loadProducts();
