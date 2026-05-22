@@ -1,51 +1,66 @@
 export default function productCard(
-product
+  product
 ) {
 
-  const image =
-product.images?.[0]
-||
-'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop';
   return `
 
-    <div
-      class="product-card"
-      onclick="
-        window.location.href=
-        'product.html?id=${product._id}'
-      "
-    >
+  <div class="product-card">
 
-      <div class="product-image">
+    <div class="product-image-wrap">
 
-        <img
-          src="${image}"
-          alt="${product.name}"
-        />
+      <img
+        src="${product.image}"
+        class="product-image"
+      />
 
-      </div>
-
-      <div class="product-info">
-
-        <div class="product-title">
-          ${product.name}
-        </div>
-
-        <div class="product-price">
-          Rp ${Number(
-            product.price
-          ).toLocaleString()}
-        </div>
-
-        <div class="product-meta">
-
-          ⭐ 4.9 • Terjual 120
-
-        </div>
-
+      <div class="product-badge">
+        HOT
       </div>
 
     </div>
+
+    <div class="product-content">
+
+      <div class="product-category">
+
+        ${product.category || 'SMARTPHONE'}
+
+      </div>
+
+      <h3 class="product-title">
+
+        ${product.name}
+
+      </h3>
+
+      <div class="product-price">
+
+        Rp ${Number(
+          product.price
+        ).toLocaleString('id-ID')}
+
+      </div>
+
+      <div class="product-meta">
+
+        ⭐ 4.9 • Terjual 120
+
+      </div>
+
+      <button
+        class="buy-btn"
+        onclick='addToCart(
+          ${JSON.stringify(product)}
+        )'
+      >
+
+        + Keranjang
+
+      </button>
+
+    </div>
+
+  </div>
 
   `;
 
