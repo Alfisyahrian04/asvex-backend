@@ -3,174 +3,279 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+<meta charset="UTF-8" />
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-  <title>
-    Keranjang - AL Gadget
-  </title>
+<title>
+Keranjang
+</title>
 
-  <!-- FONT AWESOME -->
+<link
+rel="stylesheet"
+href="css/style.css"
+/>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="./css/style.css"
-  />
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
 
 </head>
 
 <body>
 
-  <!-- TOPBAR -->
+<header class="topbar">
 
-  <div class="topbar">
+<h1 style="font-size:2.3rem;font-weight:900;color:#2563eb;font-style:italic;">
+Keranjang
+</h1>
 
-    <div class="logo">
-      Keranjang
-    </div>
+</header>
 
-  </div>
+<main class="container">
 
-  <!-- CONTENT -->
+<div
+class="cart-list"
+id="cart-container"
+>
 
-  <div class="container">
+</div>
 
-    <div
-      class="cart-list"
-      id="cart-items"
-    >
+</main>
 
-      <!-- PRODUCT -->
+<div class="checkout-bar">
 
-      <div class="cart-card">
+<p>Total</p>
 
-        <img
-          src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=1200&auto=format&fit=crop"
-          alt=""
-        />
+<h2 id="total-price">
+Rp 0
+</h2>
 
-        <div class="cart-info">
+<button
+class="checkout-btn"
+onclick="checkout()"
+>
 
-          <div>
+<i class="fa-solid fa-bag-shopping"></i>
+Checkout
 
-            <h3 class="cart-title">
-              iPhone 17 Pro max
-            </h3>
+</button>
 
-            <p class="cart-price">
-              Rp 34.749.000
-            </p>
+</div>
 
-          </div>
+<nav class="bottom-nav">
 
-          <button class="remove-btn">
+<a
+href="index.html"
+class="nav-item"
+>
 
-            <i class="fa-solid fa-trash"></i>
+<i class="fa-solid fa-house"></i>
 
-            Hapus
+<span>
+Home
+</span>
 
-          </button>
+</a>
 
-        </div>
+<a
+href="wishlist.html"
+class="nav-item"
+>
 
-      </div>
+<i class="fa-solid fa-heart"></i>
 
-    </div>
+<span>
+Wishlist
+</span>
 
-  </div>
+</a>
 
-  <!-- CHECKOUT -->
+<a
+href="orders.html"
+class="nav-item"
+>
 
-  <div class="checkout-bar">
+<i class="fa-solid fa-receipt"></i>
 
-    <div class="checkout-total">
+<span>
+Transaksi
+</span>
 
-      <span>Total</span>
+</a>
 
-      <h2 id="cart-total">
-        Rp 34.749.000
-      </h2>
+<a
+href="profile.html"
+class="nav-item active"
+>
 
-    </div>
+<i class="fa-solid fa-user"></i>
 
-    <button class="checkout-btn">
+<span>
+Akun
+</span>
 
-      <i class="fa-solid fa-bag-shopping"></i>
+</a>
 
-      Checkout
+</nav>
 
-    </button>
+<script>
 
-  </div>
+let cart =
+JSON.parse(
+localStorage.getItem('cart')
+) || [];
 
-  <!-- FLOAT NAVBAR -->
+const cartContainer =
+document.getElementById(
+'cart-container'
+);
 
-  <div class="bottom-nav">
+const totalPrice =
+document.getElementById(
+'total-price'
+);
 
-    <a
-      href="index.html"
-      class="nav-item"
-    >
+/* HAPUS DUMMY */
 
-      <i class="fa-solid fa-house"></i>
+cart = cart.filter(
+item =>
+item.name &&
+item.price &&
+item.image
+);
 
-      <span>HOME</span>
+localStorage.setItem(
+'cart',
+JSON.stringify(cart)
+);
 
-    </a>
+function renderCart(){
 
-    <a
-      href="wishlist.html"
-      class="nav-item"
-    >
+if(!cart.length){
 
-      <i class="fa-solid fa-heart"></i>
+cartContainer.innerHTML = `
+<div class="empty-cart">
+Keranjang kosong
+</div>
+`;
 
-      <span>WISHLIST</span>
+totalPrice.innerText =
+'Rp 0';
 
-    </a>
+return;
 
-    <a
-      href="transaction.html"
-      class="nav-item"
-    >
+}
 
-      <i class="fa-solid fa-receipt"></i>
+cartContainer.innerHTML =
+cart.map((item,index)=>`
 
-      <span>TRANSAKSI</span>
+<div class="cart-card">
 
-    </a>
+<img
+src="${item.image}"
+alt="${item.name}"
+/>
 
-    <a
-      href="profile.html"
-      class="nav-item active"
-    >
+<div class="cart-info">
 
-      <i class="fa-solid fa-user"></i>
+<h3>
+${item.name}
+</h3>
 
-      <span>AKUN</span>
+<p>
+Rp ${Number(item.price)
+.toLocaleString('id-ID')}
+</p>
 
-    </a>
+<button
+class="remove-btn"
+onclick="removeItem(${index})"
+>
 
-  </div>
+Hapus
 
-  <!-- JS -->
+</button>
 
-  <script
-    type="module"
-    src="./js/pages/cart.js"
-  ></script>
+</div>
+
+</div>
+
+`).join('');
+
+const total =
+cart.reduce(
+(acc,item)=>
+acc + Number(item.price),
+0
+);
+
+totalPrice.innerText =
+`Rp ${total.toLocaleString('id-ID')}`;
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem(
+'cart',
+JSON.stringify(cart)
+);
+
+renderCart();
+
+}
+
+function checkout(){
+
+if(!cart.length){
+
+alert(
+'Keranjang kosong'
+);
+
+return;
+
+}
+
+let orders =
+JSON.parse(
+localStorage.getItem('orders')
+) || [];
+
+orders.push(...cart);
+
+localStorage.setItem(
+'orders',
+JSON.stringify(orders)
+);
+
+localStorage.removeItem(
+'cart'
+);
+
+cart = [];
+
+renderCart();
+
+alert(
+'Checkout berhasil'
+);
+
+window.location.href =
+'orders.html';
+
+}
+
+renderCart();
+
+</script>
 
 </body>
-
 </html>
