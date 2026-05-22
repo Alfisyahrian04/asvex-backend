@@ -10,6 +10,10 @@ product
 
     <div
       class="product-card"
+      onclick="
+        window.location.href=
+        'product.html?id=${product._id}'
+      "
     >
 
       <div class="product-image">
@@ -38,17 +42,6 @@ product
           ⭐ 4.9 • Terjual 120
 
         </div>
-
-        <button
-          class="btn-cart"
-          onclick='addToCart(
-            ${JSON.stringify(product)}
-          )'
-        >
-
-          + Keranjang
-
-        </button>
 
       </div>
 
