@@ -803,3 +803,105 @@ body {
     scale(.97);
 
 }
+
+.topbar {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 999;
+
+  backdrop-filter:
+    blur(10px);
+
+  background:
+    rgba(22,163,74,.92);
+
+  padding:
+    18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  color: white;
+
+  box-shadow:
+    0 4px 20px
+    rgba(0,0,0,.08);
+
+}
+
+.logo {
+
+  font-size: 1.5rem;
+
+  font-weight: 800;
+
+}
+
+.bottom-nav {
+
+  position: fixed;
+
+  bottom: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  background: white;
+
+  display: flex;
+
+  justify-content: space-around;
+
+  padding:
+    14px 0;
+
+  border-top:
+    1px solid #eee;
+
+  z-index: 999;
+
+  box-shadow:
+    0 -4px 20px
+    rgba(0,0,0,.06);
+
+}
+
+.nav-item {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #6b7280;
+
+  font-size: .9rem;
+
+  transition: .3s;
+
+}
+
+.nav-item i {
+
+  font-size: 1.2rem;
+
+}
+
+.nav-item.active {
+
+  color: #16a34a;
+
+  transform:
+    translateY(-3px);
+
+}
