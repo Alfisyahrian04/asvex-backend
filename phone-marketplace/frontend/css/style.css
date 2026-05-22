@@ -402,3 +402,214 @@ body{
   font-weight:900;
   color:#0f172a;
 }
+
+/* CATEGORY */
+
+.category-scroll {
+
+  display: flex;
+
+  gap: 12px;
+
+  overflow-x: auto;
+
+  margin:
+    20px 0 10px;
+
+  padding-bottom: 4px;
+
+}
+
+.category-scroll::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.category {
+
+  border: none;
+
+  min-width: max-content;
+
+  padding:
+    12px 18px;
+
+  border-radius: 999px;
+
+  background: white;
+
+  color: #111827;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 20px
+    rgba(0,0,0,.05);
+
+}
+
+.category.active {
+
+  background:
+    #2563eb;
+
+  color: white;
+
+}
+
+/* PRODUCT */
+
+.product-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap: 18px;
+
+}
+
+.product-card {
+
+  background: white;
+
+  border-radius: 34px;
+
+  overflow: hidden;
+
+  padding: 14px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.06);
+
+}
+
+.product-image-wrap {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 180px;
+
+  background:
+    #f3f4f6;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+}
+
+.product-image {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+}
+
+.product-badge {
+
+  position: absolute;
+
+  top: 12px;
+
+  left: 12px;
+
+  background:
+    #ef4444;
+
+  color: white;
+
+  padding:
+    6px 10px;
+
+  border-radius: 999px;
+
+  font-size: .7rem;
+
+  font-weight: bold;
+
+}
+
+.product-content {
+
+  padding-top: 14px;
+
+}
+
+.product-category {
+
+  font-size: .75rem;
+
+  font-weight: 800;
+
+  color: #2563eb;
+
+  margin-bottom: 8px;
+
+}
+
+.product-title {
+
+  font-size: 1.1rem;
+
+  font-weight: 800;
+
+  line-height: 1.4;
+
+  color: #0f172a;
+
+  margin-bottom: 10px;
+
+}
+
+.product-price {
+
+  font-size: 1.5rem;
+
+  font-weight: 900;
+
+  color: #2563eb;
+
+  margin-bottom: 10px;
+
+}
+
+.product-meta {
+
+  color: #6b7280;
+
+  font-size: .9rem;
+
+  margin-bottom: 14px;
+
+}
+
+.buy-btn {
+
+  width: 100%;
+
+  border: none;
+
+  padding:
+    14px;
+
+  border-radius: 18px;
+
+  background:
+    #0f172a;
+
+  color: white;
+
+  font-weight: 700;
+
+  font-size: .95rem;
+
+}
