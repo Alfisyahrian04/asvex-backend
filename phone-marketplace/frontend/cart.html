@@ -23,51 +23,55 @@
 
 <body>
 
-  <header class="topbar">
+  <!-- TOPBAR -->
+
+  <div class="topbar">
 
     <div class="logo">
       Keranjang
     </div>
 
-  </header>
+  </div>
 
-  <main class="container">
+  <!-- CONTENT -->
+
+  <div class="container">
 
     <div
-      id="cart-items"
       class="cart-list"
+      id="cart-items"
     ></div>
 
-    <div class="checkout-bar">
+  </div>
 
-      <div>
+  <!-- CHECKOUT -->
 
-        <small>Total</small>
+  <div class="checkout-bar">
 
-        <h2 id="cart-total">
-          Rp 0
-        </h2>
+    <div class="checkout-total">
 
-      </div> <Br>
+      <span>Total</span>
 
-      <button
-        id="checkout-btn"
-        class="btn-primary"
-      >
-
-        Checkout
-
-      </button>
+      <h2 id="cart-total">
+        Rp 0
+      </h2>
 
     </div>
 
-  </main>
+    <button
+      class="checkout-btn"
+      id="checkout-btn"
+    >
 
-  <script
-    type="module"
-    src="./js/pages/cart.js"
-  ></script>
-<div class="bottom-nav">
+      Checkout
+
+    </button>
+
+  </div>
+
+  <!-- FLOAT NAV -->
+
+  <div class="bottom-nav">
 
     <a
       href="index.html"
@@ -114,6 +118,12 @@
     </a>
 
   </div>
+
+  <script
+    type="module"
+    src="./js/pages/cart.js"
+  ></script>
+
 </body>
 
 </html>
