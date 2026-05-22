@@ -10,11 +10,13 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Transaksi</title>
+  <title>
+    Transaksi
+  </title>
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="./css/style.css"
   />
 
   <link
@@ -26,8 +28,6 @@
 
 <body>
 
-  <!-- TOPBAR -->
-
   <div class="topbar">
 
     <div class="logo">
@@ -36,28 +36,16 @@
 
     <div class="search-box">
 
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="fa-solid fa-receipt"></i>
 
       <input
         type="text"
-        placeholder="Cari Gadget..."
+        placeholder="Riwayat transaksi..."
       />
 
     </div>
 
-    <div class="cart-btn">
-
-      <i class="fa-solid fa-cart-shopping"></i>
-
-      <span id="cart-count">
-        0
-      </span>
-
-    </div>
-
   </div>
-
-  <!-- CONTAINER -->
 
   <div class="container">
 
@@ -72,21 +60,31 @@
     <div
       class="history-list"
       id="transaction-list"
-    >
-
-    </div>
+    ></div>
 
   </div>
 
-  <!-- NAVBAR -->
-
   <div class="bottom-nav">
 
-    <a href="index.html" class="nav-item">
+    <a
+      href="index.html"
+      class="nav-item"
+    >
 
       <i class="fa-solid fa-house"></i>
 
       <span>HOME</span>
+
+    </a>
+
+    <a
+      href="wishlist.html"
+      class="nav-item"
+    >
+
+      <i class="fa-solid fa-heart"></i>
+
+      <span>WISHLIST</span>
 
     </a>
 
@@ -101,7 +99,10 @@
 
     </a>
 
-    <a href="profile.html" class="nav-item">
+    <a
+      href="profile.html"
+      class="nav-item"
+    >
 
       <i class="fa-solid fa-user"></i>
 
@@ -112,9 +113,9 @@
   </div>
 
   <script
-  type="module"
-  src="./js/pages/transaction.js"
-></script>
+    type="module"
+    src="./js/pages/transaction.js"
+  ></script>
 
 </body>
 
