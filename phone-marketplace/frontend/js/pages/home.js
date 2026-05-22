@@ -1,102 +1,163 @@
+import productCard
+from '../components/productCard.js';
+
 import {
   getProducts
-}
-from '../api/productApi.js';
+} from '../api/productApi.js';
 
-const grid =
-document.getElementById(
-  'productGrid'
-);
+let allProducts = [];
 
-const flashSale =
-document.getElementById(
-  'flashSale'
-);
+async function loadProducts() {
 
-async function init() {
+  try {
 
-  const products =
-    await getProducts();
+    allProducts =
+      await getProducts();
 
-  renderProducts(products);
+    renderProducts(
+      allProducts
+    );
 
-  renderFlashSale(
-    products.slice(0, 5)
-  );
+  } catch (err) {
+
+    console.error(err);
+
+  }
 
 }
 
 function renderProducts(
-  products
+products
 ) {
 
-  grid.innerHTML =
-    products.map(product => `
+  document.getElementById(
+    'products'
+  ).innerHTML = products
+    .map(product =>
+      productCard(product)
+    )
+    .join('');
 
-      <div class="product-card">
-
-        <img
-          src="${product.images?.[0]}"
-          class="w-full h-52 object-cover"
-        />
-
-        <div class="p-4">
-
-          <h3 class="font-semibold line-clamp-2">
-            ${product.name}
-          </h3>
-
-          <div class="text-sm text-gray-500 mt-2">
-            ${product.sellerName || 'Official Store'}
-          </div>
-
-          <div class="text-green-600 font-bold text-lg mt-2">
-            Rp ${product.price}
-          </div>
-
-          <button
-            class="btn-primary w-full mt-4"
-          >
-            + Keranjang
-          </button>
-
-        </div>
-
-      </div>
-
-    `).join('');
+  document.getElementById(
+    'flash-sale'
+  ).innerHTML = products
+    .slice(0, 4)
+    .map(product =>
+      productCard(product)
+    )
+    .join('');
 
 }
 
-function renderFlashSale(
-  products
-) {
+function setupSearch() {
 
-  flashSale.innerHTML =
-    products.map(product => `
+  const input =
+    document.querySelector(
+      '.search-box input'
+    );
 
-      <div class="product-card">
+  input.addEventListener(
+    'input',
+    (e) => {
 
-        <img
-          src="${product.images?.[0]}"
-          class="w-full h-40 object-cover"
-        />
+      const keyword =
+        e.target.value
+        .toLowerCase();
 
-        <div class="p-3">
+      const filtered =
+        allProducts.filter(
+          product =>
 
-          <div class="font-semibold">
-            ${product.name}
-          </div>
+            product.name
+            .toLowerCase()
+            .includes(keyword)
 
-          <div class="text-red-500 font-bold mt-2">
-            Rp ${product.price}
-          </div>
+        );
 
-        </div>
+      renderProducts(
+        filtered
+      );
 
-      </div>
+    }
+  );
 
-    `).join('');
+}
+
+function setupCategory() {
+
+  const categories =
+    document.querySelectorAll(
+      '.category'
+    );
+
+  categories.forEach(
+    category => {
+
+      category.addEventListener(
+        'click',
+        () => {
+
+          const text =
+            category.innerText
+            .toLowerCase();
+
+          const filtered =
+            allProducts.filter(
+              product =>
+
+                product.category
+                ?.toLowerCase()
+                .includes(text)
+
+            );
+
+          renderProducts(
+            filtered
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+function setupBottomNav() {
+
+  const navItems =
+    document.querySelectorAll(
+      '.bottom-nav div'
+    );
+
+  navItems.forEach(
+    item => {
+
+      item.addEventListener(
+        'click',
+        () => {
+
+          alert(
+            item.innerText
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+async function init() {
+
+  await loadProducts();
+
+  setupSearch();
+
+  setupCategory();
+
+  setupBottomNav();
 
 }
 
