@@ -1,16 +1,16 @@
-const currentUser =
-JSON.parse(
-  localStorage.getItem(
-    'user'
-  )
-);
-
 import productCard
 from '../components/productCard.js';
 
 import {
   getProducts
 } from '../api/productApi.js';
+
+const currentUser =
+JSON.parse(
+  localStorage.getItem(
+    'user'
+  )
+);
 
 let allProducts = [];
 
@@ -41,9 +41,17 @@ function(product) {
 
 function updateCartCount() {
 
-  document.getElementById(
-    'cart-count'
-  ).innerText = cart.length;
+  const cartCount =
+    document.getElementById(
+      'cart-count'
+    );
+
+  if (cartCount) {
+
+    cartCount.innerText =
+      cart.length;
+
+  }
 
 }
 
@@ -85,7 +93,10 @@ async function loadProducts() {
 
   } catch (err) {
 
-    console.error(err);
+    console.error(
+      'LOAD PRODUCT ERROR:',
+      err
+    );
 
   }
 
@@ -95,22 +106,38 @@ function renderProducts(
 products
 ) {
 
-  document.getElementById(
-    'products'
-  ).innerHTML = products
-    .map(product =>
-      productCard(product)
-    )
-    .join('');
+  const productsEl =
+    document.getElementById(
+      'products'
+    );
 
-  document.getElementById(
-    'flash-sale'
-  ).innerHTML = products
-    .slice(0, 4)
-    .map(product =>
-      productCard(product)
-    )
-    .join('');
+  const flashSaleEl =
+    document.getElementById(
+      'flash-sale'
+    );
+
+  if (productsEl) {
+
+    productsEl.innerHTML =
+      products
+      .map(product =>
+        productCard(product)
+      )
+      .join('');
+
+  }
+
+  if (flashSaleEl) {
+
+    flashSaleEl.innerHTML =
+      products
+      .slice(0, 4)
+      .map(product =>
+        productCard(product)
+      )
+      .join('');
+
+  }
 
 }
 
@@ -120,6 +147,8 @@ function setupSearch() {
     document.querySelector(
       '.search-box input'
     );
+
+  if (!input) return;
 
   input.addEventListener(
     'input',
@@ -134,7 +163,7 @@ function setupSearch() {
           product =>
 
             product.name
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(keyword)
 
         );
@@ -188,13 +217,97 @@ function setupCategory() {
 
 }
 
+function setupProfile() {
+
+  const logo =
+    document.querySelector(
+      '.logo'
+    );
+
+  if (
+    currentUser &&
+    logo
+  ) {
+
+    logo.innerHTML = `
+      Hi,
+      ${currentUser.name}
+    `;
+
+  }
+
+}
+
+function setupBottomNav() {
+
+  const navItems =
+    document.querySelectorAll(
+      '.bottom-nav div'
+    );
+
+  navItems.forEach(
+    item => {
+
+      item.addEventListener(
+        'click',
+        () => {
+
+          const text =
+            item.innerText
+            .toLowerCase();
+
+          if (
+            text.includes(
+              'profile'
+            )
+          ) {
+
+            window.location.href =
+              './profile.html';
+
+          }
+
+          if (
+            text.includes(
+              'cart'
+            )
+          ) {
+
+            window.location.href =
+              './cart.html';
+
+          }
+
+          if (
+            text.includes(
+              'home'
+            )
+          ) {
+
+            window.location.href =
+              './index.html';
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+}
+
 async function init() {
+
+  setupProfile();
 
   await loadProducts();
 
   setupSearch();
 
   setupCategory();
+
+  setupBottomNav();
 
   updateCartCount();
 
