@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>AL Gadget</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-<link rel="stylesheet" href="style.css">
+<title>
+AL Gadget
+</title>
+
+<link
+rel="stylesheet"
+href="style.css"
+/>
 
 <link
 rel="stylesheet"
@@ -14,179 +25,221 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 />
 
 </head>
+
 <body>
 
+<script>
+
+const currentUser =
+JSON.parse(
+localStorage.getItem(
+'user'
+)
+);
+
+if(!currentUser){
+
+window.location.href =
+'login.html';
+
+}
+
+</script>
+
 <!-- TOPBAR -->
+
 <header class="topbar">
 
-  <div class="logo">
-    AL
-  </div>
+<div class="logo">
+AL
+</div>
 
-  <div class="search-box">
+<div class="search-box">
 
-    <i class="fa-solid fa-magnifying-glass"></i>
+<i class="fa-solid fa-magnifying-glass"></i>
 
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Cari smartphone..."
-    />
+<input
+type="text"
+placeholder="Cari smartphone..."
+id="searchInput"
+/>
 
-  </div>
+</div>
 
-  <a href="cart.html" class="cart-btn">
+<a
+href="cart.html"
+class="cart-btn"
+>
 
-    <i class="fa-solid fa-cart-shopping"></i>
+<i class="fa-solid fa-cart-shopping"></i>
 
-    <span id="cart-count">
-      0
-    </span>
+<span id="cart-count">
+0
+</span>
 
-  </a>
+</a>
 
 </header>
 
 <!-- CONTAINER -->
+
 <div class="container">
 
-  <!-- HERO -->
-  <section class="hero-banner">
+<!-- HERO -->
 
-    <div class="hero-overlay">
+<section class="hero-banner">
 
-      <span class="hero-badge">
-        APPLE PREMIUM
-      </span>
+<img
+src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200"
+alt="banner"
+/>
 
-      <h1>
-        iPhone 17 Pro Max
-      </h1>
+<div class="hero-content">
 
-      <p>
-        Smartphone flagship dengan performa premium dan kamera terbaik.
-      </p>
+<span class="hero-tag">
+PREMIUM SMARTPHONE
+</span>
 
-      <button class="hero-btn">
-        Shop Now
-      </button>
+<h1>
+Upgrade Gadget Terbaik
+</h1>
 
-    </div>
+<p>
+Temukan smartphone premium dengan harga terbaik.
+</p>
 
-    <img
-      src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200"
-      alt="banner"
-    >
+<button class="btn-primary">
+Belanja Sekarang
+</button>
 
-  </section>
+</div>
 
-  <!-- WELCOME -->
-  <section class="welcome-box">
+</section>
 
-    <h2>
-      Hi,
-      <span id="usernameText">
-        User
-      </span>
-    </h2>
+<!-- USER -->
 
-    <p>
-      Temukan gadget favoritmu hari ini
-    </p>
+<div class="welcome-box">
 
-  </section>
+<h2>
+Hi,
+<span id="usernameText">
+User
+</span>
+👋
+</h2>
 
-  <!-- CATEGORY -->
-  <div class="category-list">
+<p>
+Temukan gadget favoritmu hari ini
+</p>
 
-    <button class="category active">
-      Semua
-    </button>
+</div>
 
-    <button class="category">
-      iPhone
-    </button>
+<!-- CATEGORY -->
 
-    <button class="category">
-      Samsung
-    </button>
+<div class="category-scroll">
 
-    <button class="category">
-      Xiaomi
-    </button>
+<button class="category active">
+Semua
+</button>
 
-    <button class="category">
-      Gaming
-    </button>
+<button class="category">
+iPhone
+</button>
 
-    <button class="category">
-      Murah
-    </button>
+<button class="category">
+Samsung
+</button>
 
-  </div>
+<button class="category">
+Xiaomi
+</button>
 
-  <!-- SECTION -->
-  <div class="section-header">
+<button class="category">
+Gaming
+</button>
 
-    <h2>
-      Flash Sale
-    </h2>
+<button class="category">
+Murah
+</button>
 
-    <a href="#">
-      Lihat Semua
-    </a>
+</div>
 
-  </div>
+<!-- TITLE -->
 
-  <!-- PRODUCTS -->
-  <div class="product-grid" id="productGrid">
+<div class="section-title">
 
-  </div>
+<h2>
+Produk
+</h2>
+
+</div>
+
+<!-- PRODUCTS -->
+
+<div
+class="product-grid"
+id="productGrid"
+>
+
+</div>
 
 </div>
 
 <!-- NAVBAR -->
+
 <div class="bottom-nav">
 
-  <a href="index.html" class="nav-item active">
+<a
+href="index.html"
+class="nav-item active"
+>
 
-    <i class="fa-solid fa-house"></i>
+<i class="fa-solid fa-house"></i>
 
-    <span>
-      Home
-    </span>
+<span>
+Home
+</span>
 
-  </a>
+</a>
 
-  <a href="wishlist.html" class="nav-item">
+<a
+href="wishlist.html"
+class="nav-item"
+>
 
-    <i class="fa-solid fa-heart"></i>
+<i class="fa-solid fa-heart"></i>
 
-    <span>
-      Wishlist
-    </span>
+<span>
+Wishlist
+</span>
 
-  </a>
+</a>
 
-  <a href="transactions.html" class="nav-item">
+<a
+href="transaction.html"
+class="nav-item"
+>
 
-    <i class="fa-solid fa-receipt"></i>
+<i class="fa-solid fa-receipt"></i>
 
-    <span>
-      Transaksi
-    </span>
+<span>
+Transaksi
+</span>
 
-  </a>
+</a>
 
-  <a href="profile.html" class="nav-item">
+<a
+href="profile.html"
+class="nav-item"
+>
 
-    <i class="fa-solid fa-user"></i>
+<i class="fa-solid fa-user"></i>
 
-    <span>
-      Akun
-    </span>
+<span>
+Akun
+</span>
 
-  </a>
+</a>
 
 </div>
 
@@ -195,120 +248,161 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api';
 
-const currentUser =
-JSON.parse(localStorage.getItem('currentUser'));
-
-if(!currentUser){
-
-  window.location.href =
-  'login.html';
-
-}
-
-document.getElementById('usernameText').innerText =
-currentUser.username || 'User';
+document.getElementById(
+'usernameText'
+).innerText =
+currentUser.username ||
+'User';
 
 let cart =
-JSON.parse(localStorage.getItem('cart')) || [];
+JSON.parse(
+localStorage.getItem(
+'cart'
+)
+) || [];
 
-document.getElementById('cart-count').innerText =
+document.getElementById(
+'cart-count'
+).innerText =
 cart.length;
 
 const productGrid =
-document.getElementById('productGrid');
+document.getElementById(
+'productGrid'
+);
 
 async function loadProducts(){
 
-  try{
+try{
 
-    const response =
-    await fetch(`${BASE_URL}/products`);
+const response =
+await fetch(
+`${BASE_URL}/products`
+);
 
-    const products =
-    await response.json();
+const products =
+await response.json();
 
-    productGrid.innerHTML = '';
+productGrid.innerHTML = '';
 
-    products.forEach(product => {
+if(!products.length){
 
-      productGrid.innerHTML += `
+productGrid.innerHTML = `
 
-      <div class="product-card">
+<div class="empty-state">
 
-        <div class="product-image">
+Produk belum tersedia
 
-          <img
-            src="${product.image}"
-            alt="${product.name}"
-          >
+</div>
 
-        </div>
+`;
 
-        <div class="product-info">
+return;
 
-          <span class="product-category">
-            ${product.category || 'SMARTPHONE'}
-          </span>
+}
 
-          <h3 class="product-title">
-            ${product.name}
-          </h3>
+products.forEach(product=>{
 
-          <div class="product-price">
+productGrid.innerHTML += `
 
-            Rp ${Number(product.price).toLocaleString('id-ID')}
+<div class="product-card">
 
-          </div>
+<div class="product-image-wrap">
 
-          <div class="product-meta">
+<img
+src="${product.image}"
+class="product-image"
+/>
 
-            <span>
-              <i class="fa-solid fa-star"></i>
-              ${product.rating || '4.8'}
-            </span>
+<div class="product-badge">
+HOT
+</div>
 
-            <span>
-              Terjual ${product.sold || '0'}
-            </span>
+</div>
 
-          </div>
+<div class="product-content">
 
-          <button
-            class="btn-cart"
-            onclick='addToCart(${JSON.stringify(product)})'
-          >
-            + Keranjang
-          </button>
+<div class="product-category">
 
-        </div>
+${product.category || 'SMARTPHONE'}
 
-      </div>
+</div>
 
-      `;
+<h3 class="product-title">
 
-    });
+${product.name}
 
-  }catch(error){
+</h3>
 
-    console.log(error);
+<div class="product-price">
 
-  }
+Rp ${Number(product.price)
+.toLocaleString('id-ID')}
+
+</div>
+
+<div class="product-meta">
+
+⭐ ${product.rating || '5.0'}
+
+•
+
+Terjual ${product.sold || '0'}
+
+</div>
+
+<button
+class="buy-btn"
+onclick='addToCart(${JSON.stringify(product)})'
+>
+
++ Keranjang
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(err){
+
+console.log(err);
+
+productGrid.innerHTML = `
+
+<div class="empty-state">
+
+Gagal memuat produk
+
+</div>
+
+`;
+
+}
 
 }
 
 function addToCart(product){
 
-  cart.push(product);
+cart.push(product);
 
-  localStorage.setItem(
-    'cart',
-    JSON.stringify(cart)
-  );
+localStorage.setItem(
+'cart',
+JSON.stringify(cart)
+);
 
-  document.getElementById('cart-count').innerText =
-  cart.length;
+document.getElementById(
+'cart-count'
+).innerText =
+cart.length;
 
-  alert('Produk ditambahkan ke keranjang');
+alert(
+'Produk masuk keranjang'
+);
 
 }
 
