@@ -1,22 +1,17 @@
-import {
-  registerApi
-}
-from '../api/authApi.js';
-
 const form =
 document.getElementById(
-  'registerForm'
+  'register-form'
 );
 
 form.addEventListener(
   'submit',
-  async e => {
+  async (e) => {
 
     e.preventDefault();
 
-    const username =
+    const name =
       document.getElementById(
-        'username'
+        'name'
       ).value;
 
     const email =
@@ -29,32 +24,64 @@ form.addEventListener(
         'password'
       ).value;
 
-    const response =
-      await registerApi({
+    try {
 
-        username,
+      const response =
+        await fetch(
 
-        email,
+          'https://asvex-backend-production.up.railway.app/api/v1/auth/register',
 
-        password
+          {
 
-      });
+            method: 'POST',
 
-    if (
-      response.success
-    ) {
+            headers: {
+
+              'Content-Type':
+                'application/json'
+
+            },
+
+            body:
+              JSON.stringify({
+
+                name,
+                email,
+                password
+
+              })
+
+          }
+
+        );
+
+      const data =
+        await response.json();
+
+      if (data.success) {
+
+        alert(
+          'Register berhasil'
+        );
+
+        window.location.href =
+          './login.html';
+
+      } else {
+
+        alert(
+          data.message
+          || 'Register gagal'
+        );
+
+      }
+
+    } catch (err) {
+
+      console.error(err);
 
       alert(
-        'Register berhasil'
-      );
-
-      location.href =
-        '/login.html';
-
-    } else {
-
-      alert(
-        response.message
+        'Server error'
       );
 
     }
