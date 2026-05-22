@@ -790,3 +790,152 @@ body{
   font-weight: 800;
 
 }
+
+/* =========================
+   CHECKOUT FIX
+========================= */
+
+.checkout-bar{
+
+  bottom: 115px !important;
+
+  padding: 24px !important;
+
+  border-radius: 38px !important;
+
+}
+
+.checkout-total span{
+
+  font-size: .95rem;
+
+  color: #9ca3af;
+
+  font-weight: 600;
+
+}
+
+.checkout-total h2{
+
+  font-size: 2.3rem !important;
+
+  margin-top: 8px;
+
+  line-height: 1;
+
+}
+
+/* =========================
+   REMOVE BUTTON MODERN
+========================= */
+
+.remove-btn{
+
+  border: none !important;
+
+  outline: none !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    ) !important;
+
+  color: white !important;
+
+  padding:
+    12px 18px !important;
+
+  border-radius: 14px !important;
+
+  font-weight: 700;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  transition: .25s;
+
+  box-shadow:
+    0 8px 20px
+    rgba(239,68,68,.25);
+
+}
+
+.remove-btn:hover{
+
+  transform:
+    translateY(-2px);
+
+}
+
+/* =========================
+   CART CARD BETTER
+========================= */
+
+.cart-card{
+
+  align-items: center;
+
+  padding: 18px !important;
+
+}
+
+.cart-card img{
+
+  width: 120px !important;
+
+  height: 120px !important;
+
+  border-radius: 24px !important;
+
+  object-fit: cover;
+
+}
+
+.cart-title{
+
+  font-size: 1.1rem;
+
+  line-height: 1.4;
+
+}
+
+.cart-price{
+
+  margin-top: 12px;
+
+  font-size: 1.5rem !important;
+
+  font-weight: 800;
+
+  color: #2563eb !important;
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+  .checkout-bar{
+
+    width: calc(100% - 24px);
+
+    left: 12px;
+
+    transform: none;
+
+    bottom: 105px !important;
+
+  }
+
+}
