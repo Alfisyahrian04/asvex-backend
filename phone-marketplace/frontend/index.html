@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AL Gadget</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css"/>
+<title>AL Gadget</title>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
 </head>
 <body>
 
@@ -22,17 +24,25 @@
   </div>
 
   <div class="search-box">
+
     <i class="fa-solid fa-magnifying-glass"></i>
+
     <input
       type="text"
       id="searchInput"
       placeholder="Cari smartphone..."
     />
+
   </div>
 
   <a href="cart.html" class="cart-btn">
+
     <i class="fa-solid fa-cart-shopping"></i>
-    <span id="cart-count">0</span>
+
+    <span id="cart-count">
+      0
+    </span>
+
   </a>
 
 </header>
@@ -41,50 +51,50 @@
 <div class="container">
 
   <!-- HERO -->
-  <section class="hero-section">
+  <section class="hero-banner">
 
-    <div class="hero-card">
+    <div class="hero-overlay">
 
-      <div class="hero-content">
+      <span class="hero-badge">
+        APPLE PREMIUM
+      </span>
 
-        <span class="hero-badge">
-          APPLE PREMIUM
-        </span>
+      <h1>
+        iPhone 17 Pro Max
+      </h1>
 
-        <h1>
-          iPhone 17 Pro Max
-        </h1>
+      <p>
+        Smartphone flagship dengan performa premium dan kamera terbaik.
+      </p>
 
-        <p>
-          Smartphone flagship dengan performa terbaik dan kamera profesional.
-        </p>
-
-        <button class="hero-btn">
-          Shop Now
-        </button>
-
-      </div>
-
-      <img
-        src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000"
-        alt="banner"
-      />
+      <button class="hero-btn">
+        Shop Now
+      </button>
 
     </div>
 
+    <img
+      src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200"
+      alt="banner"
+    >
+
   </section>
 
-  <!-- USER -->
-  <div class="welcome-box">
+  <!-- WELCOME -->
+  <section class="welcome-box">
+
     <h2>
       Hi,
-      <span id="usernameText">User</span>
+      <span id="usernameText">
+        User
+      </span>
     </h2>
 
     <p>
-      Temukan gadget terbaik hari ini
+      Temukan gadget favoritmu hari ini
     </p>
-  </div>
+
+  </section>
 
   <!-- CATEGORY -->
   <div class="category-list">
@@ -128,34 +138,54 @@
 
   </div>
 
-  <!-- PRODUCT -->
-  <div class="product-grid" id="product-grid">
+  <!-- PRODUCTS -->
+  <div class="product-grid" id="productGrid">
 
   </div>
 
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- NAVBAR -->
 <div class="bottom-nav">
 
   <a href="index.html" class="nav-item active">
+
     <i class="fa-solid fa-house"></i>
-    <span>Home</span>
+
+    <span>
+      Home
+    </span>
+
   </a>
 
   <a href="wishlist.html" class="nav-item">
+
     <i class="fa-solid fa-heart"></i>
-    <span>Wishlist</span>
+
+    <span>
+      Wishlist
+    </span>
+
   </a>
 
   <a href="transactions.html" class="nav-item">
+
     <i class="fa-solid fa-receipt"></i>
-    <span>Transaksi</span>
+
+    <span>
+      Transaksi
+    </span>
+
   </a>
 
   <a href="profile.html" class="nav-item">
+
     <i class="fa-solid fa-user"></i>
-    <span>Akun</span>
+
+    <span>
+      Akun
+    </span>
+
   </a>
 
 </div>
@@ -169,7 +199,10 @@ const currentUser =
 JSON.parse(localStorage.getItem('currentUser'));
 
 if(!currentUser){
-  window.location.href = 'login.html';
+
+  window.location.href =
+  'login.html';
+
 }
 
 document.getElementById('usernameText').innerText =
@@ -182,24 +215,24 @@ document.getElementById('cart-count').innerText =
 cart.length;
 
 const productGrid =
-document.getElementById('product-grid');
+document.getElementById('productGrid');
 
 async function loadProducts(){
 
   try{
 
-    const res =
+    const response =
     await fetch(`${BASE_URL}/products`);
 
-    const data =
-    await res.json();
+    const products =
+    await response.json();
 
     productGrid.innerHTML = '';
 
-    data.forEach(product => {
+    products.forEach(product => {
 
       productGrid.innerHTML += `
-      
+
       <div class="product-card">
 
         <div class="product-image">
@@ -207,25 +240,28 @@ async function loadProducts(){
           <img
             src="${product.image}"
             alt="${product.name}"
-          />
+          >
 
         </div>
 
         <div class="product-info">
 
-          <div class="product-category">
+          <span class="product-category">
             ${product.category || 'SMARTPHONE'}
-          </div>
+          </span>
 
           <h3 class="product-title">
             ${product.name}
           </h3>
 
           <div class="product-price">
+
             Rp ${Number(product.price).toLocaleString('id-ID')}
+
           </div>
 
           <div class="product-meta">
+
             <span>
               <i class="fa-solid fa-star"></i>
               ${product.rating || '4.8'}
@@ -234,6 +270,7 @@ async function loadProducts(){
             <span>
               Terjual ${product.sold || '0'}
             </span>
+
           </div>
 
           <button
@@ -251,9 +288,9 @@ async function loadProducts(){
 
     });
 
-  }catch(err){
+  }catch(error){
 
-    console.log(err);
+    console.log(error);
 
   }
 
