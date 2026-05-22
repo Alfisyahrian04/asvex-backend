@@ -10,11 +10,6 @@ product
 
     <div
       class="product-card"
-      onclick="
-        alert(
-          '${product.name}'
-        )
-      "
     >
 
       <div class="product-image">
@@ -43,6 +38,17 @@ product
           ⭐ 4.9 • Terjual 120
 
         </div>
+
+        <button
+          class="btn-cart"
+          onclick='addToCart(
+            ${JSON.stringify(product)}
+          )'
+        >
+
+          + Keranjang
+
+        </button>
 
       </div>
 
