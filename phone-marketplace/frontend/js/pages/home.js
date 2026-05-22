@@ -240,54 +240,44 @@ function setupProfile() {
 
 function setupBottomNav() {
 
+  const currentPage =
+    window.location.pathname;
+
   const navItems =
     document.querySelectorAll(
-      '.bottom-nav div'
+      '.bottom-nav .nav-item'
     );
 
   navItems.forEach(
     item => {
 
+      const target =
+        item.dataset.page;
+
+      if (
+        currentPage.includes(
+          target
+        )
+      ) {
+
+        item.classList.add(
+          'active'
+        );
+
+      }
+
       item.addEventListener(
         'click',
         () => {
 
-          const text =
-            item.innerText
-            .toLowerCase();
-
           if (
-            text.includes(
-              'profile'
+            currentPage.includes(
+              target
             )
-          ) {
+          ) return;
 
-            window.location.href =
-              './profile.html';
-
-          }
-
-          if (
-            text.includes(
-              'cart'
-            )
-          ) {
-
-            window.location.href =
-              './cart.html';
-
-          }
-
-          if (
-            text.includes(
-              'home'
-            )
-          ) {
-
-            window.location.href =
-              './index.html';
-
-          }
+          window.location.href =
+            target;
 
         }
       );
