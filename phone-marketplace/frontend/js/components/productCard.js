@@ -8,7 +8,14 @@ product
 
   return `
 
-    <div class="product-card">
+    <div
+      class="product-card"
+      onclick="
+        alert(
+          '${product.name}'
+        )
+      "
+    >
 
       <div class="product-image">
 
