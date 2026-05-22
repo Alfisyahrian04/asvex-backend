@@ -230,9 +230,9 @@ function setupProfile() {
   ) {
 
     logo.innerHTML = `
-      Hi,
-      ${currentUser.name}
-    `;
+  Hi,
+  ${currentUser.name || 'User'}
+`;
 
   }
 
