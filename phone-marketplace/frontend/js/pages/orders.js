@@ -1,40 +1,102 @@
-const container =
-document.getElementById(
-  'ordersContainer'
+const token =
+localStorage.getItem(
+  'token'
 );
 
-const orders =
-JSON.parse(
-  localStorage.getItem(
-    'orders'
-  ) || '[]'
-);
+if (!token) {
 
-container.innerHTML =
-orders.map(order => `
+  window.location.href =
+    './login.html';
 
-  <div class="bg-white p-5 rounded-3xl">
+}
 
-    <div class="flex justify-between">
+async function loadOrders() {
 
-      <div>
+  try {
 
-        <div class="font-bold">
-          ${order.orderId}
-        </div>
+    const response =
+      await fetch(
 
-        <div class="text-sm text-gray-500">
+        'https://asvex-backend-production.up.railway.app/api/v1/orders',
+
+        {
+
+          headers: {
+
+            Authorization:
+              `Bearer ${token}`
+
+          }
+
+        }
+
+      );
+
+    const orders =
+      await response.json();
+
+    renderOrders(
+      orders
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+}
+
+function renderOrders(
+orders
+) {
+
+  const container =
+    document.getElementById(
+      'orders-list'
+    );
+
+  if (!orders.length) {
+
+    container.innerHTML = `
+
+      <div class="empty-cart">
+
+        Belum ada pesanan
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    orders.map(order => `
+
+      <div class="order-card">
+
+        <h3>
+          ${order.product?.name || 'Produk'}
+        </h3>
+
+        <p>
+          Status:
           ${order.status}
-        </div>
+        </p>
+
+        <p>
+          Total:
+          Rp ${Number(
+            order.totalPrice || 0
+          ).toLocaleString()}
+        </p>
 
       </div>
 
-      <div class="font-bold text-green-600">
-        Rp ${order.total}
-      </div>
+    `).join('');
 
-    </div>
+}
 
-  </div>
-
-`).join('');
+loadOrders();
