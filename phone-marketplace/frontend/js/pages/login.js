@@ -1,16 +1,11 @@
-import {
-  loginApi
-}
-from '../api/authApi.js';
-
 const form =
 document.getElementById(
-  'loginForm'
+  'login-form'
 );
 
 form.addEventListener(
   'submit',
-  async e => {
+  async (e) => {
 
     e.preventDefault();
 
@@ -24,38 +19,75 @@ form.addEventListener(
         'password'
       ).value;
 
-    const response =
-      await loginApi({
+    try {
 
-        email,
+      const response =
+        await fetch(
 
-        password
+          'https://asvex-backend-production.up.railway.app/api/v1/auth/login',
 
-      });
+          {
 
-    if (
-      response.success
-    ) {
+            method: 'POST',
 
-      localStorage.setItem(
-        'token',
-        response.token
-      );
+            headers: {
 
-      localStorage.setItem(
-        'user',
-        JSON.stringify(
-          response.user
-        )
-      );
+              'Content-Type':
+                'application/json'
 
-      location.href =
-        '/index.html';
+            },
 
-    } else {
+            body:
+              JSON.stringify({
+
+                email,
+                password
+
+              })
+
+          }
+
+        );
+
+      const data =
+        await response.json();
+
+      if (data.token) {
+
+        localStorage.setItem(
+          'token',
+          data.token
+        );
+
+        localStorage.setItem(
+          'user',
+          JSON.stringify(
+            data.user
+          )
+        );
+
+        alert(
+          'Login berhasil'
+        );
+
+        window.location.href =
+          './index.html';
+
+      } else {
+
+        alert(
+          data.message
+          || 'Login gagal'
+        );
+
+      }
+
+    } catch (err) {
+
+      console.error(err);
 
       alert(
-        response.message
+        'Server error'
       );
 
     }
