@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 
 <meta
 name="viewport"
@@ -25,258 +26,130 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 </head>
 
-<body>
+<body class="auth-page">
 
-<div class="auth-page">
+<div class="auth-wrapper">
 
-  <div class="auth-card">
+<div class="auth-card">
 
-    <div class="auth-logo">
-      AL
-    </div>
+<div class="auth-logo">
+AL
+</div>
 
-    <h1>
-      Create Account
-    </h1>
+<h1>
+Create Account
+</h1>
 
-    <p>
-      Register akun baru
-    </p>
+<p>
+Register akun baru
+</p>
 
-    <form id="registerForm">
+<form id="registerForm">
 
-      <div class="input-group">
+<div class="input-group">
 
-        <i class="fa-solid fa-user"></i>
+<i class="fa-solid fa-user"></i>
 
-        <input
-        type="text"
-        id="username"
-        placeholder="Username"
-        required
-        />
-
-      </div>
-
-      <div class="input-group">
-
-        <i class="fa-solid fa-envelope"></i>
-
-        <input
-        type="email"
-        id="email"
-        placeholder="Email"
-        required
-        />
-
-      </div>
-
-      <div class="input-group">
-
-        <i class="fa-solid fa-lock"></i>
-
-        <input
-        type="password"
-        id="password"
-        placeholder="Password"
-        required
-        />
-
-      </div>
-
-      <div class="input-group">
-
-        <i class="fa-solid fa-users"></i>
-
-        <select id="role">
-
-          <option value="buyer">
-            Buyer
-          </option>
-
-          <option value="seller">
-            Seller
-          </option>
-
-          <option value="admin">
-            Admin
-          </option>
-
-        </select>
-
-      </div>
-
-      <div
-      class="input-group"
-      id="adminWrap"
-      style="display:none;"
-      >
-
-        <i class="fa-solid fa-key"></i>
-
-        <input
-        type="password"
-        id="adminKey"
-        placeholder="Admin Secret Key"
-        />
-
-      </div>
-
-      <button
-      type="submit"
-      class="btn-primary"
-      >
-      Register
-      </button>
-
-    </form>
-
-    <div class="auth-links">
-
-      <a href="login.html">
-        Sudah punya akun?
-      </a>
-
-    </div>
-
-  </div>
+<input
+type="text"
+id="username"
+placeholder="Username"
+required
+/>
 
 </div>
 
-<script>
+<div class="input-group">
 
-const roleSelect =
-document.getElementById(
-'role'
-);
+<i class="fa-solid fa-envelope"></i>
 
-const adminWrap =
-document.getElementById(
-'adminWrap'
-);
+<input
+type="email"
+id="email"
+placeholder="Email"
+required
+/>
 
-roleSelect.addEventListener(
-'change',
-()=>{
+</div>
 
-if(
-roleSelect.value ===
-'admin'
-){
+<div class="input-group">
 
-adminWrap.style.display =
-'flex';
+<i class="fa-solid fa-lock"></i>
 
-}else{
+<input
+type="password"
+id="password"
+placeholder="Password"
+required
+/>
 
-adminWrap.style.display =
-'none';
+</div>
 
-}
+<div class="input-group">
 
-}
-);
+<i class="fa-solid fa-users"></i>
 
-const registerForm =
-document.getElementById(
-'registerForm'
-);
+<select id="role">
 
-registerForm.addEventListener(
-'submit',
-async(e)=>{
+<option value="buyer">
+Buyer
+</option>
 
-e.preventDefault();
+<option value="seller">
+Seller
+</option>
 
-const username =
-document.getElementById(
-'username'
-).value;
+<option value="admin">
+Admin
+</option>
 
-const email =
-document.getElementById(
-'email'
-).value;
+</select>
 
-const password =
-document.getElementById(
-'password'
-).value;
+</div>
 
-const role =
-document.getElementById(
-'role'
-).value;
+<div
+class="input-group"
+id="adminWrap"
+style="display:none;"
+>
 
-const adminKey =
-document.getElementById(
-'adminKey'
-).value;
+<i class="fa-solid fa-key"></i>
 
-if(
-role === 'admin' &&
-adminKey !==
-'AL-GADGET-ADMIN-2026'
-){
+<input
+type="password"
+id="adminKey"
+placeholder="Admin Secret Key"
+/>
 
-alert(
-'Admin key salah'
-);
+</div>
 
-return;
+<button
+type="submit"
+class="auth-btn"
+>
 
-}
+Register
 
-try{
+</button>
 
-const response =
-await fetch(
-'https://asvex-backend-production.up.railway.app/api/auth/register',
-{
-method:'POST',
-headers:{
-'Content-Type':
-'application/json'
-},
-body:JSON.stringify({
-username,
-email,
-password,
-role
-})
-}
-);
+</form>
 
-const data =
-await response.json();
+<div class="auth-links">
 
-if(!response.ok){
+<a href="login.html">
+Sudah punya akun?
+</a>
 
-alert(
-data.message
-);
+</div>
 
-return;
+</div>
 
-}
+</div>
 
-alert(
-'Register berhasil'
-);
-
-window.location.href =
-'login.html';
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
-);
-
-</script>
+<script
+type="module"
+src="js/pages/register.js"
+></script>
 
 </body>
 </html>
