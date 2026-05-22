@@ -3,53 +3,66 @@
 
 <head>
 
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+  />
 
-  <title>Login</title>
+  <title>
+    Login
+  </title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="./css/style.css"
+  />
 
 </head>
 
-<body
-class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body>
 
-  <div
-    class="bg-white p-8 rounded-3xl shadow-lg w-full max-w-md"
-  >
+  <div class="auth-container">
 
-    <h1
-      class="text-3xl font-bold mb-6"
-    >
-      Login
-    </h1>
+    <form id="login-form">
 
-    <form id="loginForm">
+      <h1>
+        Login
+      </h1>
 
       <input
         type="email"
         id="email"
         placeholder="Email"
-        class="w-full border p-4 rounded-2xl mb-4"
-      >
+        required
+      />
 
       <input
         type="password"
         id="password"
         placeholder="Password"
-        class="w-full border p-4 rounded-2xl mb-4"
-      >
+        required
+      />
 
       <button
-        class="w-full bg-green-500 text-white p-4 rounded-2xl"
+        type="submit"
+        class="btn-primary"
       >
+
         Login
+
       </button>
+
+      <p>
+
+        Belum punya akun?
+
+        <a href="./register.html">
+          Register
+        </a>
+
+      </p>
 
     </form>
 
