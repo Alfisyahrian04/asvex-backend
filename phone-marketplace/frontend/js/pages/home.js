@@ -7,6 +7,64 @@ import {
 
 let allProducts = [];
 
+let cart =
+JSON.parse(
+  localStorage.getItem(
+    'cart'
+  )
+) || [];
+
+window.addToCart =
+function(product) {
+
+  cart.push(product);
+
+  localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+  );
+
+  updateCartCount();
+
+  showToast(
+    'Produk masuk keranjang'
+  );
+
+};
+
+function updateCartCount() {
+
+  document.getElementById(
+    'cart-count'
+  ).innerText = cart.length;
+
+}
+
+function showToast(message) {
+
+  const toast =
+    document.createElement(
+      'div'
+    );
+
+  toast.className =
+    'toast';
+
+  toast.innerText =
+    message;
+
+  document.body.appendChild(
+    toast
+  );
+
+  setTimeout(() => {
+
+    toast.remove();
+
+  }, 2000);
+
+}
+
 async function loadProducts() {
 
   try {
@@ -123,32 +181,6 @@ function setupCategory() {
 
 }
 
-function setupBottomNav() {
-
-  const navItems =
-    document.querySelectorAll(
-      '.bottom-nav div'
-    );
-
-  navItems.forEach(
-    item => {
-
-      item.addEventListener(
-        'click',
-        () => {
-
-          alert(
-            item.innerText
-          );
-
-        }
-      );
-
-    }
-  );
-
-}
-
 async function init() {
 
   await loadProducts();
@@ -157,7 +189,7 @@ async function init() {
 
   setupCategory();
 
-  setupBottomNav();
+  updateCartCount();
 
 }
 
