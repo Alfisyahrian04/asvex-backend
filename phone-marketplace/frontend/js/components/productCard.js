@@ -3,9 +3,9 @@ product
 ) {
 
   const image =
-    product.images?.[0]
-    || 'https://via.placeholder.com/300';
-
+product.images?.[0]
+||
+'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop';
   return `
 
     <div
