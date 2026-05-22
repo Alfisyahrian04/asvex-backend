@@ -1,5 +1,5 @@
 const BASE_URL =
-'https://asvex-backend-production.up.railway.app/api';
+'https://asvex-backend-production.up.railway.app/api/v1';
 
 const currentUser =
 JSON.parse(
@@ -95,10 +95,6 @@ data.user
 localStorage.setItem(
 'token',
 data.token
-);
-
-alert(
-'Login berhasil'
 );
 
 window.location.href =
