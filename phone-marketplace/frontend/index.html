@@ -1,356 +1,283 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AL Gadget</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <title>
-    AL Gadget
-  </title>
-
-  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="style.css"/>
 
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  />
-
 </head>
-
 <body>
 
-  <!-- AUTH CHECK -->
+<!-- TOPBAR -->
+<header class="topbar">
 
-  <script>
+  <div class="logo">
+    AL
+  </div>
 
-    const currentUser =
-    JSON.parse(
-      localStorage.getItem(
-        'user'
-      )
-    );
+  <div class="search-box">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Cari smartphone..."
+    />
+  </div>
 
-    if(!currentUser){
+  <a href="cart.html" class="cart-btn">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="cart-count">0</span>
+  </a>
 
-      window.location.href =
-      'login.html';
+</header>
 
-    }
+<!-- CONTAINER -->
+<div class="container">
 
-  </script>
+  <!-- HERO -->
+  <section class="hero-section">
 
-  <!-- TOPBAR -->
+    <div class="hero-card">
 
-  <div class="topbar">
+      <div class="hero-content">
 
-    <div class="logo">
-      AL
-    </div>
+        <span class="hero-badge">
+          APPLE PREMIUM
+        </span>
 
-    <div class="search-box">
+        <h1>
+          iPhone 17 Pro Max
+        </h1>
 
-      <i class="fa-solid fa-magnifying-glass"></i>
+        <p>
+          Smartphone flagship dengan performa terbaik dan kamera profesional.
+        </p>
 
-      <input
-        type="text"
-        placeholder="Cari smartphone..."
-        id="search-input"
+        <button class="hero-btn">
+          Shop Now
+        </button>
+
+      </div>
+
+      <img
+        src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000"
+        alt="banner"
       />
 
     </div>
 
-    <a
-      href="cart.html"
-      class="cart-btn"
-    >
+  </section>
 
-      <i class="fa-solid fa-cart-shopping"></i>
+  <!-- USER -->
+  <div class="welcome-box">
+    <h2>
+      Hi,
+      <span id="usernameText">User</span>
+    </h2>
 
-      <div id="cart-count">
-        0
-      </div>
+    <p>
+      Temukan gadget terbaik hari ini
+    </p>
+  </div>
 
+  <!-- CATEGORY -->
+  <div class="category-list">
+
+    <button class="category active">
+      Semua
+    </button>
+
+    <button class="category">
+      iPhone
+    </button>
+
+    <button class="category">
+      Samsung
+    </button>
+
+    <button class="category">
+      Xiaomi
+    </button>
+
+    <button class="category">
+      Gaming
+    </button>
+
+    <button class="category">
+      Murah
+    </button>
+
+  </div>
+
+  <!-- SECTION -->
+  <div class="section-header">
+
+    <h2>
+      Flash Sale
+    </h2>
+
+    <a href="#">
+      Lihat Semua
     </a>
 
   </div>
 
-  <!-- CONTAINER -->
+  <!-- PRODUCT -->
+  <div class="product-grid" id="product-grid">
 
-  <div class="container">
+  </div>
 
-    <!-- USER -->
+</div>
 
-    <div class="section-title">
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
 
-      <h2>
-        Hi,
-        <span id="username">
-          User
-        </span>
-      </h2>
+  <a href="index.html" class="nav-item active">
+    <i class="fa-solid fa-house"></i>
+    <span>Home</span>
+  </a>
 
-    </div>
+  <a href="wishlist.html" class="nav-item">
+    <i class="fa-solid fa-heart"></i>
+    <span>Wishlist</span>
+  </a>
 
-    <!-- CATEGORY -->
+  <a href="transactions.html" class="nav-item">
+    <i class="fa-solid fa-receipt"></i>
+    <span>Transaksi</span>
+  </a>
 
-    <div class="category-scroll">
+  <a href="profile.html" class="nav-item">
+    <i class="fa-solid fa-user"></i>
+    <span>Akun</span>
+  </a>
 
-      <button class="category active">
-        Semua
-      </button>
+</div>
 
-      <button class="category">
-        iPhone
-      </button>
+<script>
 
-      <button class="category">
-        Samsung
-      </button>
+const BASE_URL =
+'https://asvex-backend-production.up.railway.app/api';
 
-      <button class="category">
-        Xiaomi
-      </button>
+const currentUser =
+JSON.parse(localStorage.getItem('currentUser'));
 
-      <button class="category">
-        Gaming
-      </button>
+if(!currentUser){
+  window.location.href = 'login.html';
+}
 
-      <button class="category">
-        Murah
-      </button>
+document.getElementById('usernameText').innerText =
+currentUser.username || 'User';
 
-    </div>
+let cart =
+JSON.parse(localStorage.getItem('cart')) || [];
 
-    <!-- PRODUCT -->
+document.getElementById('cart-count').innerText =
+cart.length;
 
-    <div class="section-title">
+const productGrid =
+document.getElementById('product-grid');
 
-      <h2>
-        Produk
-      </h2>
+async function loadProducts(){
 
-    </div>
+  try{
 
-    <div
-      class="product-grid"
-      id="products"
-    >
+    const res =
+    await fetch(`${BASE_URL}/products`);
 
-      <!-- CARD -->
+    const data =
+    await res.json();
 
+    productGrid.innerHTML = '';
+
+    data.forEach(product => {
+
+      productGrid.innerHTML += `
+      
       <div class="product-card">
 
-        <div class="product-image-wrap">
+        <div class="product-image">
 
           <img
-            src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=1200&auto=format&fit=crop"
-            class="product-image"
+            src="${product.image}"
+            alt="${product.name}"
           />
-
-          <div class="product-badge">
-            HOT
-          </div>
 
         </div>
 
-        <div class="product-content">
+        <div class="product-info">
 
           <div class="product-category">
-            IPHONE
+            ${product.category || 'SMARTPHONE'}
           </div>
 
           <h3 class="product-title">
-            iPhone 15 Pro Max
+            ${product.name}
           </h3>
 
           <div class="product-price">
-            Rp 24.999.000
+            Rp ${Number(product.price).toLocaleString('id-ID')}
           </div>
 
           <div class="product-meta">
+            <span>
+              <i class="fa-solid fa-star"></i>
+              ${product.rating || '4.8'}
+            </span>
 
-            ⭐ 4.9
-
-            •
-
-            Terjual 120
-
+            <span>
+              Terjual ${product.sold || '0'}
+            </span>
           </div>
 
-          <button class="buy-btn">
-
+          <button
+            class="btn-cart"
+            onclick='addToCart(${JSON.stringify(product)})'
+          >
             + Keranjang
-
           </button>
 
         </div>
 
       </div>
 
-      <!-- CARD -->
+      `;
 
-      <div class="product-card">
+    });
 
-        <div class="product-image-wrap">
+  }catch(err){
 
-          <img
-            src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop"
-            class="product-image"
-          />
+    console.log(err);
 
-          <div class="product-badge">
-            NEW
-          </div>
+  }
 
-        </div>
+}
 
-        <div class="product-content">
+function addToCart(product){
 
-          <div class="product-category">
-            SAMSUNG
-          </div>
+  cart.push(product);
 
-          <h3 class="product-title">
-            Samsung S24 Ultra
-          </h3>
+  localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+  );
 
-          <div class="product-price">
-            Rp 21.499.000
-          </div>
+  document.getElementById('cart-count').innerText =
+  cart.length;
 
-          <div class="product-meta">
+  alert('Produk ditambahkan ke keranjang');
 
-            ⭐ 4.8
+}
 
-            •
+loadProducts();
 
-            Terjual 98
-
-          </div>
-
-          <button class="buy-btn">
-
-            + Keranjang
-
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- FLOAT NAVBAR -->
-
-  <div class="bottom-nav">
-
-    <a
-      href="index.html"
-      class="nav-item active"
-    >
-
-      <i class="fa-solid fa-house"></i>
-
-      <span>HOME</span>
-
-    </a>
-
-    <a
-      href="wishlist.html"
-      class="nav-item"
-    >
-
-      <i class="fa-solid fa-heart"></i>
-
-      <span>WISHLIST</span>
-
-    </a>
-
-    <a
-      href="transaction.html"
-      class="nav-item"
-    >
-
-      <i class="fa-solid fa-receipt"></i>
-
-      <span>TRANSAKSI</span>
-
-    </a>
-
-    <a
-      href="profile.html"
-      class="nav-item"
-    >
-
-      <i class="fa-solid fa-user"></i>
-
-      <span>AKUN</span>
-
-    </a>
-
-  </div>
-
-  <!-- SCRIPT -->
-
-  <script>
-
-    document.getElementById(
-      'username'
-    ).innerText =
-    currentUser.username ||
-    'User';
-
-    let cart =
-    JSON.parse(
-      localStorage.getItem(
-        'cart'
-      )
-    ) || [];
-
-    document.getElementById(
-      'cart-count'
-    ).innerText =
-    cart.length;
-
-    const buyButtons =
-    document.querySelectorAll(
-      '.buy-btn'
-    );
-
-    buyButtons.forEach(
-      button=>{
-
-        button.addEventListener(
-          'click',
-          ()=>{
-
-            alert(
-              'Produk masuk keranjang'
-            );
-
-          }
-        );
-
-      }
-    );
-
-  </script>
+</script>
 
 </body>
-
 </html>
