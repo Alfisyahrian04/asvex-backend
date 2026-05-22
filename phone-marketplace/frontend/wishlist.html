@@ -19,81 +19,99 @@
     href="./css/style.css"
   />
 
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
 </head>
 
 <body>
 
-  <header class="topbar">
+  <div class="topbar">
 
     <div class="logo">
-      Wishlist
+      AL
     </div>
 
-  </header>
+    <div class="search-box">
 
-  <main class="container">
+      <i class="fa-solid fa-heart"></i>
 
-    <div class="empty-cart">
+      <input
+        type="text"
+        placeholder="Wishlist..."
+      />
+
+    </div>
+
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>
+        WISHLIST
+      </h2>
+
+    </div>
+
+    <div class="empty-state">
 
       Wishlist kosong
 
     </div>
 
-  </main>
+  </div>
 
-  <nav class="bottom-nav">
+  <div class="bottom-nav">
 
-    <div
+    <a
+      href="index.html"
       class="nav-item"
-      onclick="
-        window.location.href=
-        'index.html'
-      "
     >
 
-      <i class="fa fa-home"></i>
+      <i class="fa-solid fa-house"></i>
 
-      <span>Home</span>
+      <span>HOME</span>
 
-    </div>
+    </a>
 
-    <div class="nav-item active">
-
-      <i class="fa fa-heart"></i>
-
-      <span>Wishlist</span>
-
-    </div>
-
-    <div
-      class="nav-item"
-      onclick="
-        window.location.href=
-        'cart.html'
-      "
+    <a
+      href="wishlist.html"
+      class="nav-item active"
     >
 
-      <i class="fa fa-shopping-cart"></i>
+      <i class="fa-solid fa-heart"></i>
 
-      <span>Cart</span>
+      <span>WISHLIST</span>
 
-    </div>
+    </a>
 
-    <div
+    <a
+      href="transaction.html"
       class="nav-item"
-      onclick="
-        window.location.href=
-        'profile.html'
-      "
     >
 
-      <i class="fa fa-user"></i>
+      <i class="fa-solid fa-receipt"></i>
 
-      <span>Profile</span>
+      <span>TRANSAKSI</span>
 
-    </div>
+    </a>
 
-  </nav>
+    <a
+      href="profile.html"
+      class="nav-item"
+    >
+
+      <i class="fa-solid fa-user"></i>
+
+      <span>AKUN</span>
+
+    </a>
+
+  </div>
 
 </body>
 
