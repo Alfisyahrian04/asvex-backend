@@ -753,13 +753,15 @@ body{
 
 }
 
-.checkout-total h2 {
+.checkout-total h2{
 
-  font-size: 2rem;
+  font-size: 1.6rem !important;
 
   margin-top: 6px;
 
-  color: #0f172a;
+  line-height: 1.2;
+
+  font-weight: 800;
 
 }
 
