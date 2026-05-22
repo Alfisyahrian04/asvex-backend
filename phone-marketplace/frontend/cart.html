@@ -30,7 +30,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <header class="topbar">
 
-<h1 style="font-size:2.3rem;font-weight:900;color:#2563eb;font-style:italic;">
+<h1
+style="
+font-size:2.3rem;
+font-weight:900;
+color:#2563eb;
+font-style:italic;
+"
+>
 Keranjang
 </h1>
 
@@ -125,10 +132,46 @@ Akun
 
 <script>
 
+const token =
+localStorage.getItem('token');
+
+if(!token){
+
+window.location.href =
+'login.html';
+
+}
+
 let cart =
 JSON.parse(
 localStorage.getItem('cart')
 ) || [];
+
+/* FIX DUPLIKAT */
+
+const uniqueCart = [];
+
+cart.forEach(item=>{
+
+const exists =
+uniqueCart.find(
+p=>p.name === item.name
+);
+
+if(!exists){
+
+uniqueCart.push(item);
+
+}
+
+});
+
+cart = uniqueCart;
+
+localStorage.setItem(
+'cart',
+JSON.stringify(cart)
+);
 
 const cartContainer =
 document.getElementById(
@@ -138,20 +181,6 @@ document.getElementById(
 const totalPrice =
 document.getElementById(
 'total-price'
-);
-
-/* HAPUS DUMMY */
-
-cart = cart.filter(
-item =>
-item.name &&
-item.price &&
-item.image
-);
-
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
 );
 
 function renderCart(){
@@ -166,6 +195,8 @@ Keranjang kosong
 
 totalPrice.innerText =
 'Rp 0';
+
+updateCartCount();
 
 return;
 
@@ -197,6 +228,7 @@ class="remove-btn"
 onclick="removeItem(${index})"
 >
 
+<i class="fa-solid fa-trash"></i>
 Hapus
 
 </button>
@@ -217,6 +249,8 @@ acc + Number(item.price),
 totalPrice.innerText =
 `Rp ${total.toLocaleString('id-ID')}`;
 
+updateCartCount();
+
 }
 
 function removeItem(index){
@@ -229,6 +263,22 @@ JSON.stringify(cart)
 );
 
 renderCart();
+
+}
+
+function updateCartCount(){
+
+const cartCount =
+document.getElementById(
+'cart-count'
+);
+
+if(cartCount){
+
+cartCount.innerText =
+cart.length;
+
+}
 
 }
 
