@@ -40,7 +40,7 @@ Pesanan Saya
 
 <div
 id="orders-container"
-class="cart-list"
+class="orders-wrapper"
 >
 
 </div>
@@ -144,6 +144,14 @@ orders.map(order=>`
 
 <div class="order-card">
 
+<img
+src="${order.image}"
+alt="${order.name}"
+class="order-image"
+/>
+
+<div class="order-info">
+
 <h3>
 ${order.name}
 </h3>
@@ -155,6 +163,8 @@ Rp ${Number(order.price)
 
 <div class="order-status">
 Berhasil
+</div>
+
 </div>
 
 </div>
