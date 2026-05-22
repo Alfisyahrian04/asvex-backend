@@ -114,9 +114,7 @@ document.getElementById(
   'click',
   () => {
 
-    alert(
-      'Checkout berhasil'
-    );
+    checkout();
 
     localStorage.removeItem(
       'cart'
@@ -130,3 +128,91 @@ document.getElementById(
 );
 
 renderCart();
+
+async function checkout() {
+
+  const token =
+    localStorage.getItem(
+      'token'
+    );
+
+  if (!token) {
+
+    alert(
+      'Login dulu'
+    );
+
+    window.location.href =
+      './login.html';
+
+    return;
+
+  }
+
+  try {
+
+    const response =
+      await fetch(
+
+        'https://asvex-backend-production.up.railway.app/api/v1/orders',
+
+        {
+
+          method: 'POST',
+
+          headers: {
+
+            'Content-Type':
+              'application/json',
+
+            Authorization:
+              `Bearer ${token}`
+
+          },
+
+          body:
+            JSON.stringify({
+
+              items: cart
+
+            })
+
+        }
+
+      );
+
+    const data =
+      await response.json();
+
+    if (data.success) {
+
+      alert(
+        'Checkout berhasil'
+      );
+
+      localStorage.removeItem(
+        'cart'
+      );
+
+      window.location.href =
+        './orders.html';
+
+    } else {
+
+      alert(
+        data.message
+      );
+
+    }
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      'Checkout gagal'
+    );
+
+  }
+
+}
