@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 
 <meta
 name="viewport"
@@ -11,7 +11,7 @@ content="width=device-width, initial-scale=1.0"
 />
 
 <title>
-Profile - AL Gadget
+Profile
 </title>
 
 <link
@@ -28,37 +28,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <body>
 
-<script>
-
-const currentUser =
-JSON.parse(
-localStorage.getItem(
-'user'
-)
-);
-
-if(!currentUser){
-
-window.location.href =
-'login.html';
-
-}
-
-</script>
-
-<!-- TOPBAR -->
-
 <header class="topbar">
 
-<div class="logo">
+<h1
+style="
+font-size:2.3rem;
+font-weight:900;
+color:#2563eb;
+font-style:italic;
+"
+>
 Profile
-</div>
+</h1>
 
 </header>
 
-<!-- CONTENT -->
-
-<div class="container">
+<main class="container">
 
 <div class="profile-card">
 
@@ -68,34 +53,22 @@ Profile
 
 </div>
 
-<h2 class="profile-name">
-
-<span id="profileName">
-USER
-</span>
-
+<h2 id="profile-name">
+User
 </h2>
 
-<p class="profile-email">
-
-<span id="profileEmail">
-user@gmail.com
-</span>
-
+<p id="profile-email">
+-
 </p>
 
 <div class="profile-role">
-
-<span id="profileRole">
-Buyer
-</span>
-
+buyer
 </div>
 
 <div class="profile-menu">
 
 <a
-href="transaction.html"
+href="orders.html"
 class="profile-menu-item"
 >
 
@@ -123,23 +96,20 @@ Wishlist
 </div>
 
 <button
-class="btn-primary"
+class="logout-btn"
 onclick="logout()"
 >
 
 <i class="fa-solid fa-right-from-bracket"></i>
-
 Logout
 
 </button>
 
 </div>
 
-</div>
+</main>
 
-<!-- NAVBAR -->
-
-<div class="bottom-nav">
+<nav class="bottom-nav">
 
 <a
 href="index.html"
@@ -168,7 +138,7 @@ Wishlist
 </a>
 
 <a
-href="transaction.html"
+href="orders.html"
 class="nav-item"
 >
 
@@ -193,37 +163,41 @@ Akun
 
 </a>
 
-</div>
+</nav>
 
 <script>
 
-document.getElementById(
-'profileName'
-).innerText =
-currentUser.username ||
-'USER';
+const user =
+JSON.parse(
+localStorage.getItem('user')
+);
+
+if(!user){
+
+window.location.href =
+'login.html';
+
+}
 
 document.getElementById(
-'profileEmail'
+'profile-name'
 ).innerText =
-currentUser.email ||
-'user@gmail.com';
+user.username || 'User';
 
 document.getElementById(
-'profileRole'
+'profile-email'
 ).innerText =
-currentUser.role ||
-'Buyer';
+user.email || '-';
+
+document.querySelector(
+'.profile-role'
+).innerText =
+user.role || 'buyer';
 
 function logout(){
 
-localStorage.removeItem(
-'user'
-);
-
-localStorage.removeItem(
-'token'
-);
+localStorage.removeItem('token');
+localStorage.removeItem('user');
 
 window.location.href =
 'login.html';
