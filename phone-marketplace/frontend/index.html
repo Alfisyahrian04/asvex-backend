@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 
 <meta
 name="viewport"
@@ -28,24 +28,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <body>
 
-<script>
-
-const currentUser =
-JSON.parse(
-localStorage.getItem(
-'user'
-)
-);
-
-if(!currentUser){
-
-window.location.href =
-'login.html';
-
-}
-
-</script>
-
 <!-- TOPBAR -->
 
 <header class="topbar">
@@ -61,7 +43,6 @@ AL
 <input
 type="text"
 placeholder="Cari smartphone..."
-id="searchInput"
 />
 
 </div>
@@ -81,34 +62,31 @@ class="cart-btn"
 
 </header>
 
-<!-- CONTAINER -->
-
-<div class="container">
-
 <!-- HERO -->
 
-<section class="hero-banner">
+<section class="hero-section">
 
 <img
-src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200"
-alt="banner"
+src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=1200"
+alt=""
 />
 
-<div class="hero-content">
+<div class="hero-overlay">
 
-<span class="hero-tag">
+<p>
 PREMIUM SMARTPHONE
-</span>
+</p>
 
 <h1>
 Upgrade Gadget Terbaik
 </h1>
 
-<p>
-Temukan smartphone premium dengan harga terbaik.
-</p>
+<span>
+Temukan smartphone premium
+dengan harga terbaik.
+</span>
 
-<button class="btn-primary">
+<button>
 Belanja Sekarang
 </button>
 
@@ -116,13 +94,15 @@ Belanja Sekarang
 
 </section>
 
-<!-- USER -->
+<!-- CONTENT -->
 
-<div class="welcome-box">
+<main class="container">
+
+<div class="welcome-text">
 
 <h2>
 Hi,
-<span id="usernameText">
+<span id="username">
 User
 </span>
 👋
@@ -136,7 +116,7 @@ Temukan gadget favoritmu hari ini
 
 <!-- CATEGORY -->
 
-<div class="category-scroll">
+<div class="category-list">
 
 <button class="category active">
 Semua
@@ -158,15 +138,13 @@ Xiaomi
 Gaming
 </button>
 
-<button class="category">
-Murah
-</button>
-
 </div>
 
 <!-- TITLE -->
 
 <div class="section-title">
+
+<div class="line"></div>
 
 <h2>
 Produk
@@ -174,20 +152,20 @@ Produk
 
 </div>
 
-<!-- PRODUCTS -->
+<!-- PRODUCT -->
 
 <div
 class="product-grid"
-id="productGrid"
+id="product-list"
 >
 
 </div>
 
-</div>
+</main>
 
-<!-- NAVBAR -->
+<!-- BOTTOM NAV -->
 
-<div class="bottom-nav">
+<nav class="bottom-nav">
 
 <a
 href="index.html"
@@ -216,7 +194,7 @@ Wishlist
 </a>
 
 <a
-href="transaction.html"
+href="orders.html"
 class="nav-item"
 >
 
@@ -241,174 +219,12 @@ Akun
 
 </a>
 
-</div>
-
-<script>
-
-const BASE_URL =
-'https://asvex-backend-production.up.railway.app/api';
-
-document.getElementById(
-'usernameText'
-).innerText =
-currentUser.username ||
-'User';
-
-let cart =
-JSON.parse(
-localStorage.getItem(
-'cart'
-)
-) || [];
-
-document.getElementById(
-'cart-count'
-).innerText =
-cart.length;
-
-const productGrid =
-document.getElementById(
-'productGrid'
-);
-
-async function loadProducts(){
-
-try{
-
-const response =
-await fetch(
-`${BASE_URL}/products`
-);
-
-const products =
-await response.json();
-
-productGrid.innerHTML = '';
-
-if(!products.length){
-
-productGrid.innerHTML = `
-
-<div class="empty-state">
-
-Produk belum tersedia
-
-</div>
-
-`;
-
-return;
-
-}
-
-products.forEach(product=>{
-
-productGrid.innerHTML += `
-
-<div class="product-card">
-
-<div class="product-image-wrap">
-
-<img
-src="${product.image}"
-class="product-image"
-/>
-
-<div class="product-badge">
-HOT
-</div>
-
-</div>
-
-<div class="product-content">
-
-<div class="product-category">
-
-${product.category || 'SMARTPHONE'}
-
-</div>
-
-<h3 class="product-title">
-
-${product.name}
-
-</h3>
-
-<div class="product-price">
-
-Rp ${Number(product.price)
-.toLocaleString('id-ID')}
-
-</div>
-
-<div class="product-meta">
-
-⭐ ${product.rating || '5.0'}
-
-•
-
-Terjual ${product.sold || '0'}
-
-</div>
-
-<button
-class="buy-btn"
-onclick='addToCart(${JSON.stringify(product)})'
->
-
-+ Keranjang
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}catch(err){
-
-console.log(err);
-
-productGrid.innerHTML = `
-
-<div class="empty-state">
-
-Gagal memuat produk
-
-</div>
-
-`;
-
-}
-
-}
-
-function addToCart(product){
-
-cart.push(product);
-
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
-);
-
-document.getElementById(
-'cart-count'
-).innerText =
-cart.length;
-
-alert(
-'Produk masuk keranjang'
-);
-
-}
-
-loadProducts();
-
-</script>
+</nav>
+
+<script
+type="module"
+src="js/pages/home.js"
+></script>
 
 </body>
 </html>
