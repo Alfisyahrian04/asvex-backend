@@ -19,26 +19,43 @@
     href="./css/style.css"
   />
 
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
 </head>
 
 <body>
 
-  <nav class="navbar">
+  <header class="topbar">
 
     <div class="logo">
-      PHONE MARKETPLACE
+      PHONE MARKET
     </div>
 
-    <input
-      type="text"
-      placeholder="Cari HP..."
-    />
+    <div class="search-box">
 
-  </nav>
+      <i class="fa fa-search"></i>
+
+      <input
+        type="text"
+        placeholder="Cari HP gaming..."
+      />
+
+    </div>
+
+    <div class="cart-btn">
+
+      <i class="fa fa-shopping-cart"></i>
+
+    </div>
+
+  </header>
 
   <main class="container">
 
-    <section class="hero">
+    <section class="hero-slider">
 
       <img
         src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
@@ -46,11 +63,43 @@
 
     </section>
 
+    <section class="category-list">
+
+      <div class="category">
+        iPhone
+      </div>
+
+      <div class="category">
+        Samsung
+      </div>
+
+      <div class="category">
+        Xiaomi
+      </div>
+
+      <div class="category">
+        Gaming
+      </div>
+
+      <div class="category">
+        Flagship
+      </div>
+
+    </section>
+
     <section>
 
-      <h2 class="section-title">
-        Flash Sale
-      </h2>
+      <div class="section-header">
+
+        <h2>
+          🔥 Flash Sale
+        </h2>
+
+        <span>
+          Lihat Semua
+        </span>
+
+      </div>
 
       <div
         id="flash-sale"
@@ -61,9 +110,13 @@
 
     <section>
 
-      <h2 class="section-title">
-        Semua Produk
-      </h2>
+      <div class="section-header">
+
+        <h2>
+          Semua Produk
+        </h2>
+
+      </div>
 
       <div
         id="products"
@@ -73,6 +126,30 @@
     </section>
 
   </main>
+
+  <nav class="bottom-nav">
+
+    <div>
+      <i class="fa fa-home"></i>
+      <span>Home</span>
+    </div>
+
+    <div>
+      <i class="fa fa-heart"></i>
+      <span>Wishlist</span>
+    </div>
+
+    <div>
+      <i class="fa fa-shopping-cart"></i>
+      <span>Cart</span>
+    </div>
+
+    <div>
+      <i class="fa fa-user"></i>
+      <span>Profile</span>
+    </div>
+
+  </nav>
 
   <script
     type="module"
