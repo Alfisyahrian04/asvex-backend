@@ -11,7 +11,7 @@
   />
 
   <title>
-    PHONE MARKETPLACE
+    AL STORE
   </title>
 
   <link
@@ -28,166 +28,133 @@
 
 <body>
 
-<header class="topbar">
+  <!-- TOPBAR -->
 
-  <div class="logo">
-    AL GADGET
-  </div>
+  <div class="topbar">
 
-  <div class="search-box">
+    <div class="logo">
+      AL
+    </div>
 
-    <i class="fa fa-search"></i>
+    <div class="search-box">
 
-    <input
-      type="text"
-      placeholder="Cari HP gaming..."
-    />
+      <i class="fa-solid fa-magnifying-glass"></i>
 
-  </div>
-
-  <div
-    class="cart-btn"
-    onclick="
-      window.location.href=
-      'cart.html'
-    "
-  >
-
-    <i class="fa fa-shopping-cart"></i>
-
-    <span id="cart-count">
-      0
-    </span>
-
-  </div>
-
-</header>
-
-  <main class="container">
-
-    <section class="hero-slider">
-
-      <img
-        src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+      <input
+        type="text"
+        placeholder="Cari Gadget..."
       />
 
-    </section>
+    </div>
 
-    <section class="category-list">
+    <div
+      class="cart-btn"
+      onclick="
+        window.location.href=
+        'cart.html'
+      "
+    >
 
-      <div class="category">
-        iPhone
-      </div>
+      <i class="fa-solid fa-cart-shopping"></i>
 
-      <div class="category">
-        Samsung
-      </div>
+      <span id="cart-count">
+        0
+      </span>
 
-      <div class="category">
-        Xiaomi
-      </div>
+    </div>
 
-      <div class="category">
-        Gaming
-      </div>
+  </div>
 
-      <div class="category">
-        Flagship
-      </div>
+  <!-- CONTAINER -->
 
-    </section>
+  <div class="container">
 
-    <section>
+    <!-- FLASH SALE -->
 
-      <div class="section-header">
+    <div class="section-title">
 
-        <h2>
-          🔥 Flash Sale
-        </h2>
+      <h2>
+        FLASH SALE
+      </h2>
 
-        <span>
-          Lihat Semua
-        </span>
+    </div>
 
-      </div>
+    <div
+      class="product-grid"
+      id="flash-sale"
+    ></div>
 
-      <div
-        id="flash-sale"
-        class="product-grid"
-      ></div>
+    <!-- ALL PRODUCT -->
 
-    </section>
+    <div
+      class="section-title"
+      style="
+        margin-top:40px;
+      "
+    >
 
-    <section>
+      <h2>
+        ALL PRODUCT
+      </h2>
 
-      <div class="section-header">
+    </div>
 
-        <h2>
-          Semua Produk
-        </h2>
+    <div
+      class="product-grid"
+      id="products"
+    ></div>
 
-      </div>
+  </div>
 
-      <div
-        id="products"
-        class="product-grid"
-      ></div>
+  <!-- FLOAT NAVBAR -->
 
-    </section>
+  <div class="bottom-nav">
 
-  </main>
+    <a
+      href="index.html"
+      class="nav-item active"
+    >
 
-  <nav class="bottom-nav">
+      <i class="fa-solid fa-house"></i>
 
-    <div class="bottom-nav">
+      <span>HOME</span>
 
-  <a
-    href="index.html"
-    class="nav-item active"
-  >
+    </a>
 
-    <i class="fa-solid fa-house"></i>
+    <a
+      href="wishlist.html"
+      class="nav-item"
+    >
 
-    <span>HOME</span>
+      <i class="fa-solid fa-heart"></i>
 
-  </a>
+      <span>WISHLIST</span>
 
-  <a
-    href="wishlist.html"
-    class="nav-item"
-  >
+    </a>
 
-    <i class="fa-solid fa-heart"></i>
+    <a
+      href="transaction.html"
+      class="nav-item"
+    >
 
-    <span>WISHLIST</span>
+      <i class="fa-solid fa-receipt"></i>
 
-  </a>
+      <span>TRANSAKSI</span>
 
-  <a
-    href="transaction.html"
-    class="nav-item"
-  >
+    </a>
 
-    <i class="fa-solid fa-receipt"></i>
+    <a
+      href="profile.html"
+      class="nav-item"
+    >
 
-    <span>TRANSAKSI</span>
+      <i class="fa-solid fa-user"></i>
 
-  </a>
+      <span>AKUN</span>
 
-  <a
-    href="profile.html"
-    class="nav-item"
-  >
+    </a>
 
-    <i class="fa-solid fa-user"></i>
-
-    <span>AKUN</span>
-
-  </a>
-
-</div>
-
-  </nav>
+  </div>
 
   <script
     type="module"
