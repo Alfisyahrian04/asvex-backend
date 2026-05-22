@@ -3,37 +3,42 @@
 
 <head>
 
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+  />
 
-  <title>Orders</title>
+  <title>
+    Pesanan Saya
+  </title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="./css/style.css"
+  />
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
-  <div
-    class="max-w-7xl mx-auto p-6"
-  >
+  <header class="topbar">
 
-    <h1
-      class="text-4xl font-bold mb-6"
-    >
+    <div class="logo">
       Pesanan Saya
-    </h1>
+    </div>
+
+  </header>
+
+  <main class="container">
 
     <div
-      id="ordersContainer"
-      class="space-y-4"
+      id="orders-list"
+      class="orders-list"
     ></div>
 
-  </div>
+  </main>
 
   <script
     type="module"
