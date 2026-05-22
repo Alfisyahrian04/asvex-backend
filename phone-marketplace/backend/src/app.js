@@ -39,8 +39,12 @@ app.use(express.json({
 }));
 
 app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
+
+  windowMs:
+    15 * 60 * 1000,
+
   max: 300
+
 }));
 
 app.use(
@@ -81,6 +85,22 @@ app.use(
 app.use(
   '/api/v1/notifications',
   require('./routes/notificationRoutes')
+);
+
+app.get(
+  '/',
+  (req, res) => {
+
+    res.send(
+      'API RUNNING'
+    );
+
+  }
+);
+
+app.use(
+  '/health',
+  require('./routes/healthRoutes')
 );
 
 module.exports = app;
