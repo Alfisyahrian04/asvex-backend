@@ -1,35 +1,41 @@
 export default function productCard(
-  product
+product
 ) {
+
+  const image =
+    product.images?.[0]
+    || 'https://via.placeholder.com/300';
 
   return `
 
     <div class="product-card">
 
-      <img
-        src="${product.images?.[0]}"
-        class="w-full h-52 object-cover"
-      />
+      <div class="product-image">
 
-      <div class="p-4">
+        <img
+          src="${image}"
+          alt="${product.name}"
+        />
 
-        <div class="font-semibold line-clamp-2">
+      </div>
+
+      <div class="product-info">
+
+        <div class="product-title">
           ${product.name}
         </div>
 
-        <div class="text-sm text-gray-500 mt-2">
-          ${product.sellerName}
+        <div class="product-price">
+          Rp ${Number(
+            product.price
+          ).toLocaleString()}
         </div>
 
-        <div class="text-lg font-bold text-green-600 mt-2">
-          Rp ${product.price}
-        </div>
+        <div class="product-meta">
 
-        <button
-          class="btn-primary w-full mt-4"
-        >
-          + Keranjang
-        </button>
+          ⭐ 4.9 • Terjual 120
+
+        </div>
 
       </div>
 
