@@ -4,7 +4,7 @@
 
 Laporkan vulnerability ke:
 
-security@marketplace.com
+alfisyahrian16@gmail.com
 
 ## Supported Versions
 
