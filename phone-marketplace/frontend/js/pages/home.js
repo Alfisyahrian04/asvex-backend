@@ -1,3 +1,10 @@
+const currentUser =
+JSON.parse(
+  localStorage.getItem(
+    'user'
+  )
+);
+
 import productCard
 from '../components/productCard.js';
 
