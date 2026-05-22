@@ -11,45 +11,62 @@
   />
 
   <title>
-    Profile
+    Profile - AL Gadget
   </title>
 
-  <link
-    rel="stylesheet"
-    href="./css/style.css"
-  />
+  <!-- FONT AWESOME -->
 
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
 
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
 </head>
 
 <body>
 
+  <script>
+
+    const currentUser =
+    JSON.parse(
+      localStorage.getItem(
+        'user'
+      )
+    );
+
+    if(!currentUser){
+
+      window.location.href =
+      'login.html';
+
+    }
+
+  </script>
+
+  <!-- TOPBAR -->
+
   <div class="topbar">
 
     <div class="logo">
-      AL
-    </div>
-
-    <div class="search-box">
-
-      <i class="fa-solid fa-user"></i>
-
-      <input
-        type="text"
-        placeholder="Profile..."
-      />
-
+      Profile
     </div>
 
   </div>
 
+  <!-- CONTENT -->
+
   <div class="container">
 
     <div class="profile-card">
+
+      <!-- AVATAR -->
 
       <div class="profile-avatar">
 
@@ -57,23 +74,83 @@
 
       </div>
 
-      <div class="profile-name">
+      <!-- USERNAME -->
+
+      <div
+        class="profile-name"
+        id="profile-name"
+      >
         USER
       </div>
 
-      <div class="profile-email">
+      <!-- EMAIL -->
+
+      <div
+        class="profile-email"
+        id="profile-email"
+      >
         user@gmail.com
       </div>
 
-      <button class="btn-primary">
+      <!-- ROLE -->
 
-        LOGOUT
+      <div
+        class="profile-role"
+        id="profile-role"
+      >
+        Buyer
+      </div>
+
+      <!-- MENU -->
+
+      <div class="profile-menu">
+
+        <a
+          href="transaction.html"
+          class="profile-menu-item"
+        >
+
+          <i class="fa-solid fa-clock-rotate-left"></i>
+
+          <span>
+            Riwayat Transaksi
+          </span>
+
+        </a>
+
+        <a
+          href="wishlist.html"
+          class="profile-menu-item"
+        >
+
+          <i class="fa-solid fa-heart"></i>
+
+          <span>
+            Wishlist
+          </span>
+
+        </a>
+
+      </div>
+
+      <!-- LOGOUT -->
+
+      <button
+        class="btn-primary"
+        onclick="logout()"
+      >
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        Logout
 
       </button>
 
     </div>
 
   </div>
+
+  <!-- FLOAT NAVBAR -->
 
   <div class="bottom-nav">
 
@@ -122,6 +199,45 @@
     </a>
 
   </div>
+
+  <!-- SCRIPT -->
+
+  <script>
+
+    document.getElementById(
+      'profile-name'
+    ).innerText =
+    currentUser.username ||
+    'USER';
+
+    document.getElementById(
+      'profile-email'
+    ).innerText =
+    currentUser.email ||
+    'user@gmail.com';
+
+    document.getElementById(
+      'profile-role'
+    ).innerText =
+    currentUser.role ||
+    'Buyer';
+
+    function logout(){
+
+      localStorage.removeItem(
+        'user'
+      );
+
+      localStorage.removeItem(
+        'token'
+      );
+
+      window.location.href =
+      'login.html';
+
+    }
+
+  </script>
 
 </body>
 
