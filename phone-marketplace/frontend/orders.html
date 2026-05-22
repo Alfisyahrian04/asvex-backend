@@ -3,48 +3,169 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+<meta charset="UTF-8" />
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-  <title>
-    Pesanan Saya
-  </title>
+<title>
+Pesanan Saya
+</title>
 
-  <link
-    rel="stylesheet"
-    href="./css/style.css"
-  />
+<link
+rel="stylesheet"
+href="css/style.css"
+/>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
 
 </head>
 
 <body>
 
-  <header class="topbar">
+<header class="topbar">
 
-    <div class="logo">
-      Pesanan Saya
-    </div>
+<h1 class="page-title">
+Pesanan Saya
+</h1>
 
-  </header>
+</header>
 
-  <main class="container">
+<main class="container">
 
-    <div
-      id="orders-list"
-      class="orders-list"
-    ></div>
+<div
+id="orders-container"
+class="cart-list"
+>
 
-  </main>
+</div>
 
-  <script
-    type="module"
-    src="./js/pages/orders.js"
-  ></script>
+</main>
+
+<nav class="bottom-nav">
+
+<a
+href="index.html"
+class="nav-item"
+>
+
+<i class="fa-solid fa-house"></i>
+
+<span>
+Home
+</span>
+
+</a>
+
+<a
+href="wishlist.html"
+class="nav-item"
+>
+
+<i class="fa-solid fa-heart"></i>
+
+<span>
+Wishlist
+</span>
+
+</a>
+
+<a
+href="orders.html"
+class="nav-item active"
+>
+
+<i class="fa-solid fa-receipt"></i>
+
+<span>
+Transaksi
+</span>
+
+</a>
+
+<a
+href="profile.html"
+class="nav-item"
+>
+
+<i class="fa-solid fa-user"></i>
+
+<span>
+Akun
+</span>
+
+</a>
+
+</nav>
+
+<script>
+
+const token =
+localStorage.getItem('token');
+
+if(!token){
+
+window.location.href =
+'login.html';
+
+}
+
+const ordersContainer =
+document.getElementById(
+'orders-container'
+);
+
+const orders =
+JSON.parse(
+localStorage.getItem('orders')
+) || [];
+
+function renderOrders(){
+
+if(!orders.length){
+
+ordersContainer.innerHTML = `
+<div class="empty-product">
+Belum ada transaksi
+</div>
+`;
+
+return;
+
+}
+
+ordersContainer.innerHTML =
+orders.map(order=>`
+
+<div class="order-card">
+
+<h3>
+${order.name}
+</h3>
+
+<p>
+Rp ${Number(order.price)
+.toLocaleString('id-ID')}
+</p>
+
+<div class="order-status">
+Berhasil
+</div>
+
+</div>
+
+`).join('');
+
+}
+
+renderOrders();
+
+</script>
 
 </body>
-
 </html>
