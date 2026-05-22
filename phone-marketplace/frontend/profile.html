@@ -19,111 +19,110 @@
     href="./css/style.css"
   />
 
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
 </head>
 
 <body>
 
-  <header class="topbar">
+  <div class="topbar">
 
     <div class="logo">
-      Profile
+      AL
     </div>
 
-  </header>
+    <div class="search-box">
 
-  <main class="container">
+      <i class="fa-solid fa-user"></i>
+
+      <input
+        type="text"
+        placeholder="Profile..."
+      />
+
+    </div>
+
+  </div>
+
+  <div class="container">
 
     <div class="profile-card">
 
       <div class="profile-avatar">
 
-        <i class="fa fa-user"></i>
+        <i class="fa-solid fa-user"></i>
 
       </div>
 
-      <h2 id="profile-name">
-        Loading...
-      </h2>
+      <div class="profile-name">
+        USER
+      </div>
 
-      <p id="profile-email">
-        Loading...
-      </p>
+      <div class="profile-email">
+        user@gmail.com
+      </div>
 
-      <button
-        id="logout-btn"
-        class="btn-primary"
-      >
+      <button class="btn-primary">
 
-        Logout
+        LOGOUT
 
       </button>
 
     </div>
 
-  </main>
+  </div>
 
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
-  ></script>
+  <div class="bottom-nav">
 
-  <script
-    type="module"
-    src="./js/pages/profile.js"
-  ></script>
-<nav class="bottom-nav">
+    <a
+      href="index.html"
+      class="nav-item"
+    >
 
-  <div
-    class="nav-item"
-    onclick="
-      window.location.href=
-      'index.html'
-    "
-  >
+      <i class="fa-solid fa-house"></i>
 
-    <i class="fa fa-home"></i>
+      <span>HOME</span>
 
-    <span>Home</span>
+    </a>
+
+    <a
+      href="wishlist.html"
+      class="nav-item"
+    >
+
+      <i class="fa-solid fa-heart"></i>
+
+      <span>WISHLIST</span>
+
+    </a>
+
+    <a
+      href="transaction.html"
+      class="nav-item"
+    >
+
+      <i class="fa-solid fa-receipt"></i>
+
+      <span>TRANSAKSI</span>
+
+    </a>
+
+    <a
+      href="profile.html"
+      class="nav-item active"
+    >
+
+      <i class="fa-solid fa-user"></i>
+
+      <span>AKUN</span>
+
+    </a>
 
   </div>
 
-  <div
-    class="nav-item"
-    onclick="
-      window.location.href=
-      'wishlist.html'
-    "
-  >
-
-    <i class="fa fa-heart"></i>
-
-    <span>Wishlist</span>
-
-  </div>
-
-  <div
-    class="nav-item"
-    onclick="
-      window.location.href=
-      'cart.html'
-    "
-  >
-
-    <i class="fa fa-shopping-cart"></i>
-
-    <span>Cart</span>
-
-  </div>
-
-  <div class="nav-item active">
-
-    <i class="fa fa-user"></i>
-
-    <span>Profile</span>
-
-  </div>
-
-</nav>
-  
 </body>
 
 </html>
