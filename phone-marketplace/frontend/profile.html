@@ -3,242 +3,234 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-  <title>
-    Profile - AL Gadget
-  </title>
+<title>
+Profile - AL Gadget
+</title>
 
-  <!-- FONT AWESOME -->
+<link
+rel="stylesheet"
+href="style.css"
+/>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  />
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
 
 </head>
 
 <body>
 
-  <script>
+<script>
 
-    const currentUser =
-    JSON.parse(
-      localStorage.getItem(
-        'user'
-      )
-    );
+const currentUser =
+JSON.parse(
+localStorage.getItem(
+'user'
+)
+);
 
-    if(!currentUser){
+if(!currentUser){
 
-      window.location.href =
-      'login.html';
+window.location.href =
+'login.html';
 
-    }
+}
 
-  </script>
+</script>
 
-  <!-- TOPBAR -->
+<!-- TOPBAR -->
 
-  <div class="topbar">
+<header class="topbar">
 
-    <div class="logo">
-      Profile
-    </div>
+<div class="logo">
+Profile
+</div>
 
-  </div>
+</header>
 
-  <!-- CONTENT -->
+<!-- CONTENT -->
 
-  <div class="container">
+<div class="container">
 
-    <div class="profile-card">
+<div class="profile-card">
 
-      <!-- AVATAR -->
+<div class="profile-avatar">
 
-      <div class="profile-avatar">
+<i class="fa-solid fa-user"></i>
 
-        <i class="fa-solid fa-user"></i>
+</div>
 
-      </div>
+<h2 class="profile-name">
 
-      <!-- USERNAME -->
+<span id="profileName">
+USER
+</span>
 
-      <div
-        class="profile-name"
-        id="profile-name"
-      >
-        USER
-      </div>
+</h2>
 
-      <!-- EMAIL -->
+<p class="profile-email">
 
-      <div
-        class="profile-email"
-        id="profile-email"
-      >
-        user@gmail.com
-      </div>
+<span id="profileEmail">
+user@gmail.com
+</span>
 
-      <!-- ROLE -->
+</p>
 
-      <div
-        class="profile-role"
-        id="profile-role"
-      >
-        Buyer
-      </div>
+<div class="profile-role">
 
-      <!-- MENU -->
+<span id="profileRole">
+Buyer
+</span>
 
-      <div class="profile-menu">
+</div>
 
-        <a
-          href="transaction.html"
-          class="profile-menu-item"
-        >
+<div class="profile-menu">
 
-          <i class="fa-solid fa-clock-rotate-left"></i>
+<a
+href="transaction.html"
+class="profile-menu-item"
+>
 
-          <span>
-            Riwayat Transaksi
-          </span>
+<i class="fa-solid fa-clock-rotate-left"></i>
 
-        </a>
+<span>
+Riwayat Transaksi
+</span>
 
-        <a
-          href="wishlist.html"
-          class="profile-menu-item"
-        >
+</a>
 
-          <i class="fa-solid fa-heart"></i>
+<a
+href="wishlist.html"
+class="profile-menu-item"
+>
 
-          <span>
-            Wishlist
-          </span>
+<i class="fa-solid fa-heart"></i>
 
-        </a>
+<span>
+Wishlist
+</span>
 
-      </div>
+</a>
 
-      <!-- LOGOUT -->
+</div>
 
-      <button
-        class="btn-primary"
-        onclick="logout()"
-      >
+<button
+class="btn-primary"
+onclick="logout()"
+>
 
-        <i class="fa-solid fa-right-from-bracket"></i>
+<i class="fa-solid fa-right-from-bracket"></i>
 
-        Logout
+Logout
 
-      </button>
+</button>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
-  <!-- FLOAT NAVBAR -->
+<!-- NAVBAR -->
 
-  <div class="bottom-nav">
+<div class="bottom-nav">
 
-    <a
-      href="index.html"
-      class="nav-item"
-    >
+<a
+href="index.html"
+class="nav-item"
+>
 
-      <i class="fa-solid fa-house"></i>
+<i class="fa-solid fa-house"></i>
 
-      <span>HOME</span>
+<span>
+Home
+</span>
 
-    </a>
+</a>
 
-    <a
-      href="wishlist.html"
-      class="nav-item"
-    >
+<a
+href="wishlist.html"
+class="nav-item"
+>
 
-      <i class="fa-solid fa-heart"></i>
+<i class="fa-solid fa-heart"></i>
 
-      <span>WISHLIST</span>
+<span>
+Wishlist
+</span>
 
-    </a>
+</a>
 
-    <a
-      href="transaction.html"
-      class="nav-item"
-    >
+<a
+href="transaction.html"
+class="nav-item"
+>
 
-      <i class="fa-solid fa-receipt"></i>
+<i class="fa-solid fa-receipt"></i>
 
-      <span>TRANSAKSI</span>
+<span>
+Transaksi
+</span>
 
-    </a>
+</a>
 
-    <a
-      href="profile.html"
-      class="nav-item active"
-    >
+<a
+href="profile.html"
+class="nav-item active"
+>
 
-      <i class="fa-solid fa-user"></i>
+<i class="fa-solid fa-user"></i>
 
-      <span>AKUN</span>
+<span>
+Akun
+</span>
 
-    </a>
+</a>
 
-  </div>
+</div>
 
-  <!-- SCRIPT -->
+<script>
 
-  <script>
+document.getElementById(
+'profileName'
+).innerText =
+currentUser.username ||
+'USER';
 
-    document.getElementById(
-      'profile-name'
-    ).innerText =
-    currentUser.username ||
-    'USER';
+document.getElementById(
+'profileEmail'
+).innerText =
+currentUser.email ||
+'user@gmail.com';
 
-    document.getElementById(
-      'profile-email'
-    ).innerText =
-    currentUser.email ||
-    'user@gmail.com';
+document.getElementById(
+'profileRole'
+).innerText =
+currentUser.role ||
+'Buyer';
 
-    document.getElementById(
-      'profile-role'
-    ).innerText =
-    currentUser.role ||
-    'Buyer';
+function logout(){
 
-    function logout(){
+localStorage.removeItem(
+'user'
+);
 
-      localStorage.removeItem(
-        'user'
-      );
+localStorage.removeItem(
+'token'
+);
 
-      localStorage.removeItem(
-        'token'
-      );
+window.location.href =
+'login.html';
 
-      window.location.href =
-      'login.html';
+}
 
-    }
-
-  </script>
+</script>
 
 </body>
-
 </html>
