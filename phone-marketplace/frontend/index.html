@@ -11,22 +11,46 @@
   />
 
   <title>
-    AL STORE
+    AL Gadget
   </title>
 
-  <link
-    rel="stylesheet"
-    href="./css/style.css"
-  />
+  <!-- FONT AWESOME -->
 
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
 
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
 </head>
 
 <body>
+
+  <!-- AUTH CHECK -->
+
+  <script>
+
+    const currentUser =
+    JSON.parse(
+      localStorage.getItem(
+        'user'
+      )
+    );
+
+    if(!currentUser){
+
+      window.location.href =
+      'login.html';
+
+    }
+
+  </script>
 
   <!-- TOPBAR -->
 
@@ -42,87 +66,80 @@
 
       <input
         type="text"
-        placeholder="Cari Gadget..."
+        placeholder="Cari smartphone..."
+        id="search-input"
       />
 
     </div>
 
-    <div
+    <a
+      href="cart.html"
       class="cart-btn"
-      onclick="
-        window.location.href=
-        'cart.html'
-      "
     >
 
       <i class="fa-solid fa-cart-shopping"></i>
 
-      <span id="cart-count">
+      <div id="cart-count">
         0
-      </span>
+      </div>
 
-    </div>
+    </a>
 
   </div>
-<!-- CATEGORY -->
 
-<div class="category-scroll">
-
-  <button class="category active">
-    Semua
-  </button>
-
-  <button class="category">
-    iPhone
-  </button>
-
-  <button class="category">
-    Samsung
-  </button>
-
-  <button class="category">
-    Xiaomi
-  </button>
-
-  <button class="category">
-    Gaming
-  </button>
-
-  <button class="category">
-    Murah
-  </button>
-
-</div>
   <!-- CONTAINER -->
 
   <div class="container">
 
-    <!-- FLASH SALE -->
+    <!-- USER -->
 
     <div class="section-title">
 
       <h2>
-        FLASH SALE
+        Hi,
+        <span id="username">
+          User
+        </span>
       </h2>
 
     </div>
 
-    <div
-      class="product-grid"
-      id="flash-sale"
-    ></div>
+    <!-- CATEGORY -->
 
-    <!-- ALL PRODUCT -->
+    <div class="category-scroll">
 
-    <div
-      class="section-title"
-      style="
-        margin-top:40px;
-      "
-    >
+      <button class="category active">
+        Semua
+      </button>
+
+      <button class="category">
+        iPhone
+      </button>
+
+      <button class="category">
+        Samsung
+      </button>
+
+      <button class="category">
+        Xiaomi
+      </button>
+
+      <button class="category">
+        Gaming
+      </button>
+
+      <button class="category">
+        Murah
+      </button>
+
+    </div>
+
+    <!-- PRODUCT -->
+
+    <div class="section-title">
 
       <h2>
-        ALL PRODUCT
+        Produk
       </h2>
 
     </div>
@@ -130,7 +147,111 @@
     <div
       class="product-grid"
       id="products"
-    ></div>
+    >
+
+      <!-- CARD -->
+
+      <div class="product-card">
+
+        <div class="product-image-wrap">
+
+          <img
+            src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=1200&auto=format&fit=crop"
+            class="product-image"
+          />
+
+          <div class="product-badge">
+            HOT
+          </div>
+
+        </div>
+
+        <div class="product-content">
+
+          <div class="product-category">
+            IPHONE
+          </div>
+
+          <h3 class="product-title">
+            iPhone 15 Pro Max
+          </h3>
+
+          <div class="product-price">
+            Rp 24.999.000
+          </div>
+
+          <div class="product-meta">
+
+            ⭐ 4.9
+
+            •
+
+            Terjual 120
+
+          </div>
+
+          <button class="buy-btn">
+
+            + Keranjang
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- CARD -->
+
+      <div class="product-card">
+
+        <div class="product-image-wrap">
+
+          <img
+            src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop"
+            class="product-image"
+          />
+
+          <div class="product-badge">
+            NEW
+          </div>
+
+        </div>
+
+        <div class="product-content">
+
+          <div class="product-category">
+            SAMSUNG
+          </div>
+
+          <h3 class="product-title">
+            Samsung S24 Ultra
+          </h3>
+
+          <div class="product-price">
+            Rp 21.499.000
+          </div>
+
+          <div class="product-meta">
+
+            ⭐ 4.8
+
+            •
+
+            Terjual 98
+
+          </div>
+
+          <button class="buy-btn">
+
+            + Keranjang
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -184,10 +305,51 @@
 
   </div>
 
-  <script
-    type="module"
-    src="./js/pages/home.js"
-  ></script>
+  <!-- SCRIPT -->
+
+  <script>
+
+    document.getElementById(
+      'username'
+    ).innerText =
+    currentUser.username ||
+    'User';
+
+    let cart =
+    JSON.parse(
+      localStorage.getItem(
+        'cart'
+      )
+    ) || [];
+
+    document.getElementById(
+      'cart-count'
+    ).innerText =
+    cart.length;
+
+    const buyButtons =
+    document.querySelectorAll(
+      '.buy-btn'
+    );
+
+    buyButtons.forEach(
+      button=>{
+
+        button.addEventListener(
+          'click',
+          ()=>{
+
+            alert(
+              'Produk masuk keranjang'
+            );
+
+          }
+        );
+
+      }
+    );
+
+  </script>
 
 </body>
 
