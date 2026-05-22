@@ -1,0 +1,9 @@
+{
+  "title": "Marketplace Dashboard",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "CPU Usage"
+    }
+  ]
+}
