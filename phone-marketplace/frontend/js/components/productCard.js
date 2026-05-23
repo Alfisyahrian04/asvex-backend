@@ -1,67 +1,61 @@
-export default function productCard(
-  product
-) {
+function renderProductCard(product){
 
-  return `
+return `
 
-  <div class="product-card">
+<div class="product-card">
 
-    <div class="product-image-wrap">
+<div class="product-image">
 
-      <img
-        src="${product.image}"
-        class="product-image"
-      />
+<img
+src="${
+product.images?.[0] ||
+'https://via.placeholder.com/300'
+}"
+alt="${product.name}"
+/>
 
-      <div class="product-badge">
-        HOT
-      </div>
+</div>
 
-    </div>
+<div class="product-content">
 
-    <div class="product-content">
+<h3>
+${product.name}
+</h3>
 
-      <div class="product-category">
+<p class="product-category">
+${product.category}
+</p>
 
-        ${product.category || 'SMARTPHONE'}
+<p class="product-price">
+Rp ${Number(product.price)
+.toLocaleString('id-ID')}
+</p>
 
-      </div>
+<div class="product-rating">
 
-      <h3 class="product-title">
+⭐ ${product.rating || 0}
+(
+${product.reviewCount || 0}
+)
 
-        ${product.name}
+</div>
 
-      </h3>
+<button
+class="add-cart-btn"
+onclick='addToCart(${JSON.stringify(product)})'
+>
 
-      <div class="product-price">
+Tambah Keranjang
 
-        Rp ${Number(
-          product.price
-        ).toLocaleString('id-ID')}
+</button>
 
-      </div>
+</div>
 
-      <div class="product-meta">
+</div>
 
-        ⭐ 4.9 • Terjual 120
-
-      </div>
-
-      <button
-        class="buy-btn"
-        onclick='addToCart(
-          ${JSON.stringify(product)}
-        )'
-      >
-
-        + Keranjang
-
-      </button>
-
-    </div>
-
-  </div>
-
-  `;
+`;
 
 }
+
+window.renderProductCard =
+renderProductCard;
