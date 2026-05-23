@@ -6,9 +6,15 @@ express.Router();
 
 const {
 register,
-login
+login,
+changePassword
 } = require(
 '../controllers/authController'
+);
+
+const authMiddleware =
+require(
+'../middlewares/authMiddleware'
 );
 
 router.post(
@@ -19,6 +25,12 @@ register
 router.post(
 '/login',
 login
+);
+
+router.put(
+'/change-password',
+authMiddleware,
+changePassword
 );
 
 module.exports =
