@@ -1,138 +1,204 @@
 const params =
 new URLSearchParams(
-  window.location.search
+window.location.search
 );
 
 const id =
 params.get('id');
 
-async function loadProduct() {
+const BASE_URL =
+'https://asvex-backend-production.up.railway.app/api/v1';
 
-  try {
+async function loadProduct(){
 
-    const response =
-      await fetch(
+try{
 
-        `https://asvex-backend-production.up.railway.app/api/v1/products`
+const response =
+await fetch(
+`${BASE_URL}/products/${id}`
+);
 
-      );
+const product =
+await response.json();
 
-    const products =
-      await response.json();
+if(
+!response.ok ||
+!product
+){
 
-    const product =
-      products.find(
-        item => item._id === id
-      );
+document.getElementById(
+'product-detail'
+).innerHTML =
 
-    if (!product) {
+`
+<h2>
+Produk tidak ditemukan
+</h2>
+`;
 
-      document.getElementById(
-        'product-detail'
-      ).innerHTML =
-
-      `
-        <h2>
-          Produk tidak ditemukan
-        </h2>
-      `;
-
-      return;
-
-    }
-
-    renderProduct(product);
-
-  } catch (err) {
-
-    console.error(err);
-
-  }
+return;
 
 }
 
-function renderProduct(product) {
+renderProduct(
+product
+);
 
-  const image =
-    product.images?.[0]
-    || '';
+}catch(error){
 
-  document.getElementById(
-    'product-detail'
-  ).innerHTML = `
+console.error(
+error
+);
 
-    <div class="detail-card">
+document.getElementById(
+'product-detail'
+).innerHTML =
 
-      <img
-        src="${image}"
-        class="detail-image"
-      />
+`
+<h2>
+Gagal memuat produk
+</h2>
+`;
 
-      <div class="detail-info">
+}
 
-        <h1>
-          ${product.name}
-        </h1>
+}
 
-        <div class="detail-price">
+function renderProduct(
+product
+){
 
-          Rp ${Number(
-            product.price
-          ).toLocaleString()}
+const image =
+product.images?.[0]
+||
+'https://via.placeholder.com/500x500';
 
-        </div>
+document.getElementById(
+'product-detail'
+).innerHTML =
 
-        <div class="detail-rating">
+`
 
-          ⭐ 4.9 • Terjual 120
+<div class="detail-card">
 
-        </div>
+<img
+src="${image}"
+class="detail-image"
+>
 
-        <p class="detail-desc">
+<div class="detail-info">
 
-          ${product.description}
+<h1>
+${product.name || 'Produk'}
+</h1>
 
-        </p>
+<div class="detail-price">
 
-        <button
-          class="btn-primary"
-          onclick='addToCart(
-            ${JSON.stringify(product)}
-          )'
-        >
+Rp ${Number(
+product.price || 0
+).toLocaleString(
+'id-ID'
+)}
 
-          + Tambah Keranjang
+</div>
 
-        </button>
+<div class="detail-rating">
 
-      </div>
+⭐ ${product.rating || 0}
+• ${product.reviewCount || 0} Review
 
-    </div>
+</div>
 
-  `;
+<p class="detail-desc">
+
+${product.description || 'Tidak ada deskripsi'}
+
+</p>
+
+<button
+class="btn-primary"
+id="add-cart-btn"
+>
+
++ Tambah Keranjang
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+const addCartBtn =
+document.getElementById(
+'add-cart-btn'
+);
+
+if(
+addCartBtn
+){
+
+addCartBtn.addEventListener(
+'click',
+()=>{
+
+addToCart(
+product
+);
+
+}
+);
+
+}
 
 }
 
 window.addToCart =
-function(product) {
+function(product){
 
-  let cart =
-  JSON.parse(
-    localStorage.getItem(
-      'cart'
-    )
-  ) || [];
+let cart =
+JSON.parse(
+localStorage.getItem(
+'cart'
+)
+) || [];
 
-  cart.push(product);
+const existingProduct =
+cart.find(
+item =>
+item._id ===
+product._id
+);
 
-  localStorage.setItem(
-    'cart',
-    JSON.stringify(cart)
-  );
+if(
+existingProduct
+){
 
-  alert(
-    'Produk masuk keranjang'
-  );
+existingProduct.quantity =
+(existingProduct.quantity || 1) + 1;
+
+}else{
+
+cart.push({
+
+...product,
+quantity:1
+
+});
+
+}
+
+localStorage.setItem(
+'cart',
+JSON.stringify(
+cart
+)
+);
+
+alert(
+'Produk masuk keranjang'
+);
 
 };
 
