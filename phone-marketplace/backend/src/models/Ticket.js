@@ -1,45 +1,41 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const TicketSchema =
 new mongoose.Schema({
 
-  userId: String,
+user:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  csId: String,
+title:{
+type:String,
+required:true
+},
 
-  orderId: String,
+message:{
+type:String,
+required:true
+},
 
-  title: String,
+status:{
+type:String,
+enum:[
+'open',
+'processing',
+'closed'
+],
+default:'open'
+}
 
-  message: String,
-
-  priority: {
-
-    type: String,
-
-    enum: [
-      'low',
-      'medium',
-      'high'
-    ]
-
-  },
-
-  status: {
-
-    type: String,
-
-    default: 'open'
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Ticket',
-  schema
+'Ticket',
+TicketSchema
 );
