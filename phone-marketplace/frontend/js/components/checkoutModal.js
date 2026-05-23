@@ -1,61 +1,219 @@
-export default function checkoutModal(
-{
-  total
-}
-) {
+const checkoutModal =
+document.getElementById(
+'checkout-modal'
+);
 
-  return `
+const checkoutItems =
+document.getElementById(
+'checkout-items'
+);
 
-    <div
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
+const checkoutTotal =
+document.getElementById(
+'checkout-total'
+);
 
-      <div
-        class="bg-white rounded-3xl p-8 w-full max-w-lg"
-      >
+const checkoutButton =
+document.getElementById(
+'checkout-btn'
+);
 
-        <h2
-          class="text-3xl font-bold mb-6"
-        >
-          Checkout
-        </h2>
+const paymentProofInput =
+document.getElementById(
+'payment-proof'
+);
 
-        <input
-          type="text"
-          placeholder="Alamat lengkap"
-          class="w-full border p-4 rounded-2xl mb-4"
-        />
+const paymentMethodInput =
+document.getElementById(
+'payment-method'
+);
 
-        <select
-          class="w-full border p-4 rounded-2xl mb-4"
-        >
+function openCheckoutModal(){
 
-          <option>
-            Transfer Bank
-          </option>
+const cart =
+cartStore.getCart();
 
-          <option>
-            E-Wallet
-          </option>
+if(!cart.length){
 
-        </select>
+alert(
+'Keranjang kosong'
+);
 
-        <div
-          class="text-2xl font-bold text-green-600 mb-6"
-        >
-          Rp ${total}
-        </div>
-
-        <button
-          class="btn-primary w-full"
-        >
-          Bayar Sekarang
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
+return;
 
 }
+
+checkoutModal.style.display =
+'flex';
+
+renderCheckoutItems();
+
+}
+
+function closeCheckoutModal(){
+
+checkoutModal.style.display =
+'none';
+
+}
+
+function renderCheckoutItems(){
+
+const cart =
+cartStore.getCart();
+
+checkoutItems.innerHTML =
+cart.map(item=>`
+
+<div class="checkout-item">
+
+<img
+src="${
+item.images?.[0]
+||
+'https://via.placeholder.com/300'
+}"
+>
+
+<div>
+
+<h3>
+${item.name}
+</h3>
+
+<p>
+${item.quantity || 1} x
+Rp ${Number(
+item.price
+).toLocaleString(
+'id-ID'
+)}
+</p>
+
+</div>
+
+</div>
+
+`).join('');
+
+checkoutTotal.innerText =
+`Rp ${cartStore
+.getCartTotal()
+.toLocaleString(
+'id-ID'
+)}`;
+
+}
+
+async function checkoutOrder(){
+
+try{
+
+const cart =
+cartStore.getCart();
+
+if(!cart.length){
+
+alert(
+'Keranjang kosong'
+);
+
+return;
+
+}
+
+const paymentMethod =
+paymentMethodInput?.value ||
+'QRIS';
+
+const paymentFile =
+paymentProofInput?.files?.[0];
+
+if(!paymentFile){
+
+alert(
+'Upload bukti pembayaran'
+);
+
+return;
+
+}
+
+checkoutButton.disabled =
+true;
+
+checkoutButton.innerText =
+'Memproses...';
+
+const reader =
+new FileReader();
+
+reader.onload =
+async function(e){
+
+const paymentProof =
+e.target.result;
+
+for(const item of cart){
+
+await createOrder({
+
+productId:item._id,
+
+quantity:item.quantity || 1,
+
+shippingAddress:
+'Indonesia',
+
+paymentMethod,
+
+paymentProof,
+
+status:
+'waiting_confirmation'
+
+});
+
+}
+
+cartStore.clearCart();
+
+alert(
+'Pesanan berhasil dibuat'
+);
+
+window.location.href =
+'orders.html';
+
+};
+
+reader.readAsDataURL(
+paymentFile
+);
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Checkout gagal'
+);
+
+checkoutButton.disabled =
+false;
+
+checkoutButton.innerText =
+'Bayar Sekarang';
+
+}
+
+}
+
+window.openCheckoutModal =
+openCheckoutModal;
+
+window.closeCheckoutModal =
+closeCheckoutModal;
+
+window.checkoutOrder =
+checkoutOrder;
