@@ -138,7 +138,17 @@ message:
 });
 
 }
+  
+if(user.isBanned){
 
+return res.status(403)
+.json({
+message:
+'Akun dibanned'
+});
+
+}
+  
 const validPassword =
 await bcrypt.compare(
 password,
