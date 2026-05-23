@@ -16,6 +16,13 @@ createShipment
 '../services/shippingService'
 );
 
+const {
+reduceStock,
+restoreStock
+} = require(
+'../services/stockService'
+);
+
 exports.createOrder =
 async(req,res)=>{
 
@@ -41,6 +48,11 @@ message:
 });
 
 }
+
+await reduceStock(
+productId,
+quantity
+);
 
 const shipment =
 await createShipment();
@@ -161,6 +173,18 @@ if(paymentStatus){
 
 order.paymentStatus =
 paymentStatus;
+
+if(
+paymentStatus ===
+'failed'
+){
+
+await restoreStock(
+order.product,
+order.quantity
+);
+
+}
 
 }
 
