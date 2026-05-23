@@ -39,40 +39,54 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 AL SELLER
 </div>
 
+<div class="seller-name">
+AKUN
+</div>
+
 </header>
 
 <main class="container">
 
-<div class="section-title">
+<div class="dashboard-card">
 
-<div class="line"></div>
+<p>
+SELLER PROFILE
+</p>
 
-<h2>
-Profile Seller
-</h2>
+<h1 id="profile-username">
+Seller
+</h1>
+
+<div class="dashboard-bottom">
+
+<div class="dashboard-item">
+
+<h3>
+EMAIL
+</h3>
+
+<p id="profile-email">
+-
+</p>
 
 </div>
 
-<div class="wallet-card">
+</div>
 
-<h2 id="profile-username">
-Seller
-</h2>
-
-<p id="profile-email">
-seller@gmail.com
-</p>
+</div>
 
 <button
+class="modal-content button"
 onclick="logout()"
-class="logout-btn"
+style="
+margin-top:30px;
+width:100%;
+"
 >
 
 Logout
 
 </button>
-
-</div>
 
 </main>
 
@@ -132,45 +146,7 @@ Akun
 
 </nav>
 
-<script>
-
-const user =
-JSON.parse(
-localStorage.getItem(
-'user'
-)
-);
-
-if(user){
-
-document.getElementById(
-'profile-username'
-).innerText =
-user.username;
-
-document.getElementById(
-'profile-email'
-).innerText =
-user.email;
-
-}
-
-function logout(){
-
-localStorage.removeItem(
-'user'
-);
-
-localStorage.removeItem(
-'token'
-);
-
-window.location.href =
-'login.html';
-
-}
-
-</script>
+<script src="js/pages/seller-profile.js"></script>
 
 </body>
 </html>
