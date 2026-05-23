@@ -21,7 +21,7 @@ href="css/style.css"
 
 <link
 rel="stylesheet"
-href="css/seller.css"
+href="css/seller.css?v=99999"
 >
 
 <link
@@ -69,6 +69,65 @@ Belum ada produk
 </div>
 
 </main>
+
+<!-- ADD PRODUCT BUTTON -->
+
+<button
+class="add-product-btn"
+id="open-product-modal"
+>
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<!-- PRODUCT MODAL -->
+
+<div
+class="modal"
+id="product-modal"
+>
+
+<div class="modal-content">
+
+<h2>
+Tambah Produk
+</h2>
+
+<input
+type="text"
+id="product-name"
+placeholder="Nama Produk"
+>
+
+<textarea
+id="product-description"
+placeholder="Deskripsi Produk"
+></textarea>
+
+<input
+type="number"
+id="product-price"
+placeholder="Harga Produk"
+>
+
+<input
+type="file"
+id="product-image"
+accept="image/*"
+>
+
+<button
+id="save-product-btn"
+>
+
+Upload Produk
+
+</button>
+
+</div>
+
+</div>
 
 <nav class="bottom-nav">
 
@@ -126,7 +185,7 @@ Akun
 
 </nav>
 
-<script src="js/pages/seller-products.js"></script>
+<script src="js/pages/seller-products.js?v=99999"></script>
 
 </body>
 </html>
