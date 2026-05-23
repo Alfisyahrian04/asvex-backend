@@ -1,48 +1,74 @@
-const crypto =
-require('crypto');
+const Order =
+require('../models/Order');
 
-exports.midtransWebhook =
-async (req, res) => {
+exports.handleWebhook =
+async(req,res)=>{
 
-  const signature =
-    crypto
+try{
 
-    .createHash('sha512')
+const {
+order_id,
+transaction_status
+} = req.body;
 
-    .update(
+const order =
+await Order.findById(
+order_id
+);
 
-      req.body.order_id +
+if(!order){
 
-      req.body.status_code +
+return res.status(404)
+.json({
+message:
+'Order not found'
+});
 
-      req.body.gross_amount +
+}
 
-      process.env
-      .MIDTRANS_SERVER_KEY
+if(
+transaction_status ===
+'settlement'
+){
 
-    )
+order.paymentStatus =
+'paid';
 
-    .digest('hex');
+order.timeline.push({
 
-  if (
-    signature !==
-    req.body.signature_key
-  ) {
+title:'Payment Success',
 
-    return res.status(403)
-    .json({
+description:
+'Buyer completed payment'
 
-      success: false,
+});
 
-      message:
-        'Invalid signature'
+}
 
-    });
+if(
+transaction_status ===
+'expire'
+){
 
-  }
+order.paymentStatus =
+'failed';
 
-  res.json({
-    success: true
-  });
+}
+
+await order.save();
+
+res.status(200)
+.json({
+message:'Webhook received'
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
