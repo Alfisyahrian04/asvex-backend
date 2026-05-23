@@ -1,6 +1,9 @@
 const Product =
 require('../models/Product');
 
+const User =
+require('../models/User');
+
 exports.createProduct =
 async(req,res)=>{
 
@@ -300,6 +303,85 @@ const products =
 await productsQuery;
 
 res.json(products);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.toggleWishlist =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+);
+
+const productId =
+req.params.id;
+
+const exists =
+user.wishlist.includes(
+productId
+);
+
+if(exists){
+
+user.wishlist =
+user.wishlist.filter(
+item =>
+item.toString() !==
+productId
+);
+
+}else{
+
+user.wishlist.push(
+productId
+);
+
+}
+
+await user.save();
+
+res.json({
+wishlist:user.wishlist
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getWishlist =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+).populate(
+'wishlist'
+);
+
+res.json(
+user.wishlist
+);
 
 }catch(error){
 
