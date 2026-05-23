@@ -1,28 +1,176 @@
 const Order =
 require('../models/Order');
 
+const Product =
+require('../models/Product');
+
 exports.createOrder =
-async (req, res) => {
+async(req,res)=>{
 
-  const order =
-    await Order.create({
+try{
 
-      ...req.body,
+const {
+productId,
+quantity,
+shippingAddress
+} = req.body;
 
-      orderId:
-        'INV-' + Date.now(),
+const product =
+await Product.findById(
+productId
+);
 
-      buyerId:
-        req.user._id,
+if(!product){
 
-      buyerName:
-        req.user.username,
+return res.status(404)
+.json({
+message:
+'Product not found'
+});
 
-      idempotencyKey:
-        req.idempotencyKey
+}
 
-    });
+const totalPrice =
+product.price * quantity;
 
-  res.json(order);
+const order =
+await Order.create({
+
+buyer:req.user._id,
+
+seller:product.seller,
+
+product:product._id,
+
+productType:
+product.productType,
+
+quantity,
+
+price:product.price,
+
+totalPrice,
+
+shippingAddress,
+
+timeline:[
+{
+title:'Order Created',
+description:
+'Buyer created order'
+}
+]
+
+});
+
+res.status(201)
+.json(order);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getMyOrders =
+async(req,res)=>{
+
+try{
+
+const orders =
+await Order.find({
+
+buyer:req.user._id
+
+})
+.populate(
+'product'
+)
+.populate(
+'seller',
+'username'
+)
+.sort({
+createdAt:-1
+});
+
+res.json(orders);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.updateOrderStatus =
+async(req,res)=>{
+
+try{
+
+const {
+paymentStatus,
+deliveryStatus
+} = req.body;
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+
+return res.status(404)
+.json({
+message:
+'Order not found'
+});
+
+}
+
+if(paymentStatus){
+
+order.paymentStatus =
+paymentStatus;
+
+}
+
+if(deliveryStatus){
+
+order.deliveryStatus =
+deliveryStatus;
+
+}
+
+order.timeline.push({
+
+title:'Order Updated',
+
+description:
+'Order status updated'
+
+});
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
