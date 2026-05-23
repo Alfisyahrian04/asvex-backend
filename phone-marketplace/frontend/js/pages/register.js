@@ -10,8 +10,36 @@ localStorage.getItem(
 
 if(currentUser){
 
+if(
+currentUser.role ===
+'seller'
+){
+
+window.location.href =
+'seller.html';
+
+}else if(
+currentUser.role ===
+'admin'
+){
+
+window.location.href =
+'admin.html';
+
+}else if(
+currentUser.role ===
+'customer_service'
+){
+
+window.location.href =
+'customer-service.html';
+
+}else{
+
 window.location.href =
 'index.html';
+
+}
 
 }
 
@@ -89,40 +117,6 @@ return;
 
 }
 
-if(password.length < 6){
-
-alert(
-'Password minimal 6 karakter'
-);
-
-registerButton.disabled =
-false;
-
-registerButton.innerText =
-'Register';
-
-return;
-
-}
-
-if(
-!email.includes('@')
-){
-
-alert(
-'Email tidak valid'
-);
-
-registerButton.disabled =
-false;
-
-registerButton.innerText =
-'Register';
-
-return;
-
-}
-
 try{
 
 const response =
@@ -145,7 +139,6 @@ role,
 adminKey
 
 })
-
 }
 );
 
@@ -169,6 +162,10 @@ return;
 
 }
 
+console.log(
+data.user.role
+);
+
 localStorage.setItem(
 'user',
 JSON.stringify(
@@ -187,8 +184,36 @@ false;
 registerButton.innerText =
 'Register';
 
+if(
+data.user.role ===
+'seller'
+){
+
+window.location.href =
+'seller.html';
+
+}else if(
+data.user.role ===
+'admin'
+){
+
+window.location.href =
+'admin.html';
+
+}else if(
+data.user.role ===
+'customer_service'
+){
+
+window.location.href =
+'customer-service.html';
+
+}else{
+
 window.location.href =
 'index.html';
+
+}
 
 }catch(err){
 
