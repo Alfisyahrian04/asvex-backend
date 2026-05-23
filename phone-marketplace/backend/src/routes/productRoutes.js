@@ -8,42 +8,27 @@ const {
 createProduct,
 getProducts,
 getSingleProduct,
-updateProduct,
-deleteProduct,
 toggleWishlist,
 getWishlist,
-getTrending,
-getRecommendations,
-getRelated
+deleteProduct,
+updateProduct,
+getMyProducts
 } = require(
 '../controllers/productController'
 );
 
 const {
-protect
+protect,
+roleMiddleware
 } = require(
 '../middleware/authMiddleware'
 );
 
+/* PUBLIC */
+
 router.get(
 '/',
 getProducts
-);
-
-router.get(
-'/trending',
-getTrending
-);
-
-router.get(
-'/recommendations',
-protect,
-getRecommendations
-);
-
-router.get(
-'/related/:id',
-getRelated
 );
 
 router.get(
@@ -52,33 +37,57 @@ protect,
 getWishlist
 );
 
+/* SELLER PRODUCTS */
+
 router.get(
-'/:id',
-getSingleProduct
+'/my-products',
+protect,
+getMyProducts
 );
 
 router.post(
 '/',
 protect,
+roleMiddleware(
+'seller',
+'admin'
+),
 createProduct
 );
 
 router.put(
 '/:id',
 protect,
+roleMiddleware(
+'seller',
+'admin'
+),
 updateProduct
 );
 
 router.delete(
 '/:id',
 protect,
+roleMiddleware(
+'seller',
+'admin'
+),
 deleteProduct
 );
+
+/* WISHLIST */
 
 router.post(
 '/wishlist/:id',
 protect,
 toggleWishlist
+);
+
+/* SINGLE PRODUCT */
+
+router.get(
+'/:id',
+getSingleProduct
 );
 
 module.exports =
