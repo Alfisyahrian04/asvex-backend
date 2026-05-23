@@ -2,40 +2,64 @@ const Product =
 require('../models/Product');
 
 exports.reduceStock =
-async items => {
+async(productId,quantity)=>{
 
-  for (const item of items) {
+const product =
+await Product.findById(
+productId
+);
 
-    const product =
-      await Product.findById(
-        item.productId
-      );
+if(!product){
 
-    if (!product) {
+throw new Error(
+'Product not found'
+);
 
-      throw new Error(
-        'Product tidak ditemukan'
-      );
+}
 
-    }
+if(product.stock < quantity){
 
-    if (
-      product.stock <
-      item.qty
-    ) {
+throw new Error(
+'Insufficient stock'
+);
 
-      throw new Error(
-        'Stock tidak cukup'
-      );
+}
 
-    }
+product.stock -= quantity;
 
-    product.stock -= item.qty;
+await product.save();
 
-    product.totalSold += item.qty;
+return product;
 
-    await product.save();
+};
 
-  }
+exports.restoreStock =
+async(productId,quantity)=>{
+
+const product =
+await Product.findById(
+productId
+);
+
+if(!product){
+
+throw new Error(
+'Product not found'
+);
+
+}
+
+product.stock += quantity;
+
+await product.save();
+
+return product;
+
+};
+
+exports.checkLowStock =
+(product)=>{
+
+return product.stock <= 5;
 
 };
