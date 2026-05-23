@@ -1,16 +1,33 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/notificationController');
-
-const auth =
-require('../middleware/authMiddleware');
-
-router.get(
-  '/',
-  auth,
-  controller.getNotifications
+const {
+getNotifications,
+readNotification
+} = require(
+'../controllers/notificationController'
 );
 
-module.exports = router;
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
+
+router.get(
+'/',
+protect,
+getNotifications
+);
+
+router.put(
+'/:id/read',
+protect,
+readNotification
+);
+
+module.exports =
+router;
