@@ -79,6 +79,19 @@ ${order.paymentStatus}
 
 </div>
 
+<div class="tracking-number">
+
+Resi:
+${order.trackingNumber}
+
+</div>
+
+<div class="delivery-status">
+
+${order.deliveryStatus}
+
+</div>
+
 </div>
 
 </div>
