@@ -1,27 +1,5 @@
-const Order =
-require('../models/Order');
-
 const Product =
 require('../models/Product');
-
-const {
-releaseEscrow
-} = require(
-'../services/escrowService'
-);
-
-const {
-createShipment
-} = require(
-'../services/shippingService'
-);
-
-const {
-reduceStock,
-restoreStock
-} = require(
-'../services/stockService'
-);
 
 exports.createOrder =
 async(req,res)=>{
@@ -34,28 +12,48 @@ quantity,
 shippingAddress
 } = req.body;
 
+if(
+!productId ||
+!quantity
+){
+
+return res.status(400)
+.json({
+message:
+'Data order tidak lengkap'
+});
+
+}
+
 const product =
 await Product.findById(
 productId
 );
 
-if(!product){
+if(
+!product ||
+!product.isActive
+){
 
 return res.status(404)
 .json({
 message:
-'Product not found'
+'Produk tidak ditemukan'
 });
 
 }
 
-await reduceStock(
-productId,
-quantity
-);
+if(
+product.stock < quantity
+){
 
-const shipment =
-await createShipment();
+return res.status(400)
+.json({
+message:
+'Stock produk tidak cukup'
+});
+
+}
 
 const totalPrice =
 product.price * quantity;
@@ -69,31 +67,19 @@ seller:product.seller,
 
 product:product._id,
 
-productType:
-product.productType,
-
 quantity,
-
-price:product.price,
 
 totalPrice,
 
 shippingAddress,
 
-paymentStatus:'pending',
-
-trackingNumber:
-shipment.trackingNumber,
-
-timeline:[
-{
-title:'Order Created',
-description:
-'Buyer created order'
-}
-]
+status:'pending'
 
 });
+
+product.stock -= quantity;
+
+await product.save();
 
 res.status(201)
 .json(order);
@@ -131,97 +117,9 @@ buyer:req.user._id
 createdAt:-1
 });
 
-res.json(orders);
-
-}catch(error){
-
-res.status(500)
-.json({
-message:error.message
-});
-
-}
-
-};
-
-exports.updateOrderStatus =
-async(req,res)=>{
-
-try{
-
-const {
-paymentStatus,
-deliveryStatus
-} = req.body;
-
-const order =
-await Order.findById(
-req.params.id
+res.json(
+orders
 );
-
-if(!order){
-
-return res.status(404)
-.json({
-message:
-'Order not found'
-});
-
-}
-
-if(paymentStatus){
-
-order.paymentStatus =
-paymentStatus;
-
-if(
-paymentStatus ===
-'failed'
-){
-
-await restoreStock(
-order.product,
-order.quantity
-);
-
-}
-
-}
-
-if(deliveryStatus){
-
-order.deliveryStatus =
-deliveryStatus;
-
-order.timeline.push({
-
-title:
-deliveryStatus,
-
-description:
-`Order ${deliveryStatus}`
-
-});
-
-}
-
-if(
-deliveryStatus ===
-'completed'
-){
-
-order.escrowStatus =
-'released';
-
-await releaseEscrow(
-order
-);
-
-}
-
-await order.save();
-
-res.json(order);
 
 }catch(error){
 
