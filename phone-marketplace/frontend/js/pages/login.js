@@ -38,6 +38,17 @@ document.getElementById(
 'password'
 ).value.trim();
 
+const loginButton =
+document.querySelector(
+'#loginForm button'
+);
+
+loginButton.disabled =
+true;
+
+loginButton.innerText =
+'Loading...';
+
 if(
 !email ||
 !password
@@ -46,6 +57,12 @@ if(
 alert(
 'Lengkapi semua field'
 );
+
+loginButton.disabled =
+false;
+
+loginButton.innerText =
+'Login';
 
 return;
 
@@ -81,6 +98,12 @@ data.message ||
 'Login gagal'
 );
 
+loginButton.disabled =
+false;
+
+loginButton.innerText =
+'Login';
+
 return;
 
 }
@@ -97,6 +120,12 @@ localStorage.setItem(
 data.token
 );
 
+loginButton.disabled =
+false;
+
+loginButton.innerText =
+'Login';
+
 window.location.href =
 'index.html';
 
@@ -105,8 +134,14 @@ window.location.href =
 console.log(err);
 
 alert(
-'Server error'
+'Server error / backend offline'
 );
+
+loginButton.disabled =
+false;
+
+loginButton.innerText =
+'Login';
 
 }
 
