@@ -45,18 +45,6 @@ placeholder="Cari smartphone..."
 
 </div>
 
-<div class="notification-bell">
-
-<i class="fa-solid fa-bell"></i>
-
-<span id="notification-count">
-
-0
-
-</span>
-
-</div>
-
 <a
 href="cart.html"
 class="cart-btn"
@@ -90,7 +78,8 @@ Upgrade Gadget Terbaik
 </h1>
 
 <span>
-Temukan smartphone premium dengan harga terbaik.
+Temukan smartphone premium
+dengan harga terbaik.
 </span>
 
 <button>
@@ -110,7 +99,6 @@ Hi,
 <span id="username">
 User
 </span>
-👋
 </h2>
 
 <p>
@@ -118,6 +106,8 @@ Temukan gadget favoritmu hari ini
 </p>
 
 </div>
+
+<div id="search-bar"></div>
 
 <div class="category-list">
 
@@ -135,6 +125,10 @@ Samsung
 
 <button class="category">
 Xiaomi
+</button>
+
+<button class="category">
+Gaming
 </button>
 
 </div>
@@ -162,7 +156,7 @@ id="product-list"
 
 <a
 href="index.html"
-class="nav-item"
+class="nav-item active"
 >
 
 <i class="fa-solid fa-house"></i>
@@ -175,7 +169,7 @@ Home
 
 <a
 href="wishlist.html"
-class="nav-item active"
+class="nav-item"
 >
 
 <i class="fa-solid fa-heart"></i>
@@ -213,6 +207,7 @@ Akun
 </a>
 
 </nav>
+
 <script src="js/utils/auth.js"></script>
 
 <script src="js/store/authStore.js"></script>
@@ -225,11 +220,9 @@ Akun
 
 <script src="js/components/productCard.js"></script>
 
-<script src="js/pages/home.js"></script>
-  
-<script src="js/api/notificationApi.js"></script>
+<script src="js/components/searchBar.js"></script>
 
-<script src="js/components/notificationBell.js"></script>
+<script src="js/pages/home.js"></script>
 
 </body>
 </html>
