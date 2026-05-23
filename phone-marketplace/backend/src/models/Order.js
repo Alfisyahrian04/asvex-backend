@@ -1,53 +1,120 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const OrderSchema =
 new mongoose.Schema({
 
-  orderId: String,
+buyer:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  buyerId: String,
+seller:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  buyerName: String,
+product:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'Product'
+},
 
-  items: Array,
+productType:{
+type:String,
+enum:[
+'physical',
+'digital',
+'service'
+],
+default:'physical'
+},
 
-  total: Number,
+quantity:{
+type:Number,
+default:1
+},
 
-  shippingAddress: Object,
+price:{
+type:Number,
+required:true
+},
 
-  paymentMethod: String,
+totalPrice:{
+type:Number,
+required:true
+},
 
-  paymentStatus: {
+paymentStatus:{
+type:String,
+enum:[
+'pending',
+'paid',
+'failed',
+'refunded'
+],
+default:'pending'
+},
 
-    type: String,
+deliveryStatus:{
+type:String,
+enum:[
+'processing',
+'shipped',
+'delivered',
+'completed'
+],
+default:'processing'
+},
 
-    default: 'pending'
+escrowStatus:{
+type:String,
+enum:[
+'hold',
+'released'
+],
+default:'hold'
+},
 
-  },
+trackingNumber:{
+type:String,
+default:''
+},
 
-  status: {
+shippingAddress:{
+type:String,
+default:''
+},
 
-    type: String,
+timeline:[
+{
+title:String,
+description:String,
+createdAt:{
+type:Date,
+default:Date.now
+}
+}
+],
 
-    default: 'pending'
+digitalDelivery:{
+type:Object,
+default:{}
+},
 
-  },
+serviceProgress:{
+type:Object,
+default:{}
+}
 
-  idempotencyKey: {
-
-    type: String,
-
-    unique: true
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Order',
-  schema
+'Order',
+OrderSchema
 );
