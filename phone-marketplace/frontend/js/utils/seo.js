@@ -1,24 +1,24 @@
-export function setSEO(
-{
-  title,
-  description
-}
-) {
+function setSEO(
+title,
+description
+){
 
-  document.title = title;
+document.title =
+title;
 
-  const meta =
-    document.querySelector(
-      'meta[name="description"]'
-    );
+const meta =
+document.querySelector(
+'meta[name="description"]'
+);
 
-  if (meta) {
+if(meta){
 
-    meta.setAttribute(
-      'content',
-      description
-    );
-
-  }
+meta.content =
+description;
 
 }
+
+}
+
+window.setSEO =
+setSEO;
