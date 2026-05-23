@@ -1,21 +1,13 @@
 exports.createPayment =
-async ({
-  amount,
-  method
-}) => {
+async(order)=>{
 
-  return {
+return {
 
-    paymentUrl:
-      'https://payment-url.com',
+paymentUrl:
+'https://payment-gateway.com',
 
-    amount,
+status:'pending'
 
-    method,
-
-    expiredAt:
-      Date.now() + 86400000
-
-  };
+};
 
 };
