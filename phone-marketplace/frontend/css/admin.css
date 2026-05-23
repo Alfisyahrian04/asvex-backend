@@ -1,113 +1,332 @@
-async function loadPendingPayments(){
+body{
 
-try{
+margin:0;
+padding:0;
+font-family:sans-serif;
+background:#f5f7f6;
+padding-bottom:120px;
 
-const response =
-await fetch(
-'https://asvex-backend-production.up.railway.app/api/v1/admin/pending-payments',
-{
-headers:{
-Authorization:
-`Bearer ${token}`
 }
+
+/* TOPBAR */
+
+.admin-topbar{
+
+position:sticky;
+top:0;
+z-index:999;
+background:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:
+0 4px 20px
+rgba(0,0,0,.04);
+
 }
+
+.admin-logo{
+
+font-size:34px;
+font-weight:900;
+font-style:italic;
+color:#16a34a;
+letter-spacing:1px;
+
+}
+
+.admin-badge{
+
+background:#dcfce7;
+color:#15803d;
+padding:12px 18px;
+border-radius:999px;
+font-size:14px;
+font-weight:800;
+
+}
+
+/* CONTAINER */
+
+.admin-container{
+
+padding:20px;
+
+}
+
+.admin-title{
+
+font-size:42px;
+font-weight:900;
+margin-top:10px;
+margin-bottom:35px;
+color:#111827;
+
+}
+
+/* SECTION */
+
+.admin-section{
+
+margin-bottom:45px;
+
+}
+
+.section-header{
+
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:20px;
+
+}
+
+.line{
+
+width:6px;
+height:34px;
+background:#16a34a;
+border-radius:999px;
+
+}
+
+.section-header h2{
+
+font-size:28px;
+font-weight:900;
+font-style:italic;
+margin:0;
+color:#111827;
+
+}
+
+/* GRID */
+
+.admin-grid{
+
+display:grid;
+grid-template-columns:
+repeat(
+2,
+1fr
 );
 
-const orders =
-await response.json();
+gap:16px;
 
-const paymentList =
-document.getElementById(
-'payment-list'
+}
+
+/* CARD */
+
+.admin-card{
+
+background:white;
+border-radius:30px;
+padding:18px;
+box-shadow:
+0 10px 30px
+rgba(0,0,0,.06);
+
+overflow:hidden;
+
+}
+
+.admin-card img{
+
+width:100%;
+height:160px;
+object-fit:cover;
+border-radius:22px;
+margin-bottom:14px;
+
+}
+
+.admin-card h3{
+
+font-size:18px;
+font-weight:800;
+margin:0 0 8px;
+color:#111827;
+
+}
+
+.admin-card p{
+
+font-size:14px;
+color:#6b7280;
+margin:6px 0;
+
+}
+
+.admin-card button{
+
+width:100%;
+height:48px;
+border:none;
+border-radius:18px;
+background:
+linear-gradient(
+135deg,
+#22c55e,
+#15803d
 );
+color:white;
+font-size:15px;
+font-weight:800;
+margin-top:12px;
+cursor:pointer;
 
-if(!orders.length){
-
-paymentList.innerHTML =
-`
-<div class="empty-state">
-Belum ada pembayaran
-</div>
-`;
-
-return;
+box-shadow:
+0 10px 20px
+rgba(34,197,94,.25);
 
 }
 
-paymentList.innerHTML =
-orders.map(order=>`
+/* EMPTY */
 
-<div class="admin-card">
+.empty-state{
 
-<img
-src="${
-order.paymentProof
-||
-'https://via.placeholder.com/300'
-}"
->
+background:white;
+padding:35px 20px;
+border-radius:25px;
+text-align:center;
+font-weight:700;
+color:#9ca3af;
 
-<h3>
-${order.product?.name || 'Produk'}
-</h3>
+}
 
-<p>
-Buyer:
-${order.buyer?.username || '-'}
-</p>
+/* BOTTOM NAV */
 
-<p>
-Rp ${Number(
-order.totalPrice || 0
-).toLocaleString(
-'id-ID'
-)}
-</p>
+.admin-nav{
 
-<p>
-${order.status}
-</p>
+position:fixed;
+left:50%;
+bottom:18px;
+transform:translateX(-50%);
 
-<button
-onclick="
-approvePayment(
-'${order._id}'
-)
-"
->
+width:92%;
+height:82px;
 
-Approve Payment
+background:
+rgba(255,255,255,.92);
 
-</button>
+backdrop-filter:
+blur(20px);
 
-</div>
+-webkit-backdrop-filter:
+blur(20px);
 
-`).join('');
+border-radius:32px;
 
-}catch(error){
+display:flex;
+justify-content:space-around;
+align-items:center;
 
-console.log(error);
+box-shadow:
+0 10px 40px
+rgba(0,0,0,.08);
+
+z-index:9999;
+
+}
+
+/* NAV ITEM */
+
+.admin-nav-item{
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:6px;
+
+text-decoration:none;
+
+color:#9ca3af;
+
+font-size:12px;
+font-weight:700;
+
+transition:.25s;
+
+position:relative;
+
+min-width:60px;
+
+}
+
+.admin-nav-item i{
+
+font-size:22px;
+transition:.25s;
+
+}
+
+.admin-nav-item span{
+
+transition:.25s;
+
+}
+
+/* ACTIVE */
+
+.admin-nav-item.active{
+
+color:#16a34a;
+
+}
+
+.admin-nav-item.active::before{
+
+content:'';
+
+position:absolute;
+top:-8px;
+
+width:42px;
+height:5px;
+
+border-radius:999px;
+
+background:#16a34a;
+
+}
+
+/* HOVER */
+
+.admin-nav-item:hover{
+
+transform:translateY(-2px);
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.admin-grid{
+
+grid-template-columns:
+1fr;
+
+}
+
+.admin-title{
+
+font-size:34px;
+
+}
+
+.section-header h2{
+
+font-size:24px;
+
+}
+
+.admin-nav{
+
+height:78px;
 
 }
 
 }
-
-async function approvePayment(id){
-
-await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/approve`,
-{
-method:'PUT',
-
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-loadPendingPayments();
-
-}
-
-loadPendingPayments();
