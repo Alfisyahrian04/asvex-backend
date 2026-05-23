@@ -7,6 +7,8 @@ localStorage.getItem(
 'token'
 );
 
+/* SELLER */
+
 async function loadUsers(){
 
 const response =
@@ -69,6 +71,9 @@ banUser(
 '${user._id}'
 )
 "
+style="
+background:#ef4444;
+"
 >
 
 Ban
@@ -116,6 +121,8 @@ Authorization:
 loadUsers();
 
 }
+
+/* PAYOUT */
 
 async function loadPayouts(){
 
@@ -192,6 +199,124 @@ loadPayouts();
 
 }
 
+/* PAYMENT VALIDATION */
+
+async function loadPendingPayments(){
+
+try{
+
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/admin/pending-payments',
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const orders =
+await response.json();
+
+const paymentList =
+document.getElementById(
+'payment-list'
+);
+
+if(!orders.length){
+
+paymentList.innerHTML =
+`
+<div class="empty-state">
+Belum ada pembayaran
+</div>
+`;
+
+return;
+
+}
+
+paymentList.innerHTML =
+orders.map(order=>`
+
+<div class="admin-card">
+
+<img
+src="${
+order.paymentProof
+||
+'https://via.placeholder.com/300'
+}"
+>
+
+<h3>
+${order.product?.name || 'Produk'}
+</h3>
+
+<p>
+Buyer:
+${order.buyer?.username || '-'}
+</p>
+
+<p>
+Rp ${Number(
+order.totalPrice || 0
+).toLocaleString(
+'id-ID'
+)}
+</p>
+
+<p>
+${order.status}
+</p>
+
+<button
+onclick="
+approvePayment(
+'${order._id}'
+)
+"
+>
+
+Approve Payment
+
+</button>
+
+</div>
+
+`).join('');
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function approvePayment(id){
+
+await fetch(
+`https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/approve`,
+{
+method:'PUT',
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadPendingPayments();
+
+}
+
+/* INIT */
+
 loadUsers();
 
 loadPayouts();
+
+loadPendingPayments();
