@@ -1,22 +1,33 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/chatController');
+const {
+sendMessage,
+getMessages
+} = require(
+'../controllers/chatController'
+);
 
-const auth =
-require('../middleware/authMiddleware');
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
 
 router.post(
-  '/',
-  auth,
-  controller.sendMessage
+'/',
+protect,
+sendMessage
 );
 
 router.get(
-  '/:roomId',
-  auth,
-  controller.getChats
+'/:receiverId',
+protect,
+getMessages
 );
 
-module.exports = router;
+module.exports =
+router;
