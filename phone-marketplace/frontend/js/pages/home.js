@@ -5,6 +5,16 @@ document.getElementById(
 'product-list'
 );
 
+const recommendationContainer =
+document.getElementById(
+'recommendation-list'
+);
+
+const trendingContainer =
+document.getElementById(
+'trending-list'
+);
+
 const cartCount =
 document.getElementById(
 'cart-count'
@@ -13,6 +23,11 @@ document.getElementById(
 const categoryButtons =
 document.querySelectorAll(
 '.category'
+);
+
+const token =
+localStorage.getItem(
+'token'
 );
 
 let allProducts = [];
@@ -63,6 +78,78 @@ Belum ada produk
 `;
 
 }
+
+}
+
+async function loadTrending(){
+
+try{
+
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/products/trending'
+);
+
+const products =
+await response.json();
+
+renderTrending(
+products
+);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function loadRecommendations(){
+
+try{
+
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/products/recommendations',
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const products =
+await response.json();
+
+renderRecommendations(
+products
+);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function renderTrending(products){
+
+trendingContainer.innerHTML =
+products.map(product=>
+renderProductCard(product)
+).join('');
+
+}
+
+function renderRecommendations(products){
+
+recommendationContainer.innerHTML =
+products.map(product=>
+renderProductCard(product)
+).join('');
 
 }
 
@@ -198,3 +285,7 @@ handleSearch
 updateCartCount();
 
 loadProducts();
+
+loadTrending();
+
+loadRecommendations();
