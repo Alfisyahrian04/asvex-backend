@@ -16,16 +16,23 @@ io.on(
 'connection',
 (socket)=>{
 
-console.log(
-'User connected:',
-socket.id
-);
-
 socket.on(
 'join-user-room',
 (userId)=>{
 
 socket.join(userId);
+
+});
+
+socket.on(
+'chat-message',
+(data)=>{
+
+io.to(
+data.receiverId
+).emit(
+'new-chat-message'
+);
 
 });
 
