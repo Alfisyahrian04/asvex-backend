@@ -10,7 +10,7 @@ async function loadOrders(){
 try{
 
 const orders =
-await getMyOrders();
+await fetchMyOrders();
 
 renderOrders(
 orders
@@ -58,6 +58,8 @@ orders.map(order=>`
 <img
 src="${
 order.product?.images?.[0]
+||
+'https://via.placeholder.com/300'
 }"
 class="order-image"
 />
@@ -65,30 +67,35 @@ class="order-image"
 <div class="order-info">
 
 <h3>
-${order.product?.name}
+${order.product?.name || 'Produk'}
 </h3>
 
 <p>
-Rp ${Number(order.totalPrice)
-.toLocaleString('id-ID')}
+Rp ${Number(
+order.totalPrice || 0
+).toLocaleString('id-ID')}
 </p>
 
 <div class="order-status">
 
-${order.paymentStatus}
+${order.status || 'pending'}
 
 </div>
 
 <div class="tracking-number">
 
-Resi:
-${order.trackingNumber}
+Order ID:
+${order._id}
 
 </div>
 
 <div class="delivery-status">
 
-${order.deliveryStatus}
+${new Date(
+order.createdAt
+).toLocaleDateString(
+'id-ID'
+)}
 
 </div>
 
@@ -100,12 +107,21 @@ ${order.deliveryStatus}
 
 }
 
+/* SOCKET REALTIME */
+
+if(
+typeof socket !== 'undefined'
+){
+
 socket.on(
 'order-updated',
 ()=>{
 
 loadOrders();
 
-});
+}
+);
+
+}
 
 loadOrders();
