@@ -1,13 +1,9 @@
-const client =
-require('../config/search');
-
 exports.indexProduct =
-async product => {
+async(product)=>{
 
-  await client
-    .index('products')
-    .addDocuments([
-      product
-    ]);
+console.log(
+'Indexing product:',
+product.name
+);
 
 };
