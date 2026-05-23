@@ -32,7 +32,7 @@ currentUser.role ===
 ){
 
 window.location.href =
-'cs.html';
+'customer-service.html';
 
 }else{
 
@@ -136,6 +136,10 @@ return;
 
 }
 
+console.log(
+data.user.role
+);
+
 localStorage.setItem(
 'user',
 JSON.stringify(
@@ -176,7 +180,7 @@ data.user.role ===
 ){
 
 window.location.href =
-'cs.html';
+'customer-service.html';
 
 }else{
 
