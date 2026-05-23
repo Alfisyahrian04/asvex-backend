@@ -2,52 +2,79 @@ const Chat =
 require('../models/Chat');
 
 exports.sendMessage =
-async (req, res) => {
+async(req,res)=>{
 
-  const chat =
-    await Chat.create({
+try{
 
-      senderId:
-        req.user._id,
+const {
+receiver,
+message
+} = req.body;
 
-      receiverId:
-        req.body.receiverId,
+const chat =
+await Chat.create({
 
-      roomId:
-        req.body.roomId,
+sender:req.user._id,
 
-      message:
-        req.body.message
+receiver,
 
-    });
+message
 
-  res.json({
+});
 
-    success: true,
+res.status(201)
+.json(chat);
 
-    chat
+}catch(error){
 
-  });
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
 
-exports.getChats =
-async (req, res) => {
+exports.getMessages =
+async(req,res)=>{
 
-  const chats =
-    await Chat.find({
+try{
 
-      roomId:
-        req.params.roomId
+const receiverId =
+req.params.receiverId;
 
-    });
+const chats =
+await Chat.find({
 
-  res.json({
+$or:[
 
-    success: true,
+{
+sender:req.user._id,
+receiver:receiverId
+},
 
-    chats
+{
+sender:receiverId,
+receiver:req.user._id
+}
 
-  });
+]
+
+})
+.sort({
+createdAt:1
+});
+
+res.json(chats);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
