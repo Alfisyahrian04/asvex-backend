@@ -3,31 +3,42 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-  <title>Seller Dashboard</title>
+<title>
+Seller Dashboard
+</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+<link
+rel="stylesheet"
+href="css/style.css"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
-  <div
-    class="max-w-7xl mx-auto p-6"
-  >
+<header class="topbar">
 
-    <h1
-      class="text-4xl font-bold mb-6"
-    >
-      Seller Dashboard
-    </h1>
-    <div class="wallet-card">
+<h1>
+Seller Dashboard
+</h1>
+
+</header>
+
+<main class="container">
+
+<div class="wallet-card">
 
 <h2>
 Saldo Seller
@@ -37,20 +48,137 @@ Saldo Seller
 Rp 0
 </h1>
 
-    </div>
+</div>
 
-    <div
-      id="sellerStats"
-      class="grid grid-cols-2 md:grid-cols-4 gap-4"
-    ></div>
+<div class="analytics-grid">
 
-  </div>
+<div class="analytics-card">
 
-  <script
-    type="module"
-    src="./js/pages/seller.js"
-  ></script>
+<h3>
+Total Produk
+</h3>
+
+<p id="total-products">
+0
+</p>
+
+</div>
+
+<div class="analytics-card">
+
+<h3>
+Total Order
+</h3>
+
+<p id="total-orders">
+0
+</p>
+
+</div>
+
+<div class="analytics-card">
+
+<h3>
+Revenue
+</h3>
+
+<p id="total-revenue">
+Rp 0
+</p>
+
+</div>
+
+</div>
+
+<div class="seller-section">
+
+<div class="section-header">
+
+<h2>
+Produk Saya
+</h2>
+
+<button
+class="add-product-btn"
+onclick="openProductModal()"
+>
+
+Tambah Produk
+
+</button>
+
+</div>
+
+<div
+class="seller-product-grid"
+id="seller-product-list"
+>
+
+</div>
+
+</div>
+
+</main>
+
+<div
+class="modal"
+id="product-modal"
+>
+
+<div class="modal-content">
+
+<h2>
+Tambah Produk
+</h2>
+
+<input
+type="text"
+id="product-name"
+placeholder="Nama Produk"
+>
+
+<input
+type="number"
+id="product-price"
+placeholder="Harga"
+>
+
+<input
+type="text"
+id="product-category"
+placeholder="Kategori"
+>
+
+<input
+type="text"
+id="product-image"
+placeholder="Image URL"
+>
+
+<textarea
+id="product-description"
+placeholder="Deskripsi"
+></textarea>
+
+<button
+onclick="createProduct()"
+>
+
+Simpan Produk
+
+</button>
+
+</div>
+
+</div>
+
+<script src="js/utils/auth.js"></script>
+
+<script src="js/store/authStore.js"></script>
+
+<script src="js/api/productApi.js"></script>
+
+<script src="js/pages/seller.js"></script>
 
 </body>
-
 </html>
