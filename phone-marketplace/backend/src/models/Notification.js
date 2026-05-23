@@ -1,29 +1,47 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const NotificationSchema =
 new mongoose.Schema({
 
-  userId: String,
+user:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  title: String,
+title:{
+type:String,
+required:true
+},
 
-  message: String,
+message:{
+type:String,
+required:true
+},
 
-  isRead: {
+type:{
+type:String,
+enum:[
+'order',
+'payment',
+'system',
+'chat'
+],
+default:'system'
+},
 
-    type: Boolean,
+isRead:{
+type:Boolean,
+default:false
+}
 
-    default: false
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Notification',
-  schema
+'Notification',
+NotificationSchema
 );
