@@ -4,6 +4,12 @@ require('../models/Order');
 const Product =
 require('../models/Product');
 
+const {
+releaseEscrow
+} = require(
+'../services/escrowService'
+);
+
 exports.createOrder =
 async(req,res)=>{
 
@@ -150,6 +156,20 @@ if(deliveryStatus){
 
 order.deliveryStatus =
 deliveryStatus;
+
+if(
+deliveryStatus ===
+'completed'
+){
+
+order.escrowStatus =
+'released';
+
+await releaseEscrow(
+order
+);
+
+}
 
 }
 
