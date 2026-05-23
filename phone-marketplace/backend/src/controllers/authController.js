@@ -20,6 +20,45 @@ role,
 adminKey
 } = req.body;
 
+if(
+!username ||
+!email ||
+!password
+){
+
+return res.status(400)
+.json({
+message:
+'Lengkapi semua field'
+});
+
+}
+
+if(
+!email.includes('@')
+){
+
+return res.status(400)
+.json({
+message:
+'Invalid email'
+});
+
+}
+
+if(
+!password ||
+password.length < 6
+){
+
+return res.status(400)
+.json({
+message:
+'Password minimal 6 karakter'
+});
+
+}
+
 const emailExists =
 await User.findOne({
 email
@@ -138,7 +177,7 @@ message:
 });
 
 }
-  
+
 if(user.isBanned){
 
 return res.status(403)
@@ -148,7 +187,7 @@ message:
 });
 
 }
-  
+
 const validPassword =
 await bcrypt.compare(
 password,
