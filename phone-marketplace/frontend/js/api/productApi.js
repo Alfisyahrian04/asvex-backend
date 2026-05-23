@@ -1,24 +1,24 @@
-import {
-  request
+const PRODUCT_API =
+'https://asvex-backend-production.up.railway.app/api/v1/products';
+
+async function fetchProducts(){
+
+const response =
+await fetch(
+PRODUCT_API
+);
+
+if(!response.ok){
+
+throw new Error(
+'Failed fetch products'
+);
+
 }
-from './api.js';
 
-export const getProducts =
-() => request('/products');
+return await response.json();
 
-export const createProduct =
-data => {
+}
 
-  return request(
-    '/products',
-    {
-
-      method: 'POST',
-
-      body:
-        JSON.stringify(data)
-
-    }
-  );
-
-};
+window.fetchProducts =
+fetchProducts;
