@@ -3,69 +3,197 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
 
-  <title>Admin Dashboard</title>
+<title>
+Admin Dashboard
+</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+<link
+rel="stylesheet"
+href="css/admin.css?v=99999"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+>
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
-  <div
-    class="max-w-7xl mx-auto p-6"
-  >
+<header class="admin-topbar">
 
-    <h1
-      class="text-4xl font-bold mb-6"
-    >
-      Admin Dashboard
-    </h1>
-    <div class="admin-section">
+<div class="admin-logo">
+AL ADMIN
+</div>
+
+<div class="admin-badge">
+SUPER ADMIN
+</div>
+
+</header>
+
+<main class="admin-container">
+
+<h1 class="admin-title">
+Dashboard Admin
+</h1>
+
+<!-- PAYMENT VALIDATION -->
+
+<div class="admin-section">
+
+<div class="section-header">
+
+<div class="line"></div>
+
+<h2>
+Validasi Pembayaran
+</h2>
+
+</div>
+
+<div
+id="payment-list"
+class="admin-grid"
+>
+
+<div class="empty-state">
+Belum ada pembayaran
+</div>
+
+</div>
+
+</div>
+
+<!-- SELLER -->
+
+<div class="admin-section">
+
+<div class="section-header">
+
+<div class="line"></div>
 
 <h2>
 Seller Verification
 </h2>
 
+</div>
+
 <div
 id="seller-list"
+class="admin-grid"
 >
 
 </div>
 
 </div>
 
+<!-- PAYOUT -->
+
 <div class="admin-section">
+
+<div class="section-header">
+
+<div class="line"></div>
 
 <h2>
 Payout Requests
 </h2>
 
+</div>
+
 <div
 id="payout-list"
+class="admin-grid"
 >
 
 </div>
 
 </div>
 
-    <div
-      id="adminStats"
-      class="grid grid-cols-2 md:grid-cols-4 gap-4"
-    ></div>
+</main>
 
-  </div>
+<nav class="admin-nav">
 
-  <script
-    type="module"
-    src="./js/pages/admin.js"
-  ></script>
+<a
+href="admin.html"
+class="admin-nav-item active"
+>
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>
+Dashboard
+</span>
+
+</a>
+
+<a
+href="#"
+class="admin-nav-item"
+>
+
+<i class="fa-solid fa-money-check-dollar"></i>
+
+<span>
+Transaksi
+</span>
+
+</a>
+
+<a
+href="#"
+class="admin-nav-item"
+>
+
+<i class="fa-solid fa-store"></i>
+
+<span>
+Seller
+</span>
+
+</a>
+
+<a
+href="#"
+class="admin-nav-item"
+>
+
+<i class="fa-solid fa-headset"></i>
+
+<span>
+CS
+</span>
+
+</a>
+
+<a
+href="#"
+class="admin-nav-item"
+>
+
+<i class="fa-solid fa-user-shield"></i>
+
+<span>
+Akun
+</span>
+
+</a>
+
+</nav>
+
+<script
+type="module"
+src="./js/pages/admin.js?v=99999"
+></script>
 
 </body>
 
