@@ -1,16 +1,22 @@
+const Product =
+require('../models/Product');
+
 exports.getSuggestions =
-keyword => {
+async(keyword)=>{
 
-  return [
+const products =
+await Product.find({
 
-    keyword + ' murah',
+name:{
+$regex:keyword,
+$options:'i'
+}
 
-    keyword + ' original',
+})
+.limit(5);
 
-    keyword + ' terbaik',
-
-    keyword + ' terbaru'
-
-  ];
+return products.map(
+product => product.name
+);
 
 };
