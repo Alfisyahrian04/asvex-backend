@@ -1,27 +1,82 @@
-export default function bottomNav() {
+function renderBottomNav(active){
 
-  return `
+return `
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around p-4">
+<nav class="bottom-nav">
 
-      <a href="/index.html">
-        Home
-      </a>
+<a
+href="index.html"
+class="nav-item ${
+active === 'home'
+? 'active'
+: ''
+}"
+>
 
-      <a href="/orders.html">
-        Orders
-      </a>
+<i class="fa-solid fa-house"></i>
 
-      <a href="/seller.html">
-        Seller
-      </a>
+<span>
+Home
+</span>
 
-      <a href="/admin.html">
-        Admin
-      </a>
+</a>
 
-    </div>
+<a
+href="wishlist.html"
+class="nav-item ${
+active === 'wishlist'
+? 'active'
+: ''
+}"
+>
 
-  `;
+<i class="fa-solid fa-heart"></i>
+
+<span>
+Wishlist
+</span>
+
+</a>
+
+<a
+href="orders.html"
+class="nav-item ${
+active === 'orders'
+? 'active'
+: ''
+}"
+>
+
+<i class="fa-solid fa-receipt"></i>
+
+<span>
+Transaksi
+</span>
+
+</a>
+
+<a
+href="profile.html"
+class="nav-item ${
+active === 'profile'
+? 'active'
+: ''
+}"
+>
+
+<i class="fa-solid fa-user"></i>
+
+<span>
+Akun
+</span>
+
+</a>
+
+</nav>
+
+`;
 
 }
+
+window.renderBottomNav =
+renderBottomNav;
