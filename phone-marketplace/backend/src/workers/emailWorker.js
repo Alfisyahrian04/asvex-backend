@@ -1,13 +1,15 @@
-const {
-  emailQueue
-} = require('../config/queue');
+const Queue =
+require('bull');
+
+const emailQueue =
+new Queue('email');
 
 emailQueue.process(
-async job => {
+async(job)=>{
 
-  console.log(
-    'Sending email:',
-    job.data
-  );
+console.log(
+'Sending email:',
+job.data
+);
 
 });
