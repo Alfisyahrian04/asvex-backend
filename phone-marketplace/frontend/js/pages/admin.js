@@ -1,60 +1,197 @@
-import {
-  request
-}
-from '../api/api.js';
+protectPage();
 
-const container =
-document.getElementById(
-  'adminStats'
+requireRole('admin');
+
+const token =
+localStorage.getItem(
+'token'
 );
 
-async function init() {
+async function loadUsers(){
 
-  const response =
-    await request(
-      '/admin/dashboard'
-    );
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/admin/users',
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
 
-  container.innerHTML = `
+const users =
+await response.json();
 
-    <div class="bg-white rounded-3xl p-6">
+const sellerList =
+document.getElementById(
+'seller-list'
+);
 
-      <div class="text-gray-500">
-        Users
-      </div>
+sellerList.innerHTML =
+users
+.filter(
+user =>
+user.role === 'seller'
+)
+.map(user=>`
 
-      <div class="text-3xl font-bold mt-2">
-        ${response.users}
-      </div>
+<div class="admin-card">
 
-    </div>
+<h3>
+${user.username}
+</h3>
 
-    <div class="bg-white rounded-3xl p-6">
+<p>
+${user.email}
+</p>
 
-      <div class="text-gray-500">
-        Products
-      </div>
+<p>
+Verified:
+${user.verificationStatus}
+</p>
 
-      <div class="text-3xl font-bold mt-2">
-        ${response.products}
-      </div>
+<button
+onclick="
+verifySeller(
+'${user._id}'
+)
+"
+>
 
-    </div>
+Verify
 
-    <div class="bg-white rounded-3xl p-6">
+</button>
 
-      <div class="text-gray-500">
-        Revenue
-      </div>
+<button
+onclick="
+banUser(
+'${user._id}'
+)
+"
+>
 
-      <div class="text-3xl font-bold mt-2">
-        Rp ${response.revenue}
-      </div>
+Ban
 
-    </div>
+</button>
 
-  `;
+</div>
+
+`).join('');
 
 }
 
-init();
+async function verifySeller(id){
+
+await fetch(
+`https://asvex-backend-production.up.railway.app/api/v1/admin/verify-seller/${id}`,
+{
+method:'PUT',
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadUsers();
+
+}
+
+async function banUser(id){
+
+await fetch(
+`https://asvex-backend-production.up.railway.app/api/v1/admin/ban-user/${id}`,
+{
+method:'PUT',
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadUsers();
+
+}
+
+async function loadPayouts(){
+
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/admin/payouts',
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const payouts =
+await response.json();
+
+const payoutList =
+document.getElementById(
+'payout-list'
+);
+
+payoutList.innerHTML =
+payouts.map(payout=>`
+
+<div class="admin-card">
+
+<h3>
+${payout.seller?.username}
+</h3>
+
+<p>
+Rp ${Number(payout.amount)
+.toLocaleString('id-ID')}
+</p>
+
+<p>
+${payout.status}
+</p>
+
+<button
+onclick="
+approvePayout(
+'${payout._id}'
+)
+"
+>
+
+Approve
+
+</button>
+
+</div>
+
+`).join('');
+
+}
+
+async function approvePayout(id){
+
+await fetch(
+`https://asvex-backend-production.up.railway.app/api/v1/admin/approve-payout/${id}`,
+{
+method:'PUT',
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadPayouts();
+
+}
+
+loadUsers();
+
+loadPayouts();
