@@ -1,18 +1,27 @@
-exports.calculateShipping =
-async ({
-  weight,
-  destination
-}) => {
+exports.generateTrackingNumber =
+()=>{
 
-  return {
+const random =
+Math.random()
+.toString()
+.slice(2,10);
 
-    courier: 'JNE',
+return `ALG${random}`;
 
-    price: 18000,
+};
 
-    estimation:
-      '2-3 Hari'
+exports.createShipment =
+async(order)=>{
 
-  };
+return {
+
+courier:'JNE',
+
+trackingNumber:
+exports.generateTrackingNumber(),
+
+status:'processing'
+
+};
 
 };
