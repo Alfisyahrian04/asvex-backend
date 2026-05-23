@@ -53,6 +53,8 @@ totalPrice,
 
 shippingAddress,
 
+paymentStatus:'pending',
+
 timeline:[
 {
 title:'Order Created',
