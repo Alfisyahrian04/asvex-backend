@@ -1,93 +1,101 @@
 const mongoose =
 require('mongoose');
 
-const specificationSchema =
+const ProductSchema =
 new mongoose.Schema({
 
-  key: String,
+name:{
+type:String,
+required:true
+},
 
-  value: String
+slug:{
+type:String,
+unique:true
+},
 
-}, {
-  _id: false
-});
+description:{
+type:String,
+default:''
+},
 
-const schema =
-new mongoose.Schema({
+price:{
+type:Number,
+required:true
+},
 
-  name: String,
+stock:{
+type:Number,
+default:0
+},
 
-  slug: String,
+category:{
+type:String,
+required:true
+},
 
-  brand: String,
+brand:{
+type:String,
+default:''
+},
 
-  category: String,
+productType:{
+type:String,
+enum:[
+'physical',
+'digital',
+'service'
+],
+default:'physical'
+},
 
-  type: {
+images:[
+{
+type:String
+}
+],
 
-    type: String,
+specifications:{
+type:Object,
+default:{}
+},
 
-    enum: [
-      'physical',
-      'digital',
-      'service'
-    ]
+variants:[
+{
+name:String,
+value:String,
+price:Number,
+stock:Number
+}
+],
 
-  },
+seller:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  description: String,
+rating:{
+type:Number,
+default:0
+},
 
-  images: [String],
+reviewCount:{
+type:Number,
+default:0
+},
 
-  price: Number,
+isActive:{
+type:Boolean,
+default:true
+}
 
-  stock: Number,
-
-  specifications: [
-    specificationSchema
-  ],
-
-  sellerId: {
-
-    type:
-      mongoose.Schema.Types.ObjectId,
-
-    ref: 'User'
-
-  },
-
-  sellerName: String,
-
-  rating: {
-
-    type: Number,
-
-    default: 0
-
-  },
-
-  totalReview: {
-
-    type: Number,
-
-    default: 0
-
-  },
-
-  totalSold: {
-
-    type: Number,
-
-    default: 0
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Product',
-  schema
+'Product',
+ProductSchema
 );
