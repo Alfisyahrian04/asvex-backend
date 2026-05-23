@@ -211,20 +211,20 @@ alert(
 
 /* TOGGLE PASSWORD */
 
-document
-.querySelectorAll(
+const toggleButtons =
+document.querySelectorAll(
 '.toggle-password'
-)
-.forEach(icon=>{
+);
 
-icon.addEventListener(
+toggleButtons.forEach(
+(button)=>{
+
+button.addEventListener(
 'click',
-()=>{
+function(){
 
 const target =
-icon.getAttribute(
-'toggle'
-);
+this.dataset.toggle;
 
 const input =
 document.querySelector(
@@ -245,11 +245,11 @@ input.type ===
 input.type =
 'text';
 
-icon.classList.remove(
+this.classList.remove(
 'fa-eye'
 );
 
-icon.classList.add(
+this.classList.add(
 'fa-eye-slash'
 );
 
@@ -258,16 +258,18 @@ icon.classList.add(
 input.type =
 'password';
 
-icon.classList.remove(
+this.classList.remove(
 'fa-eye-slash'
 );
 
-icon.classList.add(
+this.classList.add(
 'fa-eye'
 );
 
 }
 
-});
+}
+);
 
-});
+}
+);
