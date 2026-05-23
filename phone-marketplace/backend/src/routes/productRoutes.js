@@ -1,21 +1,52 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/productController');
+const {
+createProduct,
+getProducts,
+getSingleProduct,
+updateProduct,
+deleteProduct
+} = require(
+'../controllers/productController'
+);
 
-const auth =
-require('../middleware/authMiddleware');
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
 
 router.get(
-  '/',
-  controller.getProducts
+'/',
+getProducts
+);
+
+router.get(
+'/:id',
+getSingleProduct
 );
 
 router.post(
-  '/',
-  auth,
-  controller.createProduct
+'/',
+protect,
+createProduct
 );
 
-module.exports = router;
+router.put(
+'/:id',
+protect,
+updateProduct
+);
+
+router.delete(
+'/:id',
+protect,
+deleteProduct
+);
+
+module.exports =
+router;
