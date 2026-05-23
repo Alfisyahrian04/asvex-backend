@@ -9,7 +9,9 @@ createProduct,
 getProducts,
 getSingleProduct,
 updateProduct,
-deleteProduct
+deleteProduct,
+toggleWishlist,
+getWishlist
 } = require(
 '../controllers/productController'
 );
@@ -23,6 +25,12 @@ protect
 router.get(
 '/',
 getProducts
+);
+
+router.get(
+'/wishlist/me',
+protect,
+getWishlist
 );
 
 router.get(
@@ -46,6 +54,12 @@ router.delete(
 '/:id',
 protect,
 deleteProduct
+);
+
+router.post(
+'/wishlist/:id',
+protect,
+toggleWishlist
 );
 
 module.exports =
