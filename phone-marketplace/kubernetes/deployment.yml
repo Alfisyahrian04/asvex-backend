@@ -3,30 +3,23 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: marketplace-backend
+  name: marketplace
 
 spec:
-
   replicas: 3
 
   selector:
     matchLabels:
-      app: backend
+      app: marketplace
 
   template:
-
     metadata:
       labels:
-        app: backend
+        app: marketplace
 
     spec:
-
       containers:
-
-        - name: backend
-
-          image:
-            marketplace-backend:latest
-
+        - name: marketplace
+          image: marketplace:latest
           ports:
             - containerPort: 5000
