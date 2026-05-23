@@ -16,7 +16,7 @@ Seller Profile
 
 <link
 rel="stylesheet"
-href="css/seller.css?v=10"
+href="css/seller.css?v=11"
 >
 
 <link
@@ -76,12 +76,23 @@ Ganti Password
 
 <div class="password-form">
 
+<div class="password-group">
+
 <input
 class="password-input"
 type="password"
 id="old-password"
 placeholder="Password Lama"
 >
+
+<i
+class="fa-solid fa-eye toggle-password"
+toggle="#old-password"
+></i>
+
+</div>
+
+<div class="password-group">
 
 <input
 class="password-input"
@@ -90,12 +101,28 @@ id="new-password"
 placeholder="Password Baru"
 >
 
+<i
+class="fa-solid fa-eye toggle-password"
+toggle="#new-password"
+></i>
+
+</div>
+
+<div class="password-group">
+
 <input
 class="password-input"
 type="password"
 id="confirm-password"
 placeholder="Konfirmasi Password Baru"
 >
+
+<i
+class="fa-solid fa-eye toggle-password"
+toggle="#confirm-password"
+></i>
+
+</div>
 
 <button
 class="password-btn"
