@@ -4,46 +4,102 @@ require('jsonwebtoken');
 const User =
 require('../models/User');
 
-module.exports =
-async (req, res, next) => {
+const protect =
+async(req,res,next)=>{
 
-  try {
+try{
 
-    const token =
-      req.headers.authorization
-      ?.split(' ')[1];
+const authHeader =
+req.headers.authorization;
 
-    if (!token) {
+if(
+!authHeader ||
+!authHeader.startsWith('Bearer ')
+){
 
-      return res.status(401)
-      .json({
-        success: false,
-        message: 'Unauthorized'
-      });
+return res.status(401)
+.json({
+message:'Unauthorized'
+});
 
-    }
+}
 
-    const decoded =
-      jwt.verify(
-        token,
-        process.env.JWT_SECRET
-      );
+const token =
+authHeader.split(' ')[1];
 
-    req.user =
-      await User.findById(
-        decoded.id
-      );
+const decoded =
+jwt.verify(
+token,
+process.env.JWT_SECRET
+);
 
-    next();
+const user =
+await User.findById(
+decoded.id
+).select('-password');
 
-  } catch (err) {
+if(!user){
 
-    res.status(401)
-    .json({
-      success: false,
-      message: 'Invalid token'
-    });
+return res.status(401)
+.json({
+message:'User not found'
+});
 
-  }
+}
 
+if(user.isBanned){
+
+return res.status(403)
+.json({
+message:'Account banned'
+});
+
+}
+
+req.user = user;
+
+next();
+
+}catch(error){
+
+return res.status(401)
+.json({
+message:'Invalid token'
+});
+
+}
+
+};
+
+const roleMiddleware =
+(...roles)=>{
+
+return(
+req,
+res,
+next
+)=>{
+
+if(
+!roles.includes(
+req.user.role
+)
+){
+
+return res.status(403)
+.json({
+message:'Forbidden'
+});
+
+}
+
+next();
+
+};
+
+};
+
+module.exports = {
+protect,
+roleMiddleware
 };
