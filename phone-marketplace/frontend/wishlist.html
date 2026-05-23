@@ -3,12 +3,12 @@
 
 <head>
 
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
-/>
+>
 
 <title>
 Wishlist
@@ -17,12 +17,12 @@ Wishlist
 <link
 rel="stylesheet"
 href="css/style.css"
-/>
+>
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
+>
 
 </head>
 
@@ -30,7 +30,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <header class="topbar">
 
-<h1 class="page-title">
+<h1>
 Wishlist
 </h1>
 
@@ -38,8 +38,11 @@ Wishlist
 
 <main class="container">
 
-<div class="empty-product">
-Belum ada wishlist
+<div
+class="wishlist-grid"
+id="wishlist-container"
+>
+
 </div>
 
 </main>
@@ -99,6 +102,12 @@ Akun
 </a>
 
 </nav>
+
+<script src="js/utils/auth.js"></script>
+
+<script src="js/store/cartStore.js"></script>
+
+<script src="js/pages/wishlist.js"></script>
 
 </body>
 </html>
