@@ -749,3 +749,78 @@ z-index:999999 !important;
 pointer-events:none !important;
 
 }
+/* FINAL FLOAT BUTTON FIX */
+
+body{
+
+overflow-x:hidden !important;
+
+}
+
+.container{
+
+overflow:visible !important;
+
+}
+
+main{
+
+overflow:visible !important;
+
+}
+
+.seller-product-grid{
+
+overflow:visible !important;
+
+min-height:300px !important;
+
+}
+
+button.add-product-btn{
+
+display:flex !important;
+
+visibility:visible !important;
+
+opacity:1 !important;
+
+position:fixed !important;
+
+right:20px !important;
+
+bottom:120px !important;
+
+width:65px !important;
+
+height:65px !important;
+
+border-radius:50% !important;
+
+background:#ff5a00 !important;
+
+border:none !important;
+
+color:#fff !important;
+
+font-size:28px !important;
+
+align-items:center !important;
+
+justify-content:center !important;
+
+z-index:999999999 !important;
+
+box-shadow:
+0 10px 30px
+rgba(255,90,0,.35) !important;
+
+}
+
+button.add-product-btn i{
+
+font-size:28px !important;
+
+color:#fff !important;
+
+}
