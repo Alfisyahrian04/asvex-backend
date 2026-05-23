@@ -4,82 +4,154 @@ require('../models/Review');
 const Product =
 require('../models/Product');
 
+const Order =
+require('../models/Order');
+
 exports.createReview =
-async (req, res) => {
+async(req,res)=>{
 
-  try {
+try{
 
-    const {
+const {
+productId,
+rating,
+comment
+} = req.body;
 
-      productId,
+const product =
+await Product.findById(
+productId
+);
 
-      rating,
+if(!product){
 
-      comment
+return res.status(404)
+.json({
+message:
+'Product not found'
+});
 
-    } = req.body;
+}
 
-    const review =
-      await Review.create({
+const purchased =
+await Order.findOne({
 
-        productId,
+buyer:req.user._id,
 
-        buyerId:
-          req.user._id,
+product:productId,
 
-        rating,
+paymentStatus:'paid'
 
-        comment
+});
 
-      });
+if(!purchased){
 
-    const reviews =
-      await Review.find({
-        productId
-      });
+return res.status(403)
+.json({
+message:
+'Buy product first'
+});
 
-    const total =
-      reviews.reduce(
-        (acc, item) =>
-          acc + item.rating,
-        0
-      );
+}
 
-    const average =
-      total / reviews.length;
+const existingReview =
+await Review.findOne({
 
-    await Product.findByIdAndUpdate(
-      productId,
-      {
+user:req.user._id,
 
-        rating: average,
+product:productId
 
-        totalReview:
-          reviews.length
+});
 
-      }
-    );
+if(existingReview){
 
-    res.json({
+return res.status(400)
+.json({
+message:
+'Already reviewed'
+});
 
-      success: true,
+}
 
-      review
+const review =
+await Review.create({
 
-    });
+product:productId,
 
-  } catch (err) {
+user:req.user._id,
 
-    res.status(500)
-    .json({
+rating,
+comment,
 
-      success: false,
+verifiedPurchase:true
 
-      message:
-        err.message
+});
 
-    });
+const reviews =
+await Review.find({
+product:productId
+});
 
-  }
+const totalRating =
+reviews.reduce(
+(total,item)=>
+total + item.rating,
+0
+);
+
+product.rating =
+(
+totalRating /
+reviews.length
+).toFixed(1);
+
+product.reviewCount =
+reviews.length;
+
+await product.save();
+
+res.status(201)
+.json(review);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getProductReviews =
+async(req,res)=>{
+
+try{
+
+const reviews =
+await Review.find({
+
+product:req.params.productId
+
+})
+.populate(
+'user',
+'username'
+)
+.sort({
+createdAt:-1
+});
+
+res.json(reviews);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
