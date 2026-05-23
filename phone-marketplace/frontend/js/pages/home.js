@@ -1,31 +1,6 @@
-const token =
-localStorage.getItem('token');
+protectPage();
 
-if(!token){
-
-window.location.href =
-'login.html';
-
-}
-
-const user =
-JSON.parse(
-localStorage.getItem('user')
-);
-
-const username =
-document.getElementById(
-'username'
-);
-
-if(user){
-
-username.innerText =
-user.username;
-
-}
-
-const productList =
+const productContainer =
 document.getElementById(
 'product-list'
 );
@@ -35,115 +10,142 @@ document.getElementById(
 'cart-count'
 );
 
-function updateCartCount(){
+const categoryButtons =
+document.querySelectorAll(
+'.category'
+);
 
-const cart =
-JSON.parse(
-localStorage.getItem('cart')
-) || [];
-
-cartCount.innerText =
-cart.length;
-
-}
+let allProducts = [];
 
 async function loadProducts(){
 
 try{
 
-const response =
-await fetch(
-'https://asvex-backend-production.up.railway.app/api/products'
+const products =
+await fetchProducts();
+
+allProducts =
+products;
+
+productStore.setProducts(
+products
 );
 
-const data =
-await response.json();
+renderProducts(
+products
+);
 
-const products =
-data.products || data;
+}catch(error){
+
+productContainer.innerHTML = `
+
+<div class="empty-product">
+
+Belum ada produk
+
+</div>
+
+`;
+
+}
+
+}
+
+function renderProducts(products){
 
 if(!products.length){
 
-productList.innerHTML = `
+productContainer.innerHTML = `
+
 <div class="empty-product">
+
 Produk kosong
+
 </div>
+
 `;
 
 return;
 
 }
 
-productList.innerHTML =
-products.map(product=>`
-
-<div class="product-card">
-
-<img
-src="${product.image}"
-alt="${product.name}"
-class="product-image"
-/>
-
-<div class="product-content">
-
-<h3>
-${product.name}
-</h3>
-
-<p class="product-price">
-Rp ${Number(product.price)
-.toLocaleString('id-ID')}
-</p>
-
-<button
-class="buy-btn"
-onclick='addToCart(${JSON.stringify(product)})'
->
-
-Tambah Keranjang
-
-</button>
-
-</div>
-
-</div>
-
-`).join('');
-
-}catch(error){
-
-productList.innerHTML = `
-<div class="empty-product">
-Gagal memuat produk
-</div>
-`;
+productContainer.innerHTML =
+products.map(product=>
+renderProductCard(product)
+).join('');
 
 }
 
-}
+window.addToCart =
+function(product){
 
-window.addToCart = function(product){
-
-let cart =
-JSON.parse(
-localStorage.getItem('cart')
-) || [];
-
-cart.push(product);
-
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
+cartStore.addToCart(
+product
 );
 
 updateCartCount();
 
 alert(
-'Produk masuk keranjang'
+'Produk ditambahkan'
 );
 
 };
 
+function updateCartCount(){
+
+cartCount.innerText =
+cartStore.getCartCount();
+
+}
+
+categoryButtons.forEach(button=>{
+
+button.addEventListener(
+'click',
+()=>{
+
+document
+.querySelector(
+'.category.active'
+)
+.classList.remove(
+'active'
+);
+
+button.classList.add(
+'active'
+);
+
+const category =
+button.innerText;
+
+if(category === 'Semua'){
+
+renderProducts(
+allProducts
+);
+
+return;
+
+}
+
+const filtered =
+allProducts.filter(
+product =>
+product.category
+.toLowerCase() ===
+category.toLowerCase()
+);
+
+renderProducts(
+filtered
+);
+
+}
+);
+
+});
+
 updateCartCount();
+
 loadProducts();
