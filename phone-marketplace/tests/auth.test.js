@@ -1,16 +1,15 @@
 describe(
-  'Auth Test',
-  () => {
+'Auth Test',
+()=>{
 
-    test(
-      'Should login',
-      () => {
+test(
+'Login should work',
+()=>{
 
-        expect(true)
-        .toBe(true);
+expect(true)
+.toBe(true);
 
-      }
-    );
-
-  }
+}
 );
+
+});
