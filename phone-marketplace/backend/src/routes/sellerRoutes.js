@@ -6,7 +6,9 @@ express.Router();
 
 const {
 getWallet,
-requestPayout
+requestPayout,
+getSellerProducts,
+getSellerAnalytics
 } = require(
 '../controllers/sellerController'
 );
@@ -27,6 +29,18 @@ router.post(
 '/payout',
 protect,
 requestPayout
+);
+
+router.get(
+'/products',
+protect,
+getSellerProducts
+);
+
+router.get(
+'/analytics',
+protect,
+getSellerAnalytics
 );
 
 module.exports =
