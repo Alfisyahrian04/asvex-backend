@@ -165,6 +165,22 @@ Stock:
 ${product.stock}
 </p>
 
+<p class="
+${
+product.stock <= 5
+? 'low-stock'
+: ''
+}
+">
+
+${
+product.stock <= 5
+? '⚠ Stock Menipis'
+: 'Stock Aman'
+}
+
+</p>
+
 <button
 onclick="
 deleteProduct(
@@ -221,6 +237,11 @@ document.getElementById(
 'product-description'
 ).value;
 
+const stock =
+document.getElementById(
+'product-stock'
+).value;
+
 const response =
 await fetch(
 `${API_URL}/products`,
@@ -244,7 +265,7 @@ description,
 
 images:[image],
 
-stock:10
+stock:Number(stock)
 
 })
 
