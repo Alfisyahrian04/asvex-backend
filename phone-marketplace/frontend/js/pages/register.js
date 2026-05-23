@@ -1,48 +1,6 @@
 const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1';
 
-const currentUser =
-JSON.parse(
-localStorage.getItem(
-'user'
-)
-);
-
-if(currentUser){
-
-if(
-currentUser.role ===
-'seller'
-){
-
-window.location.href =
-'seller.html';
-
-}else if(
-currentUser.role ===
-'admin'
-){
-
-window.location.href =
-'admin.html';
-
-}else if(
-currentUser.role ===
-'customer_service'
-){
-
-window.location.href =
-'customer-service.html';
-
-}else{
-
-window.location.href =
-'index.html';
-
-}
-
-}
-
 const registerForm =
 document.getElementById(
 'registerForm'
@@ -162,20 +120,8 @@ return;
 
 }
 
-console.log(
-data.user.role
-);
-
-localStorage.setItem(
-'user',
-JSON.stringify(
-data.user
-)
-);
-
-localStorage.setItem(
-'token',
-data.token
+alert(
+'Register berhasil, silahkan login'
 );
 
 registerButton.disabled =
@@ -184,36 +130,8 @@ false;
 registerButton.innerText =
 'Register';
 
-if(
-data.user.role ===
-'seller'
-){
-
 window.location.href =
-'seller.html';
-
-}else if(
-data.user.role ===
-'admin'
-){
-
-window.location.href =
-'admin.html';
-
-}else if(
-data.user.role ===
-'customer_service'
-){
-
-window.location.href =
-'customer-service.html';
-
-}else{
-
-window.location.href =
-'index.html';
-
-}
+'login.html';
 
 }catch(err){
 
