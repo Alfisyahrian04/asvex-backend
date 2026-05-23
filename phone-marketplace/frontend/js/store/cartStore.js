@@ -1,39 +1,102 @@
 const cartStore = {
 
-  getCart() {
+getCart(){
 
-    return JSON.parse(
+return JSON.parse(
+localStorage.getItem('cart')
+) || [];
 
-      localStorage.getItem(
-        'cart'
-      ) || '[]'
+},
 
-    );
+saveCart(cart){
 
-  },
+localStorage.setItem(
+'cart',
+JSON.stringify(cart)
+);
 
-  addToCart(product) {
+},
 
-    const cart =
-      this.getCart();
+addToCart(product){
 
-    cart.push(product);
+let cart =
+this.getCart();
 
-    localStorage.setItem(
-      'cart',
-      JSON.stringify(cart)
-    );
+const existing =
+cart.find(
+item =>
+item._id === product._id
+);
 
-  },
+if(existing){
 
-  clearCart() {
+existing.quantity += 1;
 
-    localStorage.removeItem(
-      'cart'
-    );
+}else{
 
-  }
+cart.push({
+...product,
+quantity:1
+});
+
+}
+
+this.saveCart(cart);
+
+},
+
+removeFromCart(productId){
+
+let cart =
+this.getCart();
+
+cart = cart.filter(
+item =>
+item._id !== productId
+);
+
+this.saveCart(cart);
+
+},
+
+clearCart(){
+
+localStorage.removeItem(
+'cart'
+);
+
+},
+
+getCartCount(){
+
+const cart =
+this.getCart();
+
+return cart.reduce(
+(total,item)=>
+total + item.quantity,
+0
+);
+
+},
+
+getCartTotal(){
+
+const cart =
+this.getCart();
+
+return cart.reduce(
+(total,item)=>
+total + (
+item.price *
+item.quantity
+),
+0
+);
+
+}
 
 };
 
-export default cartStore;
+window.cartStore =
+cartStore;
