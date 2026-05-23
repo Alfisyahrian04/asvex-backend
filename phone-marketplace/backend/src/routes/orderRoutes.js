@@ -6,7 +6,9 @@ express.Router();
 
 const {
 createOrder,
-getMyOrders
+getMyOrders,
+getSellerOrders,
+updateOrderStatus
 } = require(
 '../controllers/orderController'
 );
@@ -27,6 +29,20 @@ router.get(
 '/my-orders',
 protect,
 getMyOrders
+);
+
+/* SELLER */
+
+router.get(
+'/seller-orders',
+protect,
+getSellerOrders
+);
+
+router.put(
+'/:id/status',
+protect,
+updateOrderStatus
 );
 
 module.exports =
