@@ -12,9 +12,10 @@ changePassword
 '../controllers/authController'
 );
 
-const authMiddleware =
-require(
-'../middlewares/authMiddleware'
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
 );
 
 router.post(
@@ -29,7 +30,7 @@ login
 
 router.put(
 '/change-password',
-authMiddleware,
+protect,
 changePassword
 );
 
