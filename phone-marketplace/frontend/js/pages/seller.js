@@ -2,18 +2,21 @@ protectPage();
 
 requireRole('seller');
 
-async function loadWallet(){
-
-try{
-
 const token =
 localStorage.getItem(
 'token'
 );
 
+const API_URL =
+'https://asvex-backend-production.up.railway.app/api/v1';
+
+async function loadWallet(){
+
+try{
+
 const response =
 await fetch(
-'https://asvex-backend-production.up.railway.app/api/v1/seller/wallet',
+`${API_URL}/seller/wallet`,
 {
 headers:{
 Authorization:
@@ -40,4 +43,273 @@ console.log(error);
 
 }
 
+async function loadAnalytics(){
+
+try{
+
+const response =
+await fetch(
+`${API_URL}/seller/analytics`,
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const analytics =
+await response.json();
+
+document.getElementById(
+'total-products'
+).innerText =
+analytics.totalProducts;
+
+document.getElementById(
+'total-orders'
+).innerText =
+analytics.totalOrders;
+
+document.getElementById(
+'total-revenue'
+).innerText =
+
+`Rp ${Number(analytics.revenue)
+.toLocaleString('id-ID')}`;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function loadProducts(){
+
+try{
+
+const response =
+await fetch(
+`${API_URL}/seller/products`,
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+const products =
+await response.json();
+
+renderProducts(
+products
+);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function renderProducts(products){
+
+const container =
+document.getElementById(
+'seller-product-list'
+);
+
+if(!products.length){
+
+container.innerHTML = `
+
+<div class="empty-product">
+
+Belum ada produk
+
+</div>
+
+`;
+
+return;
+
+}
+
+container.innerHTML =
+products.map(product=>`
+
+<div class="seller-product-card">
+
+<img
+src="${
+product.images?.[0]
+}"
+alt="${product.name}"
+>
+
+<h3>
+${product.name}
+</h3>
+
+<p>
+Rp ${Number(product.price)
+.toLocaleString('id-ID')}
+</p>
+
+<p>
+Stock:
+${product.stock}
+</p>
+
+<button
+onclick="
+deleteProduct(
+'${product._id}'
+)
+"
+>
+
+Hapus
+
+</button>
+
+</div>
+
+`).join('');
+
+}
+
+function openProductModal(){
+
+document.getElementById(
+'product-modal'
+).style.display =
+'flex';
+
+}
+
+async function createProduct(){
+
+try{
+
+const name =
+document.getElementById(
+'product-name'
+).value;
+
+const price =
+document.getElementById(
+'product-price'
+).value;
+
+const category =
+document.getElementById(
+'product-category'
+).value;
+
+const image =
+document.getElementById(
+'product-image'
+).value;
+
+const description =
+document.getElementById(
+'product-description'
+).value;
+
+const response =
+await fetch(
+`${API_URL}/products`,
+{
+method:'POST',
+
+headers:{
+'Content-Type':
+'application/json',
+
+Authorization:
+`Bearer ${token}`
+},
+
+body:JSON.stringify({
+
+name,
+price,
+category,
+description,
+
+images:[image],
+
+stock:10
+
+})
+
+}
+);
+
+if(!response.ok){
+
+throw new Error();
+
+}
+
+alert(
+'Produk berhasil dibuat'
+);
+
+document.getElementById(
+'product-modal'
+).style.display =
+'none';
+
+loadProducts();
+
+loadAnalytics();
+
+}catch(error){
+
+alert(
+'Gagal membuat produk'
+);
+
+}
+
+}
+
+async function deleteProduct(id){
+
+try{
+
+await fetch(
+`${API_URL}/products/${id}`,
+{
+method:'DELETE',
+
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadProducts();
+
+loadAnalytics();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
 loadWallet();
+
+loadAnalytics();
+
+loadProducts();
