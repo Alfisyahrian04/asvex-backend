@@ -32,6 +32,38 @@ Gagal memuat transaksi
 
 }
 
+function getStatusLabel(status){
+
+switch(status){
+
+case 'pending_payment':
+return 'Menunggu Pembayaran';
+
+case 'waiting_confirmation':
+return 'Menunggu Konfirmasi Admin';
+
+case 'paid':
+return 'Pembayaran Diterima';
+
+case 'processed':
+return 'Sedang Diproses';
+
+case 'shipped':
+return 'Pesanan Dikirim';
+
+case 'completed':
+return 'Pesanan Selesai';
+
+case 'cancelled':
+return 'Pesanan Dibatalkan';
+
+default:
+return status;
+
+}
+
+}
+
 function renderOrders(orders){
 
 if(!orders.length){
@@ -78,7 +110,9 @@ order.totalPrice || 0
 
 <div class="order-status">
 
-${order.status || 'pending'}
+${getStatusLabel(
+order.status || 'pending_payment'
+)}
 
 </div>
 
@@ -98,6 +132,38 @@ order.createdAt
 )}
 
 </div>
+
+${
+order.paymentMethod
+? `
+<div class="delivery-status">
+Metode:
+${order.paymentMethod}
+</div>
+`
+: ''
+}
+
+${
+order.paymentProof
+? `
+<a
+href="${order.paymentProof}"
+target="_blank"
+class="btn-primary"
+style="
+display:inline-flex;
+margin-top:10px;
+padding:10px 14px;
+font-size:14px;
+text-decoration:none;
+"
+>
+Lihat Bukti Bayar
+</a>
+`
+: ''
+}
 
 </div>
 
