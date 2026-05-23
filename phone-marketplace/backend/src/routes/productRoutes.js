@@ -11,7 +11,10 @@ getSingleProduct,
 updateProduct,
 deleteProduct,
 toggleWishlist,
-getWishlist
+getWishlist,
+getTrending,
+getRecommendations,
+getRelated
 } = require(
 '../controllers/productController'
 );
@@ -25,6 +28,22 @@ protect
 router.get(
 '/',
 getProducts
+);
+
+router.get(
+'/trending',
+getTrending
+);
+
+router.get(
+'/recommendations',
+protect,
+getRecommendations
+);
+
+router.get(
+'/related/:id',
+getRelated
 );
 
 router.get(
