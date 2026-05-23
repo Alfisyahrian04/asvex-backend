@@ -20,6 +20,8 @@ require('hpp');
 
 const app = express();
 
+/* FIX RAILWAY PROXY */
+
 app.set(
   'trust proxy',
   1
