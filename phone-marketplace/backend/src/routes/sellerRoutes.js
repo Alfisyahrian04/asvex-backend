@@ -1,16 +1,33 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/sellerController');
-
-const auth =
-require('../middleware/authMiddleware');
-
-router.get(
-  '/dashboard',
-  auth,
-  controller.dashboard
+const {
+getWallet,
+requestPayout
+} = require(
+'../controllers/sellerController'
 );
 
-module.exports = router;
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
+
+router.get(
+'/wallet',
+protect,
+getWallet
+);
+
+router.post(
+'/payout',
+protect,
+requestPayout
+);
+
+module.exports =
+router;
