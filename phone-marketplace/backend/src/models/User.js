@@ -1,6 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose =
+require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const UserSchema =
+new mongoose.Schema({
 
 username:{
 type:String,
@@ -58,7 +60,15 @@ default:false
 isBanned:{
 type:Boolean,
 default:false
+},
+
+wishlist:[
+{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'Product'
 }
+]
 
 },{
 timestamps:true
