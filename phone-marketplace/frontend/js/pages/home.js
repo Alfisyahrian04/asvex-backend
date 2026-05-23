@@ -17,6 +17,21 @@ document.querySelectorAll(
 
 let allProducts = [];
 
+document.getElementById(
+'search-bar'
+).innerHTML =
+renderSearchBar();
+
+const searchInput =
+document.getElementById(
+'search-input'
+);
+
+const sortSelect =
+document.getElementById(
+'sort-select'
+);
+
 async function loadProducts(){
 
 try{
@@ -145,6 +160,40 @@ filtered
 );
 
 });
+
+async function handleSearch(){
+
+const keyword =
+searchInput.value;
+
+const sort =
+sortSelect.value;
+
+const response =
+await fetch(
+
+`https://asvex-backend-production.up.railway.app/api/v1/search?keyword=${keyword}&sort=${sort}`
+
+);
+
+const products =
+await response.json();
+
+renderProducts(
+products
+);
+
+}
+
+searchInput.addEventListener(
+'input',
+handleSearch
+);
+
+sortSelect.addEventListener(
+'change',
+handleSearch
+);
 
 updateCartCount();
 
