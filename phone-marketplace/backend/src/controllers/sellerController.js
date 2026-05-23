@@ -1,62 +1,97 @@
-const Product =
-require('../models/Product');
+const Wallet =
+require('../models/Wallet');
 
-const Order =
-require('../models/Order');
+const Payout =
+require('../models/Payout');
 
-exports.dashboard =
-async (req, res) => {
+exports.getWallet =
+async(req,res)=>{
 
-  try {
+try{
 
-    const products =
-      await Product.countDocuments({
+let wallet =
+await Wallet.findOne({
 
-        sellerId:
-          req.user._id
+user:req.user._id
 
-      });
+});
 
-    const orders =
-      await Order.find({
+if(!wallet){
 
-        'items.sellerId':
-          req.user._id
+wallet =
+await Wallet.create({
 
-      });
+user:req.user._id
 
-    const revenue =
-      orders.reduce(
-        (acc, item) =>
-          acc + item.total,
-        0
-      );
+});
 
-    res.json({
+}
 
-      success: true,
+res.json(wallet);
 
-      products,
+}catch(error){
 
-      totalOrders:
-        orders.length,
+res.status(500)
+.json({
+message:error.message
+});
 
-      revenue
+}
 
-    });
+};
 
-  } catch (err) {
+exports.requestPayout =
+async(req,res)=>{
 
-    res.status(500)
-    .json({
+try{
 
-      success: false,
+const {
+amount
+} = req.body;
 
-      message:
-        err.message
+const wallet =
+await Wallet.findOne({
 
-    });
+user:req.user._id
 
-  }
+});
+
+if(
+!wallet ||
+wallet.balance < amount
+){
+
+return res.status(400)
+.json({
+message:
+'Saldo tidak cukup'
+});
+
+}
+
+wallet.balance -= amount;
+
+await wallet.save();
+
+const payout =
+await Payout.create({
+
+seller:req.user._id,
+
+amount
+
+});
+
+res.status(201)
+.json(payout);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
