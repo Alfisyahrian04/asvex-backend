@@ -1,19 +1,30 @@
 const productStore = {
 
-  products: [],
+products:[],
 
-  setProducts(products) {
+setProducts(products){
 
-    this.products = products;
+this.products =
+products;
 
-  },
+},
 
-  getProducts() {
+getProducts(){
 
-    return this.products;
+return this.products;
 
-  }
+},
+
+getProductById(id){
+
+return this.products.find(
+product =>
+product._id === id
+);
+
+}
 
 };
 
-export default productStore;
+window.productStore =
+productStore;
