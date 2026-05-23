@@ -19,4 +19,19 @@ user.id
 
 }
 
-window.socket = socket;
+socket.on(
+'new-notification',
+()=>{
+
+if(
+window.loadNotificationCount
+){
+
+loadNotificationCount();
+
+}
+
+});
+
+window.socket =
+socket;
