@@ -282,7 +282,9 @@ body:JSON.stringify({
 name,
 description,
 price,
-image:imageBase64,
+images:[imageBase64],
+category:'General',
+productType:'physical',
 seller:
 currentUser.id
 
