@@ -232,3 +232,99 @@ message:error.message
 }
 
 };
+
+exports.changePassword =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user.id
+);
+
+if(!user){
+
+return res.status(404)
+.json({
+message:
+'User tidak ditemukan'
+});
+
+}
+
+const {
+oldPassword,
+newPassword
+} = req.body;
+
+if(
+!oldPassword ||
+!newPassword
+){
+
+return res.status(400)
+.json({
+message:
+'Lengkapi semua field'
+});
+
+}
+
+if(
+newPassword.length < 6
+){
+
+return res.status(400)
+.json({
+message:
+'Password minimal 6 karakter'
+});
+
+}
+
+const validPassword =
+await bcrypt.compare(
+oldPassword,
+user.password
+);
+
+if(!validPassword){
+
+return res.status(400)
+.json({
+message:
+'Password lama salah'
+});
+
+}
+
+const hashedPassword =
+await bcrypt.hash(
+newPassword,
+10
+);
+
+user.password =
+hashedPassword;
+
+await user.save();
+
+res.json({
+message:
+'Password berhasil diubah'
+});
+
+}catch(error){
+
+console.log(error);
+
+res.status(500)
+.json({
+message:
+'Server error'
+});
+
+}
+
+};
