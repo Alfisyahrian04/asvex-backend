@@ -10,6 +10,12 @@ releaseEscrow
 '../services/escrowService'
 );
 
+const {
+createShipment
+} = require(
+'../services/shippingService'
+);
+
 exports.createOrder =
 async(req,res)=>{
 
@@ -36,6 +42,9 @@ message:
 
 }
 
+const shipment =
+await createShipment();
+
 const totalPrice =
 product.price * quantity;
 
@@ -60,6 +69,9 @@ totalPrice,
 shippingAddress,
 
 paymentStatus:'pending',
+
+trackingNumber:
+shipment.trackingNumber,
 
 timeline:[
 {
@@ -157,6 +169,18 @@ if(deliveryStatus){
 order.deliveryStatus =
 deliveryStatus;
 
+order.timeline.push({
+
+title:
+deliveryStatus,
+
+description:
+`Order ${deliveryStatus}`
+
+});
+
+}
+
 if(
 deliveryStatus ===
 'completed'
@@ -170,17 +194,6 @@ order
 );
 
 }
-
-}
-
-order.timeline.push({
-
-title:'Order Updated',
-
-description:
-'Order status updated'
-
-});
 
 await order.save();
 
