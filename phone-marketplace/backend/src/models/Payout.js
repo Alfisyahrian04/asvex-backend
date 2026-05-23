@@ -1,40 +1,36 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const PayoutSchema =
 new mongoose.Schema({
 
-  sellerId: {
+seller:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-    type:
-      mongoose.Schema.Types.ObjectId,
+amount:{
+type:Number,
+required:true
+},
 
-    ref: 'User'
+status:{
+type:String,
+enum:[
+'pending',
+'approved',
+'rejected'
+],
+default:'pending'
+}
 
-  },
-
-  amount: Number,
-
-  status: {
-
-    type: String,
-
-    enum: [
-      'pending',
-      'approved',
-      'rejected'
-    ],
-
-    default: 'pending'
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Payout',
-  schema
+'Payout',
+PayoutSchema
 );
