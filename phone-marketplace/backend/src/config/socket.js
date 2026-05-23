@@ -1,73 +1,65 @@
-const { Server } =
+const socketIo =
 require('socket.io');
 
-const jwt =
-require('jsonwebtoken');
+let io;
 
-module.exports =
-server => {
+const initSocket =
+(server)=>{
 
-  const io =
-  new Server(server, {
-    cors: {
-      origin: '*'
-    }
-  });
+io = socketIo(server,{
+cors:{
+origin:'*'
+}
+});
 
-  io.use((socket, next) => {
+io.on(
+'connection',
+(socket)=>{
 
-    try {
+console.log(
+'User connected:',
+socket.id
+);
 
-      const token =
-      socket.handshake.auth.token;
+socket.on(
+'join-user-room',
+(userId)=>{
 
-      const decoded =
-      jwt.verify(
-        token,
-        process.env.JWT_SECRET
-      );
+socket.join(userId);
 
-      socket.user = decoded;
+});
 
-      next();
+socket.on(
+'disconnect',
+()=>{
 
-    } catch (err) {
+console.log(
+'User disconnected'
+);
 
-      next(
-        new Error('Unauthorized')
-      );
+});
 
-    }
+});
 
-  });
+return io;
 
-  io.on(
-    'connection',
-    socket => {
+};
 
-      socket.on(
-        'join_room',
-        room => {
+const getIO = ()=>{
 
-          socket.join(room);
+if(!io){
 
-        }
-      );
+throw new Error(
+'Socket not initialized'
+);
 
-      socket.on(
-        'send_message',
-        data => {
+}
 
-          io.to(data.room)
-          .emit(
-            'receive_message',
-            data
-          );
+return io;
 
-        }
-      );
+};
 
-    }
-  );
-
+module.exports = {
+initSocket,
+getIO
 };
