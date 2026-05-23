@@ -1,40 +1,42 @@
-export function lazyLoad() {
+function lazyLoadImages(){
 
-  const images =
-    document.querySelectorAll(
-      'img[data-src]'
-    );
+const images =
+document.querySelectorAll(
+'img'
+);
 
-  const observer =
-    new IntersectionObserver(
-      entries => {
+const observer =
+new IntersectionObserver(
+(entries)=>{
 
-        entries.forEach(
-          entry => {
+entries.forEach(entry=>{
 
-            if (
-              entry.isIntersecting
-            ) {
+if(entry.isIntersecting){
 
-              const img =
-                entry.target;
+const img =
+entry.target;
 
-              img.src =
-                img.dataset.src;
+img.src =
+img.dataset.src;
 
-              observer.unobserve(img);
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-  images.forEach(
-    img =>
-      observer.observe(img)
-  );
+observer.unobserve(
+img
+);
 
 }
+
+});
+
+}
+);
+
+images.forEach(img=>{
+
+observer.observe(img);
+
+});
+
+}
+
+window.lazyLoadImages =
+lazyLoadImages;
