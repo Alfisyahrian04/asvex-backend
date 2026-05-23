@@ -30,14 +30,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <header class="topbar">
 
-<h1
-style="
-font-size:2.3rem;
-font-weight:900;
-color:#2563eb;
-font-style:italic;
-"
->
+<h1 class="page-title">
 Keranjang
 </h1>
 
@@ -68,6 +61,7 @@ onclick="checkout()"
 >
 
 <i class="fa-solid fa-bag-shopping"></i>
+
 Checkout
 
 </button>
@@ -130,48 +124,15 @@ Akun
 
 </nav>
 
+<script src="js/utils/auth.js"></script>
+
+<script src="js/store/cartStore.js"></script>
+
+<script src="js/api/orderApi.js"></script>
+
 <script>
 
-const token =
-localStorage.getItem('token');
-
-if(!token){
-
-window.location.href =
-'login.html';
-
-}
-
-let cart =
-JSON.parse(
-localStorage.getItem('cart')
-) || [];
-
-/* FIX DUPLIKAT */
-
-const uniqueCart = [];
-
-cart.forEach(item=>{
-
-const exists =
-uniqueCart.find(
-p=>p.name === item.name
-);
-
-if(!exists){
-
-uniqueCart.push(item);
-
-}
-
-});
-
-cart = uniqueCart;
-
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
-);
+protectPage();
 
 const cartContainer =
 document.getElementById(
@@ -185,30 +146,38 @@ document.getElementById(
 
 function renderCart(){
 
+const cart =
+cartStore.getCart();
+
 if(!cart.length){
 
 cartContainer.innerHTML = `
+
 <div class="empty-cart">
+
 Keranjang kosong
+
 </div>
+
 `;
 
 totalPrice.innerText =
 'Rp 0';
-
-updateCartCount();
 
 return;
 
 }
 
 cartContainer.innerHTML =
-cart.map((item,index)=>`
+cart.map(item=>`
 
 <div class="cart-card">
 
 <img
-src="${item.image}"
+src="${
+item.images?.[0] ||
+item.image
+}"
 alt="${item.name}"
 />
 
@@ -223,12 +192,17 @@ Rp ${Number(item.price)
 .toLocaleString('id-ID')}
 </p>
 
+<p>
+Qty: ${item.quantity}
+</p>
+
 <button
 class="remove-btn"
-onclick="removeItem(${index})"
+onclick="removeItem('${item._id}')"
 >
 
 <i class="fa-solid fa-trash"></i>
+
 Hapus
 
 </button>
@@ -239,50 +213,29 @@ Hapus
 
 `).join('');
 
-const total =
-cart.reduce(
-(acc,item)=>
-acc + Number(item.price),
-0
-);
-
 totalPrice.innerText =
-`Rp ${total.toLocaleString('id-ID')}`;
-
-updateCartCount();
+`Rp ${cartStore
+.getCartTotal()
+.toLocaleString('id-ID')}`;
 
 }
 
-function removeItem(index){
+function removeItem(productId){
 
-cart.splice(index,1);
-
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
+cartStore.removeFromCart(
+productId
 );
 
 renderCart();
 
 }
 
-function updateCartCount(){
+async function checkout(){
 
-const cartCount =
-document.getElementById(
-'cart-count'
-);
+try{
 
-if(cartCount){
-
-cartCount.innerText =
-cart.length;
-
-}
-
-}
-
-function checkout(){
+const cart =
+cartStore.getCart();
 
 if(!cart.length){
 
@@ -294,25 +247,22 @@ return;
 
 }
 
-let orders =
-JSON.parse(
-localStorage.getItem('orders')
-) || [];
+for(const item of cart){
 
-orders.push(...cart);
+await createOrder({
 
-localStorage.setItem(
-'orders',
-JSON.stringify(orders)
-);
+productId:item._id,
 
-localStorage.removeItem(
-'cart'
-);
+quantity:item.quantity,
 
-cart = [];
+shippingAddress:
+'Indonesia'
 
-renderCart();
+});
+
+}
+
+cartStore.clearCart();
 
 alert(
 'Checkout berhasil'
@@ -320,6 +270,14 @@ alert(
 
 window.location.href =
 'orders.html';
+
+}catch(error){
+
+alert(
+'Checkout gagal'
+);
+
+}
 
 }
 
