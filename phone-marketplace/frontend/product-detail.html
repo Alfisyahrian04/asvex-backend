@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Detail Produk
+</title>
+
+<link
+rel="stylesheet"
+href="css/style.css"
+>
+
+</head>
+
+<body>
+
+<div
+class="product-detail"
+id="product-detail"
+>
+
+</div>
+
+<div class="review-section">
+
+<h2>
+Review
+</h2>
+
+<div
+id="review-list"
+>
+
+</div>
+
+<textarea
+id="review-comment"
+placeholder="Tulis review..."
+></textarea>
+
+<select id="review-rating">
+
+<option value="5">
+5 Star
+</option>
+
+<option value="4">
+4 Star
+</option>
+
+<option value="3">
+3 Star
+</option>
+
+<option value="2">
+2 Star
+</option>
+
+<option value="1">
+1 Star
+</option>
+
+</select>
+
+<button
+onclick="submitReview()"
+>
+
+Kirim Review
+
+</button>
+
+</div>
+
+<script src="js/utils/auth.js"></script>
+
+<script src="js/api/reviewApi.js"></script>
+
+<script src="js/pages/productDetail.js"></script>
+
+</body>
+</html>
