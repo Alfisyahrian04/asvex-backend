@@ -1,46 +1,24 @@
 const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1';
 
+const currentUser =
+JSON.parse(
+localStorage.getItem(
+'user'
+)
+);
+
+if(currentUser){
+
+window.location.href =
+'index.html';
+
+}
+
 const registerForm =
 document.getElementById(
 'registerForm'
 );
-
-const roleSelect =
-document.getElementById(
-'role'
-);
-
-const adminWrap =
-document.getElementById(
-'adminWrap'
-);
-
-if(roleSelect){
-
-roleSelect.addEventListener(
-'change',
-()=>{
-
-if(
-roleSelect.value ===
-'admin'
-){
-
-adminWrap.style.display =
-'flex';
-
-}else{
-
-adminWrap.style.display =
-'none';
-
-}
-
-}
-);
-
-}
 
 if(registerForm){
 
@@ -70,10 +48,26 @@ document.getElementById(
 'role'
 ).value;
 
-const adminKey =
+const adminKeyInput =
 document.getElementById(
 'adminKey'
-)?.value || '';
+);
+
+const adminKey =
+adminKeyInput
+? adminKeyInput.value.trim()
+: '';
+
+const registerButton =
+document.querySelector(
+'#registerForm button'
+);
+
+registerButton.disabled =
+true;
+
+registerButton.innerText =
+'Loading...';
 
 if(
 !username ||
@@ -85,19 +79,45 @@ alert(
 'Lengkapi semua field'
 );
 
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
+
+return;
+
+}
+
+if(password.length < 6){
+
+alert(
+'Password minimal 6 karakter'
+);
+
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
+
 return;
 
 }
 
 if(
-role === 'admin' &&
-adminKey !==
-'AL-GADGET-ADMIN'
+!email.includes('@')
 ){
 
 alert(
-'Admin key salah'
+'Email tidak valid'
 );
+
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
 
 return;
 
@@ -117,12 +137,15 @@ headers:{
 },
 
 body:JSON.stringify({
+
 username,
 email,
 password,
 role,
 adminKey
+
 })
+
 }
 );
 
@@ -136,24 +159,50 @@ data.message ||
 'Register gagal'
 );
 
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
+
 return;
 
 }
 
-alert(
-'Register berhasil'
+localStorage.setItem(
+'user',
+JSON.stringify(
+data.user
+)
 );
 
+localStorage.setItem(
+'token',
+data.token
+);
+
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
+
 window.location.href =
-'login.html';
+'index.html';
 
 }catch(err){
 
 console.log(err);
 
 alert(
-'Server error'
+'Server error / backend offline'
 );
+
+registerButton.disabled =
+false;
+
+registerButton.innerText =
+'Register';
 
 }
 
