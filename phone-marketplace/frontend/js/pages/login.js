@@ -10,8 +10,36 @@ localStorage.getItem(
 
 if(currentUser){
 
+if(
+currentUser.role ===
+'seller'
+){
+
+window.location.href =
+'seller.html';
+
+}else if(
+currentUser.role ===
+'admin'
+){
+
+window.location.href =
+'admin.html';
+
+}else if(
+currentUser.role ===
+'customer_service'
+){
+
+window.location.href =
+'cs.html';
+
+}else{
+
 window.location.href =
 'index.html';
+
+}
 
 }
 
@@ -126,8 +154,36 @@ false;
 loginButton.innerText =
 'Login';
 
+if(
+data.user.role ===
+'seller'
+){
+
+window.location.href =
+'seller.html';
+
+}else if(
+data.user.role ===
+'admin'
+){
+
+window.location.href =
+'admin.html';
+
+}else if(
+data.user.role ===
+'customer_service'
+){
+
+window.location.href =
+'cs.html';
+
+}else{
+
 window.location.href =
 'index.html';
+
+}
 
 }catch(err){
 
