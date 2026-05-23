@@ -16,7 +16,7 @@ Seller Profile
 
 <link
 rel="stylesheet"
-href="css/seller.css?v=99"
+href="css/seller.css?v=100"
 >
 
 <link
@@ -204,7 +204,60 @@ Akun
 
 </nav>
 
-<script src="js/pages/seller-profile.js?v=99"></script>
+<script src="js/pages/seller-profile.js?v=100"></script>
+
+<script>
+
+function togglePassword(
+inputId,
+icon
+){
+
+const input =
+document.getElementById(
+inputId
+);
+
+if(!input){
+
+return;
+
+}
+
+if(
+input.type ===
+'password'
+){
+
+input.type =
+'text';
+
+icon.classList.remove(
+'fa-eye'
+);
+
+icon.classList.add(
+'fa-eye-slash'
+);
+
+}else{
+
+input.type =
+'password';
+
+icon.classList.remove(
+'fa-eye-slash'
+);
+
+icon.classList.add(
+'fa-eye'
+);
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
