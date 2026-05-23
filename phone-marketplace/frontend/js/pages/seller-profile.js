@@ -8,10 +8,13 @@ localStorage.getItem(
 )
 );
 
+const token =
+localStorage.getItem(
+'token'
+);
+
 if(
-!currentUser ||
-currentUser.role !==
-'seller'
+!currentUser
 ){
 
 window.location.href =
@@ -19,24 +22,52 @@ window.location.href =
 
 }
 
-const token =
-localStorage.getItem(
-'token'
-);
+if(
+currentUser.role !==
+'seller'
+){
 
+window.location.href =
+'index.html';
+
+}
+
+const usernameElement =
 document.getElementById(
 'profile-username'
-).innerText =
+);
+
+const emailElement =
+document.getElementById(
+'profile-email'
+);
+
+if(usernameElement){
+
+usernameElement.innerText =
 currentUser.username ||
 'Seller';
 
-document.getElementById(
-'profile-email'
-).innerText =
+}
+
+if(emailElement){
+
+emailElement.innerText =
 currentUser.email ||
 '-';
 
-function logout(){
+}
+
+const logoutBtn =
+document.getElementById(
+'logout-btn'
+);
+
+if(logoutBtn){
+
+logoutBtn.addEventListener(
+'click',
+()=>{
 
 localStorage.removeItem(
 'user'
@@ -50,9 +81,20 @@ window.location.href =
 'login.html';
 
 }
+);
 
-async function
-changePassword(){
+}
+
+const changePasswordBtn =
+document.getElementById(
+'change-password-btn'
+);
+
+if(changePasswordBtn){
+
+changePasswordBtn.addEventListener(
+'click',
+async()=>{
 
 const oldPassword =
 document.getElementById(
@@ -90,18 +132,6 @@ confirmPassword
 
 alert(
 'Konfirmasi password tidak sama'
-);
-
-return;
-
-}
-
-if(
-newPassword.length < 6
-){
-
-alert(
-'Password minimal 6 karakter'
 );
 
 return;
@@ -175,9 +205,6 @@ alert(
 }
 
 }
+);
 
-window.logout =
-logout;
-
-window.changePassword =
-changePassword;
+}
