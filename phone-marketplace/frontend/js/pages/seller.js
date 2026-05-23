@@ -1,3 +1,40 @@
+const currentUser =
+JSON.parse(
+localStorage.getItem(
+'user'
+)
+);
+
+if(
+!currentUser
+){
+
+window.location.href =
+'login.html';
+
+}
+
+if(
+currentUser.role !==
+'seller'
+){
+
+window.location.href =
+'index.html';
+
+}
+
+const sellerUsername =
+document.getElementById(
+'seller-username'
+);
+
+if(sellerUsername){
+
+sellerUsername.innerText =
+currentUser.username;
+
+}
 protectPage();
 
 requireRole('seller');
