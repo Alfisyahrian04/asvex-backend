@@ -701,3 +701,51 @@ font-size:18px !important;
 }
 
 }
+/* FORCE SHOW ADD PRODUCT BUTTON */
+
+.add-product-btn{
+
+display:flex !important;
+
+align-items:center !important;
+
+justify-content:center !important;
+
+position:fixed !important;
+
+right:20px !important;
+
+bottom:120px !important;
+
+width:65px !important;
+
+height:65px !important;
+
+border:none !important;
+
+border-radius:50% !important;
+
+background:
+linear-gradient(
+135deg,
+#ff7b00,
+#ff4d00
+) !important;
+
+color:white !important;
+
+font-size:28px !important;
+
+box-shadow:
+0 10px 25px
+rgba(255,90,0,.35) !important;
+
+z-index:999999 !important;
+
+}
+
+.add-product-btn i{
+
+pointer-events:none !important;
+
+}
