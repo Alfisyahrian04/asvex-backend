@@ -1,16 +1,32 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/reviewController');
-
-const auth =
-require('../middleware/authMiddleware');
-
-router.post(
-  '/',
-  auth,
-  controller.createReview
+const {
+createReview,
+getProductReviews
+} = require(
+'../controllers/reviewController'
 );
 
-module.exports = router;
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
+
+router.post(
+'/',
+protect,
+createReview
+);
+
+router.get(
+'/:productId',
+getProductReviews
+);
+
+module.exports =
+router;
