@@ -1,17 +1,40 @@
-export default function searchBar() {
+function renderSearchBar(){
 
-  return `
+return `
 
-    <div class="w-full">
+<div class="search-wrapper">
 
-      <input
-        type="text"
-        placeholder="Cari produk..."
-        class="w-full border p-4 rounded-2xl"
-      />
+<input
+type="text"
+id="search-input"
+placeholder="Cari produk..."
+/>
 
-    </div>
+<select id="sort-select">
 
-  `;
+<option value="">
+Urutkan
+</option>
+
+<option value="latest">
+Terbaru
+</option>
+
+<option value="low">
+Harga Termurah
+</option>
+
+<option value="high">
+Harga Termahal
+</option>
+
+</select>
+
+</div>
+
+`;
 
 }
+
+window.renderSearchBar =
+renderSearchBar;
