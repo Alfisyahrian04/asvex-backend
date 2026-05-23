@@ -1,27 +1,27 @@
-require('dotenv').config();
+const http =
+require('http');
 
-const http = require('http');
+const app =
+require('./app');
 
-const app = require('./app');
+const {
+initSocket
+} = require(
+'./config/socket'
+);
 
-const connectDB = require('./config/db');
+const PORT =
+process.env.PORT || 5000;
 
-const initSocket = require('./config/socket');
+const server =
+http.createServer(app);
 
-(async () => {
+initSocket(server);
 
-  await connectDB();
+server.listen(PORT,()=>{
 
-  const server = http.createServer(app);
+console.log(
+`Server running on ${PORT}`
+);
 
-  initSocket(server);
-
-  server.listen(process.env.PORT, () => {
-
-    console.log(
-      `SERVER RUNNING ${process.env.PORT}`
-    );
-
-  });
-
-})();
+});
