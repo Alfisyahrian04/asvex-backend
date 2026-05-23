@@ -4,6 +4,14 @@ require('../models/Product');
 const User =
 require('../models/User');
 
+const {
+getTrendingProducts,
+getRecommendedProducts,
+getRelatedProducts
+} = require(
+'../services/aiRecommendation'
+);
+
 exports.createProduct =
 async(req,res)=>{
 
@@ -382,6 +390,73 @@ req.user._id
 res.json(
 user.wishlist
 );
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getTrending =
+async(req,res)=>{
+
+try{
+
+const products =
+await getTrendingProducts();
+
+res.json(products);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getRecommendations =
+async(req,res)=>{
+
+try{
+
+const products =
+await getRecommendedProducts(
+req.user._id
+);
+
+res.json(products);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getRelated =
+async(req,res)=>{
+
+try{
+
+const products =
+await getRelatedProducts(
+req.params.id
+);
+
+res.json(products);
 
 }catch(error){
 
