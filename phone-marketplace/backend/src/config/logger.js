@@ -1,24 +1,14 @@
 const winston =
 require('winston');
 
-module.exports =
+const logger =
 winston.createLogger({
 
-  level: 'info',
-
-  transports: [
-
-    new winston
-    .transports.Console(),
-
-    new winston
-    .transports.File({
-
-      filename:
-        'logs/error.log'
-
-    })
-
-  ]
+transports:[
+new winston.transports.Console()
+]
 
 });
+
+module.exports =
+logger;
