@@ -411,3 +411,164 @@ font-size:20px;
 }
 
 }
+/* FORCE FIX SELLER PROFILE */
+
+.profile-page .profile-card{
+
+background:
+linear-gradient(
+135deg,
+#ff7b00,
+#ff4d00
+) !important;
+
+border-radius:35px !important;
+
+padding:30px !important;
+
+overflow:hidden !important;
+
+color:white !important;
+
+box-shadow:
+0 15px 40px
+rgba(255,115,0,.3) !important;
+
+}
+
+.profile-page .profile-name{
+
+font-size:56px !important;
+
+font-weight:900 !important;
+
+line-height:1 !important;
+
+margin-bottom:35px !important;
+
+word-break:break-word !important;
+
+overflow-wrap:anywhere !important;
+
+}
+
+.profile-page .profile-email{
+
+display:block !important;
+
+font-size:22px !important;
+
+font-weight:800 !important;
+
+line-height:1.4 !important;
+
+word-break:break-word !important;
+
+overflow-wrap:anywhere !important;
+
+white-space:normal !important;
+
+max-width:100% !important;
+
+}
+
+.profile-page .password-form{
+
+display:flex !important;
+
+flex-direction:column !important;
+
+gap:14px !important;
+
+margin-top:20px !important;
+
+}
+
+.profile-page .password-input{
+
+width:100% !important;
+
+height:56px !important;
+
+border:none !important;
+
+border-radius:18px !important;
+
+padding:0 18px !important;
+
+font-size:16px !important;
+
+background:white !important;
+
+box-sizing:border-box !important;
+
+box-shadow:
+0 4px 14px
+rgba(0,0,0,.06) !important;
+
+}
+
+.profile-page .password-btn{
+
+width:100% !important;
+
+height:56px !important;
+
+border:none !important;
+
+border-radius:18px !important;
+
+background:
+linear-gradient(
+135deg,
+#ff7b00,
+#ff4d00
+) !important;
+
+color:white !important;
+
+font-size:16px !important;
+
+font-weight:700 !important;
+
+margin-top:6px !important;
+
+}
+
+.profile-page .logout-btn{
+
+width:100% !important;
+
+height:60px !important;
+
+border:none !important;
+
+border-radius:22px !important;
+
+background:#ef4444 !important;
+
+color:white !important;
+
+font-size:18px !important;
+
+font-weight:800 !important;
+
+margin-top:24px !important;
+
+}
+
+@media(max-width:480px){
+
+.profile-page .profile-name{
+
+font-size:42px !important;
+
+}
+
+.profile-page .profile-email{
+
+font-size:18px !important;
+
+}
+
+}
