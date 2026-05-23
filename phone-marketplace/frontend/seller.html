@@ -16,12 +16,7 @@ Seller Dashboard
 
 <link
 rel="stylesheet"
-href="css/style.css"
->
-
-<link
-rel="stylesheet"
-href="css/seller.css"
+href="css/seller.css?v=99999"
 >
 
 <link
@@ -39,12 +34,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 AL SELLER
 </div>
 
-<div class="seller-name">
-
-<span id="seller-username">
+<div class="seller-name"
+id="seller-username"
+>
 SELLER
-</span>
-
 </div>
 
 </header>
@@ -54,11 +47,11 @@ SELLER
 <div class="dashboard-card">
 
 <p>
-PENDAPATAN HARI INI
+SELLER DASHBOARD
 </p>
 
-<h1 id="wallet-balance">
-Rp 0
+<h1 id="seller-balance">
+RP 0
 </h1>
 
 <div class="dashboard-bottom">
@@ -69,8 +62,8 @@ Rp 0
 BULAN INI
 </h3>
 
-<p id="monthly-revenue">
-RP0
+<p id="monthly-income">
+RP 0
 </p>
 
 </div>
@@ -91,6 +84,8 @@ TOTAL ORDER
 
 </div>
 
+<!-- PESANAN -->
+
 <div class="section-title">
 
 <div class="line"></div>
@@ -107,42 +102,16 @@ class="seller-product-grid"
 >
 
 <div class="empty-state">
+
 Belum ada pesanan
-</div>
 
-</div>
-
-<div class="section-title">
-
-<div class="line"></div>
-
-<h2>
-Produk Saya
-</h2>
-
-</div>
-
-<div
-class="seller-product-grid"
-id="seller-product-list"
->
-
-<div class="empty-state">
-Belum ada produk
 </div>
 
 </div>
 
 </main>
 
-<button
-class="add-product-btn"
-onclick="openProductModal()"
->
-
-<i class="fa-solid fa-plus"></i>
-
-</button>
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
@@ -200,93 +169,7 @@ Akun
 
 </nav>
 
-<div
-class="modal"
-id="product-modal"
->
-
-<div class="modal-content">
-
-<h2>
-Tambah Produk
-</h2>
-
-<input
-type="text"
-id="product-name"
-placeholder="Nama Produk"
->
-
-<input
-type="number"
-id="product-price"
-placeholder="Harga"
->
-
-<input
-type="number"
-id="product-stock"
-placeholder="Stock"
->
-
-<select id="product-type">
-
-<option value="physical">
-Physical Product
-</option>
-
-<option value="digital">
-Digital Product
-</option>
-
-<option value="service">
-Service / Jasa
-</option>
-
-</select>
-
-<input
-type="text"
-id="product-category"
-placeholder="Kategori"
->
-
-<input
-type="text"
-id="product-brand"
-placeholder="Brand"
->
-
-<input
-type="text"
-id="product-image"
-placeholder="Image URL"
->
-
-<textarea
-id="product-description"
-placeholder="Deskripsi"
-></textarea>
-
-<button
-onclick="createProduct()"
->
-
-Simpan Produk
-
-</button>
-
-</div>
-
-</div>
-
-<script src="js/utils/auth.js"></script>
-
-<script src="js/store/authStore.js"></script>
-
-<script src="js/api/productApi.js"></script>
-
-<script src="js/pages/seller.js"></script>
+<script src="js/pages/seller.js?v=99999"></script>
 
 </body>
 </html>
