@@ -1,46 +1,68 @@
 const authStore = {
 
-  getUser() {
+getUser(){
 
-    return JSON.parse(
-      localStorage.getItem(
-        'user'
-      )
-    );
+return JSON.parse(
+localStorage.getItem('user')
+);
 
-  },
+},
 
-  getToken() {
+getToken(){
 
-    return localStorage.getItem(
-      'token'
-    );
+return localStorage.getItem(
+'token'
+);
 
-  },
+},
 
-  isLoggedIn() {
+isAuthenticated(){
 
-    return !!localStorage.getItem(
-      'token'
-    );
+return !!localStorage.getItem(
+'token'
+);
 
-  },
+},
 
-  logout() {
+saveAuth(token,user){
 
-    localStorage.removeItem(
-      'token'
-    );
+localStorage.setItem(
+'token',
+token
+);
 
-    localStorage.removeItem(
-      'user'
-    );
+localStorage.setItem(
+'user',
+JSON.stringify(user)
+);
 
-    location.href =
-      '/login.html';
+},
 
-  }
+logout(){
+
+localStorage.removeItem(
+'token'
+);
+
+localStorage.removeItem(
+'user'
+);
+
+window.location.href =
+'login.html';
+
+},
+
+getRole(){
+
+const user =
+this.getUser();
+
+return user?.role || null;
+
+}
 
 };
 
-export default authStore;
+window.authStore =
+authStore;
