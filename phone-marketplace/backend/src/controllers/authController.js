@@ -4,86 +4,182 @@ require('bcryptjs');
 const User =
 require('../models/User');
 
-const jwt =
-require('jsonwebtoken');
+const generateToken =
+require('../utils/generateToken');
 
 exports.register =
-async (req, res) => {
+async(req,res)=>{
 
-  const user =
-    await User.create(req.body);
+try{
 
-  const token =
-    jwt.sign(
-      {
-        id: user._id,
-        role: user.role
-      },
-      process.env.JWT_SECRET
-    );
+const {
+username,
+email,
+password,
+role,
+adminKey
+} = req.body;
 
-  res.json({
-    success: true,
-    token,
-    user
-  });
+const emailExists =
+await User.findOne({
+email
+});
+
+if(emailExists){
+
+return res.status(400)
+.json({
+message:
+'Email already used'
+});
+
+}
+
+const usernameExists =
+await User.findOne({
+username
+});
+
+if(usernameExists){
+
+return res.status(400)
+.json({
+message:
+'Username already used'
+});
+
+}
+
+if(role === 'admin'){
+
+if(
+adminKey !==
+process.env.ADMIN_SECRET_KEY
+){
+
+return res.status(403)
+.json({
+message:
+'Invalid admin key'
+});
+
+}
+
+}
+
+const hashedPassword =
+await bcrypt.hash(
+password,
+10
+);
+
+const user =
+await User.create({
+
+username,
+email,
+password:
+hashedPassword,
+role
+
+});
+
+const token =
+generateToken(user);
+
+res.status(201)
+.json({
+
+token,
+
+user:{
+
+id:user._id,
+username:user.username,
+email:user.email,
+role:user.role
+
+}
+
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
 
 exports.login =
-async (req, res) => {
+async(req,res)=>{
 
-  const {
-    email,
-    password
-  } = req.body;
+try{
 
-  const user =
-    await User.findOne({
-      email
-    });
+const {
+email,
+password
+} = req.body;
 
-  if (!user) {
+const user =
+await User.findOne({
+email
+});
 
-    return res.status(400)
-    .json({
-      success: false,
-      message:
-        'User tidak ditemukan'
-    });
+if(!user){
 
-  }
+return res.status(400)
+.json({
+message:
+'Invalid credentials'
+});
 
-  const valid =
-    await bcrypt.compare(
-      password,
-      user.password
-    );
+}
 
-  if (!valid) {
+const validPassword =
+await bcrypt.compare(
+password,
+user.password
+);
 
-    return res.status(400)
-    .json({
-      success: false,
-      message:
-        'Password salah'
-    });
+if(!validPassword){
 
-  }
+return res.status(400)
+.json({
+message:
+'Invalid credentials'
+});
 
-  const token =
-    jwt.sign(
-      {
-        id: user._id,
-        role: user.role
-      },
-      process.env.JWT_SECRET
-    );
+}
 
-  res.json({
-    success: true,
-    token,
-    user
-  });
+const token =
+generateToken(user);
+
+res.json({
+
+token,
+
+user:{
+
+id:user._id,
+username:user.username,
+email:user.email,
+role:user.role
+
+}
+
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
