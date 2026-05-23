@@ -238,20 +238,8 @@ async(req,res)=>{
 
 try{
 
-const user =
-await User.findById(
-req.user.id
-);
-
-if(!user){
-
-return res.status(404)
-.json({
-message:
-'User tidak ditemukan'
-});
-
-}
+const userId =
+req.user._id;
 
 const {
 oldPassword,
@@ -279,6 +267,21 @@ return res.status(400)
 .json({
 message:
 'Password minimal 6 karakter'
+});
+
+}
+
+const user =
+await User.findById(
+userId
+);
+
+if(!user){
+
+return res.status(404)
+.json({
+message:
+'User tidak ditemukan'
 });
 
 }
@@ -317,12 +320,9 @@ message:
 
 }catch(error){
 
-console.log(error);
-
 res.status(500)
 .json({
-message:
-'Server error'
+message:error.message
 });
 
 }
