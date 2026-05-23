@@ -1,33 +1,55 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const ComplaintSchema =
 new mongoose.Schema({
 
-  orderId: String,
+order:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'Order'
+},
 
-  buyerId: String,
+buyer:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  sellerId: String,
+seller:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  reason: String,
+reason:{
+type:String,
+required:true
+},
 
-  evidence: [String],
+evidence:[
+{
+type:String
+}
+],
 
-  status: {
+status:{
+type:String,
+enum:[
+'pending',
+'processing',
+'resolved',
+'rejected'
+],
+default:'pending'
+}
 
-    type: String,
-
-    default: 'pending'
-
-  }
-
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'Complaint',
-  schema
+'Complaint',
+ComplaintSchema
 );
