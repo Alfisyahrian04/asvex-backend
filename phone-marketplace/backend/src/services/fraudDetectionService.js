@@ -1,26 +1,13 @@
 exports.detectFraud =
-({
-  transactionCount,
-  totalAmount
-}) => {
+(order)=>{
 
-  if (
-    transactionCount > 20
-  ) {
+if(order.totalPrice >
+100000000){
 
-    return true;
+return true;
 
-  }
+}
 
-  if (
-    totalAmount >
-    50000000
-  ) {
-
-    return true;
-
-  }
-
-  return false;
+return false;
 
 };
