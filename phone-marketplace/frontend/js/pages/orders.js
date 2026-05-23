@@ -1,101 +1,89 @@
-const token =
-localStorage.getItem(
-  'token'
+protectPage();
+
+const ordersContainer =
+document.getElementById(
+'orders-container'
 );
 
-if (!token) {
+async function loadOrders(){
 
-  window.location.href =
-    './login.html';
+try{
 
-}
+const orders =
+await getMyOrders();
 
-async function loadOrders() {
-
-  try {
-
-    const response =
-      await fetch(
-
-        'https://asvex-backend-production.up.railway.app/api/v1/orders',
-
-        {
-
-          headers: {
-
-            Authorization:
-              `Bearer ${token}`
-
-          }
-
-        }
-
-      );
-
-    const orders =
-      await response.json();
-
-    renderOrders(
-      orders
-    );
-
-  } catch (err) {
-
-    console.error(err);
-
-  }
-
-}
-
-function renderOrders(
+renderOrders(
 orders
-) {
+);
 
-  const container =
-    document.getElementById(
-      'orders-list'
-    );
+}catch(error){
 
-  if (!orders.length) {
+ordersContainer.innerHTML = `
 
-    container.innerHTML = `
+<div class="empty-product">
 
-      <div class="empty-cart">
+Gagal memuat transaksi
 
-        Belum ada pesanan
+</div>
 
-      </div>
+`;
 
-    `;
+}
 
-    return;
+}
 
-  }
+function renderOrders(orders){
 
-  container.innerHTML =
-    orders.map(order => `
+if(!orders.length){
 
-      <div class="order-card">
+ordersContainer.innerHTML = `
 
-        <h3>
-          ${order.product?.name || 'Produk'}
-        </h3>
+<div class="empty-product">
 
-        <p>
-          Status:
-          ${order.status}
-        </p>
+Belum ada transaksi
 
-        <p>
-          Total:
-          Rp ${Number(
-            order.totalPrice || 0
-          ).toLocaleString()}
-        </p>
+</div>
 
-      </div>
+`;
 
-    `).join('');
+return;
+
+}
+
+ordersContainer.innerHTML =
+orders.map(order=>`
+
+<div class="order-card">
+
+<img
+src="${
+order.product?.images?.[0]
+}"
+class="order-image"
+/>
+
+<div class="order-info">
+
+<h3>
+${order.product?.name}
+</h3>
+
+<p>
+Rp ${Number(order.totalPrice)
+.toLocaleString('id-ID')}
+</p>
+
+<div class="order-status">
+
+${order.paymentStatus}
+
+</div>
+
+</div>
+
+</div>
+
+`).join('');
 
 }
 
