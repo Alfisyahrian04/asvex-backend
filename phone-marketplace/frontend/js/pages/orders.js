@@ -87,4 +87,12 @@ ${order.paymentStatus}
 
 }
 
+socket.on(
+'order-updated',
+()=>{
+
+loadOrders();
+
+});
+
 loadOrders();
