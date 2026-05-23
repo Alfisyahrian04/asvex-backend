@@ -1,60 +1,43 @@
-import {
-  request
-}
-from '../api/api.js';
+protectPage();
 
-const container =
-document.getElementById(
-  'sellerStats'
+requireRole('seller');
+
+async function loadWallet(){
+
+try{
+
+const token =
+localStorage.getItem(
+'token'
 );
 
-async function init() {
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/seller/wallet',
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
 
-  const response =
-    await request(
-      '/seller/dashboard'
-    );
+const wallet =
+await response.json();
 
-  container.innerHTML = `
+document.getElementById(
+'wallet-balance'
+).innerText =
 
-    <div class="bg-white rounded-3xl p-6">
+`Rp ${Number(wallet.balance)
+.toLocaleString('id-ID')}`;
 
-      <div class="text-gray-500">
-        Produk
-      </div>
+}catch(error){
 
-      <div class="text-3xl font-bold mt-2">
-        ${response.products}
-      </div>
-
-    </div>
-
-    <div class="bg-white rounded-3xl p-6">
-
-      <div class="text-gray-500">
-        Order
-      </div>
-
-      <div class="text-3xl font-bold mt-2">
-        ${response.totalOrders}
-      </div>
-
-    </div>
-
-    <div class="bg-white rounded-3xl p-6">
-
-      <div class="text-gray-500">
-        Revenue
-      </div>
-
-      <div class="text-3xl font-bold mt-2">
-        Rp ${response.revenue}
-      </div>
-
-    </div>
-
-  `;
+console.log(error);
 
 }
 
-init();
+}
+
+loadWallet();
