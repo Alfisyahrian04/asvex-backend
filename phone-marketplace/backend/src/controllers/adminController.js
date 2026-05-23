@@ -1,62 +1,206 @@
 const User =
 require('../models/User');
 
-const Product =
-require('../models/Product');
+const Payout =
+require('../models/Payout');
 
-const Order =
-require('../models/Order');
+const AuditLog =
+require('../models/AuditLog');
 
-exports.dashboard =
-async (req, res) => {
+exports.getAllUsers =
+async(req,res)=>{
 
-  try {
+try{
 
-    const users =
-      await User.countDocuments();
+const users =
+await User.find()
+.select('-password');
 
-    const products =
-      await Product.countDocuments();
+res.json(users);
 
-    const orders =
-      await Order.countDocuments();
+}catch(error){
 
-    const revenueData =
-      await Order.find();
+res.status(500)
+.json({
+message:error.message
+});
 
-    const revenue =
-      revenueData.reduce(
-        (acc, item) =>
-          acc + item.total,
-        0
-      );
+}
 
-    res.json({
+};
 
-      success: true,
+exports.verifySeller =
+async(req,res)=>{
 
-      users,
+try{
 
-      products,
+const seller =
+await User.findById(
+req.params.id
+);
 
-      orders,
+if(!seller){
 
-      revenue
+return res.status(404)
+.json({
+message:
+'Seller not found'
+});
 
-    });
+}
 
-  } catch (err) {
+seller.verificationStatus =
+true;
 
-    res.status(500)
-    .json({
+await seller.save();
 
-      success: false,
+await AuditLog.create({
 
-      message:
-        err.message
+admin:req.user._id,
 
-    });
+targetUser:seller._id,
 
-  }
+action:'VERIFY_SELLER',
+
+description:
+'Admin verified seller'
+
+});
+
+res.json({
+message:
+'Seller verified'
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.banUser =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.params.id
+);
+
+if(!user){
+
+return res.status(404)
+.json({
+message:
+'User not found'
+});
+
+}
+
+user.isBanned = true;
+
+await user.save();
+
+await AuditLog.create({
+
+admin:req.user._id,
+
+targetUser:user._id,
+
+action:'BAN_USER',
+
+description:
+'Admin banned user'
+
+});
+
+res.json({
+message:
+'User banned'
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.getPayouts =
+async(req,res)=>{
+
+try{
+
+const payouts =
+await Payout.find()
+.populate(
+'seller',
+'username'
+)
+.sort({
+createdAt:-1
+});
+
+res.json(payouts);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.approvePayout =
+async(req,res)=>{
+
+try{
+
+const payout =
+await Payout.findById(
+req.params.id
+);
+
+if(!payout){
+
+return res.status(404)
+.json({
+message:
+'Payout not found'
+});
+
+}
+
+payout.status =
+'approved';
+
+await payout.save();
+
+res.json({
+message:
+'Payout approved'
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
 
 };
