@@ -13,6 +13,8 @@ localStorage.getItem(
 'token'
 );
 
+/* AUTH */
+
 if(
 !currentUser
 ){
@@ -31,6 +33,8 @@ window.location.href =
 'index.html';
 
 }
+
+/* PROFILE */
 
 const usernameElement =
 document.getElementById(
@@ -57,6 +61,8 @@ currentUser.email ||
 '-';
 
 }
+
+/* LOGOUT */
 
 const logoutBtn =
 document.getElementById(
@@ -85,6 +91,8 @@ window.location.href =
 
 }
 
+/* CHANGE PASSWORD */
+
 const changePasswordBtn =
 document.getElementById(
 'change-password-btn'
@@ -99,17 +107,17 @@ async()=>{
 const oldPassword =
 document.getElementById(
 'old-password'
-).value;
+).value.trim();
 
 const newPassword =
 document.getElementById(
 'new-password'
-).value;
+).value.trim();
 
 const confirmPassword =
 document.getElementById(
 'confirm-password'
-).value;
+).value.trim();
 
 if(
 !oldPassword ||
@@ -119,6 +127,18 @@ if(
 
 alert(
 'Lengkapi semua field'
+);
+
+return;
+
+}
+
+if(
+newPassword.length < 6
+){
+
+alert(
+'Password minimal 6 karakter'
 );
 
 return;
@@ -137,6 +157,12 @@ alert(
 return;
 
 }
+
+changePasswordBtn.disabled =
+true;
+
+changePasswordBtn.innerText =
+'Menyimpan...';
 
 try{
 
@@ -174,6 +200,12 @@ data.message ||
 'Gagal ganti password'
 );
 
+changePasswordBtn.disabled =
+false;
+
+changePasswordBtn.innerText =
+'Simpan Password';
+
 return;
 
 }
@@ -204,17 +236,23 @@ alert(
 
 }
 
+changePasswordBtn.disabled =
+false;
+
+changePasswordBtn.innerText =
+'Simpan Password';
+
 }
 );
 
 }
 
-/* GLOBAL TOGGLE PASSWORD */
+/* TOGGLE PASSWORD */
 
 window.togglePassword =
 function(
 inputId,
-icon
+button
 ){
 
 const input =
@@ -227,6 +265,11 @@ if(!input){
 return;
 
 }
+
+const icon =
+button.querySelector(
+'i'
+);
 
 if(
 input.type ===
