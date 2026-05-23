@@ -85,10 +85,15 @@ id="old-password"
 placeholder="Password Lama"
 >
 
-<i
-class="fa-solid fa-eye toggle-password"
+<button
+type="button"
+class="toggle-password"
 onclick="togglePassword('old-password', this)"
-></i>
+>
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
 
 </div>
 
@@ -101,10 +106,15 @@ id="new-password"
 placeholder="Password Baru"
 >
 
-<i
-class="fa-solid fa-eye toggle-password"
+<button
+type="button"
+class="toggle-password"
 onclick="togglePassword('new-password', this)"
-></i>
+>
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
 
 </div>
 
@@ -117,10 +127,15 @@ id="confirm-password"
 placeholder="Konfirmasi Password Baru"
 >
 
-<i
-class="fa-solid fa-eye toggle-password"
+<button
+type="button"
+class="toggle-password"
 onclick="togglePassword('confirm-password', this)"
-></i>
+>
+
+<i class="fa-solid fa-eye"></i>
+
+</button>
 
 </div>
 
@@ -210,12 +225,17 @@ Akun
 
 function togglePassword(
 inputId,
-icon
+button
 ){
 
 const input =
 document.getElementById(
 inputId
+);
+
+const icon =
+button.querySelector(
+'i'
 );
 
 if(!input){
