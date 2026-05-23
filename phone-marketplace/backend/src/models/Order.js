@@ -83,6 +83,16 @@ type:String,
 default:''
 },
 
+paymentToken:{
+type:String,
+default:''
+},
+
+paymentUrl:{
+type:String,
+default:''
+},
+
 shippingAddress:{
 type:String,
 default:''
