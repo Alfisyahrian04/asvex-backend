@@ -1,4 +1,4 @@
-const ORDER_API =
+const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1/orders';
 
 async function createOrder(data){
@@ -10,7 +10,7 @@ localStorage.getItem(
 
 const response =
 await fetch(
-ORDER_API,
+BASE_URL,
 {
 method:'POST',
 
@@ -23,22 +23,27 @@ Authorization:
 },
 
 body:JSON.stringify(data)
+
 }
 );
+
+const result =
+await response.json();
 
 if(!response.ok){
 
 throw new Error(
-'Failed create order'
+result.message ||
+'Checkout gagal'
 );
 
 }
 
-return await response.json();
+return result;
 
 }
 
-async function getMyOrders(){
+async function fetchMyOrders(){
 
 const token =
 localStorage.getItem(
@@ -47,7 +52,7 @@ localStorage.getItem(
 
 const response =
 await fetch(
-`${ORDER_API}/my-orders`,
+`${BASE_URL}/my-orders`,
 {
 headers:{
 Authorization:
@@ -56,20 +61,18 @@ Authorization:
 }
 );
 
+const data =
+await response.json();
+
 if(!response.ok){
 
 throw new Error(
-'Failed get orders'
+data.message ||
+'Gagal mengambil order'
 );
 
 }
 
-return await response.json();
+return data;
 
 }
-
-window.createOrder =
-createOrder;
-
-window.getMyOrders =
-getMyOrders;
