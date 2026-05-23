@@ -1,15 +1,12 @@
-exports.emitTracking =
-({
-  io,
-  orderId,
-  payload
-}) => {
+exports.trackOrder =
+(orderId)=>{
 
-  io.to(
-    `order:${orderId}`
-  ).emit(
-    'tracking-update',
-    payload
-  );
+return {
+
+lat:-6.2,
+lng:106.8,
+status:'on delivery'
+
+};
 
 };
