@@ -1,23 +1,37 @@
 const mongoose =
 require('mongoose');
 
-const schema =
+const AuditLogSchema =
 new mongoose.Schema({
 
-  userId: String,
+admin:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  action: String,
+action:{
+type:String,
+required:true
+},
 
-  module: String,
+targetUser:{
+type:
+mongoose.Schema.Types.ObjectId,
+ref:'User'
+},
 
-  metadata: Object
+description:{
+type:String,
+default:''
+}
 
-}, {
-  timestamps: true
+},{
+timestamps:true
 });
 
 module.exports =
 mongoose.model(
-  'AuditLog',
-  schema
+'AuditLog',
+AuditLogSchema
 );
