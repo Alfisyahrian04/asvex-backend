@@ -1,32 +1,42 @@
-export function getUser() {
+function protectPage(){
 
-  return JSON.parse(
-    localStorage.getItem(
-      'user'
-    )
-  );
+const token =
+localStorage.getItem(
+'token'
+);
 
-}
+if(!token){
 
-export function isLoggedIn() {
-
-  return !!localStorage.getItem(
-    'token'
-  );
+window.location.href =
+'login.html';
 
 }
 
-export function logout() {
+}
 
-  localStorage.removeItem(
-    'token'
-  );
+function requireRole(role){
 
-  localStorage.removeItem(
-    'user'
-  );
+const user =
+JSON.parse(
+localStorage.getItem(
+'user'
+)
+);
 
-  location.href =
-    '/login.html';
+if(
+!user ||
+user.role !== role
+){
+
+window.location.href =
+'index.html';
 
 }
+
+}
+
+window.protectPage =
+protectPage;
+
+window.requireRole =
+requireRole;
