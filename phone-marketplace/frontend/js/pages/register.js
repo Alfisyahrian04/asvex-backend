@@ -120,7 +120,8 @@ body:JSON.stringify({
 username,
 email,
 password,
-role
+role,
+adminKey
 })
 }
 );
