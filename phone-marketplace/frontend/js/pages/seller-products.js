@@ -169,7 +169,7 @@ products.map(product=>`
 
 <img
 src="${
-product.image ||
+product.images?.[0] ||
 'https://via.placeholder.com/300x300'
 }"
 alt="${product.name}"
