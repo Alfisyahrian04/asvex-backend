@@ -468,3 +468,33 @@ message:error.message
 }
 
 };
+exports.getMyProducts =
+async(req,res)=>{
+
+try{
+
+const products =
+await Product.find({
+
+seller:req.user._id,
+isActive:true
+
+})
+.sort({
+createdAt:-1
+});
+
+res.json({
+products
+});
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
