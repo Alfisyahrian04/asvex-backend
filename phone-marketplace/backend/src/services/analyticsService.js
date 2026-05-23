@@ -1,10 +1,27 @@
-exports.calculateGMV =
-orders => {
+const Order =
+require('../models/Order');
 
-  return orders.reduce(
-    (acc, order) =>
-      acc + order.total,
-    0
-  );
+exports.getMarketplaceAnalytics =
+async()=>{
+
+const totalOrders =
+await Order.countDocuments();
+
+const totalRevenueData =
+await Order.find({
+paymentStatus:'paid'
+});
+
+const revenue =
+totalRevenueData.reduce(
+(total,item)=>
+total + item.totalPrice,
+0
+);
+
+return {
+totalOrders,
+revenue
+};
 
 };
