@@ -1,20 +1,46 @@
-exports.calculateEscrow =
-({
-  total
-}) => {
+const Wallet =
+require('../models/Wallet');
 
-  const adminFee =
-    total * 0.03;
+const WalletTransaction =
+require('../models/WalletTransaction');
 
-  const sellerAmount =
-    total - adminFee;
+exports.releaseEscrow =
+async(order)=>{
 
-  return {
+let wallet =
+await Wallet.findOne({
 
-    adminFee,
+user:order.seller
 
-    sellerAmount
+});
 
-  };
+if(!wallet){
+
+wallet =
+await Wallet.create({
+
+user:order.seller
+
+});
+
+}
+
+wallet.balance +=
+order.totalPrice;
+
+await wallet.save();
+
+await WalletTransaction.create({
+
+user:order.seller,
+
+type:'income',
+
+amount:order.totalPrice,
+
+description:
+'Order completed'
+
+});
 
 };
