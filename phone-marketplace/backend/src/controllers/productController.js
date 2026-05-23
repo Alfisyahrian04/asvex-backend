@@ -205,3 +205,109 @@ message:error.message
 }
 
 };
+
+exports.searchProducts =
+async(req,res)=>{
+
+try{
+
+const {
+keyword,
+category,
+minPrice,
+maxPrice,
+sort
+} = req.query;
+
+let query = {
+isActive:true
+};
+
+if(keyword){
+
+query.name = {
+$regex:keyword,
+$options:'i'
+};
+
+}
+
+if(category){
+
+query.category =
+category;
+
+}
+
+if(
+minPrice ||
+maxPrice
+){
+
+query.price = {};
+
+if(minPrice){
+
+query.price.$gte =
+Number(minPrice);
+
+}
+
+if(maxPrice){
+
+query.price.$lte =
+Number(maxPrice);
+
+}
+
+}
+
+let productsQuery =
+Product.find(query)
+.populate(
+'seller',
+'username'
+);
+
+if(sort === 'low'){
+
+productsQuery =
+productsQuery.sort({
+price:1
+});
+
+}
+
+if(sort === 'high'){
+
+productsQuery =
+productsQuery.sort({
+price:-1
+});
+
+}
+
+if(sort === 'latest'){
+
+productsQuery =
+productsQuery.sort({
+createdAt:-1
+});
+
+}
+
+const products =
+await productsQuery;
+
+res.json(products);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
