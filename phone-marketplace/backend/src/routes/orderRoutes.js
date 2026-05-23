@@ -1,20 +1,40 @@
+const express =
+require('express');
+
 const router =
-require('express').Router();
+express.Router();
 
-const controller =
-require('../controllers/orderController');
-
-const auth =
-require('../middleware/authMiddleware');
-
-const idempotency =
-require('../middleware/idempotencyMiddleware');
-
-router.post(
-  '/',
-  auth,
-  idempotency,
-  controller.createOrder
+const {
+createOrder,
+getMyOrders,
+updateOrderStatus
+} = require(
+'../controllers/orderController'
 );
 
-module.exports = router;
+const {
+protect
+} = require(
+'../middleware/authMiddleware'
+);
+
+router.post(
+'/',
+protect,
+createOrder
+);
+
+router.get(
+'/my-orders',
+protect,
+getMyOrders
+);
+
+router.put(
+'/:id',
+protect,
+updateOrderStatus
+);
+
+module.exports =
+router;
