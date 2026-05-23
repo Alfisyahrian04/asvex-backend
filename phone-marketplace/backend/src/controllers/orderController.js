@@ -1,6 +1,9 @@
 const Product =
 require('../models/Product');
 
+const Order =
+require('../models/Order');
+
 exports.createOrder =
 async(req,res)=>{
 
@@ -120,6 +123,105 @@ createdAt:-1
 res.json(
 orders
 );
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+/* SELLER ORDERS */
+
+exports.getSellerOrders =
+async(req,res)=>{
+
+try{
+
+const orders =
+await Order.find({
+
+seller:req.user._id,
+
+status:{
+$in:[
+'pending',
+'paid',
+'processed'
+]
+}
+
+})
+.populate(
+'product'
+)
+.populate(
+'buyer',
+'username'
+)
+.sort({
+createdAt:-1
+});
+
+res.json(
+orders
+);
+
+}catch(error){
+
+res.status(500)
+.json({
+message:error.message
+});
+
+}
+
+};
+
+exports.updateOrderStatus =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+
+return res.status(404)
+.json({
+message:
+'Order tidak ditemukan'
+});
+
+}
+
+if(
+order.seller.toString()
+!== req.user._id.toString()
+){
+
+return res.status(403)
+.json({
+message:
+'Forbidden'
+});
+
+}
+
+order.status =
+req.body.status ||
+order.status;
+
+await order.save();
+
+res.json(order);
 
 }catch(error){
 
