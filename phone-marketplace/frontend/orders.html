@@ -16,7 +16,7 @@ Pesanan Saya
 
 <link
 rel="stylesheet"
-href="css/style.css"
+href="css/style.css?v=99999"
 />
 
 <link
@@ -103,82 +103,15 @@ Akun
 
 </nav>
 
-<script>
+<script src="js/utils/auth.js"></script>
 
-const token =
-localStorage.getItem('token');
+<script src="js/api/orderApi.js"></script>
 
-if(!token){
-
-window.location.href =
-'login.html';
-
-}
-
-const ordersContainer =
-document.getElementById(
-'orders-container'
-);
-
-const orders =
-JSON.parse(
-localStorage.getItem('orders')
-) || [];
-
-function renderOrders(){
-
-if(!orders.length){
-
-ordersContainer.innerHTML = `
-<div class="empty-product">
-Belum ada transaksi
-</div>
-`;
-
-return;
-
-}
-
-ordersContainer.innerHTML =
-orders.map(order=>`
-
-<div class="order-card">
-
-<img
-src="${order.image}"
-alt="${order.name}"
-class="order-image"
-/>
-
-<div class="order-info">
-
-<h3>
-${order.name}
-</h3>
-
-<p>
-Rp ${Number(order.price)
-.toLocaleString('id-ID')}
-</p>
-
-<div class="order-status">
-Berhasil
-</div>
-
-</div>
-
-</div>
-
-`).join('');
-
-}
-
-renderOrders();
-
-</script>
-
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
 <script src="js/socket.js"></script>
+
+<script src="js/pages/orders.js?v=99999"></script>
+
 </body>
 </html>
