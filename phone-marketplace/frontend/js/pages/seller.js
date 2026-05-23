@@ -44,14 +44,16 @@ localStorage.getItem(
 'token'
 );
 
+/* LOAD SELLER ORDERS */
+
 async function
-loadSellerProducts(){
+loadSellerOrders(){
 
 try{
 
 const response =
 await fetch(
-`${BASE_URL}/products/seller/my-products`,
+`${BASE_URL}/orders/seller-orders`,
 {
 headers:{
 Authorization:
@@ -60,28 +62,28 @@ Authorization:
 }
 );
 
-const products =
+const orders =
 await response.json();
 
-const productList =
+const pendingOrders =
 document.getElementById(
-'seller-product-list'
+'pending-orders'
 );
 
-if(!productList){
+if(!pendingOrders){
 
 return;
 
 }
 
 if(
-!products.length
+!orders.length
 ){
 
-productList.innerHTML =
+pendingOrders.innerHTML =
 `
 <div class="empty-state">
-Belum ada produk
+Belum ada pesanan
 </div>
 `;
 
@@ -89,26 +91,31 @@ return;
 
 }
 
-productList.innerHTML =
-products.map(product=>`
+pendingOrders.innerHTML =
+orders.map(order=>`
 
 <div class="product-card">
 
 <img
 src="${
-product.image ||
+order.product?.images?.[0] ||
 'https://via.placeholder.com/300'
 }"
 >
 
 <h3>
-${product.name}
+${order.product?.name || 'Produk'}
 </h3>
+
+<p>
+Qty:
+${order.quantity}
+</p>
 
 <p>
 Rp ${
 Number(
-product.price
+order.totalPrice || 0
 ).toLocaleString(
 'id-ID'
 )
@@ -116,9 +123,19 @@ product.price
 </p>
 
 <p>
-Stock:
-${product.stock}
+Status:
+${order.status}
 </p>
+
+<button
+onclick="processOrder('${order._id}')"
+class="password-btn"
+style="margin-top:10px;height:45px;"
+>
+
+Proses Pesanan
+
+</button>
 
 </div>
 
@@ -131,6 +148,70 @@ console.log(error);
 }
 
 }
+
+/* PROCESS ORDER */
+
+async function
+processOrder(orderId){
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/orders/${orderId}/status`,
+{
+method:'PUT',
+
+headers:{
+'Content-Type':
+'application/json',
+
+Authorization:
+`Bearer ${token}`
+},
+
+body:JSON.stringify({
+
+status:'processed'
+
+})
+
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+alert(
+data.message ||
+'Gagal update status'
+);
+
+return;
+
+}
+
+alert(
+'Pesanan diproses'
+);
+
+loadSellerOrders();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Server error'
+);
+
+}
+
+}
+
+/* LOAD STATS */
 
 async function
 loadSellerStats(){
@@ -151,14 +232,14 @@ Authorization:
 const data =
 await response.json();
 
-const walletBalance =
+const sellerBalance =
 document.getElementById(
-'wallet-balance'
+'seller-balance'
 );
 
-const monthlyRevenue =
+const monthlyIncome =
 document.getElementById(
-'monthly-revenue'
+'monthly-income'
 );
 
 const totalOrders =
@@ -166,10 +247,10 @@ document.getElementById(
 'total-orders'
 );
 
-if(walletBalance){
+if(sellerBalance){
 
-walletBalance.innerText =
-`Rp ${Number(
+sellerBalance.innerText =
+`RP ${Number(
 data.balance || 0
 ).toLocaleString(
 'id-ID'
@@ -177,10 +258,10 @@ data.balance || 0
 
 }
 
-if(monthlyRevenue){
+if(monthlyIncome){
 
-monthlyRevenue.innerText =
-`Rp ${Number(
+monthlyIncome.innerText =
+`RP ${Number(
 data.monthlyRevenue || 0
 ).toLocaleString(
 'id-ID'
@@ -203,136 +284,9 @@ console.log(error);
 
 }
 
-function
-openProductModal(){
+window.processOrder =
+processOrder;
 
-const modal =
-document.getElementById(
-'product-modal'
-);
-
-if(modal){
-
-modal.style.display =
-'flex';
-
-}
-
-}
-
-async function
-createProduct(){
-
-const name =
-document.getElementById(
-'product-name'
-).value;
-
-const price =
-document.getElementById(
-'product-price'
-).value;
-
-const stock =
-document.getElementById(
-'product-stock'
-).value;
-
-const category =
-document.getElementById(
-'product-category'
-).value;
-
-const brand =
-document.getElementById(
-'product-brand'
-).value;
-
-const image =
-document.getElementById(
-'product-image'
-).value;
-
-const description =
-document.getElementById(
-'product-description'
-).value;
-
-const productType =
-document.getElementById(
-'product-type'
-).value;
-
-try{
-
-const response =
-await fetch(
-`${BASE_URL}/products`,
-{
-method:'POST',
-
-headers:{
-'Content-Type':
-'application/json',
-
-Authorization:
-`Bearer ${token}`
-},
-
-body:JSON.stringify({
-
-name,
-price,
-stock,
-category,
-brand,
-image,
-description,
-productType
-
-})
-
-}
-);
-
-const data =
-await response.json();
-
-if(!response.ok){
-
-alert(
-data.message ||
-'Gagal upload produk'
-);
-
-return;
-
-}
-
-alert(
-'Produk berhasil dibuat'
-);
-
-window.location.reload();
-
-}catch(error){
-
-console.log(error);
-
-alert(
-'Server error'
-);
-
-}
-
-}
-
-window.openProductModal =
-openProductModal;
-
-window.createProduct =
-createProduct;
-
-loadSellerProducts();
+loadSellerOrders();
 
 loadSellerStats();
