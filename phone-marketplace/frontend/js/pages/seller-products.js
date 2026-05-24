@@ -243,6 +243,9 @@ alt="${product.name}"
 
 <h3>${product.name}</h3>
 
+<p><b>${product.brand || '-'}</b></p>
+<p>${product.mainVariant || '-'}</p>
+
 <p>
 Rp ${Number(
 product.price || 0
@@ -355,39 +358,31 @@ if(!product) return;
 
 productModal.style.display='flex';
 
-document.getElementById(
-'product-name'
-).value =
+document.getElementById('product-name').value =
 product.name || '';
 
-document.getElementById(
-'product-description'
-).value =
+document.getElementById('product-brand').value =
+product.brand || '';
+
+document.getElementById('product-main-variant').value =
+product.mainVariant || '';
+
+document.getElementById('product-description').value =
 product.description || '';
 
-document.getElementById(
-'product-price'
-).value =
+document.getElementById('product-price').value =
 product.price || '';
 
-document.getElementById(
-'product-stock'
-).value =
+document.getElementById('product-stock').value =
 product.stock || '';
 
-document.getElementById(
-'product-category'
-).value =
+document.getElementById('product-category').value =
 product.category || '';
 
-document.getElementById(
-'product-sku'
-).value =
+document.getElementById('product-sku').value =
 product.sku || '';
 
-document.getElementById(
-'product-weight'
-).value =
+document.getElementById('product-weight').value =
 product.weight || '';
 
 productVariants =
@@ -409,6 +404,12 @@ async()=>{
 
 const name =
 document.getElementById('product-name').value.trim();
+
+const brand =
+document.getElementById('product-brand')?.value.trim() || '';
+
+const mainVariant =
+document.getElementById('product-main-variant')?.value.trim() || '';
 
 const description =
 document.getElementById('product-description').value.trim();
@@ -483,6 +484,8 @@ Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
 name,
+brand,
+mainVariant,
 slug,
 description,
 price:Number(price),
