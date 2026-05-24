@@ -328,3 +328,104 @@ message:error.message
 }
 
 };
+
+/* PATCH START */
+
+exports.addAddress =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+);
+
+user.addresses.push(req.body);
+
+await user.save();
+
+res.json(user.addresses);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.deleteAddress =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+);
+
+user.addresses =
+user.addresses.filter(
+item =>
+item._id.toString()
+!== req.params.id
+);
+
+await user.save();
+
+res.json(user.addresses);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.setDefaultAddress =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+);
+
+user.defaultAddressId =
+req.params.id;
+
+user.addresses =
+user.addresses.map(
+item=>{
+
+item.isDefault =
+item._id.toString()
+=== req.params.id;
+
+return item;
+
+}
+);
+
+await user.save();
+
+res.json(user.addresses);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+/* PATCH END */
