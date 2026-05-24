@@ -69,11 +69,7 @@ document.getElementById('variant-stock').value.trim();
 const imageFile =
 document.getElementById('variant-image').files[0];
 
-if(
-!name ||
-!price ||
-!stock
-){
+if(!name || !price || !stock){
 alert('Lengkapi data varian');
 return;
 }
@@ -86,6 +82,7 @@ await convertToBase64(imageFile);
 }
 
 productVariants.push({
+id: Date.now(),
 name,
 price:Number(price),
 stock:Number(stock),
@@ -93,6 +90,7 @@ image:imageBase64
 });
 
 renderVariantList();
+renderPrimaryVariantOptions();
 
 document.getElementById('variant-name').value='';
 document.getElementById('variant-price').value='';
@@ -101,6 +99,28 @@ document.getElementById('variant-image').value='';
 
 }
 );
+
+}
+
+function renderPrimaryVariantOptions(){
+
+const select =
+document.getElementById('primary-variant-select');
+
+if(!select) return;
+
+select.innerHTML =
+`<option value="">Pilih Variant Utama</option>`;
+
+productVariants.forEach(variant=>{
+
+select.innerHTML += `
+<option value="${variant.id}">
+${variant.name}
+</option>
+`;
+
+});
 
 }
 
@@ -126,8 +146,7 @@ align-items:center;
 
 ${
 variant.image
-? `<img
-src="${variant.image}"
+? `<img src="${variant.image}"
 style="
 width:50px;
 height:50px;
@@ -158,7 +177,6 @@ x
 </button>
 
 </div>
-
 `).join('');
 
 }
@@ -166,6 +184,7 @@ x
 function removeVariant(index){
 productVariants.splice(index,1);
 renderVariantList();
+renderPrimaryVariantOptions();
 }
 
 window.removeVariant = removeVariant;
@@ -198,15 +217,12 @@ console.log(error);
 function renderProducts(products){
 
 if(!products.length){
-
 productList.innerHTML=`
 <div class="empty-state">
 Belum ada produk
 </div>
 `;
-
 return;
-
 }
 
 productList.innerHTML =
@@ -215,35 +231,19 @@ products.map(product=>`
 <div class="product-card">
 
 <img
-src="${
-product.images?.[0] ||
-'https://via.placeholder.com/300'
-}"
+src="${product.images?.[0] || 'https://via.placeholder.com/300'}"
 alt="${product.name}"
 >
 
 <h3>${product.name}</h3>
 
 <p>
-Rp ${Number(
-product.price || 0
-).toLocaleString('id-ID')}
+Rp ${Number(product.price || 0).toLocaleString('id-ID')}
 </p>
 
-<p>
-Stok:
-<b>${product.stock ?? 0}</b>
-</p>
-
-<p>
-Kategori:
-<b>${product.category || '-'}</b>
-</p>
-
-<p>
-Kondisi:
-<b>${product.condition || '-'}</b>
-</p>
+<p>Stok: <b>${product.stock ?? 0}</b></p>
+<p>Kategori: <b>${product.category || '-'}</b></p>
+<p>Kondisi: <b>${product.condition || '-'}</b></p>
 
 <button
 onclick="deleteProduct('${product._id}')"
@@ -300,6 +300,14 @@ document.getElementById('product-sku')?.value.trim() || '';
 const imageInput =
 document.getElementById('product-image');
 
+const primaryVariantId =
+document.getElementById('primary-variant-select')?.value;
+
+const primaryVariant =
+productVariants.find(
+item => String(item.id) === String(primaryVariantId)
+) || null;
+
 if(
 !name ||
 !description ||
@@ -324,7 +332,6 @@ imageInput.files[0]
 );
 }
 
-/* PATCH: AUTO GENERATE UNIQUE SLUG */
 const slug =
 name
 .toLowerCase()
@@ -354,6 +361,7 @@ condition,
 weight:Number(weight),
 sku,
 variants:productVariants,
+primaryVariant,
 images:[imageBase64],
 productType:'physical',
 seller:currentUser.id
@@ -373,6 +381,7 @@ alert('Produk berhasil ditambahkan');
 
 productVariants = [];
 renderVariantList();
+renderPrimaryVariantOptions();
 
 document.getElementById('product-name').value='';
 document.getElementById('product-description').value='';
