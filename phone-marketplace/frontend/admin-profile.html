@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
+<title>Admin Profile</title>
+
+<link
+rel="stylesheet"
+href="admin.css"
+/>
+</head>
+
+<body>
+
+<header class="top-header">
+<h1>AL ADMIN</h1>
+
+<div class="role-badge">
+SUPER ADMIN
+</div>
+</header>
+
+<main class="profile-page">
+
+<section class="profile-card">
+
+<div class="section-title">
+<div class="line"></div>
+<h2>Profile Admin</h2>
+</div>
+
+<div class="profile-form">
+
+<div class="input-group">
+<input
+type="text"
+id="admin-name"
+placeholder="Nama Admin"
+/>
+</div>
+
+<div class="input-group">
+<input
+type="email"
+id="admin-email"
+placeholder="Email"
+/>
+</div>
+
+<div class="input-group">
+<input
+type="text"
+id="admin-phone"
+placeholder="Nomor Telepon"
+/>
+</div>
+
+</div>
+</section>
+
+<section class="password-section">
+
+<div class="section-title">
+<div class="line"></div>
+<h2>Ganti Password</h2>
+</div>
+
+<div class="password-form">
+
+<div class="input-group">
+<input
+type="password"
+id="old-password"
+placeholder="Password Lama"
+/>
+<span
+class="toggle-password"
+onclick="togglePassword('old-password')"
+>
+👁
+</span>
+</div>
+
+<div class="input-group">
+<input
+type="password"
+id="new-password"
+placeholder="Password Baru"
+/>
+<span
+class="toggle-password"
+onclick="togglePassword('new-password')"
+>
+👁
+</span>
+</div>
+
+<div class="input-group">
+<input
+type="password"
+id="confirm-password"
+placeholder="Konfirmasi Password Baru"
+/>
+<span
+class="toggle-password"
+onclick="togglePassword('confirm-password')"
+>
+👁
+</span>
+</div>
+
+<button
+id="save-password-btn"
+class="save-password-btn"
+>
+Simpan Password
+</button>
+
+<button
+id="logout-btn"
+class="logout-btn"
+>
+Logout
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+<script src="admin-profile.js"></script>
+
+</body>
+</html>
