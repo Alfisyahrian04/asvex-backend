@@ -15,7 +15,12 @@ try{
 const {
 orderId,
 reason,
-evidence
+evidence,
+
+/* PATCH */
+unboxingVideo
+/* PATCH */
+
 } = req.body;
 
 const order =
@@ -44,9 +49,22 @@ seller:order.seller,
 
 reason,
 
-evidence
+evidence,
+
+/* PATCH */
+unboxingVideo
+/* PATCH */
 
 });
+
+/* PATCH START */
+
+order.complaintStatus =
+'pending';
+
+await order.save();
+
+/* PATCH END */
 
 res.status(201)
 .json(complaint);
@@ -155,6 +173,18 @@ complaint.status =
 req.body.status;
 
 await complaint.save();
+
+/* PATCH START */
+
+await Order.findByIdAndUpdate(
+complaint.order,
+{
+complaintStatus:
+req.body.status
+}
+);
+
+/* PATCH END */
 
 res.json(complaint);
 
