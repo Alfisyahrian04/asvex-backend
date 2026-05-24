@@ -9,6 +9,8 @@ localStorage.getItem('user')
 const token =
 localStorage.getItem('token');
 
+let productVariants = [];
+
 if(
 !currentUser ||
 currentUser.role !== 'seller'
@@ -17,24 +19,19 @@ window.location.href = 'login.html';
 }
 
 const productList =
-document.getElementById(
-'seller-product-list'
-);
+document.getElementById('seller-product-list');
 
 const productModal =
-document.getElementById(
-'product-modal'
-);
+document.getElementById('product-modal');
 
 const openModalBtn =
-document.getElementById(
-'open-product-modal'
-);
+document.getElementById('open-product-modal');
 
 const saveProductBtn =
-document.getElementById(
-'save-product-btn'
-);
+document.getElementById('save-product-btn');
+
+const addVariantBtn =
+document.getElementById('add-variant-btn');
 
 if(openModalBtn){
 openModalBtn.addEventListener(
@@ -55,6 +52,92 @@ productModal.style.display='none';
 }
 );
 }
+
+if(addVariantBtn){
+addVariantBtn.addEventListener(
+'click',
+()=>{
+
+const name =
+document.getElementById('variant-name').value.trim();
+
+const price =
+document.getElementById('variant-price').value.trim();
+
+const stock =
+document.getElementById('variant-stock').value.trim();
+
+if(!name || !price || !stock){
+alert('Lengkapi data varian');
+return;
+}
+
+productVariants.push({
+name,
+price:Number(price),
+stock:Number(stock)
+});
+
+renderVariantList();
+
+document.getElementById('variant-name').value='';
+document.getElementById('variant-price').value='';
+document.getElementById('variant-stock').value='';
+
+}
+);
+}
+
+function renderVariantList(){
+
+const variantList =
+document.getElementById('variant-list');
+
+if(!variantList) return;
+
+variantList.innerHTML =
+productVariants.map((variant,index)=>`
+
+<div style="
+padding:10px;
+margin-top:8px;
+background:#f5f5f5;
+border-radius:12px;
+font-size:14px;
+">
+
+${variant.name}
+-
+Rp ${variant.price.toLocaleString('id-ID')}
+-
+Stock ${variant.stock}
+
+<button
+onclick="removeVariant(${index})"
+style="
+float:right;
+background:red;
+color:#fff;
+border:none;
+padding:4px 8px;
+border-radius:8px;
+"
+>
+x
+</button>
+
+</div>
+
+`).join('');
+
+}
+
+function removeVariant(index){
+productVariants.splice(index,1);
+renderVariantList();
+}
+
+window.removeVariant = removeVariant;
 
 async function loadSellerProducts(){
 
@@ -254,6 +337,8 @@ condition,
 weight:Number(weight),
 sku,
 
+variants:productVariants,
+
 images:[imageBase64],
 
 productType:'physical',
@@ -276,41 +361,19 @@ data.message ||
 return;
 }
 
-alert(
-'Produk berhasil ditambahkan'
-);
+alert('Produk berhasil ditambahkan');
 
-document.getElementById(
-'product-name'
-).value='';
+productVariants = [];
+renderVariantList();
 
-document.getElementById(
-'product-description'
-).value='';
-
-document.getElementById(
-'product-price'
-).value='';
-
-document.getElementById(
-'product-stock'
-).value='';
-
-document.getElementById(
-'product-category'
-).value='';
-
-document.getElementById(
-'product-weight'
-).value='';
-
-document.getElementById(
-'product-sku'
-).value='';
-
-document.getElementById(
-'product-image'
-).value='';
+document.getElementById('product-name').value='';
+document.getElementById('product-description').value='';
+document.getElementById('product-price').value='';
+document.getElementById('product-stock').value='';
+document.getElementById('product-category').value='';
+document.getElementById('product-weight').value='';
+document.getElementById('product-sku').value='';
+document.getElementById('product-image').value='';
 
 productModal.style.display='none';
 
