@@ -1,45 +1,50 @@
 module.exports =
 (req, res, next) => {
 
-  const file =
-    req.file;
+const file =
+req.file;
 
-  if (!file) {
+if (!file) {
 
-    return res.status(400)
-    .json({
-      success: false,
-      message:
-        'File wajib diupload'
-    });
+return res.status(400)
+.json({
+success:false,
+message:
+'File wajib diupload'
+});
 
-  }
+}
 
-  const allowed = [
+const allowed = [
 
-    'image/png',
+'image/png',
 
-    'image/jpeg',
+'image/jpeg',
 
-    'image/webp'
+'image/webp',
 
-  ];
+/* PATCH */
+'video/mp4',
+'video/quicktime'
+/* PATCH */
 
-  if (
-    !allowed.includes(
-      file.mimetype
-    )
-  ) {
+];
 
-    return res.status(400)
-    .json({
-      success: false,
-      message:
-        'Format file tidak didukung'
-    });
+if (
+!allowed.includes(
+file.mimetype
+)
+) {
 
-  }
+return res.status(400)
+.json({
+success:false,
+message:
+'Format file tidak didukung'
+});
 
-  next();
+}
+
+next();
 
 };
