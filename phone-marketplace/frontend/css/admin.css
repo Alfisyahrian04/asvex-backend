@@ -362,3 +362,57 @@ background:#f3f3f3 !important;
 color:#111 !important;
 opacity:1 !important;
 }
+/* FIX ADMIN PROFILE NAVBAR */
+
+.bottom-nav{
+position:fixed;
+left:50%;
+bottom:18px;
+transform:translateX(-50%);
+width:92%;
+height:82px;
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+border-radius:32px;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 10px 40px rgba(0,0,0,.08);
+z-index:99999;
+}
+
+.bottom-nav a{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:6px;
+text-decoration:none;
+color:#9ca3af;
+font-size:12px;
+font-weight:700;
+transition:.25s;
+position:relative;
+min-width:60px;
+height:100%;
+cursor:pointer;
+}
+
+.bottom-nav a i{
+font-size:22px;
+}
+
+.bottom-nav a.active{
+color:#16a34a;
+}
+
+.bottom-nav a.active::before{
+content:'';
+position:absolute;
+top:-8px;
+width:42px;
+height:5px;
+border-radius:999px;
+background:#16a34a;
+}
