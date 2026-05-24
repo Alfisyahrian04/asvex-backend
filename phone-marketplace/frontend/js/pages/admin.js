@@ -109,8 +109,43 @@ Authorization:`Bearer ${token}`
 }
 );
 
-const orders =
+let orders =
 await response.json();
+
+/* PATCH START */
+/*
+support old + new order status:
+- waiting_payment_verification
+- pending
+- awaiting_confirmation
+*/
+orders =
+orders.filter(order=>
+
+order.paymentProof && (
+
+order.status ===
+'waiting_payment_verification'
+
+||
+
+order.status ===
+'pending'
+
+||
+
+order.status ===
+'awaiting_confirmation'
+
+||
+
+order.paymentStatus ===
+'waiting_verification'
+
+)
+
+);
+/* PATCH END */
 
 const paymentList =
 document.getElementById(
@@ -153,7 +188,10 @@ order.totalPrice || 0
 ).toLocaleString('id-ID')}
 </p>
 
-<p>${order.status}</p>
+<p>
+Status:
+${order.status}
+</p>
 
 <button
 onclick="approvePayment('${order._id}')"
