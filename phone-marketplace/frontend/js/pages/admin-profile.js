@@ -1,6 +1,7 @@
 const BASE_URL = 'https://asvex-backend.vercel.app/api';
 
 const token = localStorage.getItem('token');
+
 const currentUser =
 JSON.parse(localStorage.getItem('user')) || {};
 
@@ -18,7 +19,9 @@ async function loadAdminProfile(){
 try{
 
 document.getElementById('admin-name').value =
-currentUser.name || '';
+currentUser.username ||
+currentUser.name ||
+'';
 
 document.getElementById('admin-email').value =
 currentUser.email || '';
