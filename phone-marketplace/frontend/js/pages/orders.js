@@ -45,6 +45,16 @@ return 'Menunggu Konfirmasi Admin';
 case 'waiting_verification':
 return 'Menunggu Verifikasi Pembayaran';
 
+/* PATCH START */
+
+case 'waiting_payment_verification':
+return 'Menunggu Verifikasi Pembayaran';
+
+case 'payment_verified':
+return 'Pembayaran Diterima';
+
+/* PATCH END */
+
 case 'paid':
 return 'Pembayaran Diterima';
 
@@ -113,9 +123,11 @@ order.totalPrice || 0
 
 <div class="order-status">
 
-${getStatusLabel(
+${
+getStatusLabel(
 order.status || 'pending_payment'
-)}
+)
+}
 
 </div>
 
