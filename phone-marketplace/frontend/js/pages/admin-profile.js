@@ -42,11 +42,10 @@ document.getElementById(id);
 
 if(!input) return;
 
-if(input.type === 'password'){
-input.type = 'text';
-}else{
-input.type = 'password';
-}
+input.type =
+input.type === 'password'
+? 'text'
+: 'password';
 
 }
 
@@ -69,17 +68,17 @@ async ()=>{
 const oldPassword =
 document.getElementById(
 'old-password'
-).value;
+).value.trim();
 
 const newPassword =
 document.getElementById(
 'new-password'
-).value;
+).value.trim();
 
 const confirmPassword =
 document.getElementById(
 'confirm-password'
-).value;
+).value.trim();
 
 if(
 !oldPassword ||
@@ -90,12 +89,16 @@ alert('Lengkapi semua field');
 return;
 }
 
-if(newPassword !== confirmPassword){
+if(
+newPassword !== confirmPassword
+){
 alert('Konfirmasi password tidak sama');
 return;
 }
 
-if(newPassword.length < 6){
+if(
+newPassword.length < 6
+){
 alert(
 'Password minimal 6 karakter'
 );
@@ -112,7 +115,7 @@ method:'PUT',
 headers:{
 'Content-Type':
 'application/json',
-Authorization:
+'Authorization':
 `Bearer ${token}`
 },
 body:JSON.stringify({
@@ -122,12 +125,15 @@ newPassword
 }
 );
 
+const text =
+await response.text();
+
 let data = {};
 
 try{
-data = await response.json();
-}catch(e){
-data = {};
+data = JSON.parse(text);
+}catch{
+data = { message:text };
 }
 
 if(response.ok){
@@ -138,80 +144,36 @@ alert(
 
 document.getElementById(
 'old-password'
-).value = '';
+).value='';
 
 document.getElementById(
 'new-password'
-).value = '';
+).value='';
 
 document.getElementById(
 'confirm-password'
-).value = '';
+).value='';
 
 }else{
 
-if(
-response.status === 404 ||
-response.status === 500
-){
-
-localStorage.setItem(
-'adminPassword',
-newPassword
-);
-
-alert(
-'Password berhasil diubah'
-);
-
-document.getElementById(
-'old-password'
-).value = '';
-
-document.getElementById(
-'new-password'
-).value = '';
-
-document.getElementById(
-'confirm-password'
-).value = '';
-
-return;
-
-}
-
 alert(
 data.message ||
-'Gagal mengganti password'
+`Error ${response.status}`
 );
 
 }
 
 }catch(error){
 
-console.log(error);
-
-/* fallback biar tetap bisa save */
-localStorage.setItem(
-'adminPassword',
-newPassword
+console.error(
+'CHANGE PASSWORD:',
+error
 );
 
 alert(
-'Password berhasil diubah'
+error.message ||
+'Terjadi kesalahan'
 );
-
-document.getElementById(
-'old-password'
-).value = '';
-
-document.getElementById(
-'new-password'
-).value = '';
-
-document.getElementById(
-'confirm-password'
-).value = '';
 
 }
 
