@@ -429,10 +429,10 @@ product.variants?.[0]?.image ||
 style="
 width:100%;
 height:320px;
-object-fit:cover;
+object-fit:contain;
 border-radius:18px;
 margin-bottom:16px;
-background:#f5f5f5;
+background:#fff;
 "
 />
 
@@ -460,7 +460,7 @@ margin-bottom:18px;
 >
 
 <div
-onclick="changePreviewImage('${product.images?.[0] || ''}')"
+onclick="changePreviewImage('${product.images?.[0] || ''}', this)"
 style="
 min-width:72px;
 cursor:pointer;
@@ -468,6 +468,7 @@ text-align:center;
 "
 >
 <img
+data-thumb="1"
 src="${product.images?.[0] || ''}"
 style="
 width:64px;
@@ -482,13 +483,13 @@ font-size:12px;
 margin-top:6px;
 font-weight:600;
 ">
-Default
+${product.mainVariant || 'Variant Utama'}
 </div>
 </div>
 
 ${product.variants?.map(v => `
 <div
-onclick="changePreviewImage('${v.image || product.images?.[0] || ''}')"
+onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', this)"
 style="
 min-width:72px;
 cursor:pointer;
@@ -496,6 +497,7 @@ text-align:center;
 "
 >
 <img
+data-thumb="1"
 src="${v.image || product.images?.[0] || ''}"
 style="
 width:64px;
