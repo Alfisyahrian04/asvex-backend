@@ -7,7 +7,14 @@ express.Router();
 const {
 register,
 login,
-changePassword
+changePassword,
+
+/* PATCH */
+addAddress,
+deleteAddress,
+setDefaultAddress
+/* PATCH */
+
 } = require(
 '../controllers/authController'
 );
@@ -33,6 +40,28 @@ router.put(
 protect,
 changePassword
 );
+
+/* PATCH START */
+
+router.post(
+'/address',
+protect,
+addAddress
+);
+
+router.delete(
+'/address/:id',
+protect,
+deleteAddress
+);
+
+router.patch(
+'/address/default/:id',
+protect,
+setDefaultAddress
+);
+
+/* PATCH END */
 
 module.exports =
 router;
