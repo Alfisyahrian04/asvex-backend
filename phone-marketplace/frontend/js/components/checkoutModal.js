@@ -28,7 +28,6 @@ document.getElementById(
 'payment-method'
 );
 
-/* PATCH */
 const shippingCourierInput =
 document.getElementById(
 'shipping-courier'
@@ -38,7 +37,6 @@ const shippingAddressInput =
 document.getElementById(
 'shipping-address'
 );
-/* PATCH END */
 
 function openCheckoutModal(){
 
@@ -89,17 +87,11 @@ item.images?.[0]
 
 <div>
 
-<h3>
-${item.name}
-</h3>
+<h3>${item.name}</h3>
 
 <p>
 ${item.quantity || 1} x
-Rp ${Number(
-item.price
-).toLocaleString(
-'id-ID'
-)}
+Rp ${Number(item.price).toLocaleString('id-ID')}
 </p>
 
 </div>
@@ -109,15 +101,10 @@ item.price
 `).join('');
 
 checkoutTotal.innerText =
-`Rp ${cartStore
-.getCartTotal()
-.toLocaleString(
-'id-ID'
-)}`;
+`Rp ${cartStore.getCartTotal().toLocaleString('id-ID')}`;
 
 }
 
-/* PATCH CHECKOUT */
 async function checkoutOrder(){
 
 try{
@@ -126,60 +113,36 @@ const cart =
 cartStore.getCart();
 
 if(!cart.length){
-
-alert(
-'Keranjang kosong'
-);
-
+alert('Keranjang kosong');
 return;
-
 }
 
 const paymentMethod =
-paymentMethodInput?.value ||
-'QRIS';
+paymentMethodInput?.value || 'Transfer Bank';
 
 const shippingCourier =
-shippingCourierInput?.value ||
-'J&T Express';
+shippingCourierInput?.value || 'J&T Express';
 
 const shippingAddress =
-shippingAddressInput?.value ||
-'Indonesia';
+shippingAddressInput?.value || '';
 
-/* PATCH */
 if(!shippingAddress.trim()){
-
-alert(
-'Alamat pengiriman wajib diisi'
-);
-
+alert('Alamat pengiriman wajib diisi');
 return;
-
 }
-/* PATCH END */
 
 const paymentFile =
 paymentProofInput?.files?.[0];
 
 if(!paymentFile){
-
-alert(
-'Upload bukti pembayaran'
-);
-
+alert('Upload bukti pembayaran');
 return;
-
 }
 
-checkoutButton.disabled =
-true;
+checkoutButton.disabled = true;
+checkoutButton.innerText = 'Memproses...';
 
-checkoutButton.innerText =
-'Memproses...';
-
-const reader =
-new FileReader();
+const reader = new FileReader();
 
 reader.onload =
 async function(e){
@@ -187,36 +150,34 @@ async function(e){
 const paymentProof =
 e.target.result;
 
-/* PATCH */
 for(const item of cart){
 
 await createOrder({
 
 productId:item._id,
-
 quantity:item.quantity || 1,
 
 shippingAddress,
-
 shippingCourier,
 shippingCost:15000,
 
 paymentMethod,
 paymentProof,
 
-variant:
-item.variant || {},
+variant:item.variant || {},
 
 totalPrice:
 (item.price * (item.quantity || 1)) + 15000,
 
 status:
+'waiting_payment_verification',
+
+paymentStatus:
 'waiting_verification'
 
 });
 
 }
-/* PATCH END */
 
 cartStore.clearCart();
 
@@ -237,15 +198,10 @@ paymentFile
 
 console.log(error);
 
-alert(
-'Checkout gagal'
-);
+alert('Checkout gagal');
 
-checkoutButton.disabled =
-false;
-
-checkoutButton.innerText =
-'Bayar Sekarang';
+checkoutButton.disabled = false;
+checkoutButton.innerText = 'Bayar Sekarang';
 
 }
 
