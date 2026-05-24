@@ -8,12 +8,13 @@ const token =
 localStorage.getItem('token');
 
 let productVariants = [];
+let productsCache = [];
 
 if(
 !currentUser ||
 currentUser.role !== 'seller'
 ){
-window.location.href = 'login.html';
+window.location.href='login.html';
 }
 
 const productList =
@@ -30,6 +31,7 @@ document.getElementById('save-product-btn');
 
 const addVariantBtn =
 document.getElementById('add-variant-btn');
+
 
 if(openModalBtn){
 openModalBtn.addEventListener(
@@ -52,7 +54,6 @@ productModal.style.display='none';
 }
 
 if(addVariantBtn){
-
 addVariantBtn.addEventListener(
 'click',
 async()=>{
@@ -82,7 +83,7 @@ await convertToBase64(imageFile);
 }
 
 productVariants.push({
-id: Date.now(),
+id:Date.now(),
 name,
 price:Number(price),
 stock:Number(stock),
@@ -99,7 +100,6 @@ document.getElementById('variant-image').value='';
 
 }
 );
-
 }
 
 function renderPrimaryVariantOptions(){
@@ -144,21 +144,20 @@ gap:12px;
 align-items:center;
 ">
 
-${
-variant.image
-? `<img src="${variant.image}"
+${variant.image ? `
+<img
+src="${variant.image}"
 style="
 width:50px;
 height:50px;
-border-radius:8px;
 object-fit:cover;
+border-radius:8px;
 "
-/>`
-: ''
-}
+/>
+` : ''}
 
 <div style="flex:1;">
-<div>${variant.name}</div>
+<div><b>${variant.name}</b></div>
 <div>Rp ${variant.price.toLocaleString('id-ID')}</div>
 <div>Stok ${variant.stock}</div>
 </div>
@@ -172,11 +171,10 @@ border:none;
 padding:6px 10px;
 border-radius:8px;
 "
->
-x
-</button>
+>x</button>
 
 </div>
+
 `).join('');
 
 }
@@ -206,7 +204,10 @@ Authorization:`Bearer ${token}`
 const data =
 await response.json();
 
-renderProducts(data.products || []);
+productsCache =
+data.products || [];
+
+renderProducts(productsCache);
 
 }catch(error){
 console.log(error);
@@ -217,11 +218,13 @@ console.log(error);
 function renderProducts(products){
 
 if(!products.length){
+
 productList.innerHTML=`
 <div class="empty-state">
 Belum ada produk
 </div>
 `;
+
 return;
 }
 
@@ -231,41 +234,172 @@ products.map(product=>`
 <div class="product-card">
 
 <img
-src="${product.images?.[0] || 'https://via.placeholder.com/300'}"
+src="${
+product.images?.[0] ||
+'https://via.placeholder.com/300'
+}"
 alt="${product.name}"
 >
 
 <h3>${product.name}</h3>
 
 <p>
-Rp ${Number(product.price || 0).toLocaleString('id-ID')}
+Rp ${Number(
+product.price || 0
+).toLocaleString('id-ID')}
 </p>
 
 <p>Stok: <b>${product.stock ?? 0}</b></p>
 <p>Kategori: <b>${product.category || '-'}</b></p>
 <p>Kondisi: <b>${product.condition || '-'}</b></p>
+<p>Brand: <b>${product.brand || '-'}</b></p>
+<p>SKU: <b>${product.sku || '-'}</b></p>
+<p>Berat: <b>${product.weight || 0} gram</b></p>
+
+${
+product.variants?.length
+? `
+<details style="
+margin-top:10px;
+padding:12px;
+background:#f8f8f8;
+border-radius:12px;
+">
+<summary style="
+font-weight:700;
+cursor:pointer;
+">
+Lihat Variant (${product.variants.length})
+</summary>
+
+<div style="margin-top:10px;">
+${product.variants.map(v=>`
+
+<div style="
+padding:10px;
+margin-bottom:8px;
+background:white;
+border-radius:10px;
+">
+
+<div><b>${v.name}</b></div>
+<div>
+Rp ${Number(
+v.price || 0
+).toLocaleString('id-ID')}
+</div>
+<div>Stok ${v.stock || 0}</div>
+
+</div>
+
+`).join('')}
+</div>
+
+</details>
+`
+: ''
+}
+
+<div style="
+display:flex;
+gap:8px;
+margin-top:12px;
+">
 
 <button
-onclick="deleteProduct('${product._id}')"
+onclick="editProduct('${product._id}')"
 style="
-margin-top:10px;
-background:#dc2626;
+flex:1;
+background:#f59e0b;
 color:white;
 border:none;
 padding:10px;
-width:100%;
 border-radius:12px;
 font-weight:600;
 "
 >
-Hapus Produk
+Edit
 </button>
+
+<button
+onclick="deleteProduct('${product._id}')"
+style="
+flex:1;
+background:#dc2626;
+color:white;
+border:none;
+padding:10px;
+border-radius:12px;
+font-weight:600;
+"
+>
+Hapus
+</button>
+
+</div>
 
 </div>
 
 `).join('');
 
 }
+
+function editProduct(id){
+
+const product =
+productsCache.find(
+item=>item._id===id
+);
+
+if(!product) return;
+
+productModal.style.display='flex';
+
+document.getElementById(
+'product-name'
+).value =
+product.name || '';
+
+document.getElementById(
+'product-description'
+).value =
+product.description || '';
+
+document.getElementById(
+'product-price'
+).value =
+product.price || '';
+
+document.getElementById(
+'product-stock'
+).value =
+product.stock || '';
+
+document.getElementById(
+'product-category'
+).value =
+product.category || '';
+
+document.getElementById(
+'product-sku'
+).value =
+product.sku || '';
+
+document.getElementById(
+'product-weight'
+).value =
+product.weight || '';
+
+productVariants =
+product.variants || [];
+
+renderVariantList();
+renderPrimaryVariantOptions();
+
+}
+
+window.editProduct = editProduct;
+
 
 if(saveProductBtn){
 
@@ -318,7 +452,7 @@ alert('Lengkapi data produk');
 return;
 }
 
-saveProductBtn.disabled = true;
+saveProductBtn.disabled=true;
 saveProductBtn.innerText='Uploading...';
 
 try{
@@ -333,15 +467,12 @@ imageInput.files[0]
 }
 
 const slug =
-name
-.toLowerCase()
+name.toLowerCase()
 .trim()
 .replace(/\s+/g,'-')
-.replace(/[^\w-]+/g,'')
 + '-' +
 Date.now();
 
-const response =
 await fetch(
 `${BASE_URL}/products`,
 {
@@ -369,28 +500,12 @@ seller:currentUser.id
 }
 );
 
-const data =
-await response.json();
-
-if(!response.ok){
-alert(data.message || 'Gagal upload produk');
-return;
-}
-
 alert('Produk berhasil ditambahkan');
 
-productVariants = [];
+productVariants=[];
+
 renderVariantList();
 renderPrimaryVariantOptions();
-
-document.getElementById('product-name').value='';
-document.getElementById('product-description').value='';
-document.getElementById('product-price').value='';
-document.getElementById('product-stock').value='';
-document.getElementById('product-category').value='';
-document.getElementById('product-weight').value='';
-document.getElementById('product-sku').value='';
-document.getElementById('product-image').value='';
 
 productModal.style.display='none';
 
@@ -406,7 +521,6 @@ saveProductBtn.innerText='Upload Produk';
 
 }
 );
-
 }
 
 async function deleteProduct(id){
@@ -439,11 +553,11 @@ console.log(error);
 window.deleteProduct = deleteProduct;
 
 function convertToBase64(file){
-
 return new Promise(
 (resolve,reject)=>{
 
-const reader = new FileReader();
+const reader =
+new FileReader();
 
 reader.readAsDataURL(file);
 
@@ -455,7 +569,6 @@ error=>reject(error);
 
 }
 );
-
 }
 
 loadSellerProducts();
