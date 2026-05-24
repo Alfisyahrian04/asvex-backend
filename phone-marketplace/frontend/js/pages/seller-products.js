@@ -251,10 +251,10 @@ Authorization:`Bearer ${token}`
 }
 }
 );
-
+console.log('STATUS:', response.status);
 const data =
 await response.json();
-
+console.log('DATA:', data);
 productsCache =
 data.products || [];
 
