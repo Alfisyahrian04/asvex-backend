@@ -3,30 +3,18 @@ const BASE_URL =
 
 const currentUser =
 JSON.parse(
-localStorage.getItem(
-'user'
-)
+localStorage.getItem('user')
 );
 
 const token =
-localStorage.getItem(
-'token'
-);
-
-/* AUTH */
+localStorage.getItem('token');
 
 if(
 !currentUser ||
-currentUser.role !==
-'seller'
+currentUser.role !== 'seller'
 ){
-
-window.location.href =
-'login.html';
-
+window.location.href = 'login.html';
 }
-
-/* ELEMENT */
 
 const productList =
 document.getElementById(
@@ -48,50 +36,25 @@ document.getElementById(
 'save-product-btn'
 );
 
-/* OPEN MODAL */
-
-if(
-openModalBtn
-){
-
+if(openModalBtn){
 openModalBtn.addEventListener(
 'click',
 ()=>{
-
-productModal.style.display =
-'flex';
-
+productModal.style.display='flex';
 }
 );
-
 }
 
-/* CLOSE MODAL */
-
-if(
-productModal
-){
-
+if(productModal){
 productModal.addEventListener(
 'click',
 (e)=>{
-
-if(
-e.target ===
-productModal
-){
-
-productModal.style.display =
-'none';
-
+if(e.target===productModal){
+productModal.style.display='none';
 }
-
 }
 );
-
 }
-
-/* LOAD PRODUCTS */
 
 async function loadSellerProducts(){
 
@@ -102,8 +65,7 @@ await fetch(
 `${BASE_URL}/products/my-products`,
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -111,47 +73,21 @@ Authorization:
 const data =
 await response.json();
 
-if(
-!response.ok
-){
-
-console.log(data);
-
-return;
-
-}
-
 renderProducts(
 data.products || []
 );
 
 }catch(error){
-
 console.log(error);
-
 }
 
 }
 
-/* RENDER PRODUCTS */
+function renderProducts(products){
 
-function renderProducts(
-products
-){
+if(!products.length){
 
-if(
-!productList
-){
-
-return;
-
-}
-
-if(
-!products.length
-){
-
-productList.innerHTML =
+productList.innerHTML=
 `
 <div class="empty-state">
 Belum ada produk
@@ -170,24 +106,49 @@ products.map(product=>`
 <img
 src="${
 product.images?.[0] ||
-'https://via.placeholder.com/300x300'
+'https://via.placeholder.com/300'
 }"
 alt="${product.name}"
 >
 
-<h3>
-${product.name}
-</h3>
+<h3>${product.name}</h3>
 
 <p>
-Rp ${
-Number(
+Rp ${Number(
 product.price || 0
-).toLocaleString(
-'id-ID'
-)
-}
+).toLocaleString('id-ID')}
 </p>
+
+<p>
+Stok:
+<b>${product.stock ?? 0}</b>
+</p>
+
+<p>
+Kategori:
+<b>${product.category || '-'}</b>
+</p>
+
+<p>
+Kondisi:
+<b>${product.condition || '-'}</b>
+</p>
+
+<button
+onclick="deleteProduct('${product._id}')"
+style="
+margin-top:10px;
+background:#dc2626;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+border-radius:12px;
+font-weight:600;
+"
+>
+Hapus Produk
+</button>
 
 </div>
 
@@ -195,11 +156,7 @@ product.price || 0
 
 }
 
-/* CREATE PRODUCT */
-
-if(
-saveProductBtn
-){
+if(saveProductBtn){
 
 saveProductBtn.addEventListener(
 'click',
@@ -220,6 +177,31 @@ document.getElementById(
 'product-price'
 ).value.trim();
 
+const stock =
+document.getElementById(
+'product-stock'
+).value.trim();
+
+const category =
+document.getElementById(
+'product-category'
+)?.value.trim() || 'General';
+
+const condition =
+document.getElementById(
+'product-condition'
+)?.value || 'Baru';
+
+const weight =
+document.getElementById(
+'product-weight'
+)?.value.trim() || 0;
+
+const sku =
+document.getElementById(
+'product-sku'
+)?.value.trim() || '';
+
 const imageInput =
 document.getElementById(
 'product-image'
@@ -228,39 +210,25 @@ document.getElementById(
 if(
 !name ||
 !description ||
-!price
+!price ||
+!stock
 ){
-
-alert(
-'Lengkapi data produk'
-);
-
+alert('Lengkapi data produk');
 return;
-
 }
 
-saveProductBtn.disabled =
-true;
-
-saveProductBtn.innerText =
-'Uploading...';
+saveProductBtn.disabled=true;
+saveProductBtn.innerText='Uploading...';
 
 try{
 
-let imageBase64 = '';
+let imageBase64='';
 
-if(
-imageInput.files[0]
-){
-
-const file =
-imageInput.files[0];
-
+if(imageInput.files[0]){
 imageBase64 =
 await convertToBase64(
-file
+imageInput.files[0]
 );
-
 }
 
 const response =
@@ -270,23 +238,27 @@ await fetch(
 method:'POST',
 
 headers:{
-'Content-Type':
-'application/json',
-
-Authorization:
-`Bearer ${token}`
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
 },
 
 body:JSON.stringify({
 
 name,
 description,
-price,
+price:Number(price),
+stock:Number(stock),
+
+category,
+condition,
+weight:Number(weight),
+sku,
+
 images:[imageBase64],
-category:'General',
+
 productType:'physical',
-seller:
-currentUser.id
+
+seller:currentUser.id
 
 })
 
@@ -296,78 +268,103 @@ currentUser.id
 const data =
 await response.json();
 
-if(
-!response.ok
-){
-
+if(!response.ok){
 alert(
 data.message ||
 'Gagal upload produk'
 );
-
-saveProductBtn.disabled =
-false;
-
-saveProductBtn.innerText =
-'Upload Produk';
-
 return;
-
 }
 
 alert(
 'Produk berhasil ditambahkan'
 );
 
-/* RESET */
-
 document.getElementById(
 'product-name'
-).value = '';
+).value='';
 
 document.getElementById(
 'product-description'
-).value = '';
+).value='';
 
 document.getElementById(
 'product-price'
-).value = '';
+).value='';
+
+document.getElementById(
+'product-stock'
+).value='';
+
+document.getElementById(
+'product-category'
+).value='';
+
+document.getElementById(
+'product-weight'
+).value='';
+
+document.getElementById(
+'product-sku'
+).value='';
 
 document.getElementById(
 'product-image'
-).value = '';
+).value='';
 
-productModal.style.display =
-'none';
+productModal.style.display='none';
 
 loadSellerProducts();
 
 }catch(error){
 
 console.log(error);
-
-alert(
-'Server error'
-);
+alert('Server error');
 
 }
 
-saveProductBtn.disabled =
-false;
-
-saveProductBtn.innerText =
-'Upload Produk';
+saveProductBtn.disabled=false;
+saveProductBtn.innerText='Upload Produk';
 
 }
 );
 
 }
 
-/* IMAGE CONVERT */
+async function deleteProduct(id){
 
-function convertToBase64(
-file
-){
+const confirmDelete =
+confirm(
+'Hapus produk ini?'
+);
+
+if(!confirmDelete) return;
+
+try{
+
+await fetch(
+`${BASE_URL}/products/${id}`,
+{
+method:'DELETE',
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+loadSellerProducts();
+
+}catch(error){
+console.log(error);
+}
+
+}
+
+window.deleteProduct =
+deleteProduct;
+
+function convertToBase64(file){
 
 return new Promise(
 (resolve,reject)=>{
@@ -375,25 +372,17 @@ return new Promise(
 const reader =
 new FileReader();
 
-reader.readAsDataURL(
-file
-);
+reader.readAsDataURL(file);
 
 reader.onload =
-()=>resolve(
-reader.result
-);
+()=>resolve(reader.result);
 
 reader.onerror =
-error=>reject(
-error
-);
+error=>reject(error);
 
 }
 );
 
 }
-
-/* INIT */
 
 loadSellerProducts();
