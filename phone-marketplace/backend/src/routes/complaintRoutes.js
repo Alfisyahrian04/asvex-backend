@@ -52,5 +52,18 @@ roleMiddleware(
 updateComplaintStatus
 );
 
+/* PATCH START */
+
+router.put(
+'/:id/resolve',
+protect,
+roleMiddleware(
+'admin'
+),
+updateComplaintStatus
+);
+
+/* PATCH END */
+
 module.exports =
 router;
