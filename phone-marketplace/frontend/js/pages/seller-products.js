@@ -196,6 +196,7 @@ renderPrimaryVariantOptions();
 }
 
 window.removeVariant = removeVariant;
+
 function openProductPreviewById(id){
 
 const product =
@@ -229,16 +230,25 @@ priceEl.innerText =
 `Rp ${Number(price || 0).toLocaleString('id-ID')}`;
 }
 
+/* PATCH KOTAK OREN */
 document
-.querySelectorAll('.variant-item')
-.forEach(item=>{
-item.classList.remove('active');
+.querySelectorAll('.variant-item img')
+.forEach(img=>{
+img.style.border='1px solid #eee';
 });
 
 if(element){
-element.classList.add('active');
+const selectedImg =
+element.querySelector('img');
+
+if(selectedImg){
+selectedImg.style.border =
+'2px solid #ff6b00';
 }
 }
+
+}
+
 window.changePreviewImage =
 changePreviewImage;
 
@@ -255,10 +265,14 @@ Authorization:`Bearer ${token}`
 }
 }
 );
+
 console.log('STATUS:', response.status);
+
 const data =
 await response.json();
+
 console.log('DATA:', data);
+
 productsCache =
 data?.data?.products ||
 data?.products ||
@@ -478,8 +492,8 @@ padding-bottom:10px;
 margin-bottom:18px;
 "
 >
-
 <div
+class="variant-item active"
 onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}', this)"
 style="
 min-width:72px;
@@ -509,7 +523,9 @@ ${product.mainVariant || 'Variant Utama'}
 
 ${product.variants?.map(v => `
 <div
+class="variant-item"
 onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}', this)"
+style="
 min-width:72px;
 cursor:pointer;
 text-align:center;
@@ -534,6 +550,7 @@ ${v.name}
 </div>
 </div>
 `).join('') || ''}
+
 </div>
 
 <h3>Deskripsi Produk</h3>
