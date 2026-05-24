@@ -223,7 +223,7 @@ if(previewImage){
 previewImage.src = image;
 }
 
-if(price){
+
 const priceEl =
 document.getElementById(
 'preview-price'
@@ -231,7 +231,7 @@ document.getElementById(
 
 if(priceEl){
 priceEl.innerText =
-`Rp ${Number(price).toLocaleString('id-ID')}`;
+`Rp ${Number(price || 0).toLocaleString('id-ID')}`;
 }
 }
 
@@ -475,7 +475,7 @@ margin-bottom:18px;
 >
 
 <div
-onclick="changePreviewImage('${product.images?.[0] || ''}', this)"
+onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}')"
 style="
 min-width:72px;
 cursor:pointer;
