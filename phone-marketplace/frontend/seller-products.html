@@ -214,8 +214,6 @@ id="variant-image"
 accept="image/*"
 />
 
-<div id="variant-list"></div>
-
 <button
 type="button"
 id="add-variant-btn"
@@ -223,6 +221,25 @@ style="margin-top:14px;"
 >
 + Tambah Variant
 </button>
+
+<div id="variant-list"></div>
+
+<label
+style="
+display:block;
+margin-top:18px;
+margin-bottom:8px;
+font-weight:600;
+"
+>
+Variant Utama Produk
+</label>
+
+<select id="primary-variant-select">
+<option value="">
+Pilih Variant Utama
+</option>
+</select>
 
 </div>
 
@@ -242,7 +259,6 @@ Upload Produk
 </div>
 </div>
 
-<!-- PRODUCT PREVIEW MODAL -->
 <div
 id="product-preview-modal"
 style="
