@@ -10,6 +10,11 @@ require('../models/Product');
 const Order =
 require('../models/Order');
 
+/* PATCH */
+const User =
+require('../models/User');
+/* PATCH */
+
 exports.getWallet =
 async(req,res)=>{
 
@@ -183,3 +188,93 @@ message:error.message
 }
 
 };
+
+/* PATCH START */
+
+exports.updateSellerProfile =
+async(req,res)=>{
+
+try{
+
+const user =
+await User.findById(
+req.user._id
+);
+
+if(!user){
+return res.status(404).json({
+message:'User not found'
+});
+}
+
+user.storeName =
+req.body.storeName ??
+user.storeName;
+
+user.phone =
+req.body.phone ??
+user.phone;
+
+user.returnAddress =
+req.body.returnAddress ??
+user.returnAddress;
+
+await user.save();
+
+res.json(user);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.uploadShippingData =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.shippingCourier =
+req.body.shippingCourier
+|| order.shippingCourier;
+
+order.trackingNumber =
+req.body.trackingNumber
+|| order.trackingNumber;
+
+order.shippingPhoto =
+req.body.shippingPhoto
+|| order.shippingPhoto;
+
+order.status='shipped';
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+/* PATCH END */
