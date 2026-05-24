@@ -38,6 +38,9 @@ openModalBtn.addEventListener(
 'click',
 ()=>{
 editingProductId = null;
+productVariants = [];
+renderVariantList();
+renderPrimaryVariantOptions();
 productModal.style.display='flex';
 }
 );
@@ -83,13 +86,18 @@ imageBase64 =
 await convertToBase64(imageFile);
 }
 
-productVariants.push({
-id:Date.now(),
+const newVariant = {
+id: Date.now().toString(),
 name,
 price:Number(price),
 stock:Number(stock),
 image:imageBase64
-});
+};
+
+productVariants = [
+...productVariants,
+newVariant
+];
 
 renderVariantList();
 renderPrimaryVariantOptions();
@@ -159,8 +167,8 @@ border-radius:8px;
 
 <div style="flex:1;">
 <div><b>${variant.name}</b></div>
-<div>Rp ${variant.price.toLocaleString('id-ID')}</div>
-<div>Stok ${variant.stock}</div>
+<div>Rp ${Number(variant.price || 0).toLocaleString('id-ID')}</div>
+<div>Stok ${variant.stock || 0}</div>
 </div>
 
 <button
@@ -182,6 +190,7 @@ border-radius:8px;
 
 function removeVariant(index){
 productVariants.splice(index,1);
+productVariants = [...productVariants];
 renderVariantList();
 renderPrimaryVariantOptions();
 }
@@ -400,23 +409,8 @@ conditionField.value =
 product.condition || 'Baru';
 }
 
-/* PATCH */
 productVariants =
-(product.variants || []).map(
-variant=>({
-id:
-variant.id ||
-Date.now() + Math.random(),
-name:
-variant.name || '',
-price:
-Number(variant.price || 0),
-stock:
-Number(variant.stock || 0),
-image:
-variant.image || ''
-})
-);
+[...(product.variants || [])];
 
 renderVariantList();
 renderPrimaryVariantOptions();
@@ -471,6 +465,15 @@ const primaryVariant =
 productVariants.find(
 item => String(item.id) === String(primaryVariantId)
 ) || null;
+
+const cleanVariants =
+productVariants.map(v => ({
+id: v.id || Date.now().toString(),
+name: v.name || '',
+price: Number(v.price || 0),
+stock: Number(v.stock || 0),
+image: v.image || ''
+}));
 
 if(
 !name ||
@@ -536,7 +539,7 @@ category,
 condition,
 weight:Number(weight),
 sku,
-variants:productVariants,
+variants:cleanVariants,
 primaryVariant,
 images: imageBase64
 ? [imageBase64]
