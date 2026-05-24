@@ -35,24 +35,30 @@ document.getElementById(
 );
 
 if(nameInput){
+
 nameInput.value =
 currentUser.username ||
 currentUser.name ||
 '';
 
-nameInput.readOnly = true;
+nameInput.disabled = true;
+
 }
 
 if(emailInput){
+
 emailInput.value =
 currentUser.email || '';
 
-emailInput.readOnly = true;
+emailInput.disabled = true;
+
 }
 
 if(phoneInput){
+
 phoneInput.value =
 currentUser.phone || '';
+
 }
 
 }catch(error){
