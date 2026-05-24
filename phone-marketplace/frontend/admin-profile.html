@@ -9,7 +9,10 @@ content="width=device-width, initial-scale=1.0"
 
 <title>Admin Profile</title>
 
-<link rel="stylesheet" href="./css/admin.css?v=999">
+<link
+rel="stylesheet"
+href="./css/admin.css?v=999"
+/>
 
 <link
 rel="stylesheet"
@@ -129,8 +132,10 @@ Simpan Password
 </button>
 
 <button
+type="button"
 id="logout-btn"
 class="logout-btn"
+onclick="localStorage.removeItem('token');localStorage.removeItem('user');window.location.href='/login.html';"
 >
 Logout
 </button>
@@ -141,7 +146,7 @@ Logout
 
 </main>
 
-<script src="admin-profile.js"></script>
+<script src="./js/pages/admin-profile.js?v=999"></script>
 
 </body>
 </html>
