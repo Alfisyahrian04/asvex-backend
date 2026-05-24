@@ -166,7 +166,7 @@ password
 const user =
 await User.findOne({
 email
-});
+}).select('+password');
 
 if(!user){
 
@@ -300,7 +300,7 @@ message:
 const user =
 await User.findById(
 userId
-);
+).select('+password');
 
 if(!user){
 
