@@ -1,81 +1,34 @@
-const User =
-require('../models/User');
+/* PATCH START */
 
-const Payout =
-require('../models/Payout');
+const Order =
+require('../models/Order');
 
-const AuditLog =
-require('../models/AuditLog');
-
-exports.getAllUsers =
+exports.verifyManualPayment =
 async(req,res)=>{
 
 try{
 
-const users =
-await User.find()
-.select('-password');
-
-res.json(users);
-
-}catch(error){
-
-res.status(500)
-.json({
-message:error.message
-});
-
-}
-
-};
-
-exports.verifySeller =
-async(req,res)=>{
-
-try{
-
-const seller =
-await User.findById(
+const order =
+await Order.findById(
 req.params.id
 );
 
-if(!seller){
-
-return res.status(404)
-.json({
-message:
-'Seller not found'
+if(!order){
+return res.status(404).json({
+message:'Order not found'
 });
-
 }
 
-seller.verificationStatus =
-true;
+order.paymentStatus='paid';
+order.status='paid';
 
-await seller.save();
+await order.save();
 
-await AuditLog.create({
-
-admin:req.user._id,
-
-targetUser:seller._id,
-
-action:'VERIFY_SELLER',
-
-description:
-'Admin verified seller'
-
-});
-
-res.json({
-message:
-'Seller verified'
-});
+res.json(order);
 
 }catch(error){
 
-res.status(500)
-.json({
+res.status(500).json({
 message:error.message
 });
 
@@ -83,52 +36,32 @@ message:error.message
 
 };
 
-exports.banUser =
+exports.approveRefund =
 async(req,res)=>{
 
 try{
 
-const user =
-await User.findById(
+const order =
+await Order.findById(
 req.params.id
 );
 
-if(!user){
-
-return res.status(404)
-.json({
-message:
-'User not found'
+if(!order){
+return res.status(404).json({
+message:'Order not found'
 });
-
 }
 
-user.isBanned = true;
+order.returnStatus='approved';
+order.status='cancelled';
 
-await user.save();
+await order.save();
 
-await AuditLog.create({
-
-admin:req.user._id,
-
-targetUser:user._id,
-
-action:'BAN_USER',
-
-description:
-'Admin banned user'
-
-});
-
-res.json({
-message:
-'User banned'
-});
+res.json(order);
 
 }catch(error){
 
-res.status(500)
-.json({
+res.status(500).json({
 message:error.message
 });
 
@@ -136,71 +69,37 @@ message:error.message
 
 };
 
-exports.getPayouts =
+exports.resolveDispute =
 async(req,res)=>{
 
 try{
 
-const payouts =
-await Payout.find()
-.populate(
-'seller',
-'username'
-)
-.sort({
-createdAt:-1
-});
-
-res.json(payouts);
-
-}catch(error){
-
-res.status(500)
-.json({
-message:error.message
-});
-
-}
-
-};
-
-exports.approvePayout =
-async(req,res)=>{
-
-try{
-
-const payout =
-await Payout.findById(
+const order =
+await Order.findById(
 req.params.id
 );
 
-if(!payout){
-
-return res.status(404)
-.json({
-message:
-'Payout not found'
+if(!order){
+return res.status(404).json({
+message:'Order not found'
 });
-
 }
 
-payout.status =
-'approved';
+order.disputeStatus =
+req.body.status || 'resolved';
 
-await payout.save();
+await order.save();
 
-res.json({
-message:
-'Payout approved'
-});
+res.json(order);
 
 }catch(error){
 
-res.status(500)
-.json({
+res.status(500).json({
 message:error.message
 });
 
 }
 
 };
+
+/* PATCH END */
