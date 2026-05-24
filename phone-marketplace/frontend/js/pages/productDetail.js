@@ -13,6 +13,13 @@ document.getElementById(
 'review-list'
 );
 
+/* PATCH */
+const variantContainer =
+document.getElementById(
+'variant-list'
+);
+/* PATCH */
+
 async function loadReviews(){
 
 try{
@@ -58,6 +65,36 @@ ${review.comment}
 `).join('');
 
 }
+
+/* PATCH START */
+
+function renderVariants(product){
+
+if(
+!variantContainer ||
+!product?.variants?.length
+) return;
+
+variantContainer.innerHTML =
+product.variants.map(
+variant=>`
+
+<button
+class="variant-btn"
+data-variant='${JSON.stringify(variant)}'
+>
+${variant.color || ''}
+${variant.storage || ''}
+${variant.ram || ''}
+${variant.rom || ''}
+</button>
+
+`
+).join('');
+
+}
+
+/* PATCH END */
 
 async function submitReview(){
 
