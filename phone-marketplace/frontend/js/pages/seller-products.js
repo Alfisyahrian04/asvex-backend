@@ -235,8 +235,6 @@ priceEl.innerText =
 }
 }
 
-}
-
 window.changePreviewImage =
 changePreviewImage;
 
