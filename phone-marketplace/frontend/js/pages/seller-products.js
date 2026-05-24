@@ -400,8 +400,23 @@ conditionField.value =
 product.condition || 'Baru';
 }
 
+/* PATCH */
 productVariants =
-product.variants || [];
+(product.variants || []).map(
+variant=>({
+id:
+variant.id ||
+Date.now() + Math.random(),
+name:
+variant.name || '',
+price:
+Number(variant.price || 0),
+stock:
+Number(variant.stock || 0),
+image:
+variant.image || ''
+})
+);
 
 renderVariantList();
 renderPrimaryVariantOptions();
