@@ -11,20 +11,16 @@ localStorage.getItem(
 if(
 !currentUser
 ){
-
 window.location.href =
 'login.html';
-
 }
 
 if(
 currentUser.role !==
 'seller'
 ){
-
 window.location.href =
 'index.html';
-
 }
 
 const sellerUsername =
@@ -33,10 +29,8 @@ document.getElementById(
 );
 
 if(sellerUsername){
-
 sellerUsername.innerText =
 currentUser.username;
-
 }
 
 const token =
@@ -60,7 +54,8 @@ order.paymentStatus ===
 'paid' &&
 (
 order.status === 'paid' ||
-order.status === 'pending'
+order.status === 'pending' ||
+order.status === 'waiting_payment_verification'
 )
 ){
 return 'Menunggu Diproses';
@@ -121,9 +116,7 @@ document.getElementById(
 );
 
 if(!pendingOrders){
-
 return;
-
 }
 
 if(
