@@ -392,6 +392,14 @@ product.sku || '';
 document.getElementById('product-weight').value =
 product.weight || '';
 
+const conditionField =
+document.getElementById('product-condition');
+
+if(conditionField){
+conditionField.value =
+product.condition || 'Baru';
+}
+
 productVariants =
 product.variants || [];
 
@@ -466,7 +474,10 @@ try{
 
 let imageBase64='';
 
-if(imageInput.files[0]){
+if(
+imageInput &&
+imageInput.files[0]
+){
 imageBase64 =
 await convertToBase64(
 imageInput.files[0]
@@ -512,7 +523,17 @@ weight:Number(weight),
 sku,
 variants:productVariants,
 primaryVariant,
-images:[imageBase64],
+images: imageBase64
+? [imageBase64]
+: (
+editingProductId
+? (
+productsCache.find(
+item => item._id === editingProductId
+)?.images || []
+)
+: []
+),
 productType:'physical',
 seller:currentUser.id
 })
