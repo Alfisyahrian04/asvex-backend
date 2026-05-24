@@ -212,36 +212,29 @@ openProductPreview(product);
 window.openProductPreviewById =
 openProductPreviewById;
 
-function changePreviewImage(image, el){
-  const previewImage =
-    document.getElementById(
-      'preview-main-image'
-    );
+function changePreviewImage(image, price){
 
-  if(previewImage){
-    previewImage.src = image;
-  }
+const previewImage =
+document.getElementById(
+'preview-main-image'
+);
 
-  document
-    .querySelectorAll(
-      '#product-preview-modal img[data-thumb]'
-    )
-    .forEach(img=>{
-      img.style.border =
-        '1px solid #eee';
-    });
+if(previewImage){
+previewImage.src = image;
+}
 
-  if(el){
-    const thumb =
-      el.querySelector(
-        'img[data-thumb]'
-      );
+if(price){
+const priceEl =
+document.getElementById(
+'preview-price'
+);
 
-    if(thumb){
-      thumb.style.border =
-        '2px solid #ff6b00';
-    }
-  }
+if(priceEl){
+priceEl.innerText =
+`Rp ${Number(price).toLocaleString('id-ID')}`;
+}
+}
+
 }
 
 window.changePreviewImage =
@@ -508,7 +501,7 @@ ${product.mainVariant || 'Variant Utama'}
 
 ${product.variants?.map(v => `
 <div
-onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', this)"
+onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}')"
 style="
 min-width:72px;
 cursor:pointer;
