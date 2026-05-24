@@ -352,3 +352,13 @@ padding:16px;
 }
 
 }
+#admin-name,
+#admin-email{
+pointer-events:none !important;
+user-select:none !important;
+-webkit-user-select:none !important;
+caret-color:transparent !important;
+background:#f3f3f3 !important;
+color:#111 !important;
+opacity:1 !important;
+}
