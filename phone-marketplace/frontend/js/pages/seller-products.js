@@ -213,36 +213,32 @@ window.openProductPreviewById =
 openProductPreviewById;
 
 function changePreviewImage(image, price, element){
+
 const previewImage =
-document.getElementById(
-'preview-main-image'
-);
+document.getElementById('preview-main-image');
 
 if(previewImage){
 previewImage.src = image;
 }
 
-
 const priceEl =
-document.getElementById(
-'preview-price'
-);
+document.getElementById('preview-price');
 
 if(priceEl){
 priceEl.innerText =
 `Rp ${Number(price || 0).toLocaleString('id-ID')}`;
 }
-}
+
 document
-  .querySelectorAll('.variant-item')
-  .forEach(item=>{
-    item.classList.remove('active');
-  });
+.querySelectorAll('.variant-item')
+.forEach(item=>{
+item.classList.remove('active');
+});
 
 if(element){
-  element.classList.add('active');
+element.classList.add('active');
 }
-
+}
 window.changePreviewImage =
 changePreviewImage;
 
