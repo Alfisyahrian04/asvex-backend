@@ -33,6 +33,30 @@ type:String
 }
 ],
 
+/* PATCH START */
+
+unboxingVideo:{
+type:String,
+default:''
+},
+
+adminDecision:{
+type:String,
+default:''
+},
+
+disputeReason:{
+type:String,
+default:''
+},
+
+resolution:{
+type:String,
+default:''
+},
+
+/* PATCH END */
+
 status:{
 type:String,
 enum:[
