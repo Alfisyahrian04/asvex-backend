@@ -233,10 +233,22 @@ document
 .querySelectorAll('.variant-item')
 .forEach(item=>{
 item.classList.remove('active');
+
+const img = item.querySelector('img');
+if(img){
+img.style.border = '1px solid #eee';
+}
 });
 
 if(element){
 element.classList.add('active');
+
+const activeImg =
+element.querySelector('img');
+
+if(activeImg){
+activeImg.style.border =
+'2px solid #ff6b00';
 }
 }
 window.changePreviewImage =
@@ -495,7 +507,7 @@ width:64px;
 height:64px;
 object-fit:cover;
 border-radius:12px;
-border:2px solid #ff6b00;
+border:1px solid #eee;
 "
 />
 <div style="
