@@ -9,7 +9,14 @@ getAllUsers,
 verifySeller,
 banUser,
 getPayouts,
-approvePayout
+approvePayout,
+
+/* PATCH */
+verifyManualPayment,
+approveRefund,
+resolveDispute
+/* PATCH */
+
 } = require(
 '../controllers/adminController'
 );
@@ -53,6 +60,25 @@ router.put(
 '/approve-payout/:id',
 approvePayout
 );
+
+/* PATCH START */
+
+router.put(
+'/verify-payment/:id',
+verifyManualPayment
+);
+
+router.put(
+'/approve-refund/:id',
+approveRefund
+);
+
+router.put(
+'/resolve-dispute/:id',
+resolveDispute
+);
+
+/* PATCH END */
 
 module.exports =
 router;
