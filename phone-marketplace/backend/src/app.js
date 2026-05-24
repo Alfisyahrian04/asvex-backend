@@ -20,15 +20,13 @@ require('hpp');
 
 const app = express();
 
-/* FIX RAILWAY PROXY */
-
 app.set(
-  'trust proxy',
-  1
+'trust proxy',
+1
 );
 
 app.use(cors({
-  origin: '*'
+origin:'*'
 }));
 
 app.use(helmet());
@@ -42,72 +40,86 @@ app.use(xss());
 app.use(hpp());
 
 app.use(express.json({
-  limit: '50mb'
+limit:'50mb'
 }));
 
 app.use(rateLimit({
 
-  windowMs:
-    15 * 60 * 1000,
+windowMs:
+15 * 60 * 1000,
 
-  max: 300
+max:300
 
 }));
 
 app.use(
-  '/api/v1/auth',
-  require('./routes/authRoutes')
+'/api/v1/auth',
+require('./routes/authRoutes')
 );
 
 app.use(
-  '/api/v1/products',
-  require('./routes/productRoutes')
+'/api/v1/products',
+require('./routes/productRoutes')
 );
 
 app.use(
-  '/api/v1/orders',
-  require('./routes/orderRoutes')
+'/api/v1/orders',
+require('./routes/orderRoutes')
 );
 
 app.use(
-  '/api/v1/search',
-  require('./routes/searchRoutes')
+'/api/v1/search',
+require('./routes/searchRoutes')
 );
 
 app.use(
-  '/api/v1/reviews',
-  require('./routes/reviewRoutes')
+'/api/v1/reviews',
+require('./routes/reviewRoutes')
 );
 
 app.use(
-  '/api/v1/seller',
-  require('./routes/sellerRoutes')
+'/api/v1/seller',
+require('./routes/sellerRoutes')
 );
 
 app.use(
-  '/api/v1/admin',
-  require('./routes/adminRoutes')
+'/api/v1/admin',
+require('./routes/adminRoutes')
+);
+
+/* PATCH START */
+
+app.use(
+'/api/v1/payment',
+require('./routes/paymentRoutes')
 );
 
 app.use(
-  '/api/v1/notifications',
-  require('./routes/notificationRoutes')
+'/api/v1/complaints',
+require('./routes/complaintRoutes')
+);
+
+/* PATCH END */
+
+app.use(
+'/api/v1/notifications',
+require('./routes/notificationRoutes')
 );
 
 app.get(
-  '/',
-  (req, res) => {
+'/',
+(req,res)=>{
 
-    res.send(
-      'API RUNNING'
-    );
+res.send(
+'API RUNNING'
+);
 
-  }
+}
 );
 
 app.use(
-  '/health',
-  require('./routes/healthRoutes')
+'/health',
+require('./routes/healthRoutes')
 );
 
 module.exports = app;
