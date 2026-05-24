@@ -195,6 +195,111 @@ id="product-list"
 
 </main>
 
+<!-- PATCH CHECKOUT MODAL -->
+
+<div
+id="checkout-modal"
+class="modal"
+style="display:none"
+>
+
+<div class="modal-content">
+
+<h2>
+Checkout
+</h2>
+
+<div id="checkout-items"></div>
+
+<h3 id="checkout-total">
+Rp 0
+</h3>
+
+<input
+id="shipping-address"
+type="text"
+placeholder="Alamat Pengiriman"
+/>
+
+<select id="shipping-courier">
+
+<option value="J&T Express">
+J&T Express
+</option>
+
+<option value="JNE">
+JNE
+</option>
+
+<option value="AnterAja">
+AnterAja
+</option>
+
+<option value="GoSend">
+GoSend
+</option>
+
+<option value="Grab Express">
+Grab Express
+</option>
+
+</select>
+
+<select id="payment-method">
+
+<option value="BCA Transfer">
+BCA Transfer
+</option>
+
+<option value="Mandiri Transfer">
+Mandiri Transfer
+</option>
+
+<option value="BNI Transfer">
+BNI Transfer
+</option>
+
+<option value="BRI Transfer">
+BRI Transfer
+</option>
+
+<option value="DANA">
+DANA
+</option>
+
+<option value="GoPay">
+GoPay
+</option>
+
+<option value="OVO">
+OVO
+</option>
+
+</select>
+
+<input
+type="file"
+id="payment-proof"
+accept="image/*"
+/>
+
+<button
+id="checkout-btn"
+onclick="checkoutOrder()"
+>
+Bayar Sekarang
+</button>
+
+<button
+onclick="closeCheckoutModal()"
+>
+Tutup
+</button>
+
+</div>
+
+</div>
+
 <nav class="bottom-nav">
 
 <a
@@ -252,18 +357,15 @@ Akun
 </nav>
 
 <script src="js/utils/auth.js"></script>
-
 <script src="js/store/authStore.js"></script>
-
 <script src="js/store/cartStore.js"></script>
-
 <script src="js/store/productStore.js"></script>
-
 <script src="js/api/productApi.js"></script>
-
 <script src="js/components/productCard.js"></script>
-
 <script src="js/components/searchBar.js"></script>
+
+<!-- PATCH -->
+<script src="js/components/checkoutModal.js"></script>
 
 <script src="js/pages/home.js"></script>
 
