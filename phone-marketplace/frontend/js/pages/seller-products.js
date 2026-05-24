@@ -11,7 +11,7 @@ let productVariants = [];
 let productsCache = [];
 let editingProductId = null;
 
-if(
+if (
 !currentUser ||
 currentUser.role !== 'seller'
 ){
@@ -241,7 +241,10 @@ return;
 productList.innerHTML =
 products.map(product=>`
 
-<div class="product-card">
+<div
+class="product-card"
+onclick='openProductPreview(${JSON.stringify(product)})'
+>
 
 <img
 src="${
@@ -273,50 +276,6 @@ product.price || 0
 <p>SKU: <b>${product.sku || '-'}</b></p>
 <p>Berat: <b>${product.weight || 0} gram</b></p>
 
-${
-product.variants?.length
-? `
-<details style="
-margin-top:10px;
-padding:12px;
-background:#f8f8f8;
-border-radius:12px;
-">
-<summary style="
-font-weight:700;
-cursor:pointer;
-">
-Lihat Variant (${product.variants.length})
-</summary>
-
-<div style="margin-top:10px;">
-${product.variants.map(v=>`
-
-<div style="
-padding:10px;
-margin-bottom:8px;
-background:white;
-border-radius:10px;
-">
-
-<div><b>${v.name}</b></div>
-<div>
-Rp ${Number(
-v.price || 0
-).toLocaleString('id-ID')}
-</div>
-<div>Stok ${v.stock || 0}</div>
-
-</div>
-
-`).join('')}
-</div>
-
-</details>
-`
-: ''
-}
-
 <div style="
 display:flex;
 gap:8px;
@@ -324,7 +283,7 @@ margin-top:12px;
 ">
 
 <button
-onclick="editProduct('${product._id}')"
+onclick="event.stopPropagation();editProduct('${product._id}')"
 style="
 flex:1;
 background:#f59e0b;
@@ -339,7 +298,7 @@ Edit
 </button>
 
 <button
-onclick="deleteProduct('${product._id}')"
+onclick="event.stopPropagation();deleteProduct('${product._id}')"
 style="
 flex:1;
 background:#dc2626;
@@ -360,6 +319,110 @@ Hapus
 `).join('');
 
 }
+
+function openProductPreview(product){
+
+const existing =
+document.getElementById(
+'product-preview-modal'
+);
+
+if(existing){
+existing.remove();
+}
+
+document.body.insertAdjacentHTML(
+'beforeend',
+`
+<div
+id="product-preview-modal"
+style="
+position:fixed;
+inset:0;
+background:#fff;
+z-index:999999;
+overflow-y:auto;
+padding:16px;
+"
+>
+
+<div
+onclick="closeProductPreview()"
+style="
+font-size:28px;
+margin-bottom:12px;
+cursor:pointer;
+"
+>←</div>
+
+<img
+src="${product.images?.[0] || ''}"
+style="
+width:100%;
+border-radius:18px;
+margin-bottom:16px;
+"
+/>
+
+<h2>${product.name}</h2>
+
+<p style="
+font-size:24px;
+font-weight:700;
+color:#ea580c;
+margin:12px 0;
+">
+Rp ${Number(product.price || 0).toLocaleString('id-ID')}
+</p>
+
+<h3>Varian</h3>
+<div>
+${
+product.variants?.map(v=>`
+<span style="
+display:inline-block;
+padding:8px 12px;
+background:#f5f5f5;
+border-radius:10px;
+margin:4px;
+">
+${v.name}
+</span>
+`).join('')
+|| '-'
+}
+</div>
+
+<h3>Deskripsi Produk</h3>
+<p>${product.description || '-'}</p>
+
+<h3>Spesifikasi Produk</h3>
+<p>Brand: ${product.brand || '-'}</p>
+<p>Kategori: ${product.category || '-'}</p>
+<p>Kondisi: ${product.condition || '-'}</p>
+<p>SKU: ${product.sku || '-'}</p>
+<p>Berat: ${product.weight || 0} gram</p>
+<p>Stok: ${product.stock || 0}</p>
+
+</div>
+`
+);
+
+}
+
+function closeProductPreview(){
+document
+.getElementById(
+'product-preview-modal'
+)
+?.remove();
+}
+
+window.openProductPreview =
+openProductPreview;
+
+window.closeProductPreview =
+closeProductPreview;
 
 function editProduct(id){
 
@@ -543,15 +606,7 @@ variants:cleanVariants,
 primaryVariant,
 images: imageBase64
 ? [imageBase64]
-: (
-editingProductId
-? (
-productsCache.find(
-item => item._id === editingProductId
-)?.images || []
-)
-: []
-),
+: [],
 productType:'physical',
 seller:currentUser.id
 })
