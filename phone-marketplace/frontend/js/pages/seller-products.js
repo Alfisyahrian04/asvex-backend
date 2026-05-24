@@ -324,6 +324,16 @@ imageInput.files[0]
 );
 }
 
+/* PATCH: AUTO GENERATE UNIQUE SLUG */
+const slug =
+name
+.toLowerCase()
+.trim()
+.replace(/\s+/g,'-')
+.replace(/[^\w-]+/g,'')
++ '-' +
+Date.now();
+
 const response =
 await fetch(
 `${BASE_URL}/products`,
@@ -335,6 +345,7 @@ Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
 name,
+slug,
 description,
 price:Number(price),
 stock:Number(stock),
