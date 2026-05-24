@@ -154,7 +154,7 @@ e.target.result;
 
 for(const item of cart){
 
-await createOrder({
+const payload = {
 
 productId:item._id,
 
@@ -170,11 +170,10 @@ paymentMethod,
 
 paymentProof,
 
-/* PATCH — FIX CHECKOUT ERROR */
 variant:
-item.variant?._id
-? item.variant
-: null,
+item.variant?._id ||
+item.variant ||
+null,
 
 totalPrice:
 (item.price * (item.quantity || 1)) + 15000,
@@ -185,7 +184,9 @@ status:
 paymentStatus:
 'waiting_verification'
 
-});
+};
+
+await createOrder(payload);
 
 }
 
@@ -200,14 +201,29 @@ window.location.href =
 
 }catch(error){
 
-console.log(error);
+console.error(
+'CHECKOUT ERROR:',
+error
+);
 
-alert('Checkout gagal');
+alert(
+error.message ||
+'Checkout gagal'
+);
 
 checkoutButton.disabled = false;
 checkoutButton.innerText = 'Bayar Sekarang';
 
 }
+
+};
+
+reader.onerror = function(){
+
+alert('Gagal membaca bukti pembayaran');
+
+checkoutButton.disabled = false;
+checkoutButton.innerText = 'Bayar Sekarang';
 
 };
 
@@ -217,9 +233,12 @@ paymentFile
 
 }catch(error){
 
-console.log(error);
+console.error(error);
 
-alert('Checkout gagal');
+alert(
+error.message ||
+'Checkout gagal'
+);
 
 checkoutButton.disabled = false;
 checkoutButton.innerText = 'Bayar Sekarang';
