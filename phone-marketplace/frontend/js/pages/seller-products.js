@@ -9,6 +9,7 @@ localStorage.getItem('token');
 
 let productVariants = [];
 let productsCache = [];
+let editingProductId = null;
 
 if(
 !currentUser ||
@@ -32,11 +33,11 @@ document.getElementById('save-product-btn');
 const addVariantBtn =
 document.getElementById('add-variant-btn');
 
-
 if(openModalBtn){
 openModalBtn.addEventListener(
 'click',
 ()=>{
+editingProductId = null;
 productModal.style.display='flex';
 }
 );
@@ -244,7 +245,11 @@ alt="${product.name}"
 <h3>${product.name}</h3>
 
 <p><b>${product.brand || '-'}</b></p>
-<p>${product.mainVariant || '-'}</p>
+<p>${
+product.mainVariant ||
+product.variants?.[0]?.name ||
+'-'
+}</p>
 
 <p>
 Rp ${Number(
@@ -349,6 +354,8 @@ Hapus
 
 function editProduct(id){
 
+editingProductId = id;
+
 const product =
 productsCache.find(
 item=>item._id===id
@@ -394,7 +401,6 @@ renderPrimaryVariantOptions();
 }
 
 window.editProduct = editProduct;
-
 
 if(saveProductBtn){
 
@@ -474,10 +480,20 @@ name.toLowerCase()
 + '-' +
 Date.now();
 
+const url =
+editingProductId
+? `${BASE_URL}/products/${editingProductId}`
+: `${BASE_URL}/products`;
+
+const method =
+editingProductId
+? 'PUT'
+: 'POST';
+
 await fetch(
-`${BASE_URL}/products`,
+url,
 {
-method:'POST',
+method,
 headers:{
 'Content-Type':'application/json',
 Authorization:`Bearer ${token}`
@@ -503,8 +519,13 @@ seller:currentUser.id
 }
 );
 
-alert('Produk berhasil ditambahkan');
+alert(
+editingProductId
+? 'Produk berhasil diupdate'
+: 'Produk berhasil ditambahkan'
+);
 
+editingProductId = null;
 productVariants=[];
 
 renderVariantList();
