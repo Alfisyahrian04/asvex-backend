@@ -2,9 +2,7 @@ const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1';
 
 const currentUser =
-JSON.parse(
-localStorage.getItem('user')
-);
+JSON.parse(localStorage.getItem('user'));
 
 const token =
 localStorage.getItem('token');
@@ -54,9 +52,10 @@ productModal.style.display='none';
 }
 
 if(addVariantBtn){
+
 addVariantBtn.addEventListener(
 'click',
-()=>{
+async()=>{
 
 const name =
 document.getElementById('variant-name').value.trim();
@@ -67,15 +66,30 @@ document.getElementById('variant-price').value.trim();
 const stock =
 document.getElementById('variant-stock').value.trim();
 
-if(!name || !price || !stock){
+const imageFile =
+document.getElementById('variant-image').files[0];
+
+if(
+!name ||
+!price ||
+!stock
+){
 alert('Lengkapi data varian');
 return;
+}
+
+let imageBase64='';
+
+if(imageFile){
+imageBase64 =
+await convertToBase64(imageFile);
 }
 
 productVariants.push({
 name,
 price:Number(price),
-stock:Number(stock)
+stock:Number(stock),
+image:imageBase64
 });
 
 renderVariantList();
@@ -83,9 +97,11 @@ renderVariantList();
 document.getElementById('variant-name').value='';
 document.getElementById('variant-price').value='';
 document.getElementById('variant-stock').value='';
+document.getElementById('variant-image').value='';
 
 }
 );
+
 }
 
 function renderVariantList(){
@@ -99,27 +115,42 @@ variantList.innerHTML =
 productVariants.map((variant,index)=>`
 
 <div style="
-padding:10px;
-margin-top:8px;
+padding:12px;
+margin-top:10px;
 background:#f5f5f5;
 border-radius:12px;
-font-size:14px;
+display:flex;
+gap:12px;
+align-items:center;
 ">
 
-${variant.name}
--
-Rp ${variant.price.toLocaleString('id-ID')}
--
-Stock ${variant.stock}
+${
+variant.image
+? `<img
+src="${variant.image}"
+style="
+width:50px;
+height:50px;
+border-radius:8px;
+object-fit:cover;
+"
+/>`
+: ''
+}
+
+<div style="flex:1;">
+<div>${variant.name}</div>
+<div>Rp ${variant.price.toLocaleString('id-ID')}</div>
+<div>Stok ${variant.stock}</div>
+</div>
 
 <button
 onclick="removeVariant(${index})"
 style="
-float:right;
 background:red;
-color:#fff;
+color:white;
 border:none;
-padding:4px 8px;
+padding:6px 10px;
 border-radius:8px;
 "
 >
@@ -156,9 +187,7 @@ Authorization:`Bearer ${token}`
 const data =
 await response.json();
 
-renderProducts(
-data.products || []
-);
+renderProducts(data.products || []);
 
 }catch(error){
 console.log(error);
@@ -170,8 +199,7 @@ function renderProducts(products){
 
 if(!products.length){
 
-productList.innerHTML=
-`
+productList.innerHTML=`
 <div class="empty-state">
 Belum ada produk
 </div>
@@ -246,49 +274,31 @@ saveProductBtn.addEventListener(
 async()=>{
 
 const name =
-document.getElementById(
-'product-name'
-).value.trim();
+document.getElementById('product-name').value.trim();
 
 const description =
-document.getElementById(
-'product-description'
-).value.trim();
+document.getElementById('product-description').value.trim();
 
 const price =
-document.getElementById(
-'product-price'
-).value.trim();
+document.getElementById('product-price').value.trim();
 
 const stock =
-document.getElementById(
-'product-stock'
-).value.trim();
+document.getElementById('product-stock').value.trim();
 
 const category =
-document.getElementById(
-'product-category'
-)?.value.trim() || 'General';
+document.getElementById('product-category')?.value.trim() || 'General';
 
 const condition =
-document.getElementById(
-'product-condition'
-)?.value || 'Baru';
+document.getElementById('product-condition')?.value || 'Baru';
 
 const weight =
-document.getElementById(
-'product-weight'
-)?.value.trim() || 0;
+document.getElementById('product-weight')?.value.trim() || 0;
 
 const sku =
-document.getElementById(
-'product-sku'
-)?.value.trim() || '';
+document.getElementById('product-sku')?.value.trim() || '';
 
 const imageInput =
-document.getElementById(
-'product-image'
-);
+document.getElementById('product-image');
 
 if(
 !name ||
@@ -300,7 +310,7 @@ alert('Lengkapi data produk');
 return;
 }
 
-saveProductBtn.disabled=true;
+saveProductBtn.disabled = true;
 saveProductBtn.innerText='Uploading...';
 
 try{
@@ -319,34 +329,24 @@ await fetch(
 `${BASE_URL}/products`,
 {
 method:'POST',
-
 headers:{
 'Content-Type':'application/json',
 Authorization:`Bearer ${token}`
 },
-
 body:JSON.stringify({
-
 name,
 description,
 price:Number(price),
 stock:Number(stock),
-
 category,
 condition,
 weight:Number(weight),
 sku,
-
 variants:productVariants,
-
 images:[imageBase64],
-
 productType:'physical',
-
 seller:currentUser.id
-
 })
-
 }
 );
 
@@ -354,10 +354,7 @@ const data =
 await response.json();
 
 if(!response.ok){
-alert(
-data.message ||
-'Gagal upload produk'
-);
+alert(data.message || 'Gagal upload produk');
 return;
 }
 
@@ -380,10 +377,8 @@ productModal.style.display='none';
 loadSellerProducts();
 
 }catch(error){
-
 console.log(error);
 alert('Server error');
-
 }
 
 saveProductBtn.disabled=false;
@@ -397,9 +392,7 @@ saveProductBtn.innerText='Upload Produk';
 async function deleteProduct(id){
 
 const confirmDelete =
-confirm(
-'Hapus produk ini?'
-);
+confirm('Hapus produk ini?');
 
 if(!confirmDelete) return;
 
@@ -410,8 +403,7 @@ await fetch(
 {
 method:'DELETE',
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -424,16 +416,14 @@ console.log(error);
 
 }
 
-window.deleteProduct =
-deleteProduct;
+window.deleteProduct = deleteProduct;
 
 function convertToBase64(file){
 
 return new Promise(
 (resolve,reject)=>{
 
-const reader =
-new FileReader();
+const reader = new FileReader();
 
 reader.readAsDataURL(file);
 
