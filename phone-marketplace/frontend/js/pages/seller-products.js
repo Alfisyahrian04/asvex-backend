@@ -491,7 +491,8 @@ margin-bottom:18px;
 "
 >
 
-<div
+<<div
+class="variant-item active"
 onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}', this)"
 style="
 min-width:72px;
@@ -521,6 +522,7 @@ ${product.mainVariant || 'Variant Utama'}
 
 ${product.variants?.map(v => `
 <div
+class="variant-item"
 onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}', this)"
 min-width:72px;
 cursor:pointer;
