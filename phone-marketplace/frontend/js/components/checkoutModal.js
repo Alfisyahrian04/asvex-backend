@@ -147,6 +147,8 @@ const reader = new FileReader();
 reader.onload =
 async function(e){
 
+try{
+
 const paymentProof =
 e.target.result;
 
@@ -155,16 +157,24 @@ for(const item of cart){
 await createOrder({
 
 productId:item._id,
+
 quantity:item.quantity || 1,
 
 shippingAddress,
+
 shippingCourier,
+
 shippingCost:15000,
 
 paymentMethod,
+
 paymentProof,
 
-variant:item.variant || {},
+/* PATCH — FIX CHECKOUT ERROR */
+variant:
+item.variant?._id
+? item.variant
+: null,
 
 totalPrice:
 (item.price * (item.quantity || 1)) + 15000,
@@ -187,6 +197,17 @@ alert(
 
 window.location.href =
 'orders.html';
+
+}catch(error){
+
+console.log(error);
+
+alert('Checkout gagal');
+
+checkoutButton.disabled = false;
+checkoutButton.innerText = 'Bayar Sekarang';
+
+}
 
 };
 
