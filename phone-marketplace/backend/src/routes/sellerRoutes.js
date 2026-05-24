@@ -8,7 +8,13 @@ const {
 getWallet,
 requestPayout,
 getSellerProducts,
-getSellerAnalytics
+getSellerAnalytics,
+
+/* PATCH */
+updateSellerProfile,
+uploadShippingData
+/* PATCH */
+
 } = require(
 '../controllers/sellerController'
 );
@@ -42,6 +48,22 @@ router.get(
 protect,
 getSellerAnalytics
 );
+
+/* PATCH START */
+
+router.put(
+'/profile',
+protect,
+updateSellerProfile
+);
+
+router.put(
+'/shipping/:id',
+protect,
+uploadShippingData
+);
+
+/* PATCH END */
 
 module.exports =
 router;
