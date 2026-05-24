@@ -243,8 +243,6 @@ if(element){
   element.classList.add('active');
 }
 
-}
-
 window.changePreviewImage =
 changePreviewImage;
 
