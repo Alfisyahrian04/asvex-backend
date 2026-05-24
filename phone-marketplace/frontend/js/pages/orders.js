@@ -42,6 +42,9 @@ return 'Menunggu Pembayaran';
 case 'waiting_confirmation':
 return 'Menunggu Konfirmasi Admin';
 
+case 'waiting_verification':
+return 'Menunggu Verifikasi Pembayaran';
+
 case 'paid':
 return 'Pembayaran Diterima';
 
@@ -117,50 +120,30 @@ order.status || 'pending_payment'
 </div>
 
 <div class="tracking-number">
-
 Order ID:
 ${order._id}
-
-</div>
-
-<div class="delivery-status">
-
-${new Date(
-order.createdAt
-).toLocaleDateString(
-'id-ID'
-)}
-
 </div>
 
 ${
-order.paymentMethod
+order.trackingNumber
 ? `
-<div class="delivery-status">
-Metode:
-${order.paymentMethod}
+<div class="tracking-number">
+Resi:
+${order.trackingNumber}
 </div>
 `
 : ''
 }
 
 ${
-order.paymentProof
+order.status === 'shipped'
 ? `
-<a
-href="${order.paymentProof}"
-target="_blank"
+<button
+onclick="handleCompleteOrder('${order._id}')"
 class="btn-primary"
-style="
-display:inline-flex;
-margin-top:10px;
-padding:10px 14px;
-font-size:14px;
-text-decoration:none;
-"
 >
-Lihat Bukti Bayar
-</a>
+Pesanan Selesai
+</button>
 `
 : ''
 }
@@ -173,7 +156,27 @@ Lihat Bukti Bayar
 
 }
 
-/* SOCKET REALTIME */
+/* PATCH */
+
+async function handleCompleteOrder(id){
+
+try{
+
+await completeOrder(id);
+
+loadOrders();
+
+}catch(error){
+
+alert(
+'Gagal update pesanan'
+);
+
+}
+
+}
+
+/* SOCKET */
 
 if(
 typeof socket !== 'undefined'
