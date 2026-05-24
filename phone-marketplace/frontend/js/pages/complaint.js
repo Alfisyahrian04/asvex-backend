@@ -20,27 +20,44 @@ localStorage.getItem(
 'token'
 );
 
+/* PATCH */
+const videoInput =
+document.getElementById(
+'unboxing-video'
+);
+/* PATCH */
+
+const formData =
+new FormData();
+
+formData.append(
+'orderId',
+orderId
+);
+
+formData.append(
+'reason',
+reason
+);
+
+if(
+videoInput?.files?.[0]
+){
+formData.append(
+'unboxingVideo',
+videoInput.files[0]
+);
+}
+
 await fetch(
 'https://asvex-backend-production.up.railway.app/api/v1/complaints',
 {
 method:'POST',
-
 headers:{
-'Content-Type':
-'application/json',
-
 Authorization:
 `Bearer ${token}`
 },
-
-body:JSON.stringify({
-
-orderId,
-reason,
-evidence:[]
-
-})
-
+body:formData
 }
 );
 
@@ -50,4 +67,5 @@ alert(
 
 window.location.href =
 'orders.html';
+
 }
