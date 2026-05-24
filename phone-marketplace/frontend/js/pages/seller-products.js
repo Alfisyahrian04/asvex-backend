@@ -212,8 +212,7 @@ openProductPreview(product);
 window.openProductPreviewById =
 openProductPreviewById;
 
-function changePreviewImage(image, price){
-
+function changePreviewImage(image, price, element){
 const previewImage =
 document.getElementById(
 'preview-main-image'
@@ -234,7 +233,15 @@ priceEl.innerText =
 `Rp ${Number(price || 0).toLocaleString('id-ID')}`;
 }
 }
+document
+  .querySelectorAll('.variant-item')
+  .forEach(item=>{
+    item.classList.remove('active');
+  });
 
+if(element){
+  element.classList.add('active');
+}
 window.changePreviewImage =
 changePreviewImage;
 
@@ -476,7 +483,7 @@ margin-bottom:18px;
 >
 
 <div
-onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}')"
+onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}', this)"
 style="
 min-width:72px;
 cursor:pointer;
@@ -505,8 +512,7 @@ ${product.mainVariant || 'Variant Utama'}
 
 ${product.variants?.map(v => `
 <div
-onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}')"
-style="
+onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}', this)"
 min-width:72px;
 cursor:pointer;
 text-align:center;
