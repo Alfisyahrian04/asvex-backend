@@ -6,7 +6,7 @@ JSON.parse(localStorage.getItem('user'));
 
 const token =
 localStorage.getItem('token');
-console.log('TOKEN:', token);
+
 let productVariants = [];
 let productsCache = [];
 let editingProductId = null;
@@ -233,25 +233,12 @@ document
 .querySelectorAll('.variant-item')
 .forEach(item=>{
 item.classList.remove('active');
-
-const img = item.querySelector('img');
-if(img){
-img.style.border = '1px solid #eee';
-}
 });
 
 if(element){
 element.classList.add('active');
-
-const activeImg =
-element.querySelector('img');
-
-if(activeImg){
-activeImg.style.border =
-'2px solid #ff6b00';
 }
 }
-
 window.changePreviewImage =
 changePreviewImage;
 
@@ -493,7 +480,6 @@ margin-bottom:18px;
 >
 
 <div
-class="variant-item active"
 onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}', this)"
 style="
 min-width:72px;
@@ -509,7 +495,7 @@ width:64px;
 height:64px;
 object-fit:cover;
 border-radius:12px;
-border:1px solid #eee;
+border:2px solid #ff6b00;
 "
 />
 <div style="
@@ -523,7 +509,6 @@ ${product.mainVariant || 'Variant Utama'}
 
 ${product.variants?.map(v => `
 <div
-class="variant-item"
 onclick="changePreviewImage('${v.image || product.images?.[0] || ''}', '${v.price || product.price}', this)"
 min-width:72px;
 cursor:pointer;
