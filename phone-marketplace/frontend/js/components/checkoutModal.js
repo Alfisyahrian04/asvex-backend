@@ -28,6 +28,18 @@ document.getElementById(
 'payment-method'
 );
 
+/* PATCH */
+const shippingCourierInput =
+document.getElementById(
+'shipping-courier'
+);
+
+const shippingAddressInput =
+document.getElementById(
+'shipping-address'
+);
+/* PATCH END */
+
 function openCheckoutModal(){
 
 const cart =
@@ -126,6 +138,14 @@ const paymentMethod =
 paymentMethodInput?.value ||
 'QRIS';
 
+const shippingCourier =
+shippingCourierInput?.value ||
+'J&T Express';
+
+const shippingAddress =
+shippingAddressInput?.value ||
+'Indonesia';
+
 const paymentFile =
 paymentProofInput?.files?.[0];
 
@@ -162,15 +182,21 @@ productId:item._id,
 
 quantity:item.quantity || 1,
 
-shippingAddress:
-'Indonesia',
+shippingAddress,
+
+/* PATCH */
+shippingCourier,
+shippingCost:15000,
+/* PATCH */
 
 paymentMethod,
-
 paymentProof,
 
+variant:
+item.variant || {},
+
 status:
-'waiting_confirmation'
+'waiting_verification'
 
 });
 
