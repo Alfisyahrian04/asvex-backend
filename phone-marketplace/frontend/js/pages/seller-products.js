@@ -256,7 +256,10 @@ const data =
 await response.json();
 console.log('DATA:', data);
 productsCache =
-data.products || [];
+data.products ||
+data.data?.products ||
+data.data ||
+[];
 
 renderProducts(productsCache);
 
