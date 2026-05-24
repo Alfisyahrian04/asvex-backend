@@ -19,16 +19,41 @@ async function loadAdminProfile(){
 
 try{
 
-document.getElementById('admin-name').value =
+const nameInput =
+document.getElementById(
+'admin-name'
+);
+
+const emailInput =
+document.getElementById(
+'admin-email'
+);
+
+const phoneInput =
+document.getElementById(
+'admin-phone'
+);
+
+if(nameInput){
+nameInput.value =
 currentUser.username ||
 currentUser.name ||
 '';
 
-document.getElementById('admin-email').value =
+nameInput.readOnly = true;
+}
+
+if(emailInput){
+emailInput.value =
 currentUser.email || '';
 
-document.getElementById('admin-phone').value =
+emailInput.readOnly = true;
+}
+
+if(phoneInput){
+phoneInput.value =
 currentUser.phone || '';
+}
 
 }catch(error){
 console.log(error);
