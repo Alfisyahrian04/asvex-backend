@@ -251,6 +251,7 @@ activeImg.style.border =
 '2px solid #ff6b00';
 }
 }
+
 window.changePreviewImage =
 changePreviewImage;
 
@@ -491,7 +492,7 @@ margin-bottom:18px;
 "
 >
 
-<<div
+<div
 class="variant-item active"
 onclick="changePreviewImage('${product.images?.[0] || ''}', '${product.price}', this)"
 style="
