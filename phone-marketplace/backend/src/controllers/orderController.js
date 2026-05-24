@@ -47,6 +47,35 @@ message:
 });
 }
 
+/* PATCH START - variant stock validation */
+
+if(
+variant &&
+product.variants?.length
+){
+
+const selectedVariant =
+product.variants.find(
+v =>
+v._id?.toString()
+=== variant._id
+);
+
+if(
+selectedVariant &&
+selectedVariant.stock < quantity
+){
+return res.status(400)
+.json({
+message:
+'Stock varian tidak cukup'
+});
+}
+
+}
+
+/* PATCH END */
+
 if(
 product.stock < quantity
 ){
@@ -71,19 +100,49 @@ quantity,
 totalPrice,
 shippingAddress,
 
-/* PATCH */
 paymentMethod,
 paymentProof,
 shippingCourier,
 shippingCost,
 variant,
-/* PATCH */
 
 status:'waiting_verification'
 
 });
 
 product.stock -= quantity;
+
+/* PATCH START - variant stock reduce */
+
+if(
+variant &&
+product.variants?.length
+){
+
+product.variants =
+product.variants.map(v=>{
+
+if(
+v._id?.toString()
+=== variant._id
+){
+
+v.stock =
+Math.max(
+0,
+(v.stock || 0) - quantity
+);
+
+}
+
+return v;
+
+});
+
+}
+
+/* PATCH END */
+
 await product.save();
 
 res.status(201)
@@ -128,8 +187,6 @@ message:error.message
 
 };
 
-/* SELLER ORDERS */
-
 exports.getSellerOrders =
 async(req,res)=>{
 
@@ -158,8 +215,6 @@ message:error.message
 
 };
 
-/* PATCH ADMIN VERIFY PAYMENT */
-
 exports.verifyPayment =
 async(req,res)=>{
 
@@ -177,6 +232,7 @@ message:'Order tidak ditemukan'
 }
 
 order.status='paid';
+order.paymentStatus='paid';
 
 await order.save();
 
@@ -191,8 +247,6 @@ message:error.message
 }
 
 };
-
-/* PATCH SELLER INPUT RESI */
 
 exports.shipOrder =
 async(req,res)=>{
@@ -212,6 +266,9 @@ message:'Order tidak ditemukan'
 
 order.trackingNumber =
 req.body.trackingNumber || '';
+
+order.shippingPhoto =
+req.body.shippingPhoto || '';
 
 order.status='shipped';
 
@@ -243,8 +300,7 @@ if(!order){
 
 return res.status(404)
 .json({
-message:
-'Order tidak ditemukan'
+message:'Order tidak ditemukan'
 });
 
 }
@@ -256,8 +312,7 @@ order.seller.toString()
 
 return res.status(403)
 .json({
-message:
-'Forbidden'
+message:'Forbidden'
 });
 
 }
@@ -280,3 +335,139 @@ message:error.message
 }
 
 };
+
+/* PATCH START */
+
+exports.completeOrder =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+order.status='completed';
+order.completedAt=new Date();
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.cancelOrder =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+order.status='cancelled';
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.requestReturn =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+order.returnStatus =
+'requested';
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.submitDispute =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+order.disputeStatus =
+req.body.reason ||
+'pending';
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+/* PATCH END */
