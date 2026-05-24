@@ -76,3 +76,76 @@ data.message ||
 return data;
 
 }
+
+/* PATCH START */
+
+async function completeOrder(id){
+
+const token =
+localStorage.getItem(
+'token'
+);
+
+const response =
+await fetch(
+`${BASE_URL}/${id}/complete`,
+{
+method:'PUT',
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+return response.json();
+
+}
+
+async function cancelOrder(id){
+
+const token =
+localStorage.getItem(
+'token'
+);
+
+const response =
+await fetch(
+`${BASE_URL}/${id}/cancel`,
+{
+method:'PUT',
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+return response.json();
+
+}
+
+async function requestReturn(id){
+
+const token =
+localStorage.getItem(
+'token'
+);
+
+const response =
+await fetch(
+`${BASE_URL}/${id}/return`,
+{
+method:'PUT',
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+return response.json();
+
+}
+
+/* PATCH END */
