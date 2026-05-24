@@ -196,6 +196,37 @@ renderPrimaryVariantOptions();
 }
 
 window.removeVariant = removeVariant;
+function openProductPreviewById(id){
+
+const product =
+productsCache.find(
+item=>item._id===id
+);
+
+if(product){
+openProductPreview(product);
+}
+
+}
+
+window.openProductPreviewById =
+openProductPreviewById;
+
+function changePreviewImage(image){
+
+const previewImage =
+document.getElementById(
+'preview-main-image'
+);
+
+if(previewImage){
+previewImage.src = image;
+}
+
+}
+
+window.changePreviewImage =
+changePreviewImage;
 
 async function loadSellerProducts(){
 
@@ -243,7 +274,18 @@ products.map(product=>`
 
 <div
 class="product-card"
-onclick='openProductPreview(${JSON.stringify(product)})'
+style="
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+height:100%;
+min-height:100%;
+"
+>
+
+<div
+onclick="openProductPreviewById('${product._id}')"
+style="cursor:pointer;"
 >
 
 <img
@@ -257,6 +299,7 @@ alt="${product.name}"
 <h3>${product.name}</h3>
 
 <p><b>${product.brand || '-'}</b></p>
+
 <p>${
 product.mainVariant ||
 product.variants?.[0]?.name ||
@@ -272,14 +315,35 @@ product.price || 0
 <p>Stok: <b>${product.stock ?? 0}</b></p>
 <p>Kategori: <b>${product.category || '-'}</b></p>
 <p>Kondisi: <b>${product.condition || '-'}</b></p>
-<p>Brand: <b>${product.brand || '-'}</b></p>
 <p>SKU: <b>${product.sku || '-'}</b></p>
 <p>Berat: <b>${product.weight || 0} gram</b></p>
+
+</div>
+
+<div style="
+margin-top:auto;
+padding-top:12px;
+">
+
+<button
+onclick="event.stopPropagation();openProductPreviewById('${product._id}')"
+style="
+width:100%;
+background:#111827;
+color:white;
+border:none;
+padding:10px;
+border-radius:12px;
+font-weight:600;
+margin-bottom:8px;
+"
+>
+Preview
+</button>
 
 <div style="
 display:flex;
 gap:8px;
-margin-top:12px;
 ">
 
 <button
@@ -313,7 +377,7 @@ Hapus
 </button>
 
 </div>
-
+</div>
 </div>
 
 `).join('');
@@ -356,11 +420,19 @@ cursor:pointer;
 >←</div>
 
 <img
-src="${product.images?.[0] || ''}"
+id="preview-main-image"
+src="${
+product.images?.[0] ||
+product.variants?.[0]?.image ||
+''
+}"
 style="
 width:100%;
+height:320px;
+object-fit:cover;
 border-radius:18px;
 margin-bottom:16px;
+background:#f5f5f5;
 "
 />
 
@@ -376,27 +448,74 @@ Rp ${Number(product.price || 0).toLocaleString('id-ID')}
 </p>
 
 <h3>Varian</h3>
-<div>
+
+<div
+style="
+display:flex;
+gap:10px;
+overflow-x:auto;
+padding-bottom:10px;
+margin-bottom:18px;
+"
+>
+
 ${
 product.variants?.map(v=>`
-<span style="
-display:inline-block;
-padding:8px 12px;
-background:#f5f5f5;
-border-radius:10px;
-margin:4px;
+
+<div
+onclick="changePreviewImage('${v.image || product.images?.[0] || ''}')"
+style="
+min-width:72px;
+cursor:pointer;
+text-align:center;
+"
+>
+
+<img
+src="${v.image || product.images?.[0] || ''}"
+style="
+width:64px;
+height:64px;
+object-fit:cover;
+border-radius:12px;
+border:1px solid #eee;
+"
+/>
+
+<div style="
+font-size:12px;
+margin-top:6px;
 ">
 ${v.name}
-</span>
-`).join('')
-|| '-'
-}
 </div>
 
-<h3>Deskripsi Produk</h3>
-<p>${product.description || '-'}</p>
+</div>
 
-<h3>Spesifikasi Produk</h3>
+`).join('') || '-'
+}
+
+</div>
+<h3>Deskripsi Produk</h3>
+
+<p style="
+line-height:1.6;
+color:#444;
+">
+${product.description || '-'}
+</p>
+
+<h3 style="
+margin-top:20px;
+">
+Spesifikasi Produk
+</h3>
+
+<div style="
+background:#f8f8f8;
+padding:14px;
+border-radius:14px;
+">
+
 <p>Brand: ${product.brand || '-'}</p>
 <p>Kategori: ${product.category || '-'}</p>
 <p>Kondisi: ${product.condition || '-'}</p>
@@ -405,17 +524,21 @@ ${v.name}
 <p>Stok: ${product.stock || 0}</p>
 
 </div>
+
+</div>
 `
 );
 
 }
 
 function closeProductPreview(){
+
 document
 .getElementById(
 'product-preview-modal'
 )
 ?.remove();
+
 }
 
 window.openProductPreview =
@@ -565,8 +688,15 @@ imageInput.files[0]
 );
 }
 
+const product =
+productsCache.find(
+item=>item._id===editingProductId
+);
+
 const slug =
-name.toLowerCase()
+editingProductId
+? product?.slug
+: name.toLowerCase()
 .trim()
 .replace(/\s+/g,'-')
 + '-' +
@@ -606,7 +736,11 @@ variants:cleanVariants,
 primaryVariant,
 images: imageBase64
 ? [imageBase64]
-: [],
+: (
+editingProductId
+? product?.images || []
+: []
+),
 productType:'physical',
 seller:currentUser.id
 })
