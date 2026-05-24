@@ -6,7 +6,7 @@ JSON.parse(localStorage.getItem('user'));
 
 const token =
 localStorage.getItem('token');
-
+console.log('TOKEN:', token);
 let productVariants = [];
 let productsCache = [];
 let editingProductId = null;
