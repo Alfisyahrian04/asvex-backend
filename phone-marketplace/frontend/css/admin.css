@@ -52,6 +52,9 @@ font-weight:800;
 .admin-container{
 
 padding:20px;
+padding-bottom:140px;
+position:relative;
+z-index:1;
 
 }
 
@@ -226,7 +229,8 @@ box-shadow:
 0 10px 40px
 rgba(0,0,0,.08);
 
-z-index:9999;
+z-index:99999;
+pointer-events:auto;
 
 }
 
@@ -252,6 +256,10 @@ transition:.25s;
 position:relative;
 
 min-width:60px;
+height:100%;
+cursor:pointer;
+pointer-events:auto;
+z-index:100000;
 
 }
 
@@ -259,12 +267,14 @@ min-width:60px;
 
 font-size:22px;
 transition:.25s;
+pointer-events:none;
 
 }
 
 .admin-nav-item span{
 
 transition:.25s;
+pointer-events:none;
 
 }
 
@@ -330,6 +340,9 @@ height:78px;
 }
 
 }
+
+/* PROFILE */
+
 .profile-page{
 padding:20px;
 padding-bottom:120px;
