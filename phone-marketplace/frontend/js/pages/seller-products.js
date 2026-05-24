@@ -459,9 +459,34 @@ margin-bottom:18px;
 "
 >
 
-${
-product.variants?.map(v=>`
+<div
+onclick="changePreviewImage('${product.images?.[0] || ''}')"
+style="
+min-width:72px;
+cursor:pointer;
+text-align:center;
+"
+>
+<img
+src="${product.images?.[0] || ''}"
+style="
+width:64px;
+height:64px;
+object-fit:cover;
+border-radius:12px;
+border:2px solid #ff6b00;
+"
+/>
+<div style="
+font-size:12px;
+margin-top:6px;
+font-weight:600;
+">
+Default
+</div>
+</div>
 
+${product.variants?.map(v => `
 <div
 onclick="changePreviewImage('${v.image || product.images?.[0] || ''}')"
 style="
@@ -470,7 +495,6 @@ cursor:pointer;
 text-align:center;
 "
 >
-
 <img
 src="${v.image || product.images?.[0] || ''}"
 style="
@@ -481,20 +505,16 @@ border-radius:12px;
 border:1px solid #eee;
 "
 />
-
 <div style="
 font-size:12px;
 margin-top:6px;
 ">
 ${v.name}
 </div>
-
+</div>
+`).join('') || ''}
 </div>
 
-`).join('') || '-'
-}
-
-</div>
 <h3>Deskripsi Produk</h3>
 
 <p style="
