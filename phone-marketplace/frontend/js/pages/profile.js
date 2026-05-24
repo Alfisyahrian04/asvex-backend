@@ -1,47 +1,65 @@
 const user =
 JSON.parse(
-  localStorage.getItem(
-    'user'
-  )
+localStorage.getItem(
+'user'
+)
 );
 
 if (!user) {
 
-  window.location.href =
-    './login.html';
+window.location.href =
+'./login.html';
 
 }
 
 document.getElementById(
-  'profile-name'
+'profile-name'
 ).innerText =
-  user.name || 'User';
+user.fullName ||
+user.name ||
+user.username ||
+'User';
 
 document.getElementById(
-  'profile-email'
+'profile-email'
 ).innerText =
-  user.email || '-';
+user.email || '-';
+
+/* PATCH START */
+
+if(
+document.getElementById(
+'profile-phone'
+)
+){
+document.getElementById(
+'profile-phone'
+).innerText =
+user.phone || '-';
+}
+
+/* PATCH END */
 
 document.getElementById(
-  'logout-btn'
+'logout-btn'
 ).addEventListener(
-  'click',
-  () => {
+'click',
+()=>{
 
-    localStorage.removeItem(
-      'token'
-    );
+localStorage.removeItem(
+'token'
+);
 
-    localStorage.removeItem(
-      'user'
-    );
+localStorage.removeItem(
+'user'
+);
 
-    alert(
-      'Logout berhasil'
-    );
+alert(
+'Logout berhasil'
+);
 
-    window.location.href =
-      './login.html';
+window.location.href =
+'./login.html';
 
-  }
+}
 );
