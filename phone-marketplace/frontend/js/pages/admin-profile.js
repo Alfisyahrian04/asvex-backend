@@ -1,4 +1,5 @@
-const BASE_URL = 'https://asvex-backend.vercel.app/api';
+const BASE_URL =
+'https://asvex-backend-production.up.railway.app/api';
 
 const token = localStorage.getItem('token');
 
