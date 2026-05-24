@@ -10,7 +10,15 @@ getMyOrders,
 getSellerOrders,
 updateOrderStatus,
 verifyPayment,
-shipOrder
+shipOrder,
+
+/* PATCH */
+completeOrder,
+cancelOrder,
+requestReturn,
+submitDispute
+/* PATCH */
+
 } = require(
 '../controllers/orderController'
 );
@@ -47,21 +55,45 @@ protect,
 updateOrderStatus
 );
 
-/* PATCH ADMIN PAYMENT VERIFY */
-
 router.put(
 '/:id/verify-payment',
 protect,
 verifyPayment
 );
 
-/* PATCH SHIPPING */
-
 router.put(
 '/:id/ship',
 protect,
 shipOrder
 );
+
+/* PATCH START */
+
+router.put(
+'/:id/complete',
+protect,
+completeOrder
+);
+
+router.put(
+'/:id/cancel',
+protect,
+cancelOrder
+);
+
+router.put(
+'/:id/return',
+protect,
+requestReturn
+);
+
+router.put(
+'/:id/dispute',
+protect,
+submitDispute
+);
+
+/* PATCH END */
 
 module.exports =
 router;
