@@ -43,10 +43,7 @@ id="open-product-modal"
 <i class="fa-solid fa-plus"></i>
 </button>
 
-<div
-class="modal"
-id="product-modal"
->
+<div class="modal" id="product-modal">
 
 <div
 class="modal-content"
@@ -72,64 +69,86 @@ box-sizing:border-box;
 Tambah Produk
 </h2>
 
-<input type="text" id="product-name" placeholder="Nama Produk"/>
-<textarea id="product-description" placeholder="Deskripsi Produk"></textarea>
-<input type="number" id="product-price" placeholder="Harga Produk"/>
-<input type="number" id="product-stock" placeholder="Stok Produk"/>
-<input type="text" id="product-category" placeholder="Kategori Produk"/>
+<input
+type="text"
+id="product-name"
+placeholder="Nama Produk"
+/>
+
+<input
+type="text"
+id="product-brand"
+placeholder="Brand Produk"
+/>
+
+<input
+type="text"
+id="product-main-variant"
+placeholder="Variant Produk"
+/>
+
+<textarea
+id="product-description"
+placeholder="Deskripsi Produk"
+></textarea>
+
+<input
+type="number"
+id="product-price"
+placeholder="Harga Produk"
+/>
+
+<input
+type="number"
+id="product-stock"
+placeholder="Stok Produk"
+/>
+
+<select id="product-category">
+<option value="">Pilih Kategori Produk</option>
+<option value="Elektronik">Elektronik</option>
+<option value="Make Up">Make Up</option>
+<option value="Skincare">Skincare</option>
+<option value="Fashion">Fashion</option>
+<option value="Gaming">Gaming</option>
+<option value="Aksesoris">Aksesoris</option>
+<option value="Kesehatan">Kesehatan</option>
+<option value="Rumah Tangga">Rumah Tangga</option>
+<option value="Makanan">Makanan</option>
+<option value="Minuman">Minuman</option>
+<option value="Ibu & Bayi">Ibu & Bayi</option>
+<option value="Olahraga">Olahraga</option>
+<option value="Otomotif">Otomotif</option>
+<option value="Lainnya">Lainnya</option>
+</select>
 
 <select id="product-condition">
 <option value="Baru">Baru</option>
 <option value="Bekas">Bekas</option>
 </select>
 
-<input type="number" id="product-weight" placeholder="Berat (gram)"/>
-<input type="text" id="product-sku" placeholder="SKU Produk"/>
-
-<label style="display:block;margin-top:18px;margin-bottom:8px;font-weight:600;">
-Variant Utama (Tampil di Buyer)
-</label>
-
-<select id="primary-variant-select">
-<option value="">
-Pilih Variant Utama
-</option>
-</select>
-
-<h3>Varian Produk</h3>
+<input
+type="number"
+id="product-weight"
+placeholder="Berat (gram)"
+/>
 
 <input
 type="text"
-id="variant-name"
-placeholder="Nama Varian (Midnight 128GB)"
+id="product-sku"
+placeholder="SKU Produk"
 />
 
-<input
-type="number"
-id="variant-price"
-placeholder="Harga Varian"
-/>
-
-<input
-type="number"
-id="variant-stock"
-placeholder="Stok Varian"
-/>
-
-<input
-type="file"
-id="variant-image"
-accept="image/*"
-/>
-
-<button
-type="button"
-id="add-variant-btn"
+<label
+style="
+display:block;
+margin-top:14px;
+margin-bottom:8px;
+font-weight:600;
+"
 >
-+ Tambah Varian
-</button>
-
-<div id="variant-list"></div>
+Upload Foto Produk (Default)
+</label>
 
 <input
 type="file"
@@ -137,11 +156,83 @@ id="product-image"
 accept="image/*"
 />
 
+<hr
+style="
+margin:24px 0;
+border:none;
+border-top:1px solid #eee;
+"
+/>
+
+<details>
+
+<summary
+style="
+cursor:pointer;
+font-weight:700;
+font-size:16px;
+padding:10px 0;
+"
+>
+Tambah Variant +
+</summary>
+
+<div style="margin-top:14px;">
+
+<input
+type="text"
+id="variant-name"
+placeholder="Nama Variant"
+/>
+
+<input
+type="number"
+id="variant-price"
+placeholder="Harga Variant"
+/>
+
+<input
+type="number"
+id="variant-stock"
+placeholder="Stock Variant"
+/>
+
+<label
+style="
+display:block;
+margin-top:14px;
+margin-bottom:8px;
+font-weight:600;
+"
+>
+Upload Foto Variant
+</label>
+
+<input
+type="file"
+id="variant-image"
+accept="image/*"
+/>
+
+<div id="variant-list"></div>
+
+<button
+type="button"
+id="add-variant-btn"
+style="margin-top:14px;"
+>
++ Tambah Variant
+</button>
+
+</div>
+
+</details>
+
 <button
 type="button"
 id="save-product-btn"
 style="
-margin-top:16px;
+margin-top:20px;
 margin-bottom:60px;
 "
 >
