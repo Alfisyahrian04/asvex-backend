@@ -29,6 +29,13 @@ type:Number,
 default:0
 },
 
+/* PATCH */
+sold:{
+type:Number,
+default:0
+},
+/* PATCH */
+
 category:{
 type:String,
 required:true
@@ -65,7 +72,15 @@ variants:[
 name:String,
 value:String,
 price:Number,
-stock:Number
+stock:Number,
+
+/* PATCH */
+color:String,
+storage:String,
+ram:String,
+rom:String,
+specs:String
+/* PATCH */
 }
 ],
 
