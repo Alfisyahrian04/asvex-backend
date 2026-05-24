@@ -1,5 +1,5 @@
 const BASE_URL =
-'https://asvex-backend-production.up.railway.app/api';
+'https://asvex-backend.up.railway.app/api';
 
 const token = localStorage.getItem('token');
 
