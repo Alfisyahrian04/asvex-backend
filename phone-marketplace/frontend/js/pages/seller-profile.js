@@ -46,6 +46,18 @@ document.getElementById(
 'profile-email'
 );
 
+/* PATCH START */
+const phoneElement =
+document.getElementById(
+'profile-phone'
+);
+
+const returnAddressInput =
+document.getElementById(
+'return-address'
+);
+/* PATCH END */
+
 if(usernameElement){
 
 usernameElement.innerText =
@@ -61,6 +73,50 @@ currentUser.email ||
 '-';
 
 }
+
+/* PATCH START */
+if(phoneElement){
+
+phoneElement.innerText =
+currentUser.phone || '-';
+
+}
+
+if(returnAddressInput){
+
+returnAddressInput.value =
+currentUser.returnAddress || '';
+
+}
+
+const saveReturnBtn =
+document.getElementById(
+'save-return-address-btn'
+);
+
+if(saveReturnBtn){
+
+saveReturnBtn.addEventListener(
+'click',
+()=>{
+
+currentUser.returnAddress =
+returnAddressInput.value.trim();
+
+localStorage.setItem(
+'user',
+JSON.stringify(currentUser)
+);
+
+alert(
+'Alamat retur berhasil disimpan'
+);
+
+}
+);
+
+}
+/* PATCH END */
 
 /* LOGOUT */
 
