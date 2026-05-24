@@ -12,15 +12,60 @@ getRelatedProducts
 '../services/aiRecommendation'
 );
 
+/* PATCH START */
+const normalizeProductPayload =
+(body={})=>{
+
+return {
+
+...body,
+
+weight:
+body.weight !== undefined
+? Number(body.weight)
+: 0,
+
+sku:
+body.sku || '',
+
+condition:
+body.condition || 'Baru',
+
+brand:
+body.brand || '',
+
+mainVariant:
+body.mainVariant || '',
+
+variants:
+Array.isArray(body.variants)
+? body.variants
+: []
+
+};
+
+};
+/* PATCH END */
+
 exports.createProduct =
 async(req,res)=>{
 
 try{
 
+/* PATCH */
+const payload =
+normalizeProductPayload(
+req.body
+);
+/* PATCH END */
+
 const product =
 await Product.create({
 
-...req.body,
+/* PATCH */
+...payload,
+/* PATCH END */
+
 seller:req.user._id
 
 });
@@ -138,12 +183,21 @@ message:
 
 }
 
+/* PATCH */
+const payload =
+normalizeProductPayload(
+req.body
+);
+/* PATCH END */
+
 const updatedProduct =
 await Product.findByIdAndUpdate(
 
 req.params.id,
 
-req.body,
+/* PATCH */
+payload,
+/* PATCH END */
 
 {
 new:true
@@ -468,6 +522,7 @@ message:error.message
 }
 
 };
+
 exports.getMyProducts =
 async(req,res)=>{
 
