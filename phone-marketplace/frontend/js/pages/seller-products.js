@@ -212,17 +212,36 @@ openProductPreview(product);
 window.openProductPreviewById =
 openProductPreviewById;
 
-function changePreviewImage(image){
+function changePreviewImage(image, el){
+  const previewImage =
+    document.getElementById(
+      'preview-main-image'
+    );
 
-const previewImage =
-document.getElementById(
-'preview-main-image'
-);
+  if(previewImage){
+    previewImage.src = image;
+  }
 
-if(previewImage){
-previewImage.src = image;
-}
+  document
+    .querySelectorAll(
+      '#product-preview-modal img[data-thumb]'
+    )
+    .forEach(img=>{
+      img.style.border =
+        '1px solid #eee';
+    });
 
+  if(el){
+    const thumb =
+      el.querySelector(
+        'img[data-thumb]'
+      );
+
+    if(thumb){
+      thumb.style.border =
+        '2px solid #ff6b00';
+    }
+  }
 }
 
 window.changePreviewImage =
