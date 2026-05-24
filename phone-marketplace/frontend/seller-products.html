@@ -30,13 +30,24 @@
 
 </main>
 
-<button type="button" class="add-product-btn" id="open-product-modal">
+<button
+type="button"
+class="add-product-btn"
+id="open-product-modal"
+>
 <i class="fa-solid fa-plus"></i>
 </button>
 
 <div class="modal" id="product-modal">
 
-<div class="modal-content">
+<div
+class="modal-content"
+style="
+max-height:90vh;
+overflow-y:auto;
+padding-bottom:140px;
+"
+>
 
 <h2>Tambah Produk</h2>
 
@@ -72,6 +83,12 @@ placeholder="Harga Varian"
 type="number"
 id="variant-stock"
 placeholder="Stok Varian"
+/>
+
+<input
+type="file"
+id="variant-image"
+accept="image/*"
 />
 
 <button
