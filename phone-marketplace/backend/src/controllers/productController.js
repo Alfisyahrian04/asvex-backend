@@ -52,19 +52,15 @@ async(req,res)=>{
 
 try{
 
-/* PATCH */
 const payload =
 normalizeProductPayload(
 req.body
 );
-/* PATCH END */
 
 const product =
 await Product.create({
 
-/* PATCH */
 ...payload,
-/* PATCH END */
 
 seller:req.user._id
 
@@ -183,21 +179,17 @@ message:
 
 }
 
-/* PATCH */
 const payload =
 normalizeProductPayload(
 req.body
 );
-/* PATCH END */
 
 const updatedProduct =
 await Product.findByIdAndUpdate(
 
 req.params.id,
 
-/* PATCH */
 payload,
-/* PATCH END */
 
 {
 new:true
@@ -530,10 +522,11 @@ try{
 
 const products =
 await Product.find({
-
 seller:req.user._id,
-isActive:true
-
+$or:[
+{ isActive:true },
+{ isActive:{ $exists:false } }
+]
 })
 .sort({
 createdAt:-1
