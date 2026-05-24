@@ -44,6 +44,56 @@ localStorage.getItem(
 'token'
 );
 
+/* PATCH START */
+
+function getStatusLabel(order){
+
+if(
+order.paymentStatus ===
+'waiting_verification'
+){
+return 'Menunggu Konfirmasi Pembayaran';
+}
+
+if(
+order.paymentStatus ===
+'paid' &&
+(
+order.status === 'paid' ||
+order.status === 'pending'
+)
+){
+return 'Menunggu Diproses';
+}
+
+if(
+order.status ===
+'processed'
+){
+return 'Sedang Diproses';
+}
+
+if(
+order.status ===
+'shipped'
+){
+return 'Sedang Dikirim';
+}
+
+if(
+order.status ===
+'completed'
+){
+return 'Pesanan Selesai';
+}
+
+return order.status || 'Pending';
+
+}
+
+/* PATCH END */
+
+
 /* LOAD SELLER ORDERS */
 
 async function
@@ -92,7 +142,44 @@ return;
 }
 
 pendingOrders.innerHTML =
-orders.map(order=>`
+orders.map(order=>{
+
+/* PATCH START */
+
+const canProcess =
+order.paymentStatus === 'paid';
+
+const buttonHtml =
+canProcess
+?
+`
+<button
+onclick="processOrder('${order._id}')"
+class="password-btn"
+style="margin-top:10px;height:45px;"
+>
+Proses Pesanan
+</button>
+`
+:
+`
+<button
+disabled
+class="password-btn"
+style="
+margin-top:10px;
+height:45px;
+opacity:.6;
+cursor:not-allowed;
+"
+>
+Menunggu Pembayaran
+</button>
+`;
+
+/* PATCH END */
+
+return `
 
 <div class="product-card">
 
@@ -124,22 +211,16 @@ order.totalPrice || 0
 
 <p>
 Status:
-${order.status}
+${getStatusLabel(order)}
 </p>
 
-<button
-onclick="processOrder('${order._id}')"
-class="password-btn"
-style="margin-top:10px;height:45px;"
->
-
-Proses Pesanan
-
-</button>
+${buttonHtml}
 
 </div>
 
-`).join('');
+`;
+
+}).join('');
 
 }catch(error){
 
