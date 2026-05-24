@@ -27,14 +27,30 @@ body:JSON.stringify(data)
 }
 );
 
-const result =
+let result;
+
+try{
+
+result =
 await response.json();
+
+}catch{
+
+result = null;
+
+}
 
 if(!response.ok){
 
+console.error(
+'ORDER CREATE ERROR:',
+result
+);
+
 throw new Error(
-result.message ||
-'Checkout gagal'
+result?.message ||
+result?.error ||
+`Checkout gagal (${response.status})`
 );
 
 }
