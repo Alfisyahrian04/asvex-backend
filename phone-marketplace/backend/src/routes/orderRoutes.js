@@ -8,7 +8,9 @@ const {
 createOrder,
 getMyOrders,
 getSellerOrders,
-updateOrderStatus
+updateOrderStatus,
+verifyPayment,
+shipOrder
 } = require(
 '../controllers/orderController'
 );
@@ -43,6 +45,22 @@ router.put(
 '/:id/status',
 protect,
 updateOrderStatus
+);
+
+/* PATCH ADMIN PAYMENT VERIFY */
+
+router.put(
+'/:id/verify-payment',
+protect,
+verifyPayment
+);
+
+/* PATCH SHIPPING */
+
+router.put(
+'/:id/ship',
+protect,
+shipOrder
 );
 
 module.exports =
