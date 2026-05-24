@@ -40,44 +40,19 @@ user.role === 'seller'
 
 <div class="admin-card">
 
-<h3>
-${user.username}
-</h3>
+<h3>${user.username}</h3>
+<p>${user.email}</p>
+<p>Verified: ${user.verificationStatus}</p>
 
-<p>
-${user.email}
-</p>
-
-<p>
-Verified:
-${user.verificationStatus}
-</p>
-
-<button
-onclick="
-verifySeller(
-'${user._id}'
-)
-"
->
-
+<button onclick="verifySeller('${user._id}')">
 Verify
-
 </button>
 
 <button
-onclick="
-banUser(
-'${user._id}'
-)
-"
-style="
-background:#ef4444;
-"
+onclick="banUser('${user._id}')"
+style="background:#ef4444;"
 >
-
 Ban
-
 </button>
 
 </div>
@@ -92,10 +67,8 @@ await fetch(
 `https://asvex-backend-production.up.railway.app/api/v1/admin/verify-seller/${id}`,
 {
 method:'PUT',
-
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -110,92 +83,13 @@ await fetch(
 `https://asvex-backend-production.up.railway.app/api/v1/admin/ban-user/${id}`,
 {
 method:'PUT',
-
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
 
 loadUsers();
-
-}
-
-/* PAYOUT */
-
-async function loadPayouts(){
-
-const response =
-await fetch(
-'https://asvex-backend-production.up.railway.app/api/v1/admin/payouts',
-{
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-const payouts =
-await response.json();
-
-const payoutList =
-document.getElementById(
-'payout-list'
-);
-
-payoutList.innerHTML =
-payouts.map(payout=>`
-
-<div class="admin-card">
-
-<h3>
-${payout.seller?.username}
-</h3>
-
-<p>
-Rp ${Number(payout.amount)
-.toLocaleString('id-ID')}
-</p>
-
-<p>
-${payout.status}
-</p>
-
-<button
-onclick="
-approvePayout(
-'${payout._id}'
-)
-"
->
-
-Approve
-
-</button>
-
-</div>
-
-`).join('');
-
-}
-
-async function approvePayout(id){
-
-await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/approve-payout/${id}`,
-{
-method:'PUT',
-
-headers:{
-Authorization:
-`Bearer ${token}`
-}
-}
-);
-
-loadPayouts();
 
 }
 
@@ -210,8 +104,7 @@ await fetch(
 'https://asvex-backend-production.up.railway.app/api/v1/admin/pending-payments',
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -227,11 +120,7 @@ document.getElementById(
 if(!orders.length){
 
 paymentList.innerHTML =
-`
-<div class="empty-state">
-Belum ada pembayaran
-</div>
-`;
+`<div class="empty-state">Belum ada pembayaran</div>`;
 
 return;
 
@@ -244,8 +133,7 @@ orders.map(order=>`
 
 <img
 src="${
-order.paymentProof
-||
+order.paymentProof ||
 'https://via.placeholder.com/300'
 }"
 >
@@ -262,25 +150,15 @@ ${order.buyer?.username || '-'}
 <p>
 Rp ${Number(
 order.totalPrice || 0
-).toLocaleString(
-'id-ID'
-)}
+).toLocaleString('id-ID')}
 </p>
 
-<p>
-${order.status}
-</p>
+<p>${order.status}</p>
 
 <button
-onclick="
-approvePayment(
-'${order._id}'
-)
-"
+onclick="approvePayment('${order._id}')"
 >
-
 Approve Payment
-
 </button>
 
 </div>
@@ -301,10 +179,8 @@ await fetch(
 `https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/approve`,
 {
 method:'PUT',
-
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -313,10 +189,18 @@ loadPendingPayments();
 
 }
 
-/* INIT */
+/* PATCH START */
+
+window.approvePayment =
+approvePayment;
+
+window.verifySeller =
+verifySeller;
+
+window.banUser =
+banUser;
+
+/* PATCH END */
 
 loadUsers();
-
-loadPayouts();
-
 loadPendingPayments();
