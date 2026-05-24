@@ -37,8 +37,6 @@ type:String,
 default:''
 },
 
-/* PATCH START */
-
 paymentMethod:{
 type:String,
 default:''
@@ -74,6 +72,57 @@ type:String,
 default:''
 }
 },
+
+/* PATCH START */
+
+paymentStatus:{
+type:String,
+default:'pending'
+},
+
+paymentVerifiedAt:{
+type:Date
+},
+
+shippingPhoto:{
+type:String,
+default:''
+},
+
+completedAt:{
+type:Date
+},
+
+complaintStatus:{
+type:String,
+default:''
+},
+
+returnStatus:{
+type:String,
+default:''
+},
+
+disputeStatus:{
+type:String,
+default:''
+},
+
+fundStatus:{
+type:String,
+default:'hold'
+},
+
+timeline:[
+{
+title:String,
+description:String,
+createdAt:{
+type:Date,
+default:Date.now
+}
+}
+],
 
 /* PATCH END */
 
