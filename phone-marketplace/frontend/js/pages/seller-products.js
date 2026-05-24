@@ -450,12 +450,15 @@ background:#fff;
 
 <h2>${product.name}</h2>
 
-<p style="
+<p
+id="preview-price"
+style="
 font-size:24px;
 font-weight:700;
 color:#ea580c;
 margin:12px 0;
-">
+"
+>
 Rp ${Number(product.price || 0).toLocaleString('id-ID')}
 </p>
 
