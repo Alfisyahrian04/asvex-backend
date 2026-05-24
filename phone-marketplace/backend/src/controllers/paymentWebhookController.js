@@ -34,6 +34,16 @@ transaction_status ===
 order.paymentStatus =
 'paid';
 
+order.status =
+'paid';
+
+/* PATCH SAFE CHECK */
+if(
+order.timeline &&
+Array.isArray(
+order.timeline
+)
+){
 order.timeline.push({
 
 title:'Payment Success',
@@ -42,6 +52,7 @@ description:
 'Buyer completed payment'
 
 });
+}
 
 }
 
