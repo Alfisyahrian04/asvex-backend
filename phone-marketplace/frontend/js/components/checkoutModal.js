@@ -117,6 +117,7 @@ checkoutTotal.innerText =
 
 }
 
+/* PATCH CHECKOUT */
 async function checkoutOrder(){
 
 try{
@@ -146,6 +147,18 @@ const shippingAddress =
 shippingAddressInput?.value ||
 'Indonesia';
 
+/* PATCH */
+if(!shippingAddress.trim()){
+
+alert(
+'Alamat pengiriman wajib diisi'
+);
+
+return;
+
+}
+/* PATCH END */
+
 const paymentFile =
 paymentProofInput?.files?.[0];
 
@@ -174,6 +187,7 @@ async function(e){
 const paymentProof =
 e.target.result;
 
+/* PATCH */
 for(const item of cart){
 
 await createOrder({
@@ -184,10 +198,8 @@ quantity:item.quantity || 1,
 
 shippingAddress,
 
-/* PATCH */
 shippingCourier,
 shippingCost:15000,
-/* PATCH */
 
 paymentMethod,
 paymentProof,
@@ -195,12 +207,16 @@ paymentProof,
 variant:
 item.variant || {},
 
+totalPrice:
+(item.price * (item.quantity || 1)) + 15000,
+
 status:
 'waiting_verification'
 
 });
 
 }
+/* PATCH END */
 
 cartStore.clearCart();
 
