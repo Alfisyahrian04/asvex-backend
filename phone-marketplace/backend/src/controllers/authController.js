@@ -238,13 +238,29 @@ async(req,res)=>{
 
 try{
 
+if(
+!req.user ||
+!req.user._id
+){
+return res.status(401)
+.json({
+message:'Unauthorized'
+});
+}
+
 const userId =
 req.user._id;
 
-const {
+let {
 oldPassword,
 newPassword
 } = req.body;
+
+oldPassword =
+String(oldPassword || '').trim();
+
+newPassword =
+String(newPassword || '').trim();
 
 if(
 !oldPassword ||
@@ -269,6 +285,16 @@ message:
 'Password minimal 6 karakter'
 });
 
+}
+
+if(
+oldPassword === newPassword
+){
+return res.status(400)
+.json({
+message:
+'Password baru tidak boleh sama dengan password lama'
+});
 }
 
 const user =
@@ -319,6 +345,11 @@ message:
 });
 
 }catch(error){
+
+console.log(
+'CHANGE PASSWORD ERROR:',
+error
+);
 
 res.status(500)
 .json({
