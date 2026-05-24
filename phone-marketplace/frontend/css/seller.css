@@ -824,3 +824,36 @@ font-size:28px !important;
 color:#fff !important;
 
 }
+/* ===== SELLER ADDRESS PATCH ===== */
+
+.seller-address-wrapper{
+
+margin-top:12px;
+margin-bottom:10px;
+
+}
+
+.seller-address-input{
+
+margin-top:8px !important;
+margin-bottom:14px !important;
+
+}
+
+.seller-address-input::placeholder{
+
+color:#9ca3af;
+
+}
+
+.seller-address-btn{
+
+margin-top:0 !important;
+
+}
+
+#profile-phone{
+
+margin-bottom:18px !important;
+
+}
