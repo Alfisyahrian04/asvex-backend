@@ -126,18 +126,13 @@ width:100%;
 height:48px;
 border:none;
 border-radius:18px;
-background:linear-gradient(
-135deg,
-#22c55e,
-#15803d
-);
+background:linear-gradient(135deg,#22c55e,#15803d);
 color:white;
 font-size:15px;
 font-weight:800;
 margin-top:12px;
 cursor:pointer;
-box-shadow:
-0 10px 20px rgba(34,197,94,.25);
+box-shadow:0 10px 20px rgba(34,197,94,.25);
 }
 
 /* EMPTY */
@@ -151,28 +146,30 @@ font-weight:700;
 color:#9ca3af;
 }
 
-/* NAV */
+/* NAVBAR FIX */
 
 .admin-nav{
-position:fixed;
+position:fixed !important;
 left:50%;
 bottom:18px;
 transform:translateX(-50%);
 width:92%;
 height:82px;
-background:rgba(255,255,255,.92);
+background:rgba(255,255,255,.96) !important;
 backdrop-filter:blur(20px);
 -webkit-backdrop-filter:blur(20px);
 border-radius:32px;
-display:flex;
+display:flex !important;
 justify-content:space-around;
 align-items:center;
 box-shadow:0 10px 40px rgba(0,0,0,.08);
-z-index:99999;
+z-index:999999 !important;
+visibility:visible !important;
+opacity:1 !important;
 }
 
 .admin-nav-item{
-display:flex;
+display:flex !important;
 flex-direction:column;
 align-items:center;
 justify-content:center;
@@ -181,11 +178,10 @@ text-decoration:none;
 color:#9ca3af;
 font-size:12px;
 font-weight:700;
-transition:.25s;
 position:relative;
 min-width:60px;
 height:100%;
-cursor:pointer;
+flex:1;
 }
 
 .admin-nav-item i{
@@ -204,10 +200,6 @@ width:42px;
 height:5px;
 border-radius:999px;
 background:#16a34a;
-}
-
-.admin-nav-item:hover{
-transform:translateY(-2px);
 }
 
 /* PROFILE */
@@ -250,8 +242,6 @@ margin:0;
 color:#111827;
 }
 
-/* FORM */
-
 .profile-form,
 .password-form{
 display:flex;
@@ -277,8 +267,6 @@ background:#f5f5f5;
 box-sizing:border-box;
 }
 
-/* EYE ICON */
-
 .toggle-password{
 position:absolute;
 right:18px;
@@ -287,15 +275,8 @@ transform:translateY(-50%);
 font-size:20px;
 cursor:pointer;
 color:#9ca3af;
-display:flex;
-align-items:center;
-justify-content:center;
-width:28px;
-height:28px;
 z-index:10;
 }
-
-/* BUTTON */
 
 .save-password-btn{
 width:100%;
@@ -321,12 +302,13 @@ font-weight:700;
 cursor:pointer;
 }
 
-.save-password-btn:hover,
-.logout-btn:hover{
-opacity:.95;
+#admin-name,
+#admin-email{
+pointer-events:none !important;
+user-select:none !important;
+caret-color:transparent !important;
+background:#f3f4f6 !important;
 }
-
-/* MOBILE */
 
 @media(max-width:768px){
 
@@ -351,58 +333,4 @@ width:94%;
 padding:16px;
 }
 
-}
-#admin-name,
-#admin-email{
-pointer-events:none !important;
-user-select:none !important;
--webkit-user-select:none !important;
-caret-color:transparent !important;
-background:#f3f3f3 !important;
-color:#111 !important;
-opacity:1 !important;
-}
-/* FIX NAVBAR ADMIN PROFILE */
-
-.admin-nav{
-position:fixed !important;
-left:0 !important;
-right:0 !important;
-bottom:0 !important;
-width:100% !important;
-height:72px !important;
-background:#ffffff !important;
-display:flex !important;
-justify-content:space-around !important;
-align-items:center !important;
-z-index:999999 !important;
-box-shadow:0 -2px 12px rgba(0,0,0,.08) !important;
-border-top:1px solid #e5e7eb !important;
-padding-bottom:env(safe-area-inset-bottom);
-}
-
-.admin-nav-item{
-display:flex !important;
-flex-direction:column !important;
-align-items:center !important;
-justify-content:center !important;
-text-decoration:none !important;
-color:#6b7280 !important;
-font-size:12px !important;
-font-weight:700 !important;
-flex:1;
-height:100%;
-}
-
-.admin-nav-item i{
-font-size:20px !important;
-margin-bottom:4px;
-}
-
-.admin-nav-item.active{
-color:#16a34a !important;
-}
-
-.profile-page{
-padding-bottom:120px !important;
 }
