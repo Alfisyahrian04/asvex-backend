@@ -34,7 +34,7 @@ sold:{
 type:Number,
 default:0
 },
-/* PATCH */
+/* PATCH END */
 
 category:{
 type:String,
@@ -45,6 +45,28 @@ brand:{
 type:String,
 default:''
 },
+
+/* PATCH START */
+condition:{
+type:String,
+default:'Baru'
+},
+
+weight:{
+type:Number,
+default:0
+},
+
+sku:{
+type:String,
+default:''
+},
+
+mainVariant:{
+type:String,
+default:''
+},
+/* PATCH END */
 
 productType:{
 type:String,
@@ -69,18 +91,32 @@ default:{}
 
 variants:[
 {
+
 name:String,
+
 value:String,
+
 price:Number,
+
 stock:Number,
 
-/* PATCH */
+/* PATCH START */
+image:{
+type:String,
+default:''
+},
+
 color:String,
+
 storage:String,
+
 ram:String,
+
 rom:String,
+
 specs:String
-/* PATCH */
+/* PATCH END */
+
 }
 ],
 
