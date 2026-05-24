@@ -24,8 +24,13 @@
 <h2>Daftar Produk</h2>
 </div>
 
-<div class="seller-product-grid" id="seller-product-list">
-<div class="empty-state">Belum ada produk</div>
+<div
+class="seller-product-grid"
+id="seller-product-list"
+>
+<div class="empty-state">
+Belum ada produk
+</div>
 </div>
 
 </main>
@@ -38,32 +43,85 @@ id="open-product-modal"
 <i class="fa-solid fa-plus"></i>
 </button>
 
-<div class="modal" id="product-modal">
+<div
+class="modal"
+id="product-modal"
+>
 
 <div
 class="modal-content"
 style="
-max-height:90vh;
+position:fixed;
+top:72px;
+left:0;
+right:0;
+margin:auto;
+width:100%;
+max-width:100%;
+height:calc(100vh - 72px);
 overflow-y:auto;
-padding-bottom:140px;
+background:#fff;
+padding:24px;
+padding-bottom:180px;
+border-radius:24px 24px 0 0;
+box-sizing:border-box;
 "
 >
 
-<h2>Tambah Produk</h2>
+<h2
+style="
+margin-top:0;
+margin-bottom:20px;
+"
+>
+Tambah Produk
+</h2>
 
-<input type="text" id="product-name" placeholder="Nama Produk"/>
-<textarea id="product-description" placeholder="Deskripsi Produk"></textarea>
-<input type="number" id="product-price" placeholder="Harga Produk"/>
-<input type="number" id="product-stock" placeholder="Stok Produk"/>
-<input type="text" id="product-category" placeholder="Kategori Produk"/>
+<input
+type="text"
+id="product-name"
+placeholder="Nama Produk"
+/>
+
+<textarea
+id="product-description"
+placeholder="Deskripsi Produk"
+></textarea>
+
+<input
+type="number"
+id="product-price"
+placeholder="Harga Produk"
+/>
+
+<input
+type="number"
+id="product-stock"
+placeholder="Stok Produk"
+/>
+
+<input
+type="text"
+id="product-category"
+placeholder="Kategori Produk"
+/>
 
 <select id="product-condition">
 <option value="Baru">Baru</option>
 <option value="Bekas">Bekas</option>
 </select>
 
-<input type="number" id="product-weight" placeholder="Berat (gram)"/>
-<input type="text" id="product-sku" placeholder="SKU Produk"/>
+<input
+type="number"
+id="product-weight"
+placeholder="Berat (gram)"
+/>
+
+<input
+type="text"
+id="product-sku"
+placeholder="SKU Produk"
+/>
 
 <h3>Varian Produk</h3>
 
@@ -109,6 +167,10 @@ accept="image/*"
 <button
 type="button"
 id="save-product-btn"
+style="
+margin-top:16px;
+margin-bottom:60px;
+"
 >
 Upload Produk
 </button>
@@ -123,7 +185,10 @@ Upload Produk
 <span>Saldo</span>
 </a>
 
-<a href="seller-products.html" class="nav-item active">
+<a
+href="seller-products.html"
+class="nav-item active"
+>
 <i class="fa-solid fa-box"></i>
 <span>Produk</span>
 </a>
