@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Seller Products</title>
 
-<link
-rel="stylesheet"
-href="css/seller.css?v=100001"
-/>
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
+<link rel="stylesheet" href="css/seller.css?v=100001"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 </head>
 <body>
@@ -34,79 +24,64 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <h2>Daftar Produk</h2>
 </div>
 
-<div
-class="seller-product-grid"
-id="seller-product-list"
->
-<div class="empty-state">
-Belum ada produk
-</div>
+<div class="seller-product-grid" id="seller-product-list">
+<div class="empty-state">Belum ada produk</div>
 </div>
 
 </main>
 
-<button
-type="button"
-class="add-product-btn"
-id="open-product-modal"
->
+<button type="button" class="add-product-btn" id="open-product-modal">
 <i class="fa-solid fa-plus"></i>
 </button>
 
-<div
-class="modal"
-id="product-modal"
->
+<div class="modal" id="product-modal">
 
 <div class="modal-content">
 
 <h2>Tambah Produk</h2>
 
-<input
-type="text"
-id="product-name"
-placeholder="Nama Produk"
-/>
-
-<textarea
-id="product-description"
-placeholder="Deskripsi Produk"
-></textarea>
-
-<input
-type="number"
-id="product-price"
-placeholder="Harga Produk"
-/>
-
-<input
-type="number"
-id="product-stock"
-placeholder="Stok Produk"
-/>
-
-<input
-type="text"
-id="product-category"
-placeholder="Kategori Produk"
-/>
+<input type="text" id="product-name" placeholder="Nama Produk"/>
+<textarea id="product-description" placeholder="Deskripsi Produk"></textarea>
+<input type="number" id="product-price" placeholder="Harga Produk"/>
+<input type="number" id="product-stock" placeholder="Stok Produk"/>
+<input type="text" id="product-category" placeholder="Kategori Produk"/>
 
 <select id="product-condition">
 <option value="Baru">Baru</option>
 <option value="Bekas">Bekas</option>
 </select>
 
-<input
-type="number"
-id="product-weight"
-placeholder="Berat (gram)"
-/>
+<input type="number" id="product-weight" placeholder="Berat (gram)"/>
+<input type="text" id="product-sku" placeholder="SKU Produk"/>
+
+<h3>Varian Produk</h3>
 
 <input
 type="text"
-id="product-sku"
-placeholder="SKU Produk"
+id="variant-name"
+placeholder="Nama Varian (Midnight 128GB)"
 />
+
+<input
+type="number"
+id="variant-price"
+placeholder="Harga Varian"
+/>
+
+<input
+type="number"
+id="variant-stock"
+placeholder="Stok Varian"
+/>
+
+<button
+type="button"
+id="add-variant-btn"
+>
++ Tambah Varian
+</button>
+
+<div id="variant-list"></div>
 
 <input
 type="file"
@@ -131,10 +106,7 @@ Upload Produk
 <span>Saldo</span>
 </a>
 
-<a
-href="seller-products.html"
-class="nav-item active"
->
+<a href="seller-products.html" class="nav-item active">
 <i class="fa-solid fa-box"></i>
 <span>Produk</span>
 </a>
