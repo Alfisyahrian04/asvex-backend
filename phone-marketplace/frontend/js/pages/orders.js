@@ -213,25 +213,10 @@ onchange="handlePaymentMethodChange('${order._id}','bank')"
 Pilih Rekening Admin
 </option>
 
-<option>
-BCA - AL GADGET - 1234567890
-</option>
-
-<option>
-Mandiri - AL GADGET - 9876543210
-</option>
-
-<option>
-BNI - AL GADGET - 4567891230
-</option>
-
-<option>
-BRI - AL GADGET - 3216549870
-</option>
-
-<option>
-JAGO - AL GADGET - 1122334455
-</option>
+<option>BCA - AL GADGET - 1234567890</option>
+<option>Mandiri - AL GADGET - 9876543210</option>
+<option>BNI - AL GADGET - 4567891230</option>
+<option>BRI - AL GADGET - 3216549870</option>
 
 </select>
 
@@ -248,21 +233,10 @@ onchange="handlePaymentMethodChange('${order._id}','ewallet')"
 Pilih E-Wallet Admin
 </option>
 
-<option>
-GoPay - 081234567890
-</option>
-
-<option>
-DANA - 081234567891
-</option>
-
-<option>
-OVO - 081234567892
-</option>
-
-<option>
-ShopeePay - 081234567893
-</option>
+<option>GoPay - 081234567890</option>
+<option>DANA - 081234567891</option>
+<option>OVO - 081234567892</option>
+<option>ShopeePay - 081234567893</option>
 
 </select>
 
@@ -335,42 +309,54 @@ Pesanan Selesai
 
 }
 
+
+
 window.handlePaymentMethodChange =
 function(orderId,type){
 
-const bankSelect =
+const bank =
 document.getElementById(
 `admin-bank-${orderId}`
 );
 
-const ewalletSelect =
+const ewallet =
 document.getElementById(
 `admin-ewallet-${orderId}`
 );
 
 if(type === 'bank'){
 
-if(bankSelect.value){
-ewalletSelect.value='';
-ewalletSelect.disabled=true;
+if(bank.value){
+
+ewallet.value='';
+ewallet.disabled=true;
+
 }else{
-ewalletSelect.disabled=false;
+
+ewallet.disabled=false;
+
 }
 
 }
 
 if(type === 'ewallet'){
 
-if(ewalletSelect.value){
-bankSelect.value='';
-bankSelect.disabled=true;
+if(ewallet.value){
+
+bank.value='';
+bank.disabled=true;
+
 }else{
-bankSelect.disabled=false;
+
+bank.disabled=false;
+
 }
 
 }
 
 };
+
+
 
 window.previewPaymentFile =
 function(orderId){
@@ -389,31 +375,34 @@ if(
 input.files &&
 input.files[0]
 ){
+
 label.innerHTML =
 `File dipilih: ${input.files[0].name}`;
+
 }
 
 };
+
+
 
 async function submitPaymentProof(orderId){
 
 try{
 
-const existingOrders =
+const orders =
 await fetchMyOrders();
 
-const existingOrder =
-existingOrders.find(
+const order =
+orders.find(
 item =>
 item._id === orderId
 );
 
 if(
-existingOrder?.status !==
-'pending_payment'
+order.paymentStatus !== 'pending'
 ){
 alert(
-'Pembayaran sudah dikirim'
+'Pembayaran sudah pernah dikirim'
 );
 return;
 }
@@ -421,75 +410,57 @@ return;
 const receiverName =
 document.getElementById(
 `receiver-name-${orderId}`
-)?.value || '';
+).value;
 
 const receiverAddress =
 document.getElementById(
 `receiver-address-${orderId}`
-)?.value || '';
+).value;
 
 const receiverPhone =
 document.getElementById(
 `receiver-phone-${orderId}`
-)?.value || '';
+).value;
 
 const adminBank =
 document.getElementById(
 `admin-bank-${orderId}`
-)?.value || '';
+).value;
 
 const adminEwallet =
 document.getElementById(
 `admin-ewallet-${orderId}`
-)?.value || '';
+).value;
 
 const senderBank =
 document.getElementById(
 `sender-bank-${orderId}`
-)?.value || '';
+).value;
 
 const senderName =
 document.getElementById(
 `sender-name-${orderId}`
-)?.value || '';
+).value;
 
 const selectedPaymentMethod =
 adminBank || adminEwallet;
 
 if(!selectedPaymentMethod){
-alert(
-'Pilih metode pembayaran dulu'
-);
+alert('Pilih metode pembayaran dulu');
 return;
 }
 
-await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/orders/${orderId}/payment`,
+await submitPayment(
+orderId,
 {
-method:'PUT',
-headers:{
-'Content-Type':'application/json',
-Authorization:`Bearer ${localStorage.getItem('token')}`
-},
-body:JSON.stringify({
-
 receiverName,
 receiverAddress,
 receiverPhone,
-
 senderBank,
 senderName,
-
 adminPaymentMethod:
 selectedPaymentMethod,
-
-paymentStatus:
-'waiting_verification',
-
-status:
-'waiting_confirmation'
-
-})
+paymentProof:'uploaded'
 }
 );
 
@@ -511,6 +482,8 @@ alert(
 
 }
 
+
+
 async function handleCompleteOrder(id){
 
 try{
@@ -529,6 +502,8 @@ alert(
 
 }
 
+
+
 if(
 typeof socket !== 'undefined'
 ){
@@ -536,7 +511,9 @@ typeof socket !== 'undefined'
 socket.on(
 'order-updated',
 ()=>{
+
 loadOrders();
+
 }
 );
 
