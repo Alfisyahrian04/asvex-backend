@@ -73,8 +73,6 @@ default:''
 }
 },
 
-/* PATCH START */
-
 receiverName:{
 type:String,
 default:''
@@ -153,8 +151,6 @@ default:Date.now
 }
 }
 ],
-
-/* PATCH END */
 
 status:{
 type:String,
