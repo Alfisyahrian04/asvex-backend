@@ -162,6 +162,8 @@ quantity:item.quantity || 1,
 
 shippingAddress,
 
+courier:shippingCourier,
+
 shippingCourier,
 
 shippingCost:15000,
