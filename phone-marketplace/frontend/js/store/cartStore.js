@@ -20,10 +20,10 @@ const cartStore = {
   getProductStock(product) {
 
     return Number(
-      product.stock ||
-      product.totalStock ||
-      product.quantity ||
-      product.qty ||
+      product.stock ??
+      product.totalStock ??
+      product.countInStock ??
+      product.availableStock ??
       0
     );
 
@@ -43,6 +43,14 @@ const cartStore = {
     const maxStock =
       this.getProductStock(product);
 
+    if (
+      maxStock <= 0
+    ) {
+
+      return false;
+
+    }
+
     if (existing) {
 
       existing.quantity =
@@ -51,7 +59,6 @@ const cartStore = {
         );
 
       if (
-        maxStock > 0 &&
         existing.quantity >= maxStock
       ) {
 
@@ -67,7 +74,6 @@ const cartStore = {
       existing.quantity += 1;
 
       if (
-        maxStock > 0 &&
         existing.quantity > maxStock
       ) {
 
@@ -81,6 +87,8 @@ const cartStore = {
       cart.push({
 
         ...product,
+
+        stock: maxStock,
 
         quantity: 1
 
@@ -114,6 +122,8 @@ const cartStore = {
       return {
 
         ...item,
+
+        stock: itemStock,
 
         quantity: qty
 
