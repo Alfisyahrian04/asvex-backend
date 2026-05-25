@@ -21,9 +21,7 @@ orders
 ordersContainer.innerHTML = `
 
 <div class="empty-product">
-
 Gagal memuat transaksi
-
 </div>
 
 `;
@@ -80,9 +78,7 @@ if(!orders.length){
 ordersContainer.innerHTML = `
 
 <div class="empty-product">
-
 Belum ada transaksi
-
 </div>
 
 `;
@@ -183,23 +179,9 @@ order.status === 'waiting_verification'
 order.status === 'waiting_payment_verification'
 ? `
 
-<div
-style="
-margin-top:18px;
-padding:18px;
-background:#f8fafc;
-border-radius:18px;
-border:1px solid #edf2f7;
-"
->
+<div class="payment-box">
 
-<h4
-style="
-font-size:18px;
-font-weight:700;
-margin-bottom:14px;
-"
->
+<h4 class="payment-title">
 Data Penerima
 </h4>
 
@@ -207,65 +189,24 @@ Data Penerima
 id="receiver-name-${order._id}"
 type="text"
 placeholder="Nama Penerima"
-style="
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border-radius:12px;
-border:1px solid #ddd;
-box-sizing:border-box;
-"
 />
 
 <textarea
 id="receiver-address-${order._id}"
 placeholder="Detail Alamat Lengkap"
-style="
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border-radius:12px;
-border:1px solid #ddd;
-min-height:90px;
-box-sizing:border-box;
-resize:none;
-"
 ></textarea>
 
 <input
 id="receiver-phone-${order._id}"
 type="text"
 placeholder="No Telpon Penerima"
-style="
-width:100%;
-padding:14px;
-margin-bottom:16px;
-border-radius:12px;
-border:1px solid #ddd;
-box-sizing:border-box;
-"
 />
 
-<h4
-style="
-font-size:18px;
-font-weight:700;
-margin-bottom:10px;
-"
->
+<h4 class="payment-title">
 Bank Transfer
 </h4>
 
-<select
-id="admin-bank-${order._id}"
-style="
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #ddd;
-margin-bottom:16px;
-"
->
+<select id="admin-bank-${order._id}">
 
 <option value="">
 Pilih Rekening Admin
@@ -293,26 +234,11 @@ JAGO - AL GADGET - 1122334455
 
 </select>
 
-<h4
-style="
-font-size:18px;
-font-weight:700;
-margin-bottom:10px;
-"
->
+<h4 class="payment-title">
 E-Wallet
 </h4>
 
-<select
-id="admin-ewallet-${order._id}"
-style="
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #ddd;
-margin-bottom:16px;
-"
->
+<select id="admin-ewallet-${order._id}">
 
 <option value="">
 Pilih E-Wallet Admin
@@ -340,47 +266,30 @@ ShopeePay - 081234567893
 id="sender-bank-${order._id}"
 type="text"
 placeholder="Bank Pengirim"
-style="
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border-radius:12px;
-border:1px solid #ddd;
-box-sizing:border-box;
-"
 />
 
 <input
 id="sender-name-${order._id}"
 type="text"
 placeholder="Atas Nama Pengirim"
-style="
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border-radius:12px;
-border:1px solid #ddd;
-box-sizing:border-box;
-"
 />
+
+<label
+for="payment-proof-${order._id}"
+class="payment-upload-label"
+>
+📷 Upload Bukti Transfer
+</label>
 
 <input
 id="payment-proof-${order._id}"
 type="file"
 accept="image/*"
-style="
-width:100%;
-margin-bottom:14px;
-"
 />
 
 <button
 onclick="submitPaymentProof('${order._id}')"
-class="btn-primary"
-style="
-width:100%;
-margin-top:8px;
-"
+class="payment-submit-btn"
 >
 Konfirmasi Pembayaran
 </button>
@@ -457,7 +366,9 @@ typeof socket !== 'undefined'
 socket.on(
 'order-updated',
 ()=>{
+
 loadOrders();
+
 }
 );
 
