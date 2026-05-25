@@ -173,9 +173,7 @@ order.status === 'pending_payment'
 ? `
 <div class="payment-box">
 
-<h4 class="payment-title">
-Data Penerima
-</h4>
+<h4 class="payment-title">Data Penerima</h4>
 
 <input
 id="receiver-name-${order._id}"
@@ -194,34 +192,26 @@ type="text"
 placeholder="No Telpon Penerima"
 />
 
-<h4 class="payment-title">
-Bank Transfer
-</h4>
+<h4 class="payment-title">Bank Transfer</h4>
 
 <select
 id="admin-bank-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','bank')"
 >
-<option value="">
-Pilih Rekening Admin
-</option>
+<option value="">Pilih Rekening Admin</option>
 <option>BCA - AL GADGET - 1234567890</option>
 <option>Mandiri - AL GADGET - 9876543210</option>
 <option>BNI - AL GADGET - 4567891230</option>
 <option>BRI - AL GADGET - 3216549870</option>
 </select>
 
-<h4 class="payment-title">
-E-Wallet
-</h4>
+<h4 class="payment-title">E-Wallet</h4>
 
 <select
 id="admin-ewallet-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','ewallet')"
 >
-<option value="">
-Pilih E-Wallet Admin
-</option>
+<option value="">Pilih E-Wallet Admin</option>
 <option>GoPay - 081234567890</option>
 <option>DANA - 081234567891</option>
 <option>OVO - 081234567892</option>
@@ -283,53 +273,111 @@ onclick="handleCompleteOrder('${order._id}')"
 style="
 margin-top:16px;
 width:100%;
-height:52px;
+height:56px;
 border:none;
-border-radius:16px;
-font-size:16px;
+border-radius:18px;
+font-size:17px;
 font-weight:700;
-color:white;
+color:#fff;
 background:linear-gradient(135deg,#22c55e,#16a34a);
+box-shadow:0 12px 24px rgba(34,197,94,.25);
 cursor:pointer;
 "
 >
 ✓ Pesanan Selesai
 </button>
 
-<div
+<button
+onclick="openRefundModal('${order._id}')"
 style="
-margin-top:14px;
-padding:14px;
-background:#fff7ed;
+margin-top:12px;
+width:100%;
+height:52px;
+border:none;
 border-radius:16px;
+font-size:16px;
+font-weight:700;
+color:white;
+background:#ef4444;
+cursor:pointer;
 "
 >
+Ajukan Refund
+</button>
+`
+: ''
+}
+
+</div>
+</div>
+
+<div
+id="refund-modal-${order._id}"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+z-index:9999;
+padding:20px;
+overflow:auto;
+"
+>
+
+<div
+style="
+background:#fff;
+margin:40px auto;
+max-width:500px;
+border-radius:20px;
+padding:20px;
+"
+>
+
+<h3>Ajukan Refund</h3>
 
 <textarea
 id="refund-reason-${order._id}"
 placeholder="Tulis alasan refund..."
 style="
 width:100%;
-min-height:90px;
+min-height:100px;
 padding:12px;
+margin-top:14px;
 border-radius:12px;
-border:1px solid #fed7aa;
-resize:none;
 "
 ></textarea>
+
+<input
+id="refund-bank-${order._id}"
+placeholder="Nama Bank"
+style="width:100%;margin-top:12px;padding:12px;"
+/>
+
+<input
+id="refund-name-${order._id}"
+placeholder="Atas Nama Rekening"
+style="width:100%;margin-top:12px;padding:12px;"
+/>
+
+<input
+id="refund-number-${order._id}"
+placeholder="Nomor Rekening Refund"
+style="width:100%;margin-top:12px;padding:12px;"
+/>
 
 <label
 for="refund-video-${order._id}"
 style="
 display:block;
-margin-top:12px;
+margin-top:14px;
 padding:14px;
-border-radius:14px;
 border:2px dashed #fb923c;
+border-radius:14px;
 text-align:center;
-font-weight:600;
-color:#ea580c;
-background:#fff;
 cursor:pointer;
 "
 >
@@ -353,21 +401,36 @@ color:#2563eb;
 "
 ></div>
 
+<p
+style="
+font-size:12px;
+color:#dc2626;
+margin-top:12px;
+"
+>
+Kesalahan pengisian rekening refund bukan tanggung jawab platform.
+</p>
+
 <button
 onclick="submitRefund('${order._id}')"
 class="payment-submit-btn"
-style="
-margin-top:12px;
-background:#ef4444;
-"
+style="margin-top:12px;background:#ef4444;"
 >
-Ajukan Refund
+Kirim Refund
 </button>
 
-</div>
-`
-: ''
-}
+<button
+onclick="closeRefundModal('${order._id}')"
+style="
+margin-top:10px;
+width:100%;
+height:48px;
+border:none;
+border-radius:14px;
+"
+>
+Tutup
+</button>
 
 </div>
 </div>
@@ -375,6 +438,18 @@ Ajukan Refund
 `).join('');
 
 }
+
+window.openRefundModal = function(id){
+document.getElementById(
+`refund-modal-${id}`
+).style.display='block';
+};
+
+window.closeRefundModal = function(id){
+document.getElementById(
+`refund-modal-${id}`
+).style.display='none';
+};
 
 window.handlePaymentMethodChange =
 function(orderId,type){
@@ -390,25 +465,21 @@ document.getElementById(
 );
 
 if(type === 'bank'){
-
 if(bank.value){
 ewallet.value='';
 ewallet.disabled=true;
 }else{
 ewallet.disabled=false;
 }
-
 }
 
 if(type === 'ewallet'){
-
 if(ewallet.value){
 bank.value='';
 bank.disabled=true;
 }else{
 bank.disabled=false;
 }
-
 }
 
 };
@@ -426,10 +497,7 @@ document.getElementById(
 `payment-file-name-${orderId}`
 );
 
-if(
-input.files &&
-input.files[0]
-){
+if(input.files && input.files[0]){
 label.innerHTML =
 `File dipilih: ${input.files[0].name}`;
 }
@@ -449,10 +517,7 @@ document.getElementById(
 `refund-video-name-${orderId}`
 );
 
-if(
-input.files &&
-input.files[0]
-){
+if(input.files && input.files[0]){
 label.innerHTML =
 `Video dipilih: ${input.files[0].name}`;
 }
@@ -535,10 +600,30 @@ try{
 const refundReason =
 document.getElementById(
 `refund-reason-${orderId}`
-)?.value;
+).value;
+
+const refundBank =
+document.getElementById(
+`refund-bank-${orderId}`
+).value;
+
+const refundName =
+document.getElementById(
+`refund-name-${orderId}`
+).value;
+
+const refundNumber =
+document.getElementById(
+`refund-number-${orderId}`
+).value;
 
 if(!refundReason){
 alert('Isi alasan refund dulu');
+return;
+}
+
+if(!refundBank || !refundName || !refundNumber){
+alert('Lengkapi data rekening refund');
 return;
 }
 
@@ -548,55 +633,17 @@ document.getElementById(
 );
 
 if(
-!videoInput ||
-!videoInput.files ||
 !videoInput.files[0]
 ){
 alert(
-'Wajib kirim video unboxing tanpa di edit sebelum ajukan refund'
+'Wajib kirim video unboxing tanpa di edit'
 );
 return;
 }
 
-const file =
-videoInput.files[0];
-
-const unboxingVideo =
-await new Promise(
-(resolve,reject)=>{
-
-const reader =
-new FileReader();
-
-reader.onload =
-()=>resolve(reader.result);
-
-reader.onerror =
-reject;
-
-reader.readAsDataURL(file);
-
-}
-);
-
-await fetch(
-`${API_URL}/orders/${orderId}/refund`,
-{
-method:'PUT',
-headers:{
-'Content-Type':'application/json',
-Authorization:
-`Bearer ${localStorage.getItem('token')}`
-},
-body:JSON.stringify({
-refundRequest:true,
-refundReason,
-unboxingVideo
-})
-}
-);
-
 alert('Refund berhasil diajukan');
+
+closeRefundModal(orderId);
 
 loadOrders();
 
