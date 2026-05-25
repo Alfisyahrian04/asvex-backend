@@ -199,6 +199,7 @@ return [
 
 [
 
+'waiting_verification',
 'waiting_confirmation',
 'waiting_payment_verification',
 'pending_payment',
