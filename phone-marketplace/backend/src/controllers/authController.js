@@ -89,7 +89,23 @@ message:
 
 }
 
-if(role === 'admin'){
+/* PATCH START */
+
+const allowedRoles = [
+'buyer',
+'seller',
+'customer_service',
+'admin'
+];
+
+const normalizedRole =
+allowedRoles.includes(role)
+? role
+: 'buyer';
+
+/* PATCH END */
+
+if(normalizedRole === 'admin'){
 
 if(
 adminKey !==
@@ -119,7 +135,8 @@ username,
 email,
 password:
 hashedPassword,
-role
+
+role: normalizedRole
 
 });
 
@@ -360,8 +377,6 @@ message:error.message
 
 };
 
-/* PATCH START */
-
 exports.addAddress =
 async(req,res)=>{
 
@@ -458,5 +473,3 @@ message:error.message
 }
 
 };
-
-/* PATCH END */
