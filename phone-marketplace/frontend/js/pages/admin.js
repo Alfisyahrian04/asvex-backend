@@ -2,6 +2,9 @@ protectPage();
 
 requireRole('admin');
 
+const BASE_URL =
+'https://asvex-backend.up.railway.app/api/v1';
+
 const token =
 localStorage.getItem(
 'token'
@@ -16,7 +19,7 @@ try{
 
 const response =
 await fetch(
-'https://asvex-backend-production.up.railway.app/api/v1/admin/users',
+`${BASE_URL}/admin/users`,
 {
 headers:{
 Authorization:
@@ -95,7 +98,7 @@ console.log(error);
 async function verifySeller(id){
 
 await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/verify-seller/${id}`,
+`${BASE_URL}/admin/verify-seller/${id}`,
 {
 method:'PUT',
 headers:{
@@ -113,7 +116,7 @@ loadUsers();
 async function banUser(id){
 
 await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/ban-user/${id}`,
+`${BASE_URL}/admin/ban-user/${id}`,
 {
 method:'PUT',
 headers:{
@@ -136,7 +139,7 @@ try{
 
 const response =
 await fetch(
-'https://asvex-backend-production.up.railway.app/api/v1/admin/pending-payments',
+`${BASE_URL}/admin/pending-payments`,
 {
 headers:{
 Authorization:
@@ -145,13 +148,13 @@ Authorization:
 }
 );
 
-let orders =
+let result =
 await response.json();
 
-orders =
-Array.isArray(orders)
-? orders
-: orders.orders || [];
+let orders =
+Array.isArray(result)
+? result
+: result.orders || [];
 
 const paymentList =
 document.getElementById(
@@ -280,7 +283,7 @@ async function approvePayment(id){
 try{
 
 await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/orders/${id}/verify-payment`,
+`${BASE_URL}/orders/${id}/verify-payment`,
 {
 method:'PUT',
 headers:{
@@ -315,7 +318,7 @@ async function rejectPayment(id){
 try{
 
 await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/reject`,
+`${BASE_URL}/admin/orders/${id}/reject`,
 {
 method:'PUT',
 headers:{
@@ -357,8 +360,5 @@ verifySeller;
 window.banUser =
 banUser;
 
-
-
 loadUsers();
-
 loadPendingPayments();
