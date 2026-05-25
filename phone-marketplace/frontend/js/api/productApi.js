@@ -3,10 +3,10 @@ const PRODUCT_API =
 
 async function fetchProducts(){
 
+try{
+
 const response =
-await fetch(
-PRODUCT_API
-);
+await fetch(PRODUCT_API);
 
 if(!response.ok){
 
@@ -19,7 +19,47 @@ throw new Error(
 const data =
 await response.json();
 
-return data.products || data;
+/* PATCH START */
+/* support semua bentuk response backend */
+
+if(
+Array.isArray(data)
+){
+return data;
+}
+
+if(
+Array.isArray(data.products)
+){
+return data.products;
+}
+
+if(
+Array.isArray(data.data)
+){
+return data.data;
+}
+
+if(
+Array.isArray(data.data?.products)
+){
+return data.data.products;
+}
+
+return [];
+
+/* PATCH END */
+
+}catch(error){
+
+console.log(
+'FETCH PRODUCT ERROR:',
+error
+);
+
+return [];
+
+}
 
 }
 
