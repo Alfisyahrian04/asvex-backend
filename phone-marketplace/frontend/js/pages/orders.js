@@ -19,11 +19,9 @@ orders
 }catch(error){
 
 ordersContainer.innerHTML = `
-
 <div class="empty-product">
 Gagal memuat transaksi
 </div>
-
 `;
 
 }
@@ -76,11 +74,9 @@ function renderOrders(orders){
 if(!orders.length){
 
 ordersContainer.innerHTML = `
-
 <div class="empty-product">
 Belum ada transaksi
 </div>
-
 `;
 
 return;
@@ -94,8 +90,7 @@ orders.map(order=>`
 
 <img
 src="${
-order.product?.images?.[0]
-||
+order.product?.images?.[0] ||
 'https://via.placeholder.com/300'
 }"
 class="order-image"
@@ -176,7 +171,6 @@ ${order.trackingNumber}
 ${
 order.status === 'pending_payment'
 ? `
-
 <div class="payment-box">
 
 <h4 class="payment-title">
@@ -208,16 +202,13 @@ Bank Transfer
 id="admin-bank-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','bank')"
 >
-
 <option value="">
 Pilih Rekening Admin
 </option>
-
 <option>BCA - AL GADGET - 1234567890</option>
 <option>Mandiri - AL GADGET - 9876543210</option>
 <option>BNI - AL GADGET - 4567891230</option>
 <option>BRI - AL GADGET - 3216549870</option>
-
 </select>
 
 <h4 class="payment-title">
@@ -228,16 +219,13 @@ E-Wallet
 id="admin-ewallet-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','ewallet')"
 >
-
 <option value="">
 Pilih E-Wallet Admin
 </option>
-
 <option>GoPay - 081234567890</option>
 <option>DANA - 081234567891</option>
 <option>OVO - 081234567892</option>
 <option>ShopeePay - 081234567893</option>
-
 </select>
 
 <input
@@ -283,7 +271,6 @@ Konfirmasi Pembayaran
 </button>
 
 </div>
-
 `
 : ''
 }
@@ -293,10 +280,20 @@ order.status === 'shipped'
 ? `
 <button
 onclick="handleCompleteOrder('${order._id}')"
-class="btn-primary"
-style="margin-top:14px;"
+style="
+margin-top:16px;
+width:100%;
+height:52px;
+border:none;
+border-radius:16px;
+font-size:16px;
+font-weight:700;
+color:white;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+cursor:pointer;
+"
 >
-Pesanan Selesai
+✓ Pesanan Selesai
 </button>
 
 <div
@@ -321,6 +318,41 @@ resize:none;
 "
 ></textarea>
 
+<label
+for="refund-video-${order._id}"
+style="
+display:block;
+margin-top:12px;
+padding:14px;
+border-radius:14px;
+border:2px dashed #fb923c;
+text-align:center;
+font-weight:600;
+color:#ea580c;
+background:#fff;
+cursor:pointer;
+"
+>
+🎥 Upload Video Unboxing (Wajib)
+</label>
+
+<input
+type="file"
+accept="video/*"
+id="refund-video-${order._id}"
+style="display:none"
+onchange="previewRefundVideo('${order._id}')"
+/>
+
+<div
+id="refund-video-name-${order._id}"
+style="
+font-size:13px;
+margin-top:8px;
+color:#2563eb;
+"
+></div>
+
 <button
 onclick="submitRefund('${order._id}')"
 class="payment-submit-btn"
@@ -344,8 +376,6 @@ Ajukan Refund
 
 }
 
-
-
 window.handlePaymentMethodChange =
 function(orderId,type){
 
@@ -362,14 +392,10 @@ document.getElementById(
 if(type === 'bank'){
 
 if(bank.value){
-
 ewallet.value='';
 ewallet.disabled=true;
-
 }else{
-
 ewallet.disabled=false;
-
 }
 
 }
@@ -377,21 +403,15 @@ ewallet.disabled=false;
 if(type === 'ewallet'){
 
 if(ewallet.value){
-
 bank.value='';
 bank.disabled=true;
-
 }else{
-
 bank.disabled=false;
-
 }
 
 }
 
 };
-
-
 
 window.previewPaymentFile =
 function(orderId){
@@ -410,37 +430,38 @@ if(
 input.files &&
 input.files[0]
 ){
-
 label.innerHTML =
 `File dipilih: ${input.files[0].name}`;
-
 }
 
 };
 
+window.previewRefundVideo =
+function(orderId){
 
+const input =
+document.getElementById(
+`refund-video-${orderId}`
+);
+
+const label =
+document.getElementById(
+`refund-video-name-${orderId}`
+);
+
+if(
+input.files &&
+input.files[0]
+){
+label.innerHTML =
+`Video dipilih: ${input.files[0].name}`;
+}
+
+};
 
 async function submitPaymentProof(orderId){
 
 try{
-
-const orders =
-await fetchMyOrders();
-
-const order =
-orders.find(
-item =>
-item._id === orderId
-);
-
-if(
-order.paymentStatus !== 'pending'
-){
-alert(
-'Pembayaran sudah pernah dikirim'
-);
-return;
-}
 
 const receiverName =
 document.getElementById(
@@ -477,14 +498,6 @@ document.getElementById(
 `sender-name-${orderId}`
 ).value;
 
-const selectedPaymentMethod =
-adminBank || adminEwallet;
-
-if(!selectedPaymentMethod){
-alert('Pilih metode pembayaran dulu');
-return;
-}
-
 await submitPayment(
 orderId,
 {
@@ -494,7 +507,7 @@ receiverPhone,
 senderBank,
 senderName,
 adminPaymentMethod:
-selectedPaymentMethod,
+adminBank || adminEwallet,
 paymentProof:'uploaded'
 }
 );
@@ -507,8 +520,6 @@ loadOrders();
 
 }catch(error){
 
-console.log(error);
-
 alert(
 'Gagal upload bukti pembayaran'
 );
@@ -516,7 +527,6 @@ alert(
 }
 
 }
-
 
 async function submitRefund(orderId){
 
@@ -528,11 +538,46 @@ document.getElementById(
 )?.value;
 
 if(!refundReason){
+alert('Isi alasan refund dulu');
+return;
+}
+
+const videoInput =
+document.getElementById(
+`refund-video-${orderId}`
+);
+
+if(
+!videoInput ||
+!videoInput.files ||
+!videoInput.files[0]
+){
 alert(
-'Isi alasan refund dulu'
+'Wajib kirim video unboxing tanpa di edit sebelum ajukan refund'
 );
 return;
 }
+
+const file =
+videoInput.files[0];
+
+const unboxingVideo =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(file);
+
+}
+);
 
 await fetch(
 `${API_URL}/orders/${orderId}/refund`,
@@ -545,30 +590,23 @@ Authorization:
 },
 body:JSON.stringify({
 refundRequest:true,
-refundReason
+refundReason,
+unboxingVideo
 })
 }
 );
 
-alert(
-'Refund berhasil diajukan'
-);
+alert('Refund berhasil diajukan');
 
 loadOrders();
 
 }catch(error){
 
-console.log(error);
-
-alert(
-'Gagal ajukan refund'
-);
+alert('Gagal ajukan refund');
 
 }
 
 }
-
-
 
 async function handleCompleteOrder(id){
 
@@ -588,8 +626,6 @@ alert(
 
 }
 
-
-
 if(
 typeof socket !== 'undefined'
 ){
@@ -597,9 +633,7 @@ typeof socket !== 'undefined'
 socket.on(
 'order-updated',
 ()=>{
-
 loadOrders();
-
 }
 );
 
