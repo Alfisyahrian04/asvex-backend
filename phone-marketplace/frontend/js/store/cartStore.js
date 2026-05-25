@@ -1,102 +1,161 @@
 const cartStore = {
 
-getCart(){
+  getCart() {
 
-return JSON.parse(
-localStorage.getItem('cart')
-) || [];
+    return JSON.parse(
+      localStorage.getItem('cart')
+    ) || [];
 
-},
+  },
 
-saveCart(cart){
+  saveCart(cart) {
 
-localStorage.setItem(
-'cart',
-JSON.stringify(cart)
-);
+    localStorage.setItem(
+      'cart',
+      JSON.stringify(cart)
+    );
 
-},
+  },
 
-addToCart(product){
+  addToCart(product) {
 
-let cart =
-this.getCart();
+    let cart =
+      this.getCart();
 
-const existing =
-cart.find(
-item =>
-item._id === product._id
-);
+    const existing =
+      cart.find(
+        item =>
+          item._id === product._id
+      );
 
-if(existing){
+    const maxStock =
+      Number(product.stock || 0);
 
-existing.quantity += 1;
+    if (existing) {
 
-}else{
+      existing.quantity =
+        Number(existing.quantity || 1);
 
-cart.push({
-...product,
-quantity:1
-});
+      if (
+        maxStock > 0 &&
+        existing.quantity >= maxStock
+      ) {
 
-}
+        existing.quantity =
+          maxStock;
 
-this.saveCart(cart);
+      } else {
 
-},
+        existing.quantity += 1;
 
-removeFromCart(productId){
+      }
 
-let cart =
-this.getCart();
+    } else {
 
-cart = cart.filter(
-item =>
-item._id !== productId
-);
+      cart.push({
 
-this.saveCart(cart);
+        ...product,
 
-},
+        quantity:
+          maxStock > 0 ? 1 : 1
 
-clearCart(){
+      });
 
-localStorage.removeItem(
-'cart'
-);
+    }
 
-},
+    cart = cart.map(item => {
 
-getCartCount(){
+      const itemStock =
+        Number(item.stock || 0);
 
-const cart =
-this.getCart();
+      let qty =
+        Number(item.quantity || 1);
 
-return cart.reduce(
-(total,item)=>
-total + item.quantity,
-0
-);
+      if (
+        itemStock > 0 &&
+        qty > itemStock
+      ) {
 
-},
+        qty = itemStock;
 
-getCartTotal(){
+      }
 
-const cart =
-this.getCart();
+      return {
 
-return cart.reduce(
-(total,item)=>
-total + (
-item.price *
-item.quantity
-),
-0
-);
+        ...item,
 
-}
+        quantity: qty
+
+      };
+
+    });
+
+    this.saveCart(cart);
+
+  },
+
+  removeFromCart(productId) {
+
+    let cart =
+      this.getCart();
+
+    cart = cart.filter(
+
+      item =>
+        item._id !== productId
+
+    );
+
+    this.saveCart(cart);
+
+  },
+
+  clearCart() {
+
+    localStorage.removeItem(
+      'cart'
+    );
+
+  },
+
+  getCartCount() {
+
+    const cart =
+      this.getCart();
+
+    return cart.reduce(
+
+      (total, item) =>
+
+        total + item.quantity,
+
+      0
+
+    );
+
+  },
+
+  getCartTotal() {
+
+    const cart =
+      this.getCart();
+
+    return cart.reduce(
+
+      (total, item) =>
+
+        total + (
+          item.price *
+          item.quantity
+        ),
+
+      0
+
+    );
+
+  }
 
 };
 
 window.cartStore =
-cartStore;
+  cartStore;
