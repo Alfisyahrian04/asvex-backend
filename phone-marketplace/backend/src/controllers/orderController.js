@@ -20,8 +20,7 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    const product =
-      await Product.findById(productId);
+    const product = await Product.findById(productId);
 
     if (!product || !product.isActive) {
       return res.status(404).json({
@@ -29,10 +28,7 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    if (
-      variant &&
-      product.variants?.length
-    ) {
+    if (variant && product.variants?.length) {
 
       const selectedVariant =
         product.variants.find(
@@ -64,41 +60,19 @@ exports.createOrder = async (req, res) => {
 
     const order =
       await Order.create({
-
         buyer:req.user._id,
-
         seller:product.seller,
-
         product:product._id,
-
         quantity,
-
         totalPrice,
-
-        shippingAddress:
-          shippingAddress || '',
-
-        paymentMethod:
-          paymentMethod || '',
-
-        paymentProof:
-          paymentProof || '',
-
-        shippingCourier:
-          shippingCourier || '',
-
-        shippingCost:
-          Number(shippingCost || 0),
-
-        variant:
-          variant || {},
-
-        status:
-          'pending_payment',
-
-        paymentStatus:
-          'pending'
-
+        shippingAddress: shippingAddress || '',
+        paymentMethod: paymentMethod || '',
+        paymentProof: paymentProof || '',
+        shippingCourier: shippingCourier || '',
+        shippingCost: Number(shippingCost || 0),
+        variant: variant || {},
+        status:'pending_payment',
+        paymentStatus:'pending'
       });
 
     product.stock =
@@ -227,14 +201,6 @@ async(req,res)=>{
       });
     }
 
-    if(
-      order.paymentStatus !== 'pending'
-    ){
-      return res.status(400).json({
-        message:'Pembayaran sudah dikirim'
-      });
-    }
-
     order.receiverName =
       req.body.receiverName || '';
 
@@ -253,8 +219,10 @@ async(req,res)=>{
     order.adminPaymentMethod =
       req.body.adminPaymentMethod || '';
 
-    order.paymentProof =
-      req.body.paymentProof || '';
+    if(req.body.paymentProof){
+      order.paymentProof =
+      req.body.paymentProof;
+    }
 
     order.paymentStatus =
       'waiting_verification';
