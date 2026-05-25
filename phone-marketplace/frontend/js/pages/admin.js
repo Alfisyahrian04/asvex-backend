@@ -11,6 +11,8 @@ localStorage.getItem(
 
 async function loadUsers(){
 
+try{
+
 const response =
 await fetch(
 'https://asvex-backend-production.up.railway.app/api/v1/admin/users',
@@ -30,19 +32,29 @@ document.getElementById(
 'seller-list'
 );
 
-sellerList.innerHTML =
-users
-.filter(
+const sellers =
+users.filter(
 user =>
 user.role === 'seller'
-)
-.map(user=>`
+);
+
+if(!sellers.length){
+
+sellerList.innerHTML =
+`<div class="empty-state">Belum ada seller</div>`;
+
+return;
+
+}
+
+sellerList.innerHTML =
+sellers.map(user=>`
 
 <div class="admin-card">
 
-<h3>${user.username}</h3>
-<p>${user.email}</p>
-<p>Verified: ${user.verificationStatus}</p>
+<h3>${user.username || '-'}</h3>
+<p>${user.email || '-'}</p>
+<p>Verified: ${user.verificationStatus || 'pending'}</p>
 
 <button onclick="verifySeller('${user._id}')">
 Verify
@@ -58,6 +70,20 @@ Ban
 </div>
 
 `).join('');
+
+}catch(error){
+
+console.log(
+'LOAD USERS ERROR:',
+error
+);
+
+document.getElementById(
+'seller-list'
+).innerHTML =
+`<div class="empty-state">Belum ada seller</div>`;
+
+}
 
 }
 
@@ -113,12 +139,7 @@ let orders =
 await response.json();
 
 /* PATCH START */
-/*
-support old + new order status:
-- waiting_payment_verification
-- pending
-- awaiting_confirmation
-*/
+
 orders =
 orders.filter(order=>
 
@@ -145,6 +166,7 @@ order.paymentStatus ===
 )
 
 );
+
 /* PATCH END */
 
 const paymentList =
@@ -205,7 +227,90 @@ Approve Payment
 
 }catch(error){
 
-console.log(error);
+console.log(
+'PAYMENT ERROR:',
+error
+);
+
+document.getElementById(
+'payment-list'
+).innerHTML =
+`<div class="empty-state">Belum ada pembayaran</div>`;
+
+}
+
+}
+
+/* PAYOUT REQUEST */
+
+async function loadPayoutRequests(){
+
+try{
+
+const payoutList =
+document.getElementById(
+'payout-list'
+);
+
+if(!payoutList) return;
+
+const response =
+await fetch(
+'https://asvex-backend-production.up.railway.app/api/v1/admin/payout-requests',
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const payouts =
+await response.json();
+
+if(!payouts.length){
+
+payoutList.innerHTML =
+`<div class="empty-state">Belum ada payout request</div>`;
+
+return;
+
+}
+
+payoutList.innerHTML =
+payouts.map(item=>`
+
+<div class="admin-card">
+
+<h3>
+${item.seller?.username || 'Seller'}
+</h3>
+
+<p>
+Rp ${Number(
+item.amount || 0
+).toLocaleString('id-ID')}
+</p>
+
+<p>
+Status:
+${item.status || 'pending'}
+</p>
+
+</div>
+
+`).join('');
+
+}catch(error){
+
+console.log(
+'PAYOUT ERROR:',
+error
+);
+
+document.getElementById(
+'payout-list'
+).innerHTML =
+`<div class="empty-state">Belum ada payout request</div>`;
 
 }
 
@@ -242,3 +347,4 @@ banUser;
 
 loadUsers();
 loadPendingPayments();
+loadPayoutRequests();
