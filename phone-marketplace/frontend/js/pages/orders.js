@@ -174,11 +174,7 @@ ${order.trackingNumber}
 }
 
 ${
-(
-order.status === 'waiting_verification' ||
-order.status === 'waiting_payment_verification'
-) &&
-!order.paymentProof
+order.status === 'pending_payment'
 ? `
 
 <div class="payment-box">
@@ -412,13 +408,14 @@ item =>
 item._id === orderId
 );
 
-if(existingOrder?.paymentProof){
-
+if(
+existingOrder?.status !==
+'pending_payment'
+){
 alert(
-'Pembayaran sudah pernah dikirim'
+'Pembayaran sudah dikirim'
 );
 return;
-
 }
 
 const receiverName =
