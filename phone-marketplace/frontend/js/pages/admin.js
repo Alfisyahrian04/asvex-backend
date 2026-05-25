@@ -261,7 +261,6 @@ Reject Payment
 </button>
 
 </div>
-
 `;
 }).join('');
 
