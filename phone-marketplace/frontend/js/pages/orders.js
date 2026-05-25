@@ -111,7 +111,47 @@ class="order-image"
 ${order.product?.name || 'Produk'}
 </h3>
 
-<p>
+<div
+style="
+font-size:14px;
+color:#6b7280;
+margin-top:8px;
+line-height:1.8;
+"
+>
+
+<div>
+Kategori:
+<b>${order.product?.category || '-'}</b>
+</div>
+
+<div>
+Berat:
+<b>${order.product?.weight || '-'} gram</b>
+</div>
+
+<div>
+Qty:
+<b>${order.quantity || 1}</b>
+</div>
+
+<div>
+Variant:
+<b>
+${order.variant?.color || '-'}
+${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
+</b>
+</div>
+
+</div>
+
+<p
+style="
+margin-top:12px;
+font-size:18px;
+font-weight:700;
+"
+>
 Rp ${Number(
 order.totalPrice || 0
 ).toLocaleString('id-ID')}
@@ -145,22 +185,156 @@ order.status === 'waiting_payment_verification'
 
 <div
 style="
-margin-top:16px;
-padding:16px;
+margin-top:18px;
+padding:18px;
 background:#f8fafc;
-border-radius:14px;
+border-radius:18px;
+border:1px solid #edf2f7;
 "
 >
 
-<h4 style="margin-bottom:10px;">
-Transfer Pembayaran
+<h4
+style="
+font-size:18px;
+font-weight:700;
+margin-bottom:14px;
+"
+>
+Data Penerima
 </h4>
 
-<p>BCA - AL GADGET</p>
-<p>1234567890</p>
+<input
+id="receiver-name-${order._id}"
+type="text"
+placeholder="Nama Penerima"
+style="
+width:100%;
+padding:14px;
+margin-bottom:12px;
+border-radius:12px;
+border:1px solid #ddd;
+box-sizing:border-box;
+"
+/>
 
-<p>Mandiri - AL GADGET</p>
-<p>9876543210</p>
+<textarea
+id="receiver-address-${order._id}"
+placeholder="Detail Alamat Lengkap"
+style="
+width:100%;
+padding:14px;
+margin-bottom:12px;
+border-radius:12px;
+border:1px solid #ddd;
+min-height:90px;
+box-sizing:border-box;
+resize:none;
+"
+></textarea>
+
+<input
+id="receiver-phone-${order._id}"
+type="text"
+placeholder="No Telpon Penerima"
+style="
+width:100%;
+padding:14px;
+margin-bottom:16px;
+border-radius:12px;
+border:1px solid #ddd;
+box-sizing:border-box;
+"
+/>
+
+<h4
+style="
+font-size:18px;
+font-weight:700;
+margin-bottom:10px;
+"
+>
+Bank Transfer
+</h4>
+
+<select
+id="admin-bank-${order._id}"
+style="
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ddd;
+margin-bottom:16px;
+"
+>
+
+<option value="">
+Pilih Rekening Admin
+</option>
+
+<option>
+BCA - AL GADGET - 1234567890
+</option>
+
+<option>
+Mandiri - AL GADGET - 9876543210
+</option>
+
+<option>
+BNI - AL GADGET - 4567891230
+</option>
+
+<option>
+BRI - AL GADGET - 3216549870
+</option>
+
+<option>
+JAGO - AL GADGET - 1122334455
+</option>
+
+</select>
+
+<h4
+style="
+font-size:18px;
+font-weight:700;
+margin-bottom:10px;
+"
+>
+E-Wallet
+</h4>
+
+<select
+id="admin-ewallet-${order._id}"
+style="
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ddd;
+margin-bottom:16px;
+"
+>
+
+<option value="">
+Pilih E-Wallet Admin
+</option>
+
+<option>
+GoPay - 081234567890
+</option>
+
+<option>
+DANA - 081234567891
+</option>
+
+<option>
+OVO - 081234567892
+</option>
+
+<option>
+ShopeePay - 081234567893
+</option>
+
+</select>
 
 <input
 id="sender-bank-${order._id}"
@@ -168,10 +342,11 @@ type="text"
 placeholder="Bank Pengirim"
 style="
 width:100%;
-margin-top:10px;
-padding:12px;
-border-radius:10px;
+padding:14px;
+margin-bottom:12px;
+border-radius:12px;
 border:1px solid #ddd;
+box-sizing:border-box;
 "
 />
 
@@ -181,10 +356,11 @@ type="text"
 placeholder="Atas Nama Pengirim"
 style="
 width:100%;
-margin-top:10px;
-padding:12px;
-border-radius:10px;
+padding:14px;
+margin-bottom:12px;
+border-radius:12px;
 border:1px solid #ddd;
+box-sizing:border-box;
 "
 />
 
@@ -194,14 +370,17 @@ type="file"
 accept="image/*"
 style="
 width:100%;
-margin-top:10px;
+margin-bottom:14px;
 "
 />
 
 <button
 onclick="submitPaymentProof('${order._id}')"
 class="btn-primary"
-style="margin-top:12px;"
+style="
+width:100%;
+margin-top:8px;
+"
 >
 Konfirmasi Pembayaran
 </button>
