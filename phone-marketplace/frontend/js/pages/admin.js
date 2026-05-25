@@ -3,7 +3,7 @@ protectPage();
 requireRole('admin');
 
 const BASE_URL =
-'https://asvex-backend-production.up.railway.app';
+'https://asvex-backend-production.up.railway.app/api/v1';
 
 const token =
 localStorage.getItem('token');
@@ -271,7 +271,7 @@ async function approvePayment(id){
 try{
 
 await fetch(
-`${BASE_URL}/orders/${id}/verify-payment`,
+`${BASE_URL}/admin/verify-payment/${id}`
 {
 method:'PUT',
 headers:{
