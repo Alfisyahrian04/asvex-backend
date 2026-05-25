@@ -131,6 +131,28 @@ type:String,
 default:''
 },
 
+/* REFUND PATCH */
+
+refundRequest:{
+type:Boolean,
+default:false
+},
+
+refundReason:{
+type:String,
+default:''
+},
+
+refundStatus:{
+type:String,
+default:''
+},
+
+refundApprovedAt:{
+type:Date,
+default:null
+},
+
 disputeStatus:{
 type:String,
 default:''
