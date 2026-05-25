@@ -158,58 +158,7 @@ async(req,res)=>{
 try{
 
 const orders =
-await Order.find({
-
-$or:[
-
-{
-paymentStatus:
-'waiting_verification'
-},
-
-{
-paymentStatus:
-'pending'
-},
-
-{
-paymentStatus:
-'unpaid'
-},
-
-{
-status:
-'waiting_confirmation'
-},
-
-{
-status:
-'waiting_payment_verification'
-},
-
-{
-status:
-'pending_payment'
-},
-
-{
-status:
-'waiting_admin_confirmation'
-},
-
-{
-status:
-'awaiting_confirmation'
-},
-
-{
-status:
-'pending'
-}
-
-]
-
-})
+await Order.find()
 .populate(
 'buyer',
 'username email'
@@ -221,10 +170,42 @@ status:
 createdAt:-1
 });
 
+const filteredOrders =
+orders.filter(order=>{
+
+const paymentStatus =
+order.paymentStatus || '';
+
+const status =
+order.status || '';
+
+return [
+
+'waiting_verification',
+'pending',
+'unpaid'
+
+].includes(paymentStatus)
+
+||
+
+[
+
+'waiting_confirmation',
+'waiting_payment_verification',
+'pending_payment',
+'waiting_admin_confirmation',
+'awaiting_confirmation',
+'pending'
+
+].includes(status);
+
+});
+
 res.status(200).json({
 success:true,
-total:orders.length,
-orders
+total:filteredOrders.length,
+orders:filteredOrders
 });
 
 }catch(error){
