@@ -84,7 +84,10 @@ Ban
 
 }catch(error){
 
-console.log('LOAD USERS ERROR:', error);
+console.log(
+'LOAD USERS ERROR:',
+error
+);
 
 }
 
@@ -145,7 +148,9 @@ Authorization:`Bearer ${token}`
 );
 
 if(!response.ok){
-throw new Error('Failed load pending payments');
+throw new Error(
+'Failed load pending payments'
+);
 }
 
 const result =
@@ -157,7 +162,9 @@ Array.isArray(result)
 : result.orders || [];
 
 const paymentList =
-document.getElementById('payment-list');
+document.getElementById(
+'payment-list'
+);
 
 if(!paymentList) return;
 
@@ -259,7 +266,10 @@ Approve Payment
 
 <button
 onclick="rejectPayment('${order._id}')"
-style="background:#ef4444;margin-top:10px;"
+style="
+background:#ef4444;
+margin-top:10px;
+"
 >
 Reject Payment
 </button>
@@ -333,6 +343,118 @@ console.log(error);
 
 
 
+/* REFUND */
+
+async function loadRefundRequests(){
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/admin/refund-requests`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const result =
+await response.json();
+
+const orders =
+result.orders || [];
+
+const refundList =
+document.getElementById(
+'refund-list'
+);
+
+if(!refundList) return;
+
+if(!orders.length){
+
+refundList.innerHTML =
+`<div class="empty-state">Belum ada refund request</div>`;
+
+return;
+
+}
+
+refundList.innerHTML =
+orders.map(order=>`
+
+<div class="admin-card">
+
+<h3>
+${order.product?.name || 'Produk'}
+</h3>
+
+<p>
+Buyer:
+${order.buyer?.username || '-'}
+</p>
+
+<p>
+Alasan Refund:
+${order.refundReason || '-'}
+</p>
+
+<p>
+Status:
+${order.refundStatus || 'pending'}
+</p>
+
+<button
+onclick="approveRefund('${order._id}')"
+style="margin-top:10px;"
+>
+Approve Refund
+</button>
+
+</div>
+
+`).join('');
+
+}catch(error){
+
+console.log(
+'LOAD REFUND ERROR:',
+error
+);
+
+}
+
+}
+
+
+
+async function approveRefund(id){
+
+try{
+
+await fetch(
+`${BASE_URL}/admin/approve-refund/${id}`,
+{
+method:'PUT',
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+loadRefundRequests();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+
 window.rejectPayment =
 rejectPayment;
 
@@ -345,6 +467,10 @@ verifySeller;
 window.banUser =
 banUser;
 
+window.approveRefund =
+approveRefund;
+
 
 loadUsers();
 loadPendingPayments();
+loadRefundRequests();
