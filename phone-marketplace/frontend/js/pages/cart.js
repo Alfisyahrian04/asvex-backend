@@ -9,92 +9,42 @@ const container =
 const totalEl =
   document.getElementById('cart-total');
 
-let productsCache = [];
-
-async function loadProductsCache(){
+async function getRealtimeStock(productId){
 
   try{
 
-    const products =
-      await fetchProducts();
+    const response =
+      await fetch(
+        `https://asvex-backend-production.up.railway.app/api/v1/products/${productId}`
+      );
 
-    productsCache =
-      products || [];
+    if(!response.ok){
+      return 0;
+    }
+
+    const product =
+      await response.json();
+
+    return Number(
+      product.stock ??
+      0
+    );
 
   }catch(error){
 
     console.log(error);
+    return 0;
 
   }
-
-}
-
-function getLiveProductStock(item){
-
-  const product =
-    productsCache.find(
-      p => p._id === item._id
-    );
-
-  if(product){
-
-    return Number(
-      product.stock ??
-      product.totalStock ??
-      product.countInStock ??
-      0
-    );
-
-  }
-
-  return Number(
-    item.stock ??
-    item.totalStock ??
-    item.countInStock ??
-    0
-  );
-
-}
-
-function normalizeCartQty(){
-
-  cart = cart.map(item=>{
-
-    const stock =
-      getLiveProductStock(item);
-
-    let qty =
-      Number(item.quantity || 1);
-
-    if(qty < 1){
-      qty = 1;
-    }
-
-    if(
-      stock > 0 &&
-      qty > stock
-    ){
-      qty = stock;
-    }
-
-    return{
-      ...item,
-      stock,
-      quantity: qty
-    };
-
-  });
-
-  localStorage.setItem(
-    'cart',
-    JSON.stringify(cart)
-  );
 
 }
 
 function renderCart(){
 
-  normalizeCartQty();
+  cart =
+    JSON.parse(
+      localStorage.getItem('cart')
+    ) || [];
 
   if(!cart.length){
 
@@ -104,7 +54,9 @@ function renderCart(){
       </div>
     `;
 
-    totalEl.innerText='Rp 0';
+    totalEl.innerText =
+      'Rp 0';
+
     return;
 
   }
@@ -121,7 +73,9 @@ function renderCart(){
           <h3>${item.name}</h3>
 
           <p>
-            Rp ${Number(item.price).toLocaleString('id-ID')}
+            Rp ${Number(
+              item.price
+            ).toLocaleString('id-ID')}
           </p>
 
           <p>
@@ -131,20 +85,23 @@ function renderCart(){
 
           <div class="cart-qty-control">
 
-            <button onclick="decreaseQty(${index})">-</button>
+            <button
+              onclick="decreaseQty(${index})"
+            >-</button>
 
-            <span>${item.quantity}</span>
+            <span>
+              ${item.quantity || 1}
+            </span>
 
             <button
               onclick="increaseQty(${index})"
-              ${item.quantity >= item.stock ? 'disabled' : ''}
-            >
-              +
-            </button>
+            >+</button>
 
           </div>
 
-          <button onclick="removeCart(${index})">
+          <button
+            onclick="removeCart(${index})"
+          >
             Hapus
           </button>
 
@@ -159,8 +116,8 @@ function renderCart(){
       (acc,item)=>
         acc +
         (
-          Number(item.price) *
-          Number(item.quantity)
+          item.price *
+          item.quantity
         ),
       0
     );
@@ -170,22 +127,35 @@ function renderCart(){
 
 }
 
-window.increaseQty = function(index){
+window.increaseQty =
+async function(index){
+
+  cart =
+    JSON.parse(
+      localStorage.getItem('cart')
+    ) || [];
 
   const item =
     cart[index];
 
   if(!item) return;
 
-  const stock =
-    getLiveProductStock(item);
+  const realtimeStock =
+    await getRealtimeStock(
+      item._id
+    );
 
-  const qty =
-    Number(item.quantity || 1);
+  const currentQty =
+    Number(
+      item.quantity || 1
+    );
 
-  if(qty >= stock){
+  if(
+    currentQty >= realtimeStock
+  ){
 
-    item.quantity = stock;
+    item.quantity =
+      realtimeStock;
 
     localStorage.setItem(
       'cart',
@@ -193,7 +163,7 @@ window.increaseQty = function(index){
     );
 
     alert(
-      `Stok tersedia hanya ${stock}`
+      `Stok tersedia hanya ${realtimeStock}`
     );
 
     renderCart();
@@ -201,11 +171,8 @@ window.increaseQty = function(index){
 
   }
 
-  item.quantity = qty + 1;
-
-  if(item.quantity > stock){
-    item.quantity = stock;
-  }
+  item.quantity =
+    currentQty + 1;
 
   localStorage.setItem(
     'cart',
@@ -216,9 +183,17 @@ window.increaseQty = function(index){
 
 };
 
-window.decreaseQty = function(index){
+window.decreaseQty =
+function(index){
 
-  if(cart[index].quantity > 1){
+  cart =
+    JSON.parse(
+      localStorage.getItem('cart')
+    ) || [];
+
+  if(
+    cart[index].quantity > 1
+  ){
     cart[index].quantity -= 1;
   }
 
@@ -231,7 +206,13 @@ window.decreaseQty = function(index){
 
 };
 
-window.removeCart = function(index){
+window.removeCart =
+function(index){
+
+  cart =
+    JSON.parse(
+      localStorage.getItem('cart')
+    ) || [];
 
   cart.splice(index,1);
 
@@ -244,11 +225,4 @@ window.removeCart = function(index){
 
 };
 
-async function initCart(){
-
-  await loadProductsCache();
-  renderCart();
-
-}
-
-initCart();
+renderCart();
