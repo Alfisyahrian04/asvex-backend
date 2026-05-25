@@ -32,6 +32,7 @@ function renderUsername() {
 
 async function loadProducts() {
   try {
+
     const products = await fetchProducts();
 
     allProducts = products || [];
@@ -43,6 +44,7 @@ async function loadProducts() {
     loadRecommendations();
 
   } catch (error) {
+
     console.log(error);
 
     productContainer.innerHTML = `
@@ -54,11 +56,13 @@ async function loadProducts() {
 }
 
 function renderDynamicCategories(products) {
+
   if (!categoryList) return;
 
   const normalizedMap = {};
 
   products.forEach(product => {
+
     const rawCategory =
       product.category?.trim();
 
@@ -68,9 +72,12 @@ function renderDynamicCategories(products) {
       rawCategory.toLowerCase();
 
     if (!normalizedMap[normalizedKey]) {
+
       normalizedMap[normalizedKey] =
         rawCategory;
+
     }
+
   });
 
   const categories = [
@@ -93,7 +100,9 @@ function renderDynamicCategories(products) {
   document
     .querySelectorAll('.category')
     .forEach(button => {
+
       button.addEventListener('click', () => {
+
         selectedCategory =
           button.dataset.category;
 
@@ -106,35 +115,49 @@ function renderDynamicCategories(products) {
         button.classList.add('active');
 
         filterProducts();
+
       });
+
     });
+
 }
 
 async function loadRecommendations() {
+
   try {
 
     const grouped = {};
 
     allProducts.forEach(product => {
+
       if (!product.category) return;
 
       if (!grouped[product.category]) {
+
         grouped[product.category] = [];
+
       }
 
       grouped[product.category].push(product);
+
     });
 
     const recommendationProducts = [];
 
     Object.values(grouped).forEach(items => {
+
       const cheapest =
         [...items]
-        .sort((a,b) => a.price - b.price)[0];
+        .sort((a,b)=>a.price-b.price)[0];
 
       if (cheapest) {
-        recommendationProducts.push(cheapest);
+
+        recommendationProducts.push(
+          cheapest
+        );
+
       }
+
     });
 
     renderRecommendations(
@@ -142,37 +165,51 @@ async function loadRecommendations() {
     );
 
   } catch(error) {
+
     console.log(error);
+
   }
+
 }
 
 function renderRecommendations(products) {
+
   if (!recommendationContainer) return;
 
   recommendationContainer.innerHTML =
     products.map(product =>
       renderProductCard(product)
     ).join('');
+
 }
 
 function renderProducts(products) {
+
   if (!products.length) {
+
     productContainer.innerHTML = `
       <div class="empty-product">
         Produk kosong
       </div>
     `;
+
     return;
+
   }
 
   productContainer.innerHTML =
     products
-      .map(product => renderProductCard(product))
+      .map(product =>
+        renderProductCard(product)
+      )
       .join('');
+
 }
 
 function filterProducts() {
-  let filtered = [...allProducts];
+
+  let filtered =
+    [...allProducts];
 
   const keyword =
     searchInput?.value?.toLowerCase() || '';
@@ -180,47 +217,104 @@ function filterProducts() {
   const sort =
     sortSelect?.value || '';
 
-  if (selectedCategory !== 'Semua') {
+  if (
+    selectedCategory !== 'Semua'
+  ) {
+
     filtered = filtered.filter(
       item =>
         item.category?.toLowerCase() ===
         selectedCategory.toLowerCase()
     );
+
   }
 
   if (keyword) {
+
     filtered = filtered.filter(
       item =>
-        item.name?.toLowerCase().includes(keyword)
+        item.name?.toLowerCase()
+          .includes(keyword)
     );
+
   }
 
   if (sort === 'lowest') {
-    filtered.sort((a,b)=>a.price-b.price);
+
+    filtered.sort(
+      (a,b)=>a.price-b.price
+    );
+
   }
 
   if (sort === 'highest') {
-    filtered.sort((a,b)=>b.price-a.price);
+
+    filtered.sort(
+      (a,b)=>b.price-a.price
+    );
+
   }
 
   renderProducts(filtered);
+
 }
 
 window.addToCart = function(product) {
+
+  const cart =
+    cartStore.getCart();
+
+  const existing =
+    cart.find(
+      item =>
+        item._id === product._id
+    );
+
+  const stock =
+    Number(product.stock || 0);
+
+  const qtyInCart =
+    Number(existing?.quantity || 0);
+
+  if (
+    stock > 0 &&
+    qtyInCart >= stock
+  ) {
+
+    alert(
+      'Stok tidak mencukupi'
+    );
+
+    return;
+
+  }
+
   cartStore.addToCart(product);
+
   updateCartCount();
-  alert('Produk ditambahkan');
+
+  alert(
+    'Produk ditambahkan'
+  );
+
 };
 
 function updateCartCount() {
+
   if(cartCount){
+
     cartCount.innerText =
       cartStore.getCartCount();
+
   }
+
 }
 
 if (trendingSection) {
-  trendingSection.style.display = 'none';
+
+  trendingSection.style.display =
+    'none';
+
 }
 
 searchInput?.addEventListener(
