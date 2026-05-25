@@ -196,10 +196,15 @@ return [
 'pending_payment',
 'waiting_admin_confirmation',
 'awaiting_confirmation',
-'pending'
+'pending',
+
+'waiting_payment',
+'Waiting_Payment',
+
+'menunggu_konfirmasi_admin',
+'Menunggu Konfirmasi Admin'
 
 ].includes(status);
-
 });
 
 res.status(200).json({
