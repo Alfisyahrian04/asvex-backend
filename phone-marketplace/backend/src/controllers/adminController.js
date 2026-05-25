@@ -174,10 +174,18 @@ const filteredOrders =
 orders.filter(order=>{
 
 const paymentStatus =
-order.paymentStatus || '';
+String(
+order.paymentStatus || ''
+)
+.toLowerCase()
+.trim();
 
 const status =
-order.status || '';
+String(
+order.status || ''
+)
+.toLowerCase()
+.trim();
 
 return [
 
@@ -197,14 +205,11 @@ return [
 'waiting_admin_confirmation',
 'awaiting_confirmation',
 'pending',
-
 'waiting_payment',
-'Waiting_Payment',
-
-'menunggu_konfirmasi_admin',
-'Menunggu Konfirmasi Admin'
+'menunggu_konfirmasi_admin'
 
 ].includes(status);
+
 });
 
 res.status(200).json({
@@ -274,7 +279,6 @@ message:error.message
 };
 
 
-
 /* ==============================
 VERIFY MANUAL PAYMENT
 ============================== */
@@ -322,7 +326,6 @@ message:error.message
 };
 
 
-
 /* ==============================
 APPROVE REFUND
 ============================== */
@@ -368,7 +371,6 @@ message:error.message
 
 }
 };
-
 
 
 /* ==============================
