@@ -54,6 +54,9 @@ message:'User tidak ditemukan'
 user.isVerifiedSeller =
 true;
 
+user.updatedAt =
+new Date();
+
 await user.save();
 
 res.status(200).json({
@@ -93,6 +96,9 @@ message:'User tidak ditemukan'
 
 user.isBanned =
 true;
+
+user.updatedAt =
+new Date();
 
 await user.save();
 
@@ -258,6 +264,12 @@ message:'Order tidak ditemukan'
 
 order.payoutStatus='paid';
 
+order.payoutPaidAt =
+new Date();
+
+order.updatedAt =
+new Date();
+
 await order.save();
 
 res.status(200).json({
@@ -303,9 +315,16 @@ order.status='paid';
 order.paymentVerifiedAt=
 new Date();
 
+order.updatedAt =
+new Date();
+
 await order.save();
 
-res.status(200).json(order);
+res.status(200).json({
+success:true,
+message:'Payment verified successfully',
+order
+});
 
 }catch(error){
 
@@ -341,9 +360,19 @@ order.returnStatus='approved';
 
 order.status='cancelled';
 
+order.refundApprovedAt =
+new Date();
+
+order.updatedAt =
+new Date();
+
 await order.save();
 
-res.status(200).json(order);
+res.status(200).json({
+success:true,
+message:'Refund approved',
+order
+});
 
 }catch(error){
 
@@ -379,9 +408,19 @@ order.disputeStatus =
 req.body.status ||
 'resolved';
 
+order.disputeResolvedAt =
+new Date();
+
+order.updatedAt =
+new Date();
+
 await order.save();
 
-res.status(200).json(order);
+res.status(200).json({
+success:true,
+message:'Dispute resolved',
+order
+});
 
 }catch(error){
 
