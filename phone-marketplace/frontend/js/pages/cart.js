@@ -15,12 +15,23 @@ const totalEl =
     'cart-total'
   );
 
+function getItemStock(item){
+
+  return Number(
+    item.stock ||
+    item.totalStock ||
+    item.qty ||
+    0
+  );
+
+}
+
 function normalizeCartQty() {
 
   cart = cart.map(item => {
 
     const stock =
-      Number(item.stock || 0);
+      getItemStock(item);
 
     let qty =
       Number(item.quantity || 1);
@@ -88,6 +99,11 @@ function renderCart() {
             Rp ${Number(
               item.price
             ).toLocaleString()}
+          </p>
+
+          <p>
+            Stock:
+            ${getItemStock(item)}
           </p>
 
           <div
@@ -163,17 +179,22 @@ function(index) {
   if (!item) return;
 
   const stock =
-    Number(item.stock || 0);
+    getItemStock(item);
 
   if (
-    stock > 0 &&
+    stock &&
     item.quantity >= stock
   ) {
 
     item.quantity = stock;
 
+    localStorage.setItem(
+      'cart',
+      JSON.stringify(cart)
+    );
+
     alert(
-      'Qty melebihi stok tersedia'
+      'Stok tidak mencukupi'
     );
 
     renderCart();
@@ -280,45 +301,21 @@ async function checkout() {
 
       const response =
         await fetch(
-
           'https://asvex-backend-production.up.railway.app/api/v1/orders',
-
           {
-
-            method: 'POST',
-
-            headers: {
-
-              'Content-Type':
-                'application/json',
-
-              Authorization:
-                `Bearer ${token}`
-
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+              Authorization:`Bearer ${token}`
             },
-
-            body:
-              JSON.stringify({
-
-                productId:
-                item._id,
-
-                quantity:
-                item.quantity || 1,
-
-                shippingAddress:
-                '',
-
-                paymentMethod:
-                'manual_transfer',
-
-                paymentProof:
-                ''
-
-              })
-
+            body:JSON.stringify({
+              productId:item._id,
+              quantity:item.quantity || 1,
+              shippingAddress:'',
+              paymentMethod:'manual_transfer',
+              paymentProof:''
+            })
           }
-
         );
 
       const data =
