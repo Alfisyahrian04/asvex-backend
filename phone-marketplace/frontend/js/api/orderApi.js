@@ -22,7 +22,27 @@ Authorization:
 `Bearer ${token}`
 },
 
-body:JSON.stringify(data)
+body:JSON.stringify({
+
+productId:
+data.productId,
+
+quantity:
+data.quantity || 1,
+
+shippingAddress:
+data.shippingAddress || '',
+
+courier:
+data.courier || '',
+
+paymentMethod:
+data.paymentMethod || '',
+
+paymentProof:
+data.paymentProof || ''
+
+})
 
 }
 );
@@ -165,3 +185,18 @@ return response.json();
 }
 
 /* PATCH END */
+
+window.createOrder =
+createOrder;
+
+window.fetchMyOrders =
+fetchMyOrders;
+
+window.completeOrder =
+completeOrder;
+
+window.cancelOrder =
+cancelOrder;
+
+window.requestReturn =
+requestReturn;
