@@ -1,442 +1,419 @@
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 
-exports.createOrder =
-async(req,res)=>{
+exports.createOrder = async (req, res) => {
+  try {
+    const {
+      productId,
+      quantity,
+      shippingAddress,
+      paymentMethod,
+      paymentProof,
+      shippingCourier,
+      shippingCost,
+      variant
+    } = req.body;
 
-try{
+    if (!productId || !quantity) {
+      return res.status(400).json({
+        message: 'Data order tidak lengkap'
+      });
+    }
 
-const {
-productId,
-quantity,
-shippingAddress,
-paymentMethod,
-paymentProof,
-shippingCourier,
-shippingCost,
-variant
-} = req.body;
+    const product = await Product.findById(productId);
 
-if(!productId || !quantity){
-return res.status(400).json({
-message:'Data order tidak lengkap'
-});
-}
+    if (!product || !product.isActive) {
+      return res.status(404).json({
+        message: 'Produk tidak ditemukan'
+      });
+    }
 
-const product =
-await Product.findById(productId);
+    if (variant && product.variants?.length) {
+      const selectedVariant = product.variants.find(
+        v =>
+          v._id?.toString() ===
+          variant._id?.toString()
+      );
 
-if(!product || !product.isActive){
-return res.status(404).json({
-message:'Produk tidak ditemukan'
-});
-}
+      if (
+        selectedVariant &&
+        selectedVariant.stock < quantity
+      ) {
+        return res.status(400).json({
+          message: 'Stock varian tidak cukup'
+        });
+      }
+    }
 
-/* VALIDASI VARIANT */
-if(
-variant &&
-product.variants?.length
-){
+    if (product.stock < quantity) {
+      return res.status(400).json({
+        message: 'Stock produk tidak cukup'
+      });
+    }
 
-const selectedVariant =
-product.variants.find(
-v =>
-v._id?.toString()
-===
-variant._id?.toString()
-);
+    const totalPrice =
+      (product.price * quantity) +
+      Number(shippingCost || 0);
 
-if(
-selectedVariant &&
-selectedVariant.stock < quantity
-){
-return res.status(400).json({
-message:'Stock varian tidak cukup'
-});
-}
+    const order = await Order.create({
+      buyer: req.user._id,
+      seller: product.seller,
+      product: product._id,
+      quantity,
+      totalPrice,
 
-}
+      shippingAddress:
+        shippingAddress || '',
 
-/* VALIDASI STOCK */
-if(product.stock < quantity){
-return res.status(400).json({
-message:'Stock produk tidak cukup'
-});
-}
+      paymentMethod:
+        paymentMethod || '',
 
-/* TOTAL */
-const totalPrice =
-(product.price * quantity) +
-Number(shippingCost || 0);
+      paymentProof:
+        paymentProof || '',
 
-/* CREATE ORDER */
-const order =
-await Order.create({
+      shippingCourier:
+        shippingCourier || '',
 
-buyer:req.user._id,
+      shippingCost:
+        Number(shippingCost || 0),
 
-seller:product.seller,
+      variant:
+        variant || {},
 
-product:product._id,
+      status:
+        'waiting_payment_verification',
 
-quantity,
+      paymentStatus:
+        'waiting_verification'
+    });
 
-totalPrice,
+    product.stock =
+      Math.max(
+        0,
+        product.stock - quantity
+      );
 
-shippingAddress:
-shippingAddress || '',
+    if (
+      variant &&
+      product.variants?.length
+    ) {
+      product.variants =
+        product.variants.map(v => {
+          if (
+            v._id?.toString() ===
+            variant._id?.toString()
+          ) {
+            v.stock =
+              Math.max(
+                0,
+                (v.stock || 0) - quantity
+              );
+          }
 
-paymentMethod:
-paymentMethod || '',
+          return v;
+        });
+    }
 
-paymentProof:
-paymentProof || '',
+    await product.save();
 
-shippingCourier:
-shippingCourier || '',
+    res.status(201).json({
+      success: true,
+      message: 'Checkout berhasil',
+      order
+    });
 
-shippingCost:
-Number(shippingCost || 0),
+  } catch (error) {
 
-variant:
-variant || {},
+    console.error(
+      'CREATE ORDER ERROR:',
+      error
+    );
 
-/* FIX STATUS */
-status:
-'waiting_verification',
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
 
-paymentStatus:
-'waiting_verification'
-
-});
-
-/* KURANGI STOCK */
-product.stock =
-Math.max(
-0,
-product.stock - quantity
-);
-
-/* VARIANT STOCK */
-if(
-variant &&
-product.variants?.length
-){
-
-product.variants =
-product.variants.map(v=>{
-
-if(
-v._id?.toString()
-===
-variant._id?.toString()
-){
-v.stock =
-Math.max(
-0,
-(v.stock || 0) - quantity
-);
-}
-
-return v;
-
-});
-
-}
-
-await product.save();
-
-res.status(201).json({
-success:true,
-message:'Checkout berhasil',
-order
-});
-
-}catch(error){
-
-console.error(
-'CREATE ORDER ERROR:',
-error
-);
-
-res.status(500).json({
-success:false,
-message:error.message
-});
-
-}
-
+  }
 };
+
 
 /* GET MY ORDERS */
 
-exports.getMyOrders =
-async(req,res)=>{
-try{
+exports.getMyOrders = async (req, res) => {
+  try {
 
-const orders =
-await Order.find({
-buyer:req.user._id
-})
-.populate('product')
-.populate('seller','username')
-.sort({createdAt:-1});
+    const orders =
+      await Order.find({
+        buyer: req.user._id
+      })
+      .populate('product')
+      .populate('seller', 'username')
+      .sort({ createdAt: -1 });
 
-res.json(orders);
+    res.json(orders);
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
+
 
 /* SELLER ORDERS */
 
-exports.getSellerOrders =
-async(req,res)=>{
-try{
+exports.getSellerOrders = async (req, res) => {
+  try {
 
-const orders =
-await Order.find({
-seller:req.user._id
-})
-.populate('product')
-.populate('buyer','username')
-.sort({createdAt:-1});
+    const orders =
+      await Order.find({
+        seller: req.user._id
+      })
+      .populate('product')
+      .populate('buyer', 'username')
+      .sort({ createdAt: -1 });
 
-res.json(orders);
+    res.json(orders);
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
+
 
 /* VERIFY PAYMENT */
 
-exports.verifyPayment =
-async(req,res)=>{
+exports.verifyPayment = async (req, res) => {
 
-try{
+  try {
 
-const order =
-await Order.findById(
-req.params.id
-);
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-order.status='paid';
-order.paymentStatus='paid';
-order.paymentVerifiedAt=new Date();
+    order.status = 'paid';
+    order.paymentStatus = 'paid';
+    order.paymentVerifiedAt = new Date();
 
-await order.save();
+    await order.save();
 
-res.json(order);
+    res.json(order);
 
-}catch(error){
+  } catch (error) {
 
-res.status(500).json({
-message:error.message
-});
+    res.status(500).json({
+      message: error.message
+    });
 
-}
+  }
 
 };
+
 
 /* SHIP ORDER */
 
-exports.shipOrder =
-async(req,res)=>{
+exports.shipOrder = async (req, res) => {
 
-try{
+  try {
 
-const order =
-await Order.findById(
-req.params.id
-);
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-order.trackingNumber =
-req.body.trackingNumber || '';
+    order.trackingNumber =
+      req.body.trackingNumber || '';
 
-order.shippingPhoto =
-req.body.shippingPhoto || '';
+    order.shippingPhoto =
+      req.body.shippingPhoto || '';
 
-order.status='shipped';
+    order.status = 'shipped';
 
-await order.save();
+    await order.save();
 
-res.json(order);
+    res.json(order);
 
-}catch(error){
+  } catch (error) {
 
-res.status(500).json({
-message:error.message
-});
+    res.status(500).json({
+      message: error.message
+    });
 
-}
+  }
 
 };
+
 
 /* UPDATE STATUS */
 
-exports.updateOrderStatus =
-async(req,res)=>{
+exports.updateOrderStatus = async (req, res) => {
 
-try{
+  try {
 
-const order =
-await Order.findById(
-req.params.id
-);
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-if(
-order.seller.toString()
-!== req.user._id.toString()
-){
-return res.status(403).json({
-message:'Forbidden'
-});
-}
+    if (
+      order.seller.toString() !==
+      req.user._id.toString()
+    ) {
+      return res.status(403).json({
+        message: 'Forbidden'
+      });
+    }
 
-order.status =
-req.body.status ||
-order.status;
+    order.status =
+      req.body.status ||
+      order.status;
 
-await order.save();
+    await order.save();
 
-res.json(order);
+    res.json(order);
 
-}catch(error){
+  } catch (error) {
 
-res.status(500).json({
-message:error.message
-});
+    res.status(500).json({
+      message: error.message
+    });
 
-}
+  }
 
 };
 
-exports.completeOrder =
-async(req,res)=>{
-try{
 
-const order =
-await Order.findById(req.params.id);
+exports.completeOrder = async (req, res) => {
+  try {
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-order.status='completed';
-order.completedAt=new Date();
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-await order.save();
+    order.status = 'completed';
+    order.completedAt = new Date();
 
-res.json(order);
+    await order.save();
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+    res.json(order);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-exports.cancelOrder =
-async(req,res)=>{
-try{
 
-const order =
-await Order.findById(req.params.id);
+exports.cancelOrder = async (req, res) => {
+  try {
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-order.status='cancelled';
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-await order.save();
+    order.status = 'cancelled';
 
-res.json(order);
+    await order.save();
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+    res.json(order);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-exports.requestReturn =
-async(req,res)=>{
-try{
 
-const order =
-await Order.findById(req.params.id);
+exports.requestReturn = async (req, res) => {
+  try {
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-order.returnStatus='requested';
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-await order.save();
+    order.returnStatus = 'requested';
 
-res.json(order);
+    await order.save();
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+    res.json(order);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
 
-exports.submitDispute =
-async(req,res)=>{
-try{
 
-const order =
-await Order.findById(req.params.id);
+exports.submitDispute = async (req, res) => {
+  try {
 
-if(!order){
-return res.status(404).json({
-message:'Order tidak ditemukan'
-});
-}
+    const order =
+      await Order.findById(
+        req.params.id
+      );
 
-order.disputeStatus =
-req.body.reason || 'pending';
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
 
-await order.save();
+    order.disputeStatus =
+      req.body.reason || 'pending';
 
-res.json(order);
+    await order.save();
 
-}catch(error){
-res.status(500).json({
-message:error.message
-});
-}
+    res.json(order);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 };
