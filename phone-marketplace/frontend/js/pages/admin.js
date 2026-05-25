@@ -360,6 +360,7 @@ verifySeller;
 
 window.banUser =
 banUser;
+alert('ADMIN JS UPDATED');
 
 loadUsers();
 loadPendingPayments();
