@@ -9,7 +9,8 @@ const token =
 localStorage.getItem(
 'token'
 );
-alert('TOKEN: ' + localStorage.getItem('token'));
+
+alert('TOKEN: ' + (token || 'TOKEN NOT FOUND'));
 
 
 /* SELLER */
@@ -39,6 +40,10 @@ const sellerList =
 document.getElementById(
 'seller-list'
 );
+
+if(!sellerList){
+return;
+}
 
 const sellers =
 users.filter(
@@ -89,6 +94,7 @@ Ban
 }catch(error){
 
 console.log(error);
+alert('LOAD USERS ERROR: ' + error.message);
 
 }
 
@@ -149,13 +155,32 @@ Authorization:
 }
 );
 
-let result =
-await response.json();
+const raw =
+await response.text();
 
-let orders =
+alert(
+'PENDING PAYMENTS DEBUG'
++ '\n\nSTATUS: ' + response.status
++ '\n\nRESPONSE:\n' + raw
+);
+
+let result = {};
+let orders = [];
+
+try{
+
+result = JSON.parse(raw);
+
+orders =
 Array.isArray(result)
 ? result
 : result.orders || [];
+
+}catch(parseError){
+
+console.log(parseError);
+
+}
 
 const paymentList =
 document.getElementById(
@@ -273,6 +298,10 @@ Reject Payment
 
 console.log(error);
 
+alert(
+'LOAD PAYMENT ERROR: ' + error.message
+);
+
 }
 
 }
@@ -360,6 +389,7 @@ verifySeller;
 
 window.banUser =
 banUser;
+
 alert('ADMIN JS UPDATED');
 
 loadUsers();
