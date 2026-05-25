@@ -56,13 +56,26 @@ async function loadProducts() {
 function renderDynamicCategories(products) {
   if (!categoryList) return;
 
+  const normalizedMap = {};
+
+  products.forEach(product => {
+    const rawCategory =
+      product.category?.trim();
+
+    if (!rawCategory) return;
+
+    const normalizedKey =
+      rawCategory.toLowerCase();
+
+    if (!normalizedMap[normalizedKey]) {
+      normalizedMap[normalizedKey] =
+        rawCategory;
+    }
+  });
+
   const categories = [
     'Semua',
-    ...new Set(
-      products
-        .map(item => item.category?.trim())
-        .filter(Boolean)
-    )
+    ...Object.values(normalizedMap)
   ];
 
   categoryList.innerHTML =
@@ -103,6 +116,8 @@ async function loadRecommendations() {
     const grouped = {};
 
     allProducts.forEach(product => {
+      if (!product.category) return;
+
       if (!grouped[product.category]) {
         grouped[product.category] = [];
       }
