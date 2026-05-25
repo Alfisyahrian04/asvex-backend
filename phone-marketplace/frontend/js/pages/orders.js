@@ -174,9 +174,11 @@ ${order.trackingNumber}
 }
 
 ${
-order.status === 'waiting_verification'
-||
+(
+order.status === 'waiting_verification' ||
 order.status === 'waiting_payment_verification'
+) &&
+!order.paymentProof
 ? `
 
 <div class="payment-box">
@@ -206,7 +208,10 @@ placeholder="No Telpon Penerima"
 Bank Transfer
 </h4>
 
-<select id="admin-bank-${order._id}">
+<select
+id="admin-bank-${order._id}"
+onchange="handlePaymentMethodChange('${order._id}','bank')"
+>
 
 <option value="">
 Pilih Rekening Admin
@@ -238,7 +243,10 @@ JAGO - AL GADGET - 1122334455
 E-Wallet
 </h4>
 
-<select id="admin-ewallet-${order._id}">
+<select
+id="admin-ewallet-${order._id}"
+onchange="handlePaymentMethodChange('${order._id}','ewallet')"
+>
 
 <option value="">
 Pilih E-Wallet Admin
@@ -285,7 +293,17 @@ class="payment-upload-label"
 id="payment-proof-${order._id}"
 type="file"
 accept="image/*"
+onchange="previewPaymentFile('${order._id}')"
 />
+
+<div
+id="payment-file-name-${order._id}"
+style="
+font-size:13px;
+color:#2563eb;
+margin-top:6px;
+"
+></div>
 
 <button
 onclick="submitPaymentProof('${order._id}')"
@@ -321,9 +339,87 @@ Pesanan Selesai
 
 }
 
+window.handlePaymentMethodChange =
+function(orderId,type){
+
+const bankSelect =
+document.getElementById(
+`admin-bank-${orderId}`
+);
+
+const ewalletSelect =
+document.getElementById(
+`admin-ewallet-${orderId}`
+);
+
+if(type === 'bank'){
+
+if(bankSelect.value){
+ewalletSelect.value='';
+ewalletSelect.disabled=true;
+}else{
+ewalletSelect.disabled=false;
+}
+
+}
+
+if(type === 'ewallet'){
+
+if(ewalletSelect.value){
+bankSelect.value='';
+bankSelect.disabled=true;
+}else{
+bankSelect.disabled=false;
+}
+
+}
+
+};
+
+window.previewPaymentFile =
+function(orderId){
+
+const input =
+document.getElementById(
+`payment-proof-${orderId}`
+);
+
+const label =
+document.getElementById(
+`payment-file-name-${orderId}`
+);
+
+if(
+input.files &&
+input.files[0]
+){
+label.innerHTML =
+`File dipilih: ${input.files[0].name}`;
+}
+
+};
+
 async function submitPaymentProof(orderId){
 
 try{
+
+const existingOrders =
+await fetchMyOrders();
+
+const existingOrder =
+existingOrders.find(
+item =>
+item._id === orderId
+);
+
+if(existingOrder?.paymentProof){
+
+alert(
+'Pembayaran sudah pernah dikirim'
+);
+return;
+
+}
 
 const receiverName =
 document.getElementById(
@@ -360,13 +456,15 @@ document.getElementById(
 `sender-name-${orderId}`
 )?.value || '';
 
-const paymentProofInput =
-document.getElementById(
-`payment-proof-${orderId}`
-);
-
 const selectedPaymentMethod =
 adminBank || adminEwallet;
+
+if(!selectedPaymentMethod){
+alert(
+'Pilih metode pembayaran dulu'
+);
+return;
+}
 
 await fetch(
 `https://asvex-backend-production.up.railway.app/api/v1/orders/${orderId}/payment`,
@@ -441,9 +539,7 @@ typeof socket !== 'undefined'
 socket.on(
 'order-updated',
 ()=>{
-
 loadOrders();
-
 }
 );
 
