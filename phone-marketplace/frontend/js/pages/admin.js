@@ -24,8 +24,11 @@ Authorization:
 }
 );
 
-const users =
+const result =
 await response.json();
+
+const users =
+result.users || result || [];
 
 const sellerList =
 document.getElementById(
@@ -54,7 +57,9 @@ sellers.map(user=>`
 
 <h3>${user.username || '-'}</h3>
 <p>${user.email || '-'}</p>
-<p>Verified: ${user.verificationStatus || 'pending'}</p>
+<p>Verified:
+${user.isVerifiedSeller ? 'verified' : 'pending'}
+</p>
 
 <button onclick="verifySeller('${user._id}')">
 Verify
@@ -138,12 +143,13 @@ Authorization:`Bearer ${token}`
 let orders =
 await response.json();
 
-/* PATCH START */
+orders =
+Array.isArray(orders)
+? orders
+: orders.orders || [];
 
 orders =
-orders.filter(order=>
-
-order.paymentProof && (
+orders.filter(order =>
 
 order.status ===
 'waiting_payment_verification'
@@ -156,18 +162,19 @@ order.status ===
 ||
 
 order.status ===
-'awaiting_confirmation'
+'paid'
 
 ||
 
 order.paymentStatus ===
 'waiting_verification'
 
-)
+||
+
+order.paymentStatus ===
+'paid'
 
 );
-
-/* PATCH END */
 
 const paymentList =
 document.getElementById(
@@ -191,6 +198,7 @@ orders.map(order=>`
 <img
 src="${
 order.paymentProof ||
+order.product?.images?.[0] ||
 'https://via.placeholder.com/300'
 }"
 >
@@ -212,7 +220,7 @@ order.totalPrice || 0
 
 <p>
 Status:
-${order.status}
+${order.status || '-'}
 </p>
 
 <button
@@ -264,8 +272,11 @@ Authorization:`Bearer ${token}`
 }
 );
 
-const payouts =
+const result =
 await response.json();
+
+const payouts =
+result.payouts || result || [];
 
 if(!payouts.length){
 
@@ -287,13 +298,13 @@ ${item.seller?.username || 'Seller'}
 
 <p>
 Rp ${Number(
-item.amount || 0
+item.totalPrice || item.amount || 0
 ).toLocaleString('id-ID')}
 </p>
 
 <p>
 Status:
-${item.status || 'pending'}
+${item.payoutStatus || 'pending'}
 </p>
 
 </div>
@@ -332,8 +343,6 @@ loadPendingPayments();
 
 }
 
-/* PATCH START */
-
 window.approvePayment =
 approvePayment;
 
@@ -342,8 +351,6 @@ verifySeller;
 
 window.banUser =
 banUser;
-
-/* PATCH END */
 
 loadUsers();
 loadPendingPayments();
