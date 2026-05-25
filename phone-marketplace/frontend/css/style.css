@@ -1100,3 +1100,36 @@ rgba(0,0,0,.82)
 color:white;
 
 }
+#search-bar{
+margin-top:14px;
+margin-bottom:22px;
+}
+
+#search-bar .search-wrapper{
+display:flex;
+gap:12px;
+align-items:center;
+}
+
+#search-bar input{
+flex:1;
+height:52px;
+border:none;
+outline:none;
+background:#fff;
+border-radius:16px;
+padding:0 18px;
+font-size:15px;
+box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+
+#search-bar select{
+height:52px;
+border:none;
+outline:none;
+background:#fff;
+border-radius:16px;
+padding:0 16px;
+font-size:14px;
+box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
