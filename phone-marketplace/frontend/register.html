@@ -127,7 +127,10 @@ placeholder="Admin Secret Key"
 
 </div>
 
-<button type="submit">
+<button
+type="submit"
+class="auth-btn"
+>
 Register
 </button>
 
@@ -159,27 +162,24 @@ document.getElementById(
 'adminKeyContainer'
 );
 
-roleSelect.addEventListener(
-'change',
-()=>{
+function toggleAdminKeyField(){
 
 if(
-roleSelect.value ===
-'admin'
+roleSelect.value === 'admin'
 ){
-
-adminKeyContainer.style.display =
-'flex';
-
+adminKeyContainer.style.display = 'flex';
 }else{
-
-adminKeyContainer.style.display =
-'none';
-
+adminKeyContainer.style.display = 'none';
 }
 
 }
+
+roleSelect.addEventListener(
+'change',
+toggleAdminKeyField
 );
+
+toggleAdminKeyField();
 
 </script>
 
