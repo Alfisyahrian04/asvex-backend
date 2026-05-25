@@ -20,7 +20,8 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    const product = await Product.findById(productId);
+    const product =
+      await Product.findById(productId);
 
     if (!product || !product.isActive) {
       return res.status(404).json({
@@ -28,26 +29,32 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    if (variant && product.variants?.length) {
-      const selectedVariant = product.variants.find(
-        v =>
-          v._id?.toString() ===
-          variant._id?.toString()
-      );
+    if (
+      variant &&
+      product.variants?.length
+    ) {
+
+      const selectedVariant =
+        product.variants.find(
+          v =>
+            v._id?.toString() ===
+            variant._id?.toString()
+        );
 
       if (
         selectedVariant &&
         selectedVariant.stock < quantity
       ) {
         return res.status(400).json({
-          message: 'Stock varian tidak cukup'
+          message:'Stock varian tidak cukup'
         });
       }
+
     }
 
     if (product.stock < quantity) {
       return res.status(400).json({
-        message: 'Stock produk tidak cukup'
+        message:'Stock produk tidak cukup'
       });
     }
 
@@ -55,41 +62,83 @@ exports.createOrder = async (req, res) => {
       (product.price * quantity) +
       Number(shippingCost || 0);
 
-    const order = await Order.create({
-      buyer: req.user._id,
-      seller: product.seller,
-      product: product._id,
-      quantity,
-      totalPrice,
+    const order =
+      await Order.create({
 
-      shippingAddress:
-        shippingAddress || '',
+        buyer:req.user._id,
 
-      paymentMethod:
-        paymentMethod || '',
+        seller:product.seller,
 
-      paymentProof:
-        paymentProof || '',
+        product:product._id,
 
-      shippingCourier:
-        shippingCourier || '',
+        quantity,
 
-      shippingCost:
-        Number(shippingCost || 0),
+        totalPrice,
 
-      variant:
-        variant || {},
+        shippingAddress:
+          shippingAddress || '',
 
-      status:
-        'waiting_payment_verification',
+        paymentMethod:
+          paymentMethod || '',
 
-      paymentStatus:
-        'waiting_verification'
-    });
+        paymentProof:
+          paymentProof || '',
+
+        shippingCourier:
+          shippingCourier || '',
+
+        shippingCost:
+          Number(shippingCost || 0),
+
+        variant:
+          variant || {},
+
+        status:
+          'pending_payment',
+
+        paymentStatus:
+          'pending'
+
+      });
+
+    product.stock =
+      Math.max(
+        0,
+        product.stock - quantity
+      );
+
+    if (
+      variant &&
+      product.variants?.length
+    ) {
+
+      product.variants =
+        product.variants.map(v=>{
+
+          if(
+            v._id?.toString() ===
+            variant._id?.toString()
+          ){
+
+            v.stock =
+              Math.max(
+                0,
+                (v.stock || 0) - quantity
+              );
+
+          }
+
+          return v;
+
+        });
+
+    }
+
+    await product.save();
 
     res.status(201).json({
-      success: true,
-      message: 'Checkout berhasil',
+      success:true,
+      message:'Checkout berhasil',
       order
     });
 
@@ -101,8 +150,8 @@ exports.createOrder = async (req, res) => {
     );
 
     res.status(500).json({
-      success: false,
-      message: error.message
+      success:false,
+      message:error.message
     });
 
   }
@@ -111,123 +160,152 @@ exports.createOrder = async (req, res) => {
 
 /* GET MY ORDERS */
 
-exports.getMyOrders = async (req, res) => {
-  try {
+exports.getMyOrders =
+async(req,res)=>{
+  try{
 
     const orders =
       await Order.find({
-        buyer: req.user._id
+        buyer:req.user._id
       })
       .populate('product')
-      .populate('seller', 'username')
-      .sort({ createdAt: -1 });
+      .populate('seller','username')
+      .sort({createdAt:-1});
 
     res.json(orders);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
 
 
 /* SELLER ORDERS */
 
-exports.getSellerOrders = async (req, res) => {
-  try {
+exports.getSellerOrders =
+async(req,res)=>{
+  try{
 
     const orders =
       await Order.find({
-        seller: req.user._id
+        seller:req.user._id
       })
       .populate('product')
-      .populate('buyer', 'username')
-      .sort({ createdAt: -1 });
+      .populate('buyer','username')
+      .sort({createdAt:-1});
 
     res.json(orders);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
 
 
-/* VERIFY PAYMENT */
+/* SUBMIT PAYMENT */
 
-exports.verifyPayment = async (req, res) => {
-
-  try {
+exports.submitPayment =
+async(req,res)=>{
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
-    const product =
-      await Product.findById(
-        order.product
-      );
-
-    if (product) {
-
-      product.stock =
-        Math.max(
-          0,
-          product.stock - order.quantity
-        );
-
-      if (
-        order.variant &&
-        product.variants?.length
-      ) {
-
-        product.variants =
-          product.variants.map(v => {
-
-            if (
-              v._id?.toString() ===
-              order.variant?._id?.toString()
-            ) {
-
-              v.stock =
-                Math.max(
-                  0,
-                  (v.stock || 0) - order.quantity
-                );
-
-            }
-
-            return v;
-
-          });
-
-      }
-
-      await product.save();
-
+    if(
+      order.paymentStatus !== 'pending'
+    ){
+      return res.status(400).json({
+        message:'Pembayaran sudah dikirim'
+      });
     }
 
-    order.status = 'paid';
-    order.paymentStatus = 'paid';
-    order.paymentVerifiedAt = new Date();
+    order.receiverName =
+      req.body.receiverName || '';
+
+    order.receiverAddress =
+      req.body.receiverAddress || '';
+
+    order.receiverPhone =
+      req.body.receiverPhone || '';
+
+    order.senderBank =
+      req.body.senderBank || '';
+
+    order.senderName =
+      req.body.senderName || '';
+
+    order.adminPaymentMethod =
+      req.body.adminPaymentMethod || '';
+
+    order.paymentProof =
+      req.body.paymentProof || '';
+
+    order.paymentStatus =
+      'waiting_verification';
+
+    order.status =
+      'waiting_confirmation';
 
     await order.save();
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
 
     res.status(500).json({
-      message: error.message
+      message:error.message
+    });
+
+  }
+};
+
+
+/* VERIFY PAYMENT */
+
+exports.verifyPayment =
+async(req,res)=>{
+
+  try{
+
+    const order =
+      await Order.findById(
+        req.params.id
+      );
+
+    if(!order){
+      return res.status(404).json({
+        message:'Order tidak ditemukan'
+      });
+    }
+
+    order.status='paid';
+    order.paymentStatus='paid';
+    order.paymentVerifiedAt=new Date();
+
+    await order.save();
+
+    res.json(order);
+
+  }catch(error){
+
+    res.status(500).json({
+      message:error.message
     });
 
   }
@@ -237,18 +315,19 @@ exports.verifyPayment = async (req, res) => {
 
 /* SHIP ORDER */
 
-exports.shipOrder = async (req, res) => {
+exports.shipOrder =
+async(req,res)=>{
 
-  try {
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
@@ -258,16 +337,16 @@ exports.shipOrder = async (req, res) => {
     order.shippingPhoto =
       req.body.shippingPhoto || '';
 
-    order.status = 'shipped';
+    order.status='shipped';
 
     await order.save();
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
 
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
 
   }
@@ -277,27 +356,29 @@ exports.shipOrder = async (req, res) => {
 
 /* UPDATE STATUS */
 
-exports.updateOrderStatus = async (req, res) => {
+exports.updateOrderStatus =
+async(req,res)=>{
 
-  try {
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
-    if (
-      order.seller.toString() !==
+    if(
+      order.seller.toString()
+      !==
       req.user._id.toString()
-    ) {
+    ){
       return res.status(403).json({
-        message: 'Forbidden'
+        message:'Forbidden'
       });
     }
 
@@ -309,10 +390,10 @@ exports.updateOrderStatus = async (req, res) => {
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
 
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
 
   }
@@ -320,102 +401,112 @@ exports.updateOrderStatus = async (req, res) => {
 };
 
 
-exports.completeOrder = async (req, res) => {
-  try {
+exports.completeOrder =
+async(req,res)=>{
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
-    order.status = 'completed';
-    order.completedAt = new Date();
+    order.status='completed';
+    order.completedAt=new Date();
 
     await order.save();
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
 
 
-exports.cancelOrder = async (req, res) => {
-  try {
+exports.cancelOrder =
+async(req,res)=>{
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
-    order.status = 'cancelled';
+    order.status='cancelled';
 
     await order.save();
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
 
 
-exports.requestReturn = async (req, res) => {
-  try {
+exports.requestReturn =
+async(req,res)=>{
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
-    order.returnStatus = 'requested';
+    order.returnStatus='requested';
 
     await order.save();
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
 
 
-exports.submitDispute = async (req, res) => {
-  try {
+exports.submitDispute =
+async(req,res)=>{
+  try{
 
     const order =
       await Order.findById(
         req.params.id
       );
 
-    if (!order) {
+    if(!order){
       return res.status(404).json({
-        message: 'Order tidak ditemukan'
+        message:'Order tidak ditemukan'
       });
     }
 
@@ -426,9 +517,11 @@ exports.submitDispute = async (req, res) => {
 
     res.json(order);
 
-  } catch (error) {
+  }catch(error){
+
     res.status(500).json({
-      message: error.message
+      message:error.message
     });
+
   }
 };
