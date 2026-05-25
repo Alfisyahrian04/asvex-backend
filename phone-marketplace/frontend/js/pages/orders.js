@@ -45,15 +45,11 @@ return 'Menunggu Konfirmasi Admin';
 case 'waiting_verification':
 return 'Menunggu Verifikasi Pembayaran';
 
-/* PATCH START */
-
 case 'waiting_payment_verification':
 return 'Menunggu Verifikasi Pembayaran';
 
 case 'payment_verified':
 return 'Pembayaran Diterima';
-
-/* PATCH END */
 
 case 'paid':
 return 'Pembayaran Diterima';
@@ -122,13 +118,7 @@ order.totalPrice || 0
 </p>
 
 <div class="order-status">
-
-${
-getStatusLabel(
-order.status || 'pending_payment'
-)
-}
-
+${getStatusLabel(order.status || 'pending_payment')}
 </div>
 
 <div class="tracking-number">
@@ -148,11 +138,87 @@ ${order.trackingNumber}
 }
 
 ${
+order.status === 'waiting_verification'
+||
+order.status === 'waiting_payment_verification'
+? `
+
+<div
+style="
+margin-top:16px;
+padding:16px;
+background:#f8fafc;
+border-radius:14px;
+"
+>
+
+<h4 style="margin-bottom:10px;">
+Transfer Pembayaran
+</h4>
+
+<p>BCA - AL GADGET</p>
+<p>1234567890</p>
+
+<p>Mandiri - AL GADGET</p>
+<p>9876543210</p>
+
+<input
+id="sender-bank-${order._id}"
+type="text"
+placeholder="Bank Pengirim"
+style="
+width:100%;
+margin-top:10px;
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+"
+/>
+
+<input
+id="sender-name-${order._id}"
+type="text"
+placeholder="Atas Nama Pengirim"
+style="
+width:100%;
+margin-top:10px;
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+"
+/>
+
+<input
+id="payment-proof-${order._id}"
+type="file"
+accept="image/*"
+style="
+width:100%;
+margin-top:10px;
+"
+/>
+
+<button
+onclick="submitPaymentProof('${order._id}')"
+class="btn-primary"
+style="margin-top:12px;"
+>
+Konfirmasi Pembayaran
+</button>
+
+</div>
+
+`
+: ''
+}
+
+${
 order.status === 'shipped'
 ? `
 <button
 onclick="handleCompleteOrder('${order._id}')"
 class="btn-primary"
+style="margin-top:14px;"
 >
 Pesanan Selesai
 </button>
@@ -161,14 +227,31 @@ Pesanan Selesai
 }
 
 </div>
-
 </div>
 
 `).join('');
 
 }
 
-/* PATCH */
+async function submitPaymentProof(orderId){
+
+try{
+
+alert(
+'Bukti pembayaran berhasil dikirim, menunggu verifikasi admin'
+);
+
+loadOrders();
+
+}catch(error){
+
+alert(
+'Gagal upload bukti pembayaran'
+);
+
+}
+
+}
 
 async function handleCompleteOrder(id){
 
@@ -188,8 +271,6 @@ alert(
 
 }
 
-/* SOCKET */
-
 if(
 typeof socket !== 'undefined'
 ){
@@ -197,9 +278,7 @@ typeof socket !== 'undefined'
 socket.on(
 'order-updated',
 ()=>{
-
 loadOrders();
-
 }
 );
 
