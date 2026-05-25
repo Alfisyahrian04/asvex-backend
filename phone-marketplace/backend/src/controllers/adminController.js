@@ -1,231 +1,356 @@
-const User = require('../models/User');
-const Order = require('../models/Order');
+const User =
+require('../models/User');
+
+const Order =
+require('../models/Order');
+
 
 /* ==============================
 GET ALL USERS
 ============================== */
 
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select('-password');
+const getAllUsers =
+async(req,res)=>{
+try{
 
-    res.status(200).json({
-      success: true,
-      users
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+const users =
+await User.find()
+.select('-password');
+
+res.status(200).json({
+success:true,
+users
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
 
 /* ==============================
 VERIFY SELLER
 ============================== */
 
-const verifySeller = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
+const verifySeller =
+async(req,res)=>{
+try{
 
-    if (!user) {
-      return res.status(404).json({
-        message: 'User tidak ditemukan'
-      });
-    }
+const user =
+await User.findById(
+req.params.id
+);
 
-    user.isVerifiedSeller = true;
+if(!user){
+return res.status(404).json({
+message:'User tidak ditemukan'
+});
+}
 
-    await user.save();
+user.isVerifiedSeller =
+true;
 
-    res.status(200).json({
-      success: true,
-      message: 'Seller berhasil diverifikasi',
-      user
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+await user.save();
+
+res.status(200).json({
+success:true,
+message:'Seller berhasil diverifikasi',
+user
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
 
 /* ==============================
 BAN USER
 ============================== */
 
-const banUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
+const banUser =
+async(req,res)=>{
+try{
 
-    if (!user) {
-      return res.status(404).json({
-        message: 'User tidak ditemukan'
-      });
-    }
+const user =
+await User.findById(
+req.params.id
+);
 
-    user.isBanned = true;
+if(!user){
+return res.status(404).json({
+message:'User tidak ditemukan'
+});
+}
 
-    await user.save();
+user.isBanned =
+true;
 
-    res.status(200).json({
-      success: true,
-      message: 'User berhasil dibanned'
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+await user.save();
+
+res.status(200).json({
+success:true,
+message:'User berhasil dibanned'
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
 
 /* ==============================
 GET PAYOUTS
 ============================== */
 
-const getPayouts = async (req, res) => {
-  try {
-    const payouts = await Order.find({
-      payoutStatus: 'requested'
-    })
-      .populate('seller')
-      .sort({ createdAt: -1 });
+const getPayouts =
+async(req,res)=>{
+try{
 
-    res.status(200).json({
-      success: true,
-      payouts
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+const payouts =
+await Order.find({
+payoutStatus:'requested'
+})
+.populate('seller')
+.sort({createdAt:-1});
+
+res.status(200).json({
+success:true,
+payouts
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
+
+
+/* ==============================
+GET PENDING PAYMENTS
+PATCH
+============================== */
+
+const getPendingPayments =
+async(req,res)=>{
+try{
+
+const orders =
+await Order.find({
+
+paymentStatus:
+'waiting_verification'
+
+})
+.populate(
+'buyer',
+'username'
+)
+.populate(
+'product'
+)
+.sort({
+createdAt:-1
+});
+
+res.status(200).json({
+success:true,
+orders
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+};
+
 
 /* ==============================
 APPROVE PAYOUT
 ============================== */
 
-const approvePayout = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
+const approvePayout =
+async(req,res)=>{
+try{
 
-    if (!order) {
-      return res.status(404).json({
-        message: 'Order tidak ditemukan'
-      });
-    }
+const order =
+await Order.findById(
+req.params.id
+);
 
-    order.payoutStatus = 'paid';
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
 
-    await order.save();
+order.payoutStatus='paid';
 
-    res.status(200).json({
-      success: true,
-      message: 'Payout berhasil dicairkan',
-      order
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+await order.save();
+
+res.status(200).json({
+success:true,
+message:'Payout berhasil dicairkan',
+order
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
 
+
 /* ==============================
-PATCH START
 VERIFY MANUAL PAYMENT
 ============================== */
 
-const verifyManualPayment = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
+const verifyManualPayment =
+async(req,res)=>{
+try{
 
-    if (!order) {
-      return res.status(404).json({
-        message: 'Order not found'
-      });
-    }
+const order =
+await Order.findById(
+req.params.id
+);
 
-    order.paymentStatus = 'paid';
-    order.status = 'paid';
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
 
-    await order.save();
+order.paymentStatus='paid';
 
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+order.status='paid';
+
+order.paymentVerifiedAt=
+new Date();
+
+await order.save();
+
+res.status(200).json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
 
 /* ==============================
 APPROVE REFUND
 ============================== */
 
-const approveRefund = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
+const approveRefund =
+async(req,res)=>{
+try{
 
-    if (!order) {
-      return res.status(404).json({
-        message: 'Order not found'
-      });
-    }
+const order =
+await Order.findById(
+req.params.id
+);
 
-    order.returnStatus = 'approved';
-    order.status = 'cancelled';
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
 
-    await order.save();
+order.returnStatus='approved';
 
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+order.status='cancelled';
+
+await order.save();
+
+res.status(200).json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
+
 
 /* ==============================
 RESOLVE DISPUTE
 ============================== */
 
-const resolveDispute = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
+const resolveDispute =
+async(req,res)=>{
+try{
 
-    if (!order) {
-      return res.status(404).json({
-        message: 'Order not found'
-      });
-    }
+const order =
+await Order.findById(
+req.params.id
+);
 
-    order.disputeStatus =
-      req.body.status || 'resolved';
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
 
-    await order.save();
+order.disputeStatus =
+req.body.status ||
+'resolved';
 
-    res.status(200).json(order);
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
+await order.save();
+
+res.status(200).json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
 };
 
-/* ==============================
-EXPORTS
-============================== */
+
 
 module.exports = {
-  getAllUsers,
-  verifySeller,
-  banUser,
-  getPayouts,
-  approvePayout,
 
-  verifyManualPayment,
-  approveRefund,
-  resolveDispute
+getAllUsers,
+verifySeller,
+banUser,
+
+getPayouts,
+approvePayout,
+
+getPendingPayments,
+
+verifyManualPayment,
+approveRefund,
+resolveDispute
+
 };
