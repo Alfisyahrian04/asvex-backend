@@ -75,6 +75,36 @@ default:''
 
 /* PATCH START */
 
+receiverName:{
+type:String,
+default:''
+},
+
+receiverPhone:{
+type:String,
+default:''
+},
+
+receiverAddress:{
+type:String,
+default:''
+},
+
+senderBank:{
+type:String,
+default:''
+},
+
+senderName:{
+type:String,
+default:''
+},
+
+adminPaymentMethod:{
+type:String,
+default:''
+},
+
 paymentStatus:{
 type:String,
 default:'pending'
@@ -130,7 +160,10 @@ status:{
 type:String,
 enum:[
 'pending',
+'pending_payment',
+'waiting_confirmation',
 'waiting_verification',
+'waiting_payment_verification',
 'paid',
 'processed',
 'shipped',
