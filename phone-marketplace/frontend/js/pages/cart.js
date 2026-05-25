@@ -15,13 +15,43 @@ const totalEl =
     'cart-total'
   );
 
-function getItemStock(item){
+let productsCache = [];
+
+async function loadProductsCache(){
+
+  try{
+
+    const products =
+      await fetchProducts();
+
+    productsCache =
+      products || [];
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+function getLiveProductStock(item){
+
+  const product =
+    productsCache.find(
+      p => p._id === item._id
+    );
+
+  if(!product){
+
+    return Number(
+      item.stock || 0
+    );
+
+  }
 
   return Number(
-    item.stock ||
-    item.totalStock ||
-    item.qty ||
-    0
+    product.stock || 0
   );
 
 }
@@ -31,7 +61,7 @@ function normalizeCartQty() {
   cart = cart.map(item => {
 
     const stock =
-      getItemStock(item);
+      getLiveProductStock(item);
 
     let qty =
       Number(item.quantity || 1);
@@ -47,7 +77,8 @@ function normalizeCartQty() {
 
     return {
       ...item,
-      quantity: qty
+      quantity: qty,
+      stock
     };
 
   });
@@ -66,11 +97,9 @@ function renderCart() {
   if (!cart.length) {
 
     container.innerHTML = `
-
       <div class="empty-cart">
         Keranjang kosong
       </div>
-
     `;
 
     totalEl.innerText =
@@ -81,7 +110,7 @@ function renderCart() {
   }
 
   container.innerHTML =
-    cart.map((item, index) => `
+    cart.map((item,index)=>`
 
       <div class="cart-card">
 
@@ -91,9 +120,7 @@ function renderCart() {
 
         <div class="cart-info">
 
-          <h3>
-            ${item.name}
-          </h3>
+          <h3>${item.name}</h3>
 
           <p>
             Rp ${Number(
@@ -103,7 +130,7 @@ function renderCart() {
 
           <p>
             Stock:
-            ${getItemStock(item)}
+            ${item.stock || 0}
           </p>
 
           <div
@@ -135,11 +162,7 @@ function renderCart() {
           </div>
 
           <button
-            onclick="
-              removeCart(
-                ${index}
-              )
-            "
+            onclick="removeCart(${index})"
           >
             Hapus
           </button>
@@ -152,15 +175,11 @@ function renderCart() {
 
   const total =
     cart.reduce(
-      (
-        acc,
-        item
-      ) =>
+      (acc,item)=>
 
-        acc + (
-          item.price *
-          (item.quantity || 1)
-        ),
+        acc +
+        item.price *
+        (item.quantity || 1),
 
       0
     );
@@ -171,20 +190,24 @@ function renderCart() {
 }
 
 window.increaseQty =
-function(index) {
+function(index){
 
   const item =
     cart[index];
 
-  if (!item) return;
+  if(!item) return;
 
   const stock =
-    getItemStock(item);
+    getLiveProductStock(item);
 
-  if (
-    stock &&
+  if(
+    stock > 0 &&
     item.quantity >= stock
-  ) {
+  ){
+
+    alert(
+      'Stok tidak mencukupi'
+    );
 
     item.quantity = stock;
 
@@ -193,11 +216,8 @@ function(index) {
       JSON.stringify(cart)
     );
 
-    alert(
-      'Stok tidak mencukupi'
-    );
-
     renderCart();
+
     return;
 
   }
@@ -214,16 +234,14 @@ function(index) {
 };
 
 window.decreaseQty =
-function(index) {
+function(index){
 
   const item =
     cart[index];
 
-  if (!item) return;
+  if(!item) return;
 
-  if (
-    item.quantity > 1
-  ) {
+  if(item.quantity > 1){
 
     item.quantity -= 1;
 
@@ -239,9 +257,9 @@ function(index) {
 };
 
 window.removeCart =
-function(index) {
+function(index){
 
-  cart.splice(index, 1);
+  cart.splice(index,1);
 
   localStorage.setItem(
     'cart',
@@ -256,14 +274,19 @@ document.getElementById(
   'checkout-btn'
 ).addEventListener(
   'click',
-  async () => {
-
+  async()=>{
     await checkout();
-
   }
 );
 
-renderCart();
+async function initCart(){
+
+  await loadProductsCache();
+  renderCart();
+
+}
+
+initCart();
 
 async function checkout() {
 
@@ -274,9 +297,7 @@ async function checkout() {
 
   if (!token) {
 
-    alert(
-      'Login dulu'
-    );
+    alert('Login dulu');
 
     window.location.href =
       './login.html';
