@@ -149,9 +149,11 @@ order.paymentStatus === 'paid'
 && order.status !== 'shipped'
 && order.status !== 'completed';
 
-let buttonHtml =
-canProcess
-?
+let buttonHtml = '';
+
+if(canProcess){
+
+buttonHtml =
 `
 <button
 onclick="processOrder('${order._id}')"
@@ -160,8 +162,19 @@ style="margin-top:12px;height:45px;"
 >
 Proses Pesanan
 </button>
-`
-:
+`;
+
+}
+
+else if(
+order.paymentStatus === 'waiting_verification'
+||
+order.status === 'pending_payment'
+||
+order.status === 'waiting_confirmation'
+){
+
+buttonHtml =
 `
 <button
 disabled
@@ -176,6 +189,8 @@ cursor:not-allowed;
 Menunggu Pembayaran
 </button>
 `;
+
+}
 
 if(
 order.status === 'processed'
