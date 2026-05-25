@@ -6,11 +6,7 @@ const BASE_URL =
 'https://asvex-backend.up.railway.app/api/v1';
 
 const token =
-localStorage.getItem(
-'token'
-);
-
-alert('TOKEN: ' + (token || 'TOKEN NOT FOUND'));
+localStorage.getItem('token');
 
 
 /* SELLER */
@@ -24,8 +20,7 @@ await fetch(
 `${BASE_URL}/admin/users`,
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -37,18 +32,13 @@ const users =
 result.users || result || [];
 
 const sellerList =
-document.getElementById(
-'seller-list'
-);
+document.getElementById('seller-list');
 
-if(!sellerList){
-return;
-}
+if(!sellerList) return;
 
 const sellers =
 users.filter(
-user =>
-user.role === 'seller'
+user => user.role === 'seller'
 );
 
 if(!sellers.length){
@@ -57,7 +47,6 @@ sellerList.innerHTML =
 `<div class="empty-state">Belum ada seller</div>`;
 
 return;
-
 }
 
 sellerList.innerHTML =
@@ -74,9 +63,7 @@ Verified:
 ${user.isVerifiedSeller ? 'verified' : 'pending'}
 </p>
 
-<button
-onclick="verifySeller('${user._id}')"
->
+<button onclick="verifySeller('${user._id}')">
 Verify
 </button>
 
@@ -93,8 +80,7 @@ Ban
 
 }catch(error){
 
-console.log(error);
-alert('LOAD USERS ERROR: ' + error.message);
+console.log('LOAD USERS ERROR:', error);
 
 }
 
@@ -138,7 +124,7 @@ loadUsers();
 
 
 
-/* PAYMENT VALIDATION */
+/* PAYMENT */
 
 async function loadPendingPayments(){
 
@@ -149,47 +135,23 @@ await fetch(
 `${BASE_URL}/admin/pending-payments`,
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
 
-const raw =
-await response.text();
+const result =
+await response.json();
 
-alert(
-'PENDING PAYMENTS DEBUG'
-+ '\n\nSTATUS: ' + response.status
-+ '\n\nRESPONSE:\n' + raw
-);
-
-let result = {};
-let orders = [];
-
-try{
-
-result = JSON.parse(raw);
-
-orders =
+const orders =
 Array.isArray(result)
 ? result
 : result.orders || [];
 
-}catch(parseError){
-
-console.log(parseError);
-
-}
-
 const paymentList =
-document.getElementById(
-'payment-list'
-);
+document.getElementById('payment-list');
 
-if(!paymentList){
-return;
-}
+if(!paymentList) return;
 
 if(!orders.length){
 
@@ -282,10 +244,7 @@ Approve Payment
 
 <button
 onclick="rejectPayment('${order._id}')"
-style="
-background:#ef4444;
-margin-top:10px;
-"
+style="background:#ef4444;margin-top:10px;"
 >
 Reject Payment
 </button>
@@ -296,10 +255,9 @@ Reject Payment
 
 }catch(error){
 
-console.log(error);
-
-alert(
-'LOAD PAYMENT ERROR: ' + error.message
+console.log(
+'LOAD PAYMENT ERROR:',
+error
 );
 
 }
@@ -317,14 +275,9 @@ await fetch(
 {
 method:'PUT',
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
-);
-
-alert(
-'Pembayaran berhasil diverifikasi'
 );
 
 loadPendingPayments();
@@ -332,10 +285,6 @@ loadPendingPayments();
 }catch(error){
 
 console.log(error);
-
-alert(
-'Gagal approve pembayaran'
-);
 
 }
 
@@ -352,14 +301,9 @@ await fetch(
 {
 method:'PUT',
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
-);
-
-alert(
-'Pembayaran ditolak'
 );
 
 loadPendingPayments();
@@ -367,10 +311,6 @@ loadPendingPayments();
 }catch(error){
 
 console.log(error);
-
-alert(
-'Gagal reject pembayaran'
-);
 
 }
 
@@ -390,7 +330,6 @@ verifySeller;
 window.banUser =
 banUser;
 
-alert('ADMIN JS UPDATED');
 
 loadUsers();
 loadPendingPayments();
