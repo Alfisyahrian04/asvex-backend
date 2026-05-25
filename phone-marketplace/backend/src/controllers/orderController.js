@@ -87,35 +87,6 @@ exports.createOrder = async (req, res) => {
         'waiting_verification'
     });
 
-    product.stock =
-      Math.max(
-        0,
-        product.stock - quantity
-      );
-
-    if (
-      variant &&
-      product.variants?.length
-    ) {
-      product.variants =
-        product.variants.map(v => {
-          if (
-            v._id?.toString() ===
-            variant._id?.toString()
-          ) {
-            v.stock =
-              Math.max(
-                0,
-                (v.stock || 0) - quantity
-              );
-          }
-
-          return v;
-        });
-    }
-
-    await product.save();
-
     res.status(201).json({
       success: true,
       message: 'Checkout berhasil',
@@ -199,6 +170,50 @@ exports.verifyPayment = async (req, res) => {
       return res.status(404).json({
         message: 'Order tidak ditemukan'
       });
+    }
+
+    const product =
+      await Product.findById(
+        order.product
+      );
+
+    if (product) {
+
+      product.stock =
+        Math.max(
+          0,
+          product.stock - order.quantity
+        );
+
+      if (
+        order.variant &&
+        product.variants?.length
+      ) {
+
+        product.variants =
+          product.variants.map(v => {
+
+            if (
+              v._id?.toString() ===
+              order.variant?._id?.toString()
+            ) {
+
+              v.stock =
+                Math.max(
+                  0,
+                  (v.stock || 0) - order.quantity
+                );
+
+            }
+
+            return v;
+
+          });
+
+      }
+
+      await product.save();
+
     }
 
     order.status = 'paid';
