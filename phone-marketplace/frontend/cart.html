@@ -74,60 +74,38 @@ Checkout
 href="index.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-house"></i>
-
-<span>
-Home
-</span>
-
+<span>Home</span>
 </a>
 
 <a
 href="wishlist.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-heart"></i>
-
-<span>
-Wishlist
-</span>
-
+<span>Wishlist</span>
 </a>
 
 <a
 href="orders.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-receipt"></i>
-
-<span>
-Transaksi
-</span>
-
+<span>Transaksi</span>
 </a>
 
 <a
 href="profile.html"
 class="nav-item active"
 >
-
 <i class="fa-solid fa-user"></i>
-
-<span>
-Akun
-</span>
-
+<span>Akun</span>
 </a>
 
 </nav>
 
 <script src="js/utils/auth.js"></script>
-
 <script src="js/store/cartStore.js"></script>
-
 <script src="js/api/orderApi.js"></script>
 
 <script>
@@ -157,13 +135,9 @@ cartStore.getCart();
 if(!cart.length){
 
 cartContainer.innerHTML = `
-
 <div class="empty-cart">
-
 Keranjang kosong
-
 </div>
-
 `;
 
 totalPrice.innerText =
@@ -189,9 +163,7 @@ alt="${item.name}"
 
 <div class="cart-info">
 
-<h3>
-${item.name}
-</h3>
+<h3>${item.name}</h3>
 
 <p>
 Rp ${Number(item.price || 0)
@@ -203,17 +175,40 @@ Stok:
 ${Number(item.stock || 0)}
 </p>
 
-<div class="qty-box">
+<div
+class="qty-box"
+style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:12px;
+margin-bottom:14px;
+"
+>
 
 <button
 onclick="decreaseQty('${item._id}')"
+style="
+width:36px;
+height:36px;
+border:none;
+border-radius:10px;
+background:#f3f4f6;
+font-size:22px;
+font-weight:700;
+"
 >
-
--
-
+−
 </button>
 
-<span>
+<span
+style="
+min-width:30px;
+text-align:center;
+font-size:18px;
+font-weight:700;
+"
+>
 ${item.quantity || 1}
 </span>
 
@@ -222,10 +217,17 @@ onclick="increaseQty('${item._id}')"
 ${Number(item.quantity || 1) >= Number(item.stock || 0)
 ? 'disabled'
 : ''}
+style="
+width:36px;
+height:36px;
+border:none;
+border-radius:10px;
+background:#f3f4f6;
+font-size:22px;
+font-weight:700;
+"
 >
-
 +
-
 </button>
 
 </div>
@@ -233,6 +235,10 @@ ${Number(item.quantity || 1) >= Number(item.stock || 0)
 <button
 class="remove-btn"
 onclick="removeItem('${item._id}')"
+style="
+margin-top:12px;
+width:100%;
+"
 >
 
 <i class="fa-solid fa-trash"></i>
@@ -267,7 +273,6 @@ renderCart();
 }
 
 /* INCREASE */
-/* PATCH: tambah validasi stock tanpa ngerusak logic lama */
 
 function increaseQty(productId){
 
@@ -348,9 +353,7 @@ if(
 product &&
 product.quantity > 1
 ){
-
 product.quantity--;
-
 }
 
 localStorage.setItem(
@@ -364,9 +367,7 @@ renderCart();
 
 /* CHECKOUT */
 
-if(
-checkoutBtn
-){
+if(checkoutBtn){
 
 checkoutBtn.addEventListener(
 'click',
@@ -378,17 +379,9 @@ const cart =
 cartStore.getCart();
 
 if(!cart.length){
-
-alert(
-'Keranjang kosong'
-);
-
+alert('Keranjang kosong');
 return;
-
 }
-
-/* PATCH START */
-/* validasi ulang sebelum checkout */
 
 for(const item of cart){
 
@@ -402,19 +395,14 @@ if(
 stock > 0 &&
 qty > stock
 ){
-
 alert(
 `${item.name} melebihi stok tersedia`
 );
-
 renderCart();
-
 return;
-
 }
 
 }
-/* PATCH END */
 
 checkoutBtn.disabled =
 true;
@@ -459,9 +447,7 @@ alert(
 checkoutBtn.disabled =
 false;
 
-checkoutBtn.innerHTML =
-
-`
+checkoutBtn.innerHTML = `
 <i class="fa-solid fa-bag-shopping"></i>
 Checkout
 `;
