@@ -1,6 +1,7 @@
 const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1/orders';
 
+
 async function createOrder(data){
 
 const token =
@@ -40,7 +41,16 @@ paymentMethod:
 data.paymentMethod || '',
 
 paymentProof:
-data.paymentProof || ''
+data.paymentProof || '',
+
+shippingCourier:
+data.shippingCourier || '',
+
+shippingCost:
+data.shippingCost || 0,
+
+variant:
+data.variant || {}
 
 })
 
@@ -79,6 +89,8 @@ return result;
 
 }
 
+
+
 async function fetchMyOrders(){
 
 const token =
@@ -113,7 +125,55 @@ return data;
 
 }
 
-/* PATCH START */
+
+
+/* SUBMIT PAYMENT */
+
+async function submitPayment(orderId,data){
+
+const token =
+localStorage.getItem(
+'token'
+);
+
+const response =
+await fetch(
+`${BASE_URL}/${orderId}/payment`,
+{
+method:'PUT',
+
+headers:{
+'Content-Type':
+'application/json',
+
+Authorization:
+`Bearer ${token}`
+},
+
+body:JSON.stringify(data)
+
+}
+);
+
+const result =
+await response.json();
+
+if(!response.ok){
+
+throw new Error(
+result.message ||
+'Gagal kirim pembayaran'
+);
+
+}
+
+return result;
+
+}
+
+
+
+/* COMPLETE ORDER */
 
 async function completeOrder(id){
 
@@ -138,6 +198,10 @@ return response.json();
 
 }
 
+
+
+/* CANCEL ORDER */
+
 async function cancelOrder(id){
 
 const token =
@@ -160,6 +224,10 @@ Authorization:
 return response.json();
 
 }
+
+
+
+/* RETURN ORDER */
 
 async function requestReturn(id){
 
@@ -184,13 +252,18 @@ return response.json();
 
 }
 
-/* PATCH END */
+
+
+/* GLOBAL */
 
 window.createOrder =
 createOrder;
 
 window.fetchMyOrders =
 fetchMyOrders;
+
+window.submitPayment =
+submitPayment;
 
 window.completeOrder =
 completeOrder;
