@@ -155,32 +155,58 @@ const orders =
 await Order.find({
 
 $or:[
+
 {
 paymentStatus:
 'waiting_verification'
 },
+
+{
+paymentStatus:
+'pending'
+},
+
+{
+paymentStatus:
+'unpaid'
+},
+
 {
 status:
 'waiting_confirmation'
 },
+
 {
 status:
 'waiting_payment_verification'
 },
+
 {
 status:
 'pending_payment'
 },
+
 {
-paymentStatus:
+status:
+'waiting_admin_confirmation'
+},
+
+{
+status:
+'awaiting_confirmation'
+},
+
+{
+status:
 'pending'
 }
+
 ]
 
 })
 .populate(
 'buyer',
-'username'
+'username email'
 )
 .populate(
 'product'
@@ -191,6 +217,7 @@ createdAt:-1
 
 res.status(200).json({
 success:true,
+total:orders.length,
 orders
 });
 
@@ -207,6 +234,7 @@ message:error.message
 
 }
 };
+
 
 
 /* ==============================
@@ -246,6 +274,7 @@ message:error.message
 
 }
 };
+
 
 
 /* ==============================
@@ -288,6 +317,7 @@ message:error.message
 };
 
 
+
 /* ==============================
 APPROVE REFUND
 ============================== */
@@ -323,6 +353,7 @@ message:error.message
 
 }
 };
+
 
 
 /* ==============================
