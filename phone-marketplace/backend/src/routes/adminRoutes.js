@@ -5,9 +5,11 @@ const router =
 express.Router();
 
 const {
+
 getAllUsers,
 verifySeller,
 banUser,
+
 getPayouts,
 approvePayout,
 
@@ -15,7 +17,8 @@ verifyManualPayment,
 approveRefund,
 resolveDispute,
 
-getPendingPayments
+getPendingPayments,
+getRefundRequests
 
 } = require(
 '../controllers/adminController'
@@ -82,6 +85,11 @@ verifyManualPayment
 
 
 /* REFUND */
+
+router.get(
+'/refund-requests',
+getRefundRequests
+);
 
 router.put(
 '/approve-refund/:id',
