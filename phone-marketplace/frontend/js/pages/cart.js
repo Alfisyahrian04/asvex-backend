@@ -1,30 +1,63 @@
 let cart =
-JSON.parse(
-  localStorage.getItem(
-    'cart'
-  )
-) || [];
+  JSON.parse(
+    localStorage.getItem(
+      'cart'
+    )
+  ) || [];
 
 const container =
-document.getElementById(
-  'cart-items'
-);
+  document.getElementById(
+    'cart-items'
+  );
 
 const totalEl =
-document.getElementById(
-  'cart-total'
-);
+  document.getElementById(
+    'cart-total'
+  );
+
+function normalizeCartQty() {
+
+  cart = cart.map(item => {
+
+    const stock =
+      Number(item.stock || 0);
+
+    let qty =
+      Number(item.quantity || 1);
+
+    if (qty < 1) qty = 1;
+
+    if (
+      stock > 0 &&
+      qty > stock
+    ) {
+      qty = stock;
+    }
+
+    return {
+      ...item,
+      quantity: qty
+    };
+
+  });
+
+  localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+  );
+
+}
 
 function renderCart() {
+
+  normalizeCartQty();
 
   if (!cart.length) {
 
     container.innerHTML = `
 
       <div class="empty-cart">
-
         Keranjang kosong
-
       </div>
 
     `;
@@ -42,9 +75,7 @@ function renderCart() {
       <div class="cart-card">
 
         <img
-          src="${
-            item.images?.[0]
-          }"
+          src="${item.images?.[0]}"
         />
 
         <div class="cart-info">
@@ -59,10 +90,33 @@ function renderCart() {
             ).toLocaleString()}
           </p>
 
-          <p>
-            Qty:
-            ${item.quantity || 1}
-          </p>
+          <div
+            class="cart-qty-control"
+            style="
+              display:flex;
+              gap:8px;
+              align-items:center;
+              margin:10px 0;
+            "
+          >
+
+            <button
+              onclick="decreaseQty(${index})"
+            >
+              -
+            </button>
+
+            <span>
+              ${item.quantity || 1}
+            </span>
+
+            <button
+              onclick="increaseQty(${index})"
+            >
+              +
+            </button>
+
+          </div>
 
           <button
             onclick="
@@ -71,9 +125,7 @@ function renderCart() {
               )
             "
           >
-
             Hapus
-
           </button>
 
         </div>
@@ -101,6 +153,69 @@ function renderCart() {
     `Rp ${total.toLocaleString()}`;
 
 }
+
+window.increaseQty =
+function(index) {
+
+  const item =
+    cart[index];
+
+  if (!item) return;
+
+  const stock =
+    Number(item.stock || 0);
+
+  if (
+    stock > 0 &&
+    item.quantity >= stock
+  ) {
+
+    item.quantity = stock;
+
+    alert(
+      'Qty melebihi stok tersedia'
+    );
+
+    renderCart();
+    return;
+
+  }
+
+  item.quantity += 1;
+
+  localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+  );
+
+  renderCart();
+
+};
+
+window.decreaseQty =
+function(index) {
+
+  const item =
+    cart[index];
+
+  if (!item) return;
+
+  if (
+    item.quantity > 1
+  ) {
+
+    item.quantity -= 1;
+
+  }
+
+  localStorage.setItem(
+    'cart',
+    JSON.stringify(cart)
+  );
+
+  renderCart();
+
+};
 
 window.removeCart =
 function(index) {
@@ -150,8 +265,13 @@ async function checkout() {
   }
 
   if(!cart.length){
-    alert('Keranjang kosong');
+
+    alert(
+      'Keranjang kosong'
+    );
+
     return;
+
   }
 
   try {
@@ -205,11 +325,14 @@ async function checkout() {
         await response.json();
 
       if(!response.ok){
+
         alert(
           data.message ||
           'Checkout gagal'
         );
+
         return;
+
       }
 
     }
