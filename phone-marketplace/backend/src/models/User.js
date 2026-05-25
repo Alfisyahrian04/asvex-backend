@@ -46,7 +46,6 @@ default:false
 }
 
 },{ _id:true });
-/* PATCH */
 
 const UserSchema =
 new mongoose.Schema({
@@ -57,12 +56,10 @@ required:true,
 unique:true
 },
 
-/* PATCH */
 fullName:{
 type:String,
 default:''
 },
-/* PATCH */
 
 email:{
 type:String,
@@ -101,8 +98,6 @@ type:String,
 default:''
 },
 
-/* PATCH START */
-
 addresses:{
 type:[AddressSchema],
 default:[]
@@ -123,8 +118,6 @@ type:String,
 default:''
 },
 
-/* PATCH END */
-
 walletBalance:{
 type:Number,
 default:0
@@ -134,6 +127,13 @@ verificationStatus:{
 type:Boolean,
 default:false
 },
+
+/* PATCH START */
+isVerifiedSeller:{
+type:Boolean,
+default:false
+},
+/* PATCH END */
 
 isBanned:{
 type:Boolean,
