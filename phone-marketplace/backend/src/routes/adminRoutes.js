@@ -11,11 +11,11 @@ banUser,
 getPayouts,
 approvePayout,
 
-/* PATCH */
 verifyManualPayment,
 approveRefund,
-resolveDispute
-/* PATCH */
+resolveDispute,
+
+getPendingPayments
 
 } = require(
 '../controllers/adminController'
@@ -36,6 +36,9 @@ router.use(
 roleMiddleware('admin')
 );
 
+
+/* USERS */
+
 router.get(
 '/users',
 getAllUsers
@@ -51,6 +54,9 @@ router.put(
 banUser
 );
 
+
+/* PAYOUT */
+
 router.get(
 '/payouts',
 getPayouts
@@ -61,24 +67,35 @@ router.put(
 approvePayout
 );
 
-/* PATCH START */
+
+/* PAYMENT */
+
+router.get(
+'/pending-payments',
+getPendingPayments
+);
 
 router.put(
 '/verify-payment/:id',
 verifyManualPayment
 );
 
+
+/* REFUND */
+
 router.put(
 '/approve-refund/:id',
 approveRefund
 );
+
+
+/* DISPUTE */
 
 router.put(
 '/resolve-dispute/:id',
 resolveDispute
 );
 
-/* PATCH END */
 
 module.exports =
 router;
