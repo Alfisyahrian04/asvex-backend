@@ -23,15 +23,41 @@ localStorage.getItem(
 )
 );
 
+if(!user){
+
+window.location.href =
+'index.html';
+return;
+
+}
+
+/* PATCH START */
+
+const currentRole =
+String(
+user.role || ''
+)
+.trim()
+.toLowerCase();
+
+const requiredRole =
+String(
+role || ''
+)
+.trim()
+.toLowerCase();
+
 if(
-!user ||
-user.role !== role
+currentRole !== requiredRole
 ){
 
 window.location.href =
 'index.html';
+return;
 
 }
+
+/* PATCH END */
 
 }
 
