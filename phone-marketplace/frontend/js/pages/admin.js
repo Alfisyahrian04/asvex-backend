@@ -3,7 +3,7 @@ protectPage();
 requireRole('admin');
 
 const BASE_URL =
-'https://asvex-backend.up.railway.app/api/v1';
+'https://asvex-backend-production.up.railway.app';
 
 const token =
 localStorage.getItem('token');
