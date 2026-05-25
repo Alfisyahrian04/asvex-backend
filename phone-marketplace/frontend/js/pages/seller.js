@@ -38,9 +38,17 @@ localStorage.getItem(
 'token'
 );
 
-/* PATCH START */
+
+/* STATUS LABEL PATCH */
 
 function getStatusLabel(order){
+
+if(
+order.status ===
+'waiting_confirmation'
+){
+return 'Menunggu Konfirmasi Pembayaran';
+}
 
 if(
 order.paymentStatus ===
@@ -55,7 +63,7 @@ order.paymentStatus ===
 (
 order.status === 'paid' ||
 order.status === 'pending' ||
-order.status === 'waiting_payment_verification'
+order.status === 'pending_payment'
 )
 ){
 return 'Menunggu Diproses';
@@ -79,11 +87,15 @@ order.status === 'completed'
 return 'Pesanan Selesai';
 }
 
+if(
+order.status === 'cancelled'
+){
+return 'Pesanan Dibatalkan';
+}
+
 return order.status || 'Pending';
 
 }
-
-/* PATCH END */
 
 
 /* LOAD SELLER ORDERS */
@@ -265,6 +277,7 @@ console.log(error);
 
 }
 
+
 /* PROCESS ORDER */
 
 async function processOrder(orderId){
@@ -325,6 +338,7 @@ alert(
 }
 
 }
+
 
 /* LOAD STATS */
 
@@ -397,6 +411,7 @@ console.log(error);
 }
 
 }
+
 
 window.processOrder =
 processOrder;
