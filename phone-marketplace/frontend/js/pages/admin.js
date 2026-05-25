@@ -7,6 +7,7 @@ localStorage.getItem(
 'token'
 );
 
+
 /* SELLER */
 
 async function loadUsers(){
@@ -56,12 +57,17 @@ sellers.map(user=>`
 <div class="admin-card">
 
 <h3>${user.username || '-'}</h3>
+
 <p>${user.email || '-'}</p>
-<p>Verified:
+
+<p>
+Verified:
 ${user.isVerifiedSeller ? 'verified' : 'pending'}
 </p>
 
-<button onclick="verifySeller('${user._id}')">
+<button
+onclick="verifySeller('${user._id}')"
+>
 Verify
 </button>
 
@@ -84,6 +90,8 @@ console.log(error);
 
 }
 
+
+
 async function verifySeller(id){
 
 await fetch(
@@ -99,6 +107,8 @@ Authorization:`Bearer ${token}`
 loadUsers();
 
 }
+
+
 
 async function banUser(id){
 
@@ -116,6 +126,8 @@ loadUsers();
 
 }
 
+
+
 /* PAYMENT VALIDATION */
 
 async function loadPendingPayments(){
@@ -127,7 +139,8 @@ await fetch(
 'https://asvex-backend-production.up.railway.app/api/v1/admin/pending-payments',
 {
 headers:{
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 }
 }
 );
@@ -144,6 +157,10 @@ const paymentList =
 document.getElementById(
 'payment-list'
 );
+
+if(!paymentList){
+return;
+}
 
 if(!orders.length){
 
@@ -184,6 +201,7 @@ ${order.quantity || 1}
 <p>
 Variant:
 ${order.variant?.color || '-'}
+${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
 </p>
 
 <p>
@@ -255,37 +273,77 @@ console.log(error);
 
 }
 
+
+
 async function approvePayment(id){
 
+try{
+
 await fetch(
-`https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/approve`,
+`https://asvex-backend-production.up.railway.app/api/v1/orders/${id}/verify-payment`,
 {
 method:'PUT',
 headers:{
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 }
 }
 );
 
+alert(
+'Pembayaran berhasil diverifikasi'
+);
+
 loadPendingPayments();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Gagal approve pembayaran'
+);
 
 }
 
+}
+
+
+
 async function rejectPayment(id){
+
+try{
 
 await fetch(
 `https://asvex-backend-production.up.railway.app/api/v1/admin/orders/${id}/reject`,
 {
 method:'PUT',
 headers:{
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 }
 }
 );
 
+alert(
+'Pembayaran ditolak'
+);
+
 loadPendingPayments();
 
+}catch(error){
+
+console.log(error);
+
+alert(
+'Gagal reject pembayaran'
+);
+
 }
+
+}
+
+
 
 window.rejectPayment =
 rejectPayment;
@@ -299,5 +357,8 @@ verifySeller;
 window.banUser =
 banUser;
 
+
+
 loadUsers();
+
 loadPendingPayments();
