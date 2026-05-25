@@ -17,6 +17,18 @@ const cartStore = {
 
   },
 
+  getProductStock(product) {
+
+    return Number(
+      product.stock ||
+      product.totalStock ||
+      product.quantity ||
+      product.qty ||
+      0
+    );
+
+  },
+
   addToCart(product) {
 
     let cart =
@@ -29,12 +41,14 @@ const cartStore = {
       );
 
     const maxStock =
-      Number(product.stock || 0);
+      this.getProductStock(product);
 
     if (existing) {
 
       existing.quantity =
-        Number(existing.quantity || 1);
+        Number(
+          existing.quantity || 1
+        );
 
       if (
         maxStock > 0 &&
@@ -44,9 +58,21 @@ const cartStore = {
         existing.quantity =
           maxStock;
 
-      } else {
+        this.saveCart(cart);
 
-        existing.quantity += 1;
+        return false;
+
+      }
+
+      existing.quantity += 1;
+
+      if (
+        maxStock > 0 &&
+        existing.quantity > maxStock
+      ) {
+
+        existing.quantity =
+          maxStock;
 
       }
 
@@ -56,8 +82,7 @@ const cartStore = {
 
         ...product,
 
-        quantity:
-          maxStock > 0 ? 1 : 1
+        quantity: 1
 
       });
 
@@ -66,10 +91,16 @@ const cartStore = {
     cart = cart.map(item => {
 
       const itemStock =
-        Number(item.stock || 0);
+        this.getProductStock(item);
 
       let qty =
-        Number(item.quantity || 1);
+        Number(
+          item.quantity || 1
+        );
+
+      if (qty < 1) {
+        qty = 1;
+      }
 
       if (
         itemStock > 0 &&
@@ -91,6 +122,8 @@ const cartStore = {
     });
 
     this.saveCart(cart);
+
+    return true;
 
   },
 
