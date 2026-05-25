@@ -39,22 +39,18 @@ function getLiveProductStock(item){
   if(!product){
 
     return Number(
-      item.stock ||
-      item.quantity ||
-      item.qty ||
-      item.countInStock ||
-      item.totalStock ||
+      item.stock ??
+      item.totalStock ??
+      item.countInStock ??
       0
     );
 
   }
 
   return Number(
-    product.stock ||
-    product.quantity ||
-    product.qty ||
-    product.countInStock ||
-    product.totalStock ||
+    product.stock ??
+    product.totalStock ??
+    product.countInStock ??
     0
   );
 
@@ -151,7 +147,14 @@ function renderCart(){
               ${item.quantity || 1}
             </span>
 
-            <button onclick="increaseQty(${index})">
+            <button
+              onclick="increaseQty(${index})"
+              ${
+                Number(item.quantity) >= Number(item.stock)
+                ? 'disabled'
+                : ''
+              }
+            >
               +
             </button>
 
@@ -185,30 +188,21 @@ function renderCart(){
 
 window.increaseQty = function(index){
 
-  const item = cart[index];
+  const item =
+    cart[index];
+
   if(!item) return;
 
   const stock =
-    getLiveProductStock(item);
+    Number(item.stock || 0);
 
   const currentQty =
     Number(item.quantity || 1);
 
-  if(stock <= 0){
-
-    alert('Stok habis');
-    return;
-
-  }
-
-  if(currentQty >= stock){
-
-    item.quantity = stock;
-
-    localStorage.setItem(
-      'cart',
-      JSON.stringify(cart)
-    );
+  if(
+    stock <= 0 ||
+    currentQty >= stock
+  ){
 
     alert(
       `Stok tersedia hanya ${stock}`
@@ -221,6 +215,12 @@ window.increaseQty = function(index){
 
   item.quantity =
     currentQty + 1;
+
+  if(
+    item.quantity > stock
+  ){
+    item.quantity = stock;
+  }
 
   localStorage.setItem(
     'cart',
