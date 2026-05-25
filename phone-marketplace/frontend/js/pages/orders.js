@@ -325,13 +325,88 @@ async function submitPaymentProof(orderId){
 
 try{
 
+const receiverName =
+document.getElementById(
+`receiver-name-${orderId}`
+)?.value || '';
+
+const receiverAddress =
+document.getElementById(
+`receiver-address-${orderId}`
+)?.value || '';
+
+const receiverPhone =
+document.getElementById(
+`receiver-phone-${orderId}`
+)?.value || '';
+
+const adminBank =
+document.getElementById(
+`admin-bank-${orderId}`
+)?.value || '';
+
+const adminEwallet =
+document.getElementById(
+`admin-ewallet-${orderId}`
+)?.value || '';
+
+const senderBank =
+document.getElementById(
+`sender-bank-${orderId}`
+)?.value || '';
+
+const senderName =
+document.getElementById(
+`sender-name-${orderId}`
+)?.value || '';
+
+const paymentProofInput =
+document.getElementById(
+`payment-proof-${orderId}`
+);
+
+const selectedPaymentMethod =
+adminBank || adminEwallet;
+
+await fetch(
+`https://asvex-backend-production.up.railway.app/api/v1/orders/${orderId}/payment`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${localStorage.getItem('token')}`
+},
+body:JSON.stringify({
+
+receiverName,
+receiverAddress,
+receiverPhone,
+
+senderBank,
+senderName,
+
+adminPaymentMethod:
+selectedPaymentMethod,
+
+paymentStatus:
+'waiting_verification',
+
+status:
+'waiting_confirmation'
+
+})
+}
+);
+
 alert(
-'Bukti pembayaran berhasil dikirim, menunggu verifikasi admin'
+'Pembayaran berhasil dikirim, menunggu konfirmasi admin'
 );
 
 loadOrders();
 
 }catch(error){
+
+console.log(error);
 
 alert(
 'Gagal upload bukti pembayaran'
