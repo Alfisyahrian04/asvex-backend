@@ -147,10 +147,8 @@ message:error.message
 };
 
 
-
 /* ==============================
 GET PENDING PAYMENTS
-PATCH FIX
 ============================== */
 
 const getPendingPayments =
@@ -198,7 +196,6 @@ return [
 ||
 
 [
-
 'waiting_verification',
 'waiting_confirmation',
 'waiting_payment_verification',
@@ -233,6 +230,39 @@ message:error.message
 }
 };
 
+
+/* ==============================
+GET REFUND REQUESTS
+============================== */
+
+const getRefundRequests =
+async(req,res)=>{
+try{
+
+const orders =
+await Order.find({
+refundRequest:true
+})
+.populate('buyer')
+.populate('seller')
+.populate('product')
+.sort({
+createdAt:-1
+});
+
+res.status(200).json({
+success:true,
+orders
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+};
 
 
 /* ==============================
@@ -300,7 +330,6 @@ message:'Order not found'
 }
 
 order.paymentStatus='paid';
-
 order.status='paid';
 
 order.paymentVerifiedAt=
@@ -347,7 +376,7 @@ message:'Order not found'
 }
 
 order.returnStatus='approved';
-
+order.refundStatus='approved';
 order.status='cancelled';
 
 order.refundApprovedAt =
@@ -421,7 +450,6 @@ message:error.message
 };
 
 
-
 module.exports = {
 
 getAllUsers,
@@ -432,6 +460,7 @@ getPayouts,
 approvePayout,
 
 getPendingPayments,
+getRefundRequests,
 
 verifyManualPayment,
 approveRefund,
