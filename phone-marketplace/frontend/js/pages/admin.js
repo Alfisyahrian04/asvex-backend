@@ -140,6 +140,10 @@ Authorization:`Bearer ${token}`
 }
 );
 
+if(!response.ok){
+throw new Error('Failed load pending payments');
+}
+
 const result =
 await response.json();
 
@@ -163,16 +167,23 @@ return;
 }
 
 paymentList.innerHTML =
-orders.map(order=>`
+orders.map(order=>{
+
+const paymentImage =
+order.paymentProof &&
+order.paymentProof !== 'uploaded'
+? order.paymentProof
+: (
+order.product?.images?.[0] ||
+'https://via.placeholder.com/300'
+);
+
+return `
 
 <div class="admin-card">
 
 <img
-src="${
-order.paymentProof ||
-order.product?.images?.[0] ||
-'https://via.placeholder.com/300'
-}"
+src="${paymentImage}"
 >
 
 <h3>
@@ -251,7 +262,8 @@ Reject Payment
 
 </div>
 
-`).join('');
+`;
+}).join('');
 
 }catch(error){
 
@@ -271,7 +283,7 @@ async function approvePayment(id){
 try{
 
 await fetch(
-`${BASE_URL}/admin/verify-payment/${id}`
+`${BASE_URL}/admin/verify-payment/${id}`,
 {
 method:'PUT',
 headers:{
