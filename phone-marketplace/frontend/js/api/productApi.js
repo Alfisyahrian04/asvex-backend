@@ -16,7 +16,10 @@ throw new Error(
 
 }
 
-return await response.json();
+const data =
+await response.json();
+
+return data.products || data;
 
 }
 
