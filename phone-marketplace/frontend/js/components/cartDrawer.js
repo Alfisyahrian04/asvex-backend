@@ -61,6 +61,7 @@ ${item.variant.storage || ''}
 </div>
 
 <button
+id="checkout-btn"
 class="btn-primary w-full mt-6"
 onclick="openCheckoutModal()"
 >
@@ -72,3 +73,38 @@ Checkout
 `;
 
 }
+
+/* =========================
+PATCH FIX
+SYNC CHECKOUT BUTTON
+========================= */
+
+document.addEventListener(
+'DOMContentLoaded',
+()=>{
+
+const checkoutBtn =
+document.getElementById(
+'checkout-btn'
+);
+
+if(checkoutBtn){
+
+checkoutBtn.addEventListener(
+'click',
+()=>{
+
+if(
+typeof openCheckoutModal ===
+'function'
+){
+openCheckoutModal();
+}
+
+}
+);
+
+}
+
+}
+);
