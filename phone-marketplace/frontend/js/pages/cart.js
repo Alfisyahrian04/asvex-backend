@@ -59,6 +59,11 @@ function renderCart() {
             ).toLocaleString()}
           </p>
 
+          <p>
+            Qty:
+            ${item.quantity || 1}
+          </p>
+
           <button
             onclick="
               removeCart(
@@ -84,7 +89,10 @@ function renderCart() {
         item
       ) =>
 
-        acc + item.price,
+        acc + (
+          item.price *
+          (item.quantity || 1)
+        ),
 
       0
     );
@@ -112,17 +120,9 @@ document.getElementById(
   'checkout-btn'
 ).addEventListener(
   'click',
-  () => {
+  async () => {
 
-    checkout();
-
-    localStorage.removeItem(
-      'cart'
-    );
-
-    cart = [];
-
-    renderCart();
+    await checkout();
 
   }
 );
@@ -149,61 +149,85 @@ async function checkout() {
 
   }
 
+  if(!cart.length){
+    alert('Keranjang kosong');
+    return;
+  }
+
   try {
 
-    const response =
-      await fetch(
+    for(const item of cart){
 
-        'https://asvex-backend-production.up.railway.app/api/v1/orders',
+      const response =
+        await fetch(
 
-        {
+          'https://asvex-backend-production.up.railway.app/api/v1/orders',
 
-          method: 'POST',
+          {
 
-          headers: {
+            method: 'POST',
 
-            'Content-Type':
-              'application/json',
+            headers: {
 
-            Authorization:
-              `Bearer ${token}`
+              'Content-Type':
+                'application/json',
 
-          },
+              Authorization:
+                `Bearer ${token}`
 
-          body:
-            JSON.stringify({
+            },
 
-              items: cart
+            body:
+              JSON.stringify({
 
-            })
+                productId:
+                item._id,
 
-        }
+                quantity:
+                item.quantity || 1,
 
-      );
+                shippingAddress:
+                '',
 
-    const data =
-      await response.json();
+                paymentMethod:
+                'manual_transfer',
 
-    if (data.success) {
+                paymentProof:
+                ''
 
-      alert(
-        'Checkout berhasil'
-      );
+              })
 
-      localStorage.removeItem(
-        'cart'
-      );
+          }
 
-      window.location.href =
-        './orders.html';
+        );
 
-    } else {
+      const data =
+        await response.json();
 
-      alert(
-        data.message
-      );
+      if(!response.ok){
+        alert(
+          data.message ||
+          'Checkout gagal'
+        );
+        return;
+      }
 
     }
+
+    alert(
+      'Checkout berhasil'
+    );
+
+    localStorage.removeItem(
+      'cart'
+    );
+
+    cart = [];
+
+    renderCart();
+
+    window.location.href =
+      './orders.html';
 
   } catch (err) {
 
