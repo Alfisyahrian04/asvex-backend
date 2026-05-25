@@ -1,71 +1,98 @@
 const transactionList =
 document.getElementById(
-  'transaction-list'
+'transaction-list'
+);
+
+const token =
+localStorage.getItem(
+'token'
+);
+
+const BASE_URL =
+'https://asvex-backend.up.railway.app/api/v1';
+
+async function renderOrders(){
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/orders/my`,
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
 );
 
 const orders =
-JSON.parse(
-  localStorage.getItem(
-    'orders'
-  )
-) || [];
+await response.json();
 
-function renderOrders() {
+if(
+!Array.isArray(orders) ||
+!orders.length
+){
 
-  if (!orders.length) {
+transactionList.innerHTML = `
 
-    transactionList.innerHTML = `
+<div class="empty-state">
+Belum ada transaksi
+</div>
 
-      <div class="empty-state">
+`;
 
-        Belum ada transaksi
+return;
 
-      </div>
+}
 
-    `;
+transactionList.innerHTML =
+orders.map(order=>`
 
-    return;
+<div class="history-card">
 
-  }
+<div class="history-top">
 
-  transactionList.innerHTML =
-  orders.map(order => `
+<div class="invoice">
+INV-${order._id?.slice(-8)}
+</div>
 
-    <div class="history-card">
+<div class="status">
+${order.status || 'pending'}
+</div>
 
-      <div class="history-top">
+</div>
 
-        <div class="invoice">
+<div class="history-product">
+${order.product?.name || '-'}
+</div>
 
-          INV-${order.id}
+<div class="history-total">
+Total: Rp ${Number(
+order.totalPrice || 0
+).toLocaleString('id-ID')}
+</div>
 
-        </div>
+</div>
 
-        <div class="status">
+`).join('');
 
-          ${order.status || 'DIKIRIM'}
+}catch(error){
 
-        </div>
+console.log(
+'TRANSACTION ERROR:',
+error
+);
 
-      </div>
+transactionList.innerHTML = `
 
-      <div class="history-product">
+<div class="empty-state">
+Belum ada transaksi
+</div>
 
-        ${order.name}
+`;
 
-      </div>
-
-      <div class="history-total">
-
-        Total: Rp ${Number(
-          order.price
-        ).toLocaleString('id-ID')}
-
-      </div>
-
-    </div>
-
-  `).join('');
+}
 
 }
 
