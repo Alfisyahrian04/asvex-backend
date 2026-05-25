@@ -146,7 +146,7 @@ orders.map(order=>{
 const canProcess =
 order.paymentStatus === 'paid';
 
-const buttonHtml =
+let buttonHtml =
 canProcess
 ?
 `
@@ -173,6 +173,63 @@ cursor:not-allowed;
 Menunggu Pembayaran
 </button>
 `;
+
+
+
+/* PATCH START SHIPPING FORM */
+
+if(
+order.status === 'processed'
+){
+
+buttonHtml += `
+
+<div style="
+margin-top:12px;
+display:flex;
+flex-direction:column;
+gap:10px;
+">
+
+<input
+id="resi-${order._id}"
+placeholder="Input nomor resi"
+style="
+height:45px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+"
+/>
+
+<input
+id="foto-${order._id}"
+placeholder="Link foto bukti paket"
+style="
+height:45px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+"
+/>
+
+<button
+onclick="shipOrder('${order._id}')"
+class="password-btn"
+style="height:45px;"
+>
+Paket Sudah Dikirim
+</button>
+
+</div>
+
+`;
+
+}
+
+/* PATCH END SHIPPING FORM */
+
+
 
 return `
 
@@ -261,6 +318,34 @@ Atas Nama:
 ${order.senderName || '-'}
 </p>
 
+${
+order.status === 'shipped'
+&& order.trackingNumber
+? `
+<p>
+No Resi:
+${order.trackingNumber}
+</p>
+`
+: ''
+}
+
+${
+order.status === 'shipped'
+&& order.shippingPhoto
+? `
+<img
+src="${order.shippingPhoto}"
+style="
+margin-top:10px;
+border-radius:12px;
+width:100%;
+"
+/>
+`
+: ''
+}
+
 ${buttonHtml}
 
 </div>
@@ -340,6 +425,75 @@ alert(
 }
 
 
+
+/* PATCH START SHIP ORDER */
+
+async function shipOrder(orderId){
+
+try{
+
+const trackingNumber =
+document.getElementById(
+`resi-${orderId}`
+)?.value || '';
+
+const shippingPhoto =
+document.getElementById(
+`foto-${orderId}`
+)?.value || '';
+
+const response =
+await fetch(
+`${BASE_URL}/seller/shipping/${orderId}`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+trackingNumber,
+shippingPhoto
+})
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+
+alert(
+data.message ||
+'Gagal kirim paket'
+);
+
+return;
+
+}
+
+alert(
+'Paket berhasil dikirim'
+);
+
+loadSellerOrders();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Server error'
+);
+
+}
+
+}
+
+/* PATCH END SHIP ORDER */
+
+
+
 /* LOAD STATS */
 
 async function loadSellerStats(){
@@ -415,6 +569,11 @@ console.log(error);
 
 window.processOrder =
 processOrder;
+
+/* PATCH */
+window.shipOrder =
+shipOrder;
+/* PATCH */
 
 loadSellerOrders();
 
