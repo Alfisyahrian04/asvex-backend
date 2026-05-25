@@ -24,9 +24,7 @@ message:'Data order tidak lengkap'
 }
 
 const product =
-await Product.findById(
-productId
-);
+await Product.findById(productId);
 
 if(!product || !product.isActive){
 return res.status(404).json({
@@ -34,11 +32,18 @@ message:'Produk tidak ditemukan'
 });
 }
 
-if(variant && product.variants?.length){
+/* VALIDASI VARIANT */
+if(
+variant &&
+product.variants?.length
+){
 
 const selectedVariant =
 product.variants.find(
-v => v._id?.toString() === variant._id
+v =>
+v._id?.toString()
+===
+variant._id?.toString()
 );
 
 if(
@@ -52,45 +57,67 @@ message:'Stock varian tidak cukup'
 
 }
 
+/* VALIDASI STOCK */
 if(product.stock < quantity){
 return res.status(400).json({
 message:'Stock produk tidak cukup'
 });
 }
 
+/* TOTAL */
 const totalPrice =
 (product.price * quantity) +
 Number(shippingCost || 0);
 
+/* CREATE ORDER */
 const order =
 await Order.create({
 
 buyer:req.user._id,
+
 seller:product.seller,
+
 product:product._id,
+
 quantity,
+
 totalPrice,
 
-shippingAddress,
+shippingAddress:
+shippingAddress || '',
 
-paymentMethod,
-paymentProof,
+paymentMethod:
+paymentMethod || '',
 
-shippingCourier,
-shippingCost,
+paymentProof:
+paymentProof || '',
 
-variant,
+shippingCourier:
+shippingCourier || '',
 
+shippingCost:
+Number(shippingCost || 0),
+
+variant:
+variant || {},
+
+/* FIX STATUS */
 status:
-'waiting_payment_verification',
+'waiting_verification',
 
 paymentStatus:
 'waiting_verification'
 
 });
 
-product.stock -= quantity;
+/* KURANGI STOCK */
+product.stock =
+Math.max(
+0,
+product.stock - quantity
+);
 
+/* VARIANT STOCK */
 if(
 variant &&
 product.variants?.length
@@ -101,7 +128,8 @@ product.variants.map(v=>{
 
 if(
 v._id?.toString()
-=== variant._id
+===
+variant._id?.toString()
 ){
 v.stock =
 Math.max(
@@ -118,17 +146,29 @@ return v;
 
 await product.save();
 
-res.status(201).json(order);
+res.status(201).json({
+success:true,
+message:'Checkout berhasil',
+order
+});
 
 }catch(error){
 
+console.error(
+'CREATE ORDER ERROR:',
+error
+);
+
 res.status(500).json({
+success:false,
 message:error.message
 });
 
 }
 
 };
+
+/* GET MY ORDERS */
 
 exports.getMyOrders =
 async(req,res)=>{
@@ -151,6 +191,8 @@ message:error.message
 }
 };
 
+/* SELLER ORDERS */
+
 exports.getSellerOrders =
 async(req,res)=>{
 try{
@@ -172,6 +214,8 @@ message:error.message
 }
 };
 
+/* VERIFY PAYMENT */
+
 exports.verifyPayment =
 async(req,res)=>{
 
@@ -190,6 +234,7 @@ message:'Order tidak ditemukan'
 
 order.status='paid';
 order.paymentStatus='paid';
+order.paymentVerifiedAt=new Date();
 
 await order.save();
 
@@ -204,6 +249,8 @@ message:error.message
 }
 
 };
+
+/* SHIP ORDER */
 
 exports.shipOrder =
 async(req,res)=>{
@@ -242,6 +289,8 @@ message:error.message
 }
 
 };
+
+/* UPDATE STATUS */
 
 exports.updateOrderStatus =
 async(req,res)=>{
@@ -289,6 +338,7 @@ message:error.message
 exports.completeOrder =
 async(req,res)=>{
 try{
+
 const order =
 await Order.findById(req.params.id);
 
@@ -315,6 +365,7 @@ message:error.message
 exports.cancelOrder =
 async(req,res)=>{
 try{
+
 const order =
 await Order.findById(req.params.id);
 
@@ -340,6 +391,7 @@ message:error.message
 exports.requestReturn =
 async(req,res)=>{
 try{
+
 const order =
 await Order.findById(req.params.id);
 
@@ -365,6 +417,7 @@ message:error.message
 exports.submitDispute =
 async(req,res)=>{
 try{
+
 const order =
 await Order.findById(req.params.id);
 
