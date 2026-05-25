@@ -166,6 +166,14 @@ status:
 {
 status:
 'waiting_payment_verification'
+},
+{
+status:
+'pending_payment'
+},
+{
+paymentStatus:
+'pending'
 }
 ]
 
