@@ -43,24 +43,19 @@ const cartStore = {
     const maxStock =
       this.getProductStock(product);
 
-    if (
-      maxStock <= 0
-    ) {
+    if (maxStock <= 0) {
 
+      alert('Stok habis');
       return false;
 
     }
 
     if (existing) {
 
-      existing.quantity =
-        Number(
-          existing.quantity || 1
-        );
+      const existingQty =
+        Number(existing.quantity || 1);
 
-      if (
-        existing.quantity >= maxStock
-      ) {
+      if (existingQty >= maxStock) {
 
         existing.quantity =
           maxStock;
@@ -71,15 +66,13 @@ const cartStore = {
 
       }
 
-      existing.quantity += 1;
+      existing.quantity =
+        existingQty + 1;
 
       if (
         existing.quantity > maxStock
       ) {
-
-        existing.quantity =
-          maxStock;
-
+        existing.quantity = maxStock;
       }
 
     } else {
@@ -87,9 +80,7 @@ const cartStore = {
       cart.push({
 
         ...product,
-
         stock: maxStock,
-
         quantity: 1
 
       });
@@ -102,29 +93,21 @@ const cartStore = {
         this.getProductStock(item);
 
       let qty =
-        Number(
-          item.quantity || 1
-        );
+        Number(item.quantity || 1);
 
-      if (qty < 1) {
-        qty = 1;
-      }
+      if (qty < 1) qty = 1;
 
       if (
         itemStock > 0 &&
         qty > itemStock
       ) {
-
         qty = itemStock;
-
       }
 
       return {
 
         ...item,
-
         stock: itemStock,
-
         quantity: qty
 
       };
@@ -143,10 +126,8 @@ const cartStore = {
       this.getCart();
 
     cart = cart.filter(
-
       item =>
         item._id !== productId
-
     );
 
     this.saveCart(cart);
@@ -167,13 +148,9 @@ const cartStore = {
       this.getCart();
 
     return cart.reduce(
-
       (total, item) =>
-
         total + item.quantity,
-
       0
-
     );
 
   },
@@ -184,16 +161,12 @@ const cartStore = {
       this.getCart();
 
     return cart.reduce(
-
       (total, item) =>
-
         total + (
           item.price *
           item.quantity
         ),
-
       0
-
     );
 
   }
