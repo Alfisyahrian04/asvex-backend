@@ -1,19 +1,13 @@
 let cart =
   JSON.parse(
-    localStorage.getItem(
-      'cart'
-    )
+    localStorage.getItem('cart')
   ) || [];
 
 const container =
-  document.getElementById(
-    'cart-items'
-  );
+  document.getElementById('cart-items');
 
 const totalEl =
-  document.getElementById(
-    'cart-total'
-  );
+  document.getElementById('cart-total');
 
 let productsCache = [];
 
@@ -45,20 +39,30 @@ function getLiveProductStock(item){
   if(!product){
 
     return Number(
-      item.stock || 0
+      item.stock ||
+      item.quantity ||
+      item.qty ||
+      item.countInStock ||
+      item.totalStock ||
+      0
     );
 
   }
 
   return Number(
-    product.stock || 0
+    product.stock ||
+    product.quantity ||
+    product.qty ||
+    product.countInStock ||
+    product.totalStock ||
+    0
   );
 
 }
 
-function normalizeCartQty() {
+function normalizeCartQty(){
 
-  cart = cart.map(item => {
+  cart = cart.map(item=>{
 
     const stock =
       getLiveProductStock(item);
@@ -66,19 +70,19 @@ function normalizeCartQty() {
     let qty =
       Number(item.quantity || 1);
 
-    if (qty < 1) qty = 1;
+    if(qty < 1) qty = 1;
 
-    if (
+    if(
       stock > 0 &&
       qty > stock
-    ) {
+    ){
       qty = stock;
     }
 
-    return {
+    return{
       ...item,
-      quantity: qty,
-      stock
+      stock,
+      quantity: qty
     };
 
   });
@@ -90,11 +94,11 @@ function normalizeCartQty() {
 
 }
 
-function renderCart() {
+function renderCart(){
 
   normalizeCartQty();
 
-  if (!cart.length) {
+  if(!cart.length){
 
     container.innerHTML = `
       <div class="empty-cart">
@@ -102,9 +106,7 @@ function renderCart() {
       </div>
     `;
 
-    totalEl.innerText =
-      'Rp 0';
-
+    totalEl.innerText = 'Rp 0';
     return;
 
   }
@@ -114,9 +116,7 @@ function renderCart() {
 
       <div class="cart-card">
 
-        <img
-          src="${item.images?.[0]}"
-        />
+        <img src="${item.images?.[0] || ''}" />
 
         <div class="cart-info">
 
@@ -125,7 +125,7 @@ function renderCart() {
           <p>
             Rp ${Number(
               item.price
-            ).toLocaleString()}
+            ).toLocaleString('id-ID')}
           </p>
 
           <p>
@@ -143,9 +143,7 @@ function renderCart() {
             "
           >
 
-            <button
-              onclick="decreaseQty(${index})"
-            >
+            <button onclick="decreaseQty(${index})">
               -
             </button>
 
@@ -153,17 +151,13 @@ function renderCart() {
               ${item.quantity || 1}
             </span>
 
-            <button
-              onclick="increaseQty(${index})"
-            >
+            <button onclick="increaseQty(${index})">
               +
             </button>
 
           </div>
 
-          <button
-            onclick="removeCart(${index})"
-          >
+          <button onclick="removeCart(${index})">
             Hapus
           </button>
 
@@ -176,38 +170,38 @@ function renderCart() {
   const total =
     cart.reduce(
       (acc,item)=>
-
         acc +
-        item.price *
-        (item.quantity || 1),
-
+        (
+          Number(item.price || 0) *
+          Number(item.quantity || 1)
+        ),
       0
     );
 
   totalEl.innerText =
-    `Rp ${total.toLocaleString()}`;
+    `Rp ${total.toLocaleString('id-ID')}`;
 
 }
 
-window.increaseQty =
-function(index){
+window.increaseQty = function(index){
 
-  const item =
-    cart[index];
-
+  const item = cart[index];
   if(!item) return;
 
   const stock =
     getLiveProductStock(item);
 
-  if(
-    stock > 0 &&
-    item.quantity >= stock
-  ){
+  const currentQty =
+    Number(item.quantity || 1);
 
-    alert(
-      'Stok tidak mencukupi'
-    );
+  if(stock <= 0){
+
+    alert('Stok habis');
+    return;
+
+  }
+
+  if(currentQty >= stock){
 
     item.quantity = stock;
 
@@ -216,13 +210,17 @@ function(index){
       JSON.stringify(cart)
     );
 
-    renderCart();
+    alert(
+      `Stok tersedia hanya ${stock}`
+    );
 
+    renderCart();
     return;
 
   }
 
-  item.quantity += 1;
+  item.quantity =
+    currentQty + 1;
 
   localStorage.setItem(
     'cart',
@@ -233,18 +231,13 @@ function(index){
 
 };
 
-window.decreaseQty =
-function(index){
+window.decreaseQty = function(index){
 
-  const item =
-    cart[index];
-
+  const item = cart[index];
   if(!item) return;
 
   if(item.quantity > 1){
-
     item.quantity -= 1;
-
   }
 
   localStorage.setItem(
@@ -256,8 +249,7 @@ function(index){
 
 };
 
-window.removeCart =
-function(index){
+window.removeCart = function(index){
 
   cart.splice(index,1);
 
@@ -270,9 +262,9 @@ function(index){
 
 };
 
-document.getElementById(
-  'checkout-btn'
-).addEventListener(
+document
+.getElementById('checkout-btn')
+?.addEventListener(
   'click',
   async()=>{
     await checkout();
@@ -288,35 +280,28 @@ async function initCart(){
 
 initCart();
 
-async function checkout() {
+async function checkout(){
 
   const token =
-    localStorage.getItem(
-      'token'
-    );
+    localStorage.getItem('token');
 
-  if (!token) {
+  if(!token){
 
     alert('Login dulu');
-
     window.location.href =
       './login.html';
-
     return;
 
   }
 
   if(!cart.length){
 
-    alert(
-      'Keranjang kosong'
-    );
-
+    alert('Keranjang kosong');
     return;
 
   }
 
-  try {
+  try{
 
     for(const item of cart){
 
@@ -355,13 +340,9 @@ async function checkout() {
 
     }
 
-    alert(
-      'Checkout berhasil'
-    );
+    alert('Checkout berhasil');
 
-    localStorage.removeItem(
-      'cart'
-    );
+    localStorage.removeItem('cart');
 
     cart = [];
 
@@ -370,13 +351,11 @@ async function checkout() {
     window.location.href =
       './orders.html';
 
-  } catch (err) {
+  }catch(err){
 
     console.error(err);
 
-    alert(
-      'Checkout gagal'
-    );
+    alert('Checkout gagal');
 
   }
 
