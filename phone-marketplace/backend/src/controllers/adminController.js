@@ -144,7 +144,7 @@ message:error.message
 
 /* ==============================
 GET PENDING PAYMENTS
-PATCH
+PATCH FIX
 ============================== */
 
 const getPendingPayments =
@@ -154,8 +154,20 @@ try{
 const orders =
 await Order.find({
 
+$or:[
+{
 paymentStatus:
 'waiting_verification'
+},
+{
+status:
+'waiting_confirmation'
+},
+{
+status:
+'waiting_payment_verification'
+}
+]
 
 })
 .populate(
@@ -175,6 +187,11 @@ orders
 });
 
 }catch(error){
+
+console.log(
+'GET PENDING PAYMENTS ERROR:',
+error
+);
 
 res.status(500).json({
 message:error.message
