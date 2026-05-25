@@ -12,12 +12,12 @@ updateOrderStatus,
 verifyPayment,
 shipOrder,
 
-/* PATCH */
+submitPayment,
+
 completeOrder,
 cancelOrder,
 requestReturn,
 submitDispute
-/* PATCH */
 
 } = require(
 '../controllers/orderController'
@@ -29,17 +29,24 @@ protect
 '../middleware/authMiddleware'
 );
 
+
+/* CREATE ORDER */
+
 router.post(
 '/',
 protect,
 createOrder
 );
 
+
+/* BUYER */
+
 router.get(
 '/my-orders',
 protect,
 getMyOrders
 );
+
 
 /* SELLER */
 
@@ -55,11 +62,26 @@ protect,
 updateOrderStatus
 );
 
+
+/* PAYMENT SUBMIT */
+
+router.put(
+'/:id/payment',
+protect,
+submitPayment
+);
+
+
+/* ADMIN VERIFY PAYMENT */
+
 router.put(
 '/:id/verify-payment',
 protect,
 verifyPayment
 );
+
+
+/* SHIPPING */
 
 router.put(
 '/:id/ship',
@@ -67,7 +89,8 @@ protect,
 shipOrder
 );
 
-/* PATCH START */
+
+/* COMPLETE */
 
 router.put(
 '/:id/complete',
@@ -75,11 +98,17 @@ protect,
 completeOrder
 );
 
+
+/* CANCEL */
+
 router.put(
 '/:id/cancel',
 protect,
 cancelOrder
 );
+
+
+/* RETURN */
 
 router.put(
 '/:id/return',
@@ -87,13 +116,15 @@ protect,
 requestReturn
 );
 
+
+/* DISPUTE */
+
 router.put(
 '/:id/dispute',
 protect,
 submitDispute
 );
 
-/* PATCH END */
 
 module.exports =
 router;
