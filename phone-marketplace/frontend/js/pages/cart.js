@@ -36,21 +36,21 @@ function getLiveProductStock(item){
       p => p._id === item._id
     );
 
-  if(!product){
+  if(product){
 
     return Number(
-      item.stock ??
-      item.totalStock ??
-      item.countInStock ??
+      product.stock ??
+      product.totalStock ??
+      product.countInStock ??
       0
     );
 
   }
 
   return Number(
-    product.stock ??
-    product.totalStock ??
-    product.countInStock ??
+    item.stock ??
+    item.totalStock ??
+    item.countInStock ??
     0
   );
 
@@ -66,7 +66,9 @@ function normalizeCartQty(){
     let qty =
       Number(item.quantity || 1);
 
-    if(qty < 1) qty = 1;
+    if(qty < 1){
+      qty = 1;
+    }
 
     if(
       stock > 0 &&
@@ -102,7 +104,7 @@ function renderCart(){
       </div>
     `;
 
-    totalEl.innerText = 'Rp 0';
+    totalEl.innerText='Rp 0';
     return;
 
   }
@@ -119,9 +121,7 @@ function renderCart(){
           <h3>${item.name}</h3>
 
           <p>
-            Rp ${Number(
-              item.price
-            ).toLocaleString('id-ID')}
+            Rp ${Number(item.price).toLocaleString('id-ID')}
           </p>
 
           <p>
@@ -129,31 +129,15 @@ function renderCart(){
             ${item.stock || 0}
           </p>
 
-          <div
-            class="cart-qty-control"
-            style="
-              display:flex;
-              gap:8px;
-              align-items:center;
-              margin:10px 0;
-            "
-          >
+          <div class="cart-qty-control">
 
-            <button onclick="decreaseQty(${index})">
-              -
-            </button>
+            <button onclick="decreaseQty(${index})">-</button>
 
-            <span>
-              ${item.quantity || 1}
-            </span>
+            <span>${item.quantity}</span>
 
             <button
               onclick="increaseQty(${index})"
-              ${
-                Number(item.quantity) >= Number(item.stock)
-                ? 'disabled'
-                : ''
-              }
+              ${item.quantity >= item.stock ? 'disabled' : ''}
             >
               +
             </button>
@@ -175,8 +159,8 @@ function renderCart(){
       (acc,item)=>
         acc +
         (
-          Number(item.price || 0) *
-          Number(item.quantity || 1)
+          Number(item.price) *
+          Number(item.quantity)
         ),
       0
     );
@@ -194,15 +178,19 @@ window.increaseQty = function(index){
   if(!item) return;
 
   const stock =
-    Number(item.stock || 0);
+    getLiveProductStock(item);
 
-  const currentQty =
+  const qty =
     Number(item.quantity || 1);
 
-  if(
-    stock <= 0 ||
-    currentQty >= stock
-  ){
+  if(qty >= stock){
+
+    item.quantity = stock;
+
+    localStorage.setItem(
+      'cart',
+      JSON.stringify(cart)
+    );
 
     alert(
       `Stok tersedia hanya ${stock}`
@@ -213,12 +201,9 @@ window.increaseQty = function(index){
 
   }
 
-  item.quantity =
-    currentQty + 1;
+  item.quantity = qty + 1;
 
-  if(
-    item.quantity > stock
-  ){
+  if(item.quantity > stock){
     item.quantity = stock;
   }
 
@@ -233,11 +218,8 @@ window.increaseQty = function(index){
 
 window.decreaseQty = function(index){
 
-  const item = cart[index];
-  if(!item) return;
-
-  if(item.quantity > 1){
-    item.quantity -= 1;
+  if(cart[index].quantity > 1){
+    cart[index].quantity -= 1;
   }
 
   localStorage.setItem(
@@ -262,15 +244,6 @@ window.removeCart = function(index){
 
 };
 
-document
-.getElementById('checkout-btn')
-?.addEventListener(
-  'click',
-  async()=>{
-    await checkout();
-  }
-);
-
 async function initCart(){
 
   await loadProductsCache();
@@ -279,84 +252,3 @@ async function initCart(){
 }
 
 initCart();
-
-async function checkout(){
-
-  const token =
-    localStorage.getItem('token');
-
-  if(!token){
-
-    alert('Login dulu');
-    window.location.href =
-      './login.html';
-    return;
-
-  }
-
-  if(!cart.length){
-
-    alert('Keranjang kosong');
-    return;
-
-  }
-
-  try{
-
-    for(const item of cart){
-
-      const response =
-        await fetch(
-          'https://asvex-backend-production.up.railway.app/api/v1/orders',
-          {
-            method:'POST',
-            headers:{
-              'Content-Type':'application/json',
-              Authorization:`Bearer ${token}`
-            },
-            body:JSON.stringify({
-              productId:item._id,
-              quantity:item.quantity || 1,
-              shippingAddress:'',
-              paymentMethod:'manual_transfer',
-              paymentProof:''
-            })
-          }
-        );
-
-      const data =
-        await response.json();
-
-      if(!response.ok){
-
-        alert(
-          data.message ||
-          'Checkout gagal'
-        );
-
-        return;
-
-      }
-
-    }
-
-    alert('Checkout berhasil');
-
-    localStorage.removeItem('cart');
-
-    cart = [];
-
-    renderCart();
-
-    window.location.href =
-      './orders.html';
-
-  }catch(err){
-
-    console.error(err);
-
-    alert('Checkout gagal');
-
-  }
-
-}
