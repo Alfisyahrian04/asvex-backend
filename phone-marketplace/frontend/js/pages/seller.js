@@ -144,7 +144,10 @@ pendingOrders.innerHTML =
 orders.map(order=>{
 
 const canProcess =
-order.paymentStatus === 'paid';
+order.paymentStatus === 'paid'
+&& order.status !== 'processed'
+&& order.status !== 'shipped'
+&& order.status !== 'completed';
 
 let buttonHtml =
 canProcess
@@ -174,49 +177,75 @@ Menunggu Pembayaran
 </button>
 `;
 
-
-
-/* PATCH START SHIPPING FORM */
-
 if(
 order.status === 'processed'
 ){
 
-buttonHtml += `
+buttonHtml = `
 
 <div style="
 margin-top:12px;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:12px;
 ">
 
 <input
 id="resi-${order._id}"
 placeholder="Input nomor resi"
 style="
-height:45px;
-padding:10px;
-border-radius:10px;
-border:1px solid #ddd;
+height:48px;
+padding:12px;
+border-radius:14px;
+border:1px solid #e5e7eb;
 "
 />
 
-<input
-id="foto-${order._id}"
-placeholder="Link foto bukti paket"
+<label
+for="foto-${order._id}"
 style="
-height:45px;
-padding:10px;
-border-radius:10px;
-border:1px solid #ddd;
+padding:14px;
+border-radius:14px;
+border:2px dashed #ff6b00;
+background:#fff7ed;
+text-align:center;
+font-weight:600;
+color:#ff6b00;
+cursor:pointer;
+"
+>
+📦 Upload Foto Paket
+</label>
+
+<input
+type="file"
+accept="image/*"
+id="foto-${order._id}"
+style="display:none"
+onchange="previewShippingPhoto('${order._id}')"
+/>
+
+<div
+id="upload-status-${order._id}"
+style="
+font-size:13px;
+font-weight:600;
+"
+></div>
+
+<img
+id="preview-${order._id}"
+style="
+display:none;
+width:100%;
+border-radius:12px;
 "
 />
 
 <button
 onclick="shipOrder('${order._id}')"
 class="password-btn"
-style="height:45px;"
+style="height:48px;"
 >
 Paket Sudah Dikirim
 </button>
@@ -226,10 +255,6 @@ Paket Sudah Dikirim
 `;
 
 }
-
-/* PATCH END SHIPPING FORM */
-
-
 
 return `
 
@@ -425,8 +450,55 @@ alert(
 }
 
 
+/* PREVIEW SHIPPING PHOTO */
 
-/* PATCH START SHIP ORDER */
+function previewShippingPhoto(orderId){
+
+const input =
+document.getElementById(
+`foto-${orderId}`
+);
+
+const preview =
+document.getElementById(
+`preview-${orderId}`
+);
+
+const status =
+document.getElementById(
+`upload-status-${orderId}`
+);
+
+const file =
+input.files[0];
+
+if(!file){
+
+status.innerHTML =
+'❌ Upload gagal';
+
+status.style.color =
+'#ef4444';
+
+return;
+}
+
+preview.src =
+URL.createObjectURL(file);
+
+preview.style.display =
+'block';
+
+status.innerHTML =
+'✅ Upload berhasil';
+
+status.style.color =
+'#16a34a';
+
+}
+
+
+/* SHIP ORDER */
 
 async function shipOrder(orderId){
 
@@ -437,10 +509,45 @@ document.getElementById(
 `resi-${orderId}`
 )?.value || '';
 
-const shippingPhoto =
+const photoInput =
 document.getElementById(
 `foto-${orderId}`
-)?.value || '';
+);
+
+let shippingPhoto = '';
+
+if(
+photoInput &&
+photoInput.files &&
+photoInput.files[0]
+){
+
+const file =
+photoInput.files[0];
+
+shippingPhoto =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(
+reader.result
+);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+file
+);
+
+}
+);
+
+}
 
 const response =
 await fetch(
@@ -489,9 +596,6 @@ alert(
 }
 
 }
-
-/* PATCH END SHIP ORDER */
-
 
 
 /* LOAD STATS */
@@ -570,10 +674,11 @@ console.log(error);
 window.processOrder =
 processOrder;
 
-/* PATCH */
 window.shipOrder =
 shipOrder;
-/* PATCH */
+
+window.previewShippingPhoto =
+previewShippingPhoto;
 
 loadSellerOrders();
 
