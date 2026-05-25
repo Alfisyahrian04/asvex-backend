@@ -1,6 +1,10 @@
-protectPage();
+if (typeof protectPage === 'function') {
+  protectPage();
+}
 
-requireRole('admin');
+if (typeof requireRole === 'function') {
+  requireRole('admin');
+}
 
 const BASE_URL =
 'https://asvex-backend-production.up.railway.app/api/v1';
