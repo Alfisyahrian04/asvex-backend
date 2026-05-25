@@ -62,22 +62,19 @@ return 'Menunggu Diproses';
 }
 
 if(
-order.status ===
-'processed'
+order.status === 'processed'
 ){
 return 'Sedang Diproses';
 }
 
 if(
-order.status ===
-'shipped'
+order.status === 'shipped'
 ){
 return 'Sedang Dikirim';
 }
 
 if(
-order.status ===
-'completed'
+order.status === 'completed'
 ){
 return 'Pesanan Selesai';
 }
@@ -91,8 +88,7 @@ return order.status || 'Pending';
 
 /* LOAD SELLER ORDERS */
 
-async function
-loadSellerOrders(){
+async function loadSellerOrders(){
 
 try{
 
@@ -119,9 +115,7 @@ if(!pendingOrders){
 return;
 }
 
-if(
-!orders.length
-){
+if(!orders.length){
 
 pendingOrders.innerHTML =
 `
@@ -137,8 +131,6 @@ return;
 pendingOrders.innerHTML =
 orders.map(order=>{
 
-/* PATCH START */
-
 const canProcess =
 order.paymentStatus === 'paid';
 
@@ -149,7 +141,7 @@ canProcess
 <button
 onclick="processOrder('${order._id}')"
 class="password-btn"
-style="margin-top:10px;height:45px;"
+style="margin-top:12px;height:45px;"
 >
 Proses Pesanan
 </button>
@@ -160,7 +152,7 @@ Proses Pesanan
 disabled
 class="password-btn"
 style="
-margin-top:10px;
+margin-top:12px;
 height:45px;
 opacity:.6;
 cursor:not-allowed;
@@ -169,8 +161,6 @@ cursor:not-allowed;
 Menunggu Pembayaran
 </button>
 `;
-
-/* PATCH END */
 
 return `
 
@@ -188,8 +178,24 @@ ${order.product?.name || 'Produk'}
 </h3>
 
 <p>
+Kategori:
+${order.product?.category || '-'}
+</p>
+
+<p>
+Berat:
+${order.product?.weight || '-'} gram
+</p>
+
+<p>
 Qty:
-${order.quantity}
+${order.quantity || 1}
+</p>
+
+<p>
+Variant:
+${order.variant?.color || '-'}
+${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
 </p>
 
 <p>
@@ -205,6 +211,42 @@ order.totalPrice || 0
 <p>
 Status:
 ${getStatusLabel(order)}
+</p>
+
+<hr style="
+margin:12px 0;
+border:none;
+border-top:1px solid #eee;
+">
+
+<p>
+Penerima:
+${order.receiverName || '-'}
+</p>
+
+<p>
+No Telp:
+${order.receiverPhone || '-'}
+</p>
+
+<p>
+Alamat:
+${order.receiverAddress || '-'}
+</p>
+
+<p>
+Metode Transfer:
+${order.adminPaymentMethod || '-'}
+</p>
+
+<p>
+Bank Pengirim:
+${order.senderBank || '-'}
+</p>
+
+<p>
+Atas Nama:
+${order.senderName || '-'}
 </p>
 
 ${buttonHtml}
@@ -225,8 +267,7 @@ console.log(error);
 
 /* PROCESS ORDER */
 
-async function
-processOrder(orderId){
+async function processOrder(orderId){
 
 try{
 
@@ -287,8 +328,7 @@ alert(
 
 /* LOAD STATS */
 
-async function
-loadSellerStats(){
+async function loadSellerStats(){
 
 try{
 
