@@ -298,6 +298,41 @@ style="margin-top:14px;"
 >
 Pesanan Selesai
 </button>
+
+<div
+style="
+margin-top:14px;
+padding:14px;
+background:#fff7ed;
+border-radius:16px;
+"
+>
+
+<textarea
+id="refund-reason-${order._id}"
+placeholder="Tulis alasan refund..."
+style="
+width:100%;
+min-height:90px;
+padding:12px;
+border-radius:12px;
+border:1px solid #fed7aa;
+resize:none;
+"
+></textarea>
+
+<button
+onclick="submitRefund('${order._id}')"
+class="payment-submit-btn"
+style="
+margin-top:12px;
+background:#ef4444;
+"
+>
+Ajukan Refund
+</button>
+
+</div>
 `
 : ''
 }
@@ -476,6 +511,57 @@ console.log(error);
 
 alert(
 'Gagal upload bukti pembayaran'
+);
+
+}
+
+}
+
+
+async function submitRefund(orderId){
+
+try{
+
+const refundReason =
+document.getElementById(
+`refund-reason-${orderId}`
+)?.value;
+
+if(!refundReason){
+alert(
+'Isi alasan refund dulu'
+);
+return;
+}
+
+await fetch(
+`${API_URL}/orders/${orderId}/refund`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:
+`Bearer ${localStorage.getItem('token')}`
+},
+body:JSON.stringify({
+refundRequest:true,
+refundReason
+})
+}
+);
+
+alert(
+'Refund berhasil diajukan'
+);
+
+loadOrders();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Gagal ajukan refund'
 );
 
 }
