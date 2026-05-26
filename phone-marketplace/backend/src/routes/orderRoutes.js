@@ -5,20 +5,19 @@ const router =
 express.Router();
 
 const {
+const {
 createOrder,
 getMyOrders,
 getSellerOrders,
 updateOrderStatus,
 verifyPayment,
 shipOrder,
-
 submitPayment,
-
 completeOrder,
 cancelOrder,
 requestReturn,
+submitReturnShipment,
 submitDispute
-
 } = require(
 '../controllers/orderController'
 );
@@ -122,6 +121,11 @@ router.put(
   requestReturn
 );
 
+router.put(
+'/:id/return-shipment',
+protect,
+submitReturnShipment
+);
 
 /* DISPUTE */
 
