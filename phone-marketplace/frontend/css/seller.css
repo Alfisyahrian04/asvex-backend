@@ -962,3 +962,53 @@ border-top:1px solid #eee !important;
 .order-detail-row.hidden{
 display:none !important;
 }
+/* ===== REFUND MODAL UI POLISH FIX ===== */
+
+.refund-detail-content{
+max-width:420px !important;
+width:calc(100% - 32px) !important;
+margin:40px auto !important;
+padding:20px !important;
+border-radius:24px !important;
+background:#fff !important;
+box-sizing:border-box !important;
+}
+
+#refund-detail-video{
+width:100% !important;
+max-height:260px !important;
+object-fit:cover !important;
+border-radius:16px !important;
+margin-top:12px !important;
+margin-bottom:14px !important;
+display:block;
+}
+
+#seller-return-address{
+width:100% !important;
+min-height:88px !important;
+max-height:120px !important;
+resize:none !important;
+padding:14px !important;
+font-size:15px !important;
+line-height:1.5 !important;
+border-radius:14px !important;
+border:1px solid #e5e7eb !important;
+box-sizing:border-box !important;
+margin-bottom:14px !important;
+}
+
+#approve-refund-btn,
+#reject-refund-btn{
+height:52px !important;
+font-size:16px !important;
+font-weight:700 !important;
+border-radius:14px !important;
+margin-top:10px !important;
+}
+
+#refund-detail-modal button:last-child{
+height:48px !important;
+border-radius:14px !important;
+margin-top:10px !important;
+}
