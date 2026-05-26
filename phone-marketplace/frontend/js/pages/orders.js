@@ -69,6 +69,9 @@ return 'Buyer Mengajukan Refund';
 case 'waiting_return':
 return 'Menunggu Buyer Mengirim Retur';
 
+case 'waiting_seller_receive_return':
+return 'Menunggu Seller Menerima Retur';        
+
 case 'waiting_admin_refund':
 return 'Menunggu Admin Memproses Refund';
     
