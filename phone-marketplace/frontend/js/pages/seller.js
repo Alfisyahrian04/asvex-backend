@@ -38,56 +38,40 @@ localStorage.getItem(
 'token'
 );
 
+let sellerOrders = [];
+let selectedRefundOrderId = null;
 
-/* STATUS LABEL PATCH */
+
+/* STATUS LABEL */
 
 function getStatusLabel(order){
 
-if(
-order.status ===
-'waiting_confirmation'
-){
+if(order.status === 'waiting_confirmation'){
 return 'Menunggu Konfirmasi Pembayaran';
 }
 
-if(
-order.paymentStatus ===
-'waiting_verification'
-){
+if(order.paymentStatus === 'waiting_verification'){
 return 'Menunggu Konfirmasi Pembayaran';
 }
 
-if(
-order.refundStatus ===
-'requested'
-){
-return 'Pengajuan Refund Masuk';
+if(order.refundStatus === 'requested'){
+return 'Buyer Mengajukan Refund';
 }
 
-if(
-order.refundStatus ===
-'approved'
-){
+if(order.refundStatus === 'approved'){
 return 'Menunggu Barang Retur Buyer';
 }
 
-if(
-order.refundStatus ===
-'returned'
-){
+if(order.refundStatus === 'returned'){
 return 'Paket Retur Sudah Sampai';
 }
 
-if(
-order.refundStatus ===
-'waiting_admin_refund'
-){
+if(order.refundStatus === 'waiting_admin_refund'){
 return 'Menunggu Refund Admin';
 }
 
 if(
-order.paymentStatus ===
-'paid' &&
+order.paymentStatus === 'paid' &&
 (
 order.status === 'paid' ||
 order.status === 'pending' ||
@@ -97,27 +81,19 @@ order.status === 'pending_payment'
 return 'Menunggu Diproses';
 }
 
-if(
-order.status === 'processed'
-){
+if(order.status === 'processed'){
 return 'Sedang Diproses';
 }
 
-if(
-order.status === 'shipped'
-){
+if(order.status === 'shipped'){
 return 'Sedang Dikirim';
 }
 
-if(
-order.status === 'completed'
-){
+if(order.status === 'completed'){
 return 'Pesanan Selesai';
 }
 
-if(
-order.status === 'cancelled'
-){
+if(order.status === 'cancelled'){
 return 'Pesanan Dibatalkan';
 }
 
@@ -146,6 +122,8 @@ Authorization:
 const orders =
 await response.json();
 
+sellerOrders = orders;
+
 const pendingOrders =
 document.getElementById(
 'pending-orders'
@@ -154,8 +132,7 @@ document.getElementById(
 if(!pendingOrders){
 return;
 }
-
-if(!orders.length){
+  if(!orders.length){
 
 pendingOrders.innerHTML =
 `
@@ -225,7 +202,6 @@ order.status === 'processed'
 ){
 
 buttonHtml = `
-
 <div style="
 margin-top:12px;
 display:flex;
@@ -294,13 +270,11 @@ Paket Sudah Dikirim
 </button>
 
 </div>
-
 `;
-
 }
 
 
-/* REFUND PATCH SELLER */
+/* REFUND CARD PATCH */
 
 if(
 order.refundRequest === true &&
@@ -308,7 +282,6 @@ order.refundStatus === 'requested'
 ){
 
 buttonHtml += `
-
 <div style="
 margin-top:16px;
 padding:16px;
@@ -319,55 +292,33 @@ background:#fff7ed;
 <h4>Pengajuan Refund Buyer</h4>
 
 <p>
+Status:
+<b style="color:#ea580c;">
+Buyer Mengajukan Refund
+</b>
+</p>
+
+<p>
 Alasan:
 ${order.refundReason || '-'}
 </p>
 
-${
-order.unboxingVideo
-? `
-<video
-controls
-style="
-width:100%;
-margin-top:10px;
-border-radius:12px;
-"
-src="${order.unboxingVideo}"
-></video>
-`
-: ''
-}
-
-<textarea
-id="return-address-${order._id}"
-placeholder="Input alamat retur"
-style="
-width:100%;
-min-height:90px;
-margin-top:12px;
-padding:12px;
-border-radius:12px;
-"
-></textarea>
-
 <button
-onclick="approveRefund('${order._id}')"
+onclick="openRefundDetailModal('${order._id}')"
 class="password-btn"
 style="
 margin-top:12px;
 height:48px;
-background:#16a34a;
+background:#f97316;
 "
 >
-Setujui Refund & Kirim Alamat Retur
+Lihat Detail Refund
 </button>
 
 </div>
 `;
 }
-
-if(
+  if(
 order.refundStatus === 'returned'
 ){
 
@@ -426,9 +377,7 @@ ${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
 Rp ${
 Number(
 order.totalPrice || 0
-).toLocaleString(
-'id-ID'
-)
+).toLocaleString('id-ID')
 }
 </p>
 
@@ -437,11 +386,13 @@ Status:
 ${getStatusLabel(order)}
 </p>
 
-<hr style="
+<hr
+style="
 margin:12px 0;
 border:none;
 border-top:1px solid #eee;
-">
+"
+/>
 
 <p>
 Penerima:
@@ -516,8 +467,6 @@ console.log(error);
 }
 
 }
-
-
 /* PROCESS ORDER */
 
 async function processOrder(orderId){
@@ -529,19 +478,14 @@ await fetch(
 `${BASE_URL}/orders/${orderId}/status`,
 {
 method:'PUT',
-
 headers:{
-'Content-Type':
-'application/json',
-
+'Content-Type':'application/json',
 Authorization:
 `Bearer ${token}`
 },
-
 body:JSON.stringify({
 status:'processed'
 })
-
 }
 );
 
@@ -598,15 +542,20 @@ const file =
 input.files[0];
 
 if(!file){
+
 status.innerHTML =
 '❌ Upload gagal';
+
 status.style.color =
 '#ef4444';
+
 return;
+
 }
 
 preview.src =
 URL.createObjectURL(file);
+
 preview.style.display =
 'block';
 
@@ -663,14 +612,14 @@ reader.readAsDataURL(file);
 
 });
 }
-
-await fetch(
+  await fetch(
 `${BASE_URL}/seller/shipping/${orderId}`,
 {
 method:'PUT',
 headers:{
 'Content-Type':'application/json',
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 },
 body:JSON.stringify({
 trackingNumber,
@@ -687,24 +636,96 @@ loadSellerOrders();
 
 }catch(error){
 
-alert('Server error');
+alert(
+'Server error'
+);
 
 }
 
 }
+
+
+/* REFUND MODAL ACTION */
+
+window.openRefundDetailModal =
+function(orderId){
+
+const order =
+sellerOrders.find(
+item =>
+item._id === orderId
+);
+
+if(!order) return;
+
+selectedRefundOrderId =
+orderId;
+
+document.getElementById(
+'refund-detail-reason'
+).innerText =
+'Alasan: ' +
+(order.refundReason || '-');
+
+const video =
+document.getElementById(
+'refund-detail-video'
+);
+
+if(
+order.unboxingVideo
+){
+video.src =
+order.unboxingVideo;
+video.style.display =
+'block';
+}else{
+video.style.display =
+'none';
+}
+
+document.getElementById(
+'refund-detail-modal'
+).style.display =
+'block';
+
+document.getElementById(
+'approve-refund-btn'
+).onclick =
+async function(){
+await approveRefund(
+selectedRefundOrderId
+);
+};
+
+};
+
+window.closeRefundDetailModal =
+function(){
+
+document.getElementById(
+'refund-detail-modal'
+).style.display =
+'none';
+
+};
 
 
 /* REFUND ACTION */
 
 async function approveRefund(orderId){
 
+try{
+
 const returnAddress =
 document.getElementById(
-`return-address-${orderId}`
+'seller-return-address'
 ).value;
 
 if(!returnAddress){
-alert('Alamat retur wajib diisi');
+alert(
+'Alamat retur wajib diisi'
+);
 return;
 }
 
@@ -714,7 +735,8 @@ await fetch(
 method:'PUT',
 headers:{
 'Content-Type':'application/json',
-Authorization:`Bearer ${token}`
+Authorization:
+`Bearer ${token}`
 },
 body:JSON.stringify({
 returnAddress
@@ -726,7 +748,17 @@ alert(
 'Refund disetujui'
 );
 
+closeRefundDetailModal();
+
 loadSellerOrders();
+
+}catch(error){
+
+alert(
+'Gagal approve refund'
+);
+
+}
 
 }
 
@@ -792,9 +824,7 @@ if(sellerBalance){
 sellerBalance.innerText =
 `RP ${Number(
 data.balance || 0
-).toLocaleString(
-'id-ID'
-)}`;
+).toLocaleString('id-ID')}`;
 
 }
 
@@ -803,9 +833,7 @@ if(monthlyIncome){
 monthlyIncome.innerText =
 `RP ${Number(
 data.monthlyRevenue || 0
-).toLocaleString(
-'id-ID'
-)}`;
+).toLocaleString('id-ID')}`;
 
 }
 
