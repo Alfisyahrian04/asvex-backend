@@ -7,28 +7,19 @@
 
 <title>Seller Dashboard</title>
 
-<link
-rel="stylesheet"
-href="css/seller.css?v=99999"
->
+<link rel="stylesheet" href="css/seller.css?v=99999">
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+/>
 </head>
 
 <body>
 
 <header class="topbar">
 <div class="seller-logo">AL SELLER</div>
-
-<div
-class="seller-name"
-id="seller-username"
->
-SELLER
-</div>
+<div class="seller-name" id="seller-username">SELLER</div>
 </header>
 
 
@@ -37,12 +28,9 @@ SELLER
 <div class="dashboard-card">
 <p>SELLER DASHBOARD</p>
 
-<h1 id="seller-balance">
-RP 0
-</h1>
+<h1 id="seller-balance">RP 0</h1>
 
 <div class="dashboard-bottom">
-
 <div class="dashboard-item">
 <h3>BULAN INI</h3>
 <p id="monthly-income">RP 0</p>
@@ -52,7 +40,6 @@ RP 0
 <h3>TOTAL ORDER</h3>
 <p id="total-orders">0 UNIT</p>
 </div>
-
 </div>
 </div>
 
@@ -195,12 +182,14 @@ id="seller-appeal-modal"
 style="
 display:none;
 position:fixed;
-inset:0;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:rgba(0,0,0,.45);
 z-index:99999;
-justify-content:center;
-align-items:center;
 padding:20px;
+overflow-y:auto;
 "
 >
 
@@ -212,6 +201,9 @@ max-width:430px;
 border-radius:24px;
 padding:22px;
 box-sizing:border-box;
+margin:40px auto;
+position:relative;
+z-index:100000;
 "
 >
 
@@ -242,7 +234,6 @@ box-sizing:border-box;
 
 
 <div style="margin-top:14px;">
-
 <label
 for="seller-appeal-photo"
 style="
@@ -268,16 +259,15 @@ background:#f9fafb;
 border:1px solid #e5e7eb;
 border-radius:14px;
 box-sizing:border-box;
-cursor:pointer;
 font-size:15px;
+cursor:pointer;
 "
->
-
+/>
 </div>
 
 
-<div style="margin-top:14px;">
 
+<div style="margin-top:14px;">
 <label
 for="seller-appeal-video"
 style="
@@ -303,27 +293,36 @@ background:#f9fafb;
 border:1px solid #e5e7eb;
 border-radius:14px;
 box-sizing:border-box;
-cursor:pointer;
 font-size:15px;
+cursor:pointer;
 "
->
-
+/>
 </div>
 
 
 <button
+type="button"
 onclick="submitSellerAppealForm()"
-class="password-btn"
 style="
 width:100%;
 height:52px;
 margin-top:18px;
+border:none;
+border-radius:16px;
+background:#ff6b00;
+color:white;
+font-size:18px;
+font-weight:700;
+cursor:pointer;
+position:relative;
+z-index:100001;
 "
 >
 Kirim Banding
 </button>
 
 <button
+type="button"
 onclick="closeSellerAppealModal()"
 style="
 width:100%;
@@ -334,6 +333,8 @@ border-radius:14px;
 background:#f3f4f6;
 font-weight:600;
 cursor:pointer;
+position:relative;
+z-index:100001;
 "
 >
 Batal
@@ -346,34 +347,22 @@ Batal
 
 <nav class="bottom-nav">
 
-<a
-href="seller.html"
-class="nav-item active"
->
+<a href="seller.html" class="nav-item active">
 <i class="fa-solid fa-wallet"></i>
 <span>Saldo</span>
 </a>
 
-<a
-href="seller-products.html"
-class="nav-item"
->
+<a href="seller-products.html" class="nav-item">
 <i class="fa-solid fa-box"></i>
 <span>Produk</span>
 </a>
 
-<a
-href="seller-chat.html"
-class="nav-item"
->
+<a href="seller-chat.html" class="nav-item">
 <i class="fa-solid fa-comments"></i>
 <span>Inbox</span>
 </a>
 
-<a
-href="seller-profile.html"
-class="nav-item"
->
+<a href="seller-profile.html" class="nav-item">
 <i class="fa-solid fa-user-gear"></i>
 <span>Akun</span>
 </a>
