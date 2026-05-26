@@ -59,7 +59,6 @@ Belum ada pesanan
 </main>
 
 
-
 <!-- REFUND DETAIL MODAL -->
 
 <div
@@ -179,15 +178,14 @@ id="seller-appeal-modal"
 style="
 display:none;
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+inset:0;
 background:rgba(0,0,0,.45);
 z-index:99999;
 padding:16px;
 overflow-y:auto;
 box-sizing:border-box;
+justify-content:center;
+align-items:center;
 "
 >
 
@@ -201,8 +199,8 @@ padding:20px;
 box-sizing:border-box;
 margin:32px auto;
 position:relative;
-z-index:100000;
-overflow:hidden;
+z-index:100001;
+pointer-events:auto;
 "
 >
 
@@ -252,8 +250,6 @@ accept="image/*"
 id="seller-appeal-photo"
 style="
 width:100%;
-display:block;
-max-width:100%;
 padding:12px;
 background:#f9fafb;
 border:1px solid #e5e7eb;
@@ -262,7 +258,7 @@ box-sizing:border-box;
 font-size:14px;
 cursor:pointer;
 "
-/>
+>
 </div>
 
 
@@ -286,8 +282,6 @@ accept="video/*"
 id="seller-appeal-video"
 style="
 width:100%;
-display:block;
-max-width:100%;
 padding:12px;
 background:#f9fafb;
 border:1px solid #e5e7eb;
@@ -296,7 +290,7 @@ box-sizing:border-box;
 font-size:14px;
 cursor:pointer;
 "
-/>
+>
 </div>
 
 
@@ -315,7 +309,7 @@ font-size:18px;
 font-weight:700;
 cursor:pointer;
 position:relative;
-z-index:100001;
+z-index:100002;
 "
 >
 Kirim Banding
@@ -334,7 +328,7 @@ background:#f3f4f6;
 font-weight:600;
 cursor:pointer;
 position:relative;
-z-index:100001;
+z-index:100002;
 "
 >
 Batal
