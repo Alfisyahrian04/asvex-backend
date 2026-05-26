@@ -50,7 +50,7 @@ getSellerProducts
 router.get(
 '/analytics',
 protect,
-getSellerAnalytics'
+getSellerAnalytics
 );
 
 router.put(
