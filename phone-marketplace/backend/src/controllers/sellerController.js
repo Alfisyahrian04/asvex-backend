@@ -309,8 +309,7 @@ req.user._id
 order.sellerRefundApproved =
 true;
 
-order.refundStatus =
-'seller_approved';
+order.refundStatus = 'approved';
 
 order.returnAddress =
 req.body.returnAddress ||
