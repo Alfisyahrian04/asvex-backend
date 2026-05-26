@@ -285,6 +285,48 @@ message:error.message
 
 };
 
+exports.rejectRefundRequest =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.refundRequest = false;
+
+order.refundStatus = 'rejected';
+
+order.refundRejectedBySeller = true;
+
+order.rejectReason =
+req.body.rejectReason || '';
+
+order.refundRejectedAt =
+new Date();
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
 exports.approveRefundRequest =
 async(req,res)=>{
 
