@@ -56,6 +56,9 @@ return 'Sedang Diproses';
 case 'shipped':
 return 'Pesanan Dikirim';
 
+case 'waiting_seller_approval':
+return 'Menunggu Persetujuan Seller';
+
 case 'completed':
 return 'Pesanan Selesai';
 
@@ -633,6 +636,8 @@ document.getElementById(
 );
 
 if(
+!videoInput ||
+!videoInput.files ||
 !videoInput.files[0]
 ){
 alert(
@@ -641,13 +646,72 @@ alert(
 return;
 }
 
-alert('Refund berhasil diajukan');
+const file =
+videoInput.files[0];
+
+const unboxingVideo =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(file);
+
+}
+);
+
+const response =
+await fetch(
+`${API_URL}/orders/${orderId}/refund`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:
+`Bearer ${localStorage.getItem('token')}`
+},
+body:JSON.stringify({
+refundRequest:true,
+refundReason,
+refundBank,
+refundName,
+refundNumber,
+unboxingVideo,
+status:'waiting_seller_approval',
+refundStatus:'waiting_seller_approval'
+})
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+alert(
+data.message ||
+'Gagal ajukan refund'
+);
+return;
+}
+
+alert(
+'Refund berhasil diajukan, menunggu persetujuan seller'
+);
 
 closeRefundModal(orderId);
 
 loadOrders();
 
 }catch(error){
+
+console.log(error);
 
 alert('Gagal ajukan refund');
 
