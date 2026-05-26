@@ -1,4 +1,4 @@
-const BASE_URL =
+const ORDERS_BASE_URL =
 window.API_URL ||
 'https://asvex-backend-production.up.railway.app/api/v1';
 
@@ -673,7 +673,7 @@ reader.readAsDataURL(file);
 
 const response =
 await fetch(
-`${BASE_URL}/orders/${orderId}/refund`,
+`${ORDERS_BASE_URL}/orders/${orderId}/refund`
 {
 method:'PUT',
 headers:{
