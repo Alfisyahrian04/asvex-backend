@@ -302,14 +302,10 @@ message:'Order not found'
 }
 
 order.refundRequest = false;
-
 order.refundStatus = 'rejected';
-
 order.refundRejectedBySeller = true;
-
 order.rejectReason =
 req.body.rejectReason || '';
-
 order.refundRejectedAt =
 new Date();
 
@@ -348,10 +344,14 @@ await User.findById(
 req.user._id
 );
 
-order.sellerRefundApproved =
-true;
+order.sellerRefundApproved = true;
 
 order.refundStatus = 'approved';
+
+/* PATCH STATUS BUYER */
+order.status = 'waiting_return';
+
+order.returnStatus = 'approved';
 
 order.returnAddress =
 req.body.returnAddress ||
@@ -403,6 +403,9 @@ order.returnStatus =
 'returned_received';
 
 order.refundStatus =
+'waiting_admin_refund';
+
+order.status =
 'waiting_admin_refund';
 
 order.sellerReceivedReturnAt =
