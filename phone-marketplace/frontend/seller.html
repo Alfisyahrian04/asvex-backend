@@ -34,7 +34,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 AL SELLER
 </div>
 
-<div class="seller-name"
+<div
+class="seller-name"
 id="seller-username"
 >
 SELLER
@@ -84,8 +85,6 @@ TOTAL ORDER
 
 </div>
 
-<!-- PESANAN -->
-
 <div class="section-title">
 
 <div class="line"></div>
@@ -102,16 +101,124 @@ class="seller-product-grid"
 >
 
 <div class="empty-state">
-
 Belum ada pesanan
-
 </div>
 
 </div>
 
 </main>
 
-<!-- BOTTOM NAV -->
+
+<!-- REFUND DETAIL MODAL PATCH -->
+
+<div
+id="refund-detail-modal"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.55);
+z-index:99999;
+padding:20px;
+overflow:auto;
+"
+>
+
+<div
+style="
+background:#fff;
+max-width:520px;
+margin:40px auto;
+border-radius:22px;
+padding:22px;
+"
+>
+
+<h2
+style="
+font-size:20px;
+font-weight:700;
+margin-bottom:14px;
+"
+>
+Pengajuan Refund Buyer
+</h2>
+
+<p
+id="refund-detail-reason"
+style="
+font-size:14px;
+line-height:1.7;
+color:#374151;
+"
+></p>
+
+<video
+id="refund-detail-video"
+controls
+style="
+width:100%;
+margin-top:14px;
+border-radius:14px;
+display:none;
+"
+></video>
+
+<textarea
+id="seller-return-address"
+placeholder="Input alamat retur seller"
+style="
+width:100%;
+min-height:110px;
+margin-top:16px;
+padding:14px;
+border-radius:14px;
+border:1px solid #e5e7eb;
+resize:none;
+"
+></textarea>
+
+<button
+id="approve-refund-btn"
+style="
+margin-top:14px;
+width:100%;
+height:52px;
+border:none;
+border-radius:16px;
+background:#16a34a;
+color:white;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+"
+>
+Setujui Refund & Kirim Alamat Retur
+</button>
+
+<button
+onclick="closeRefundDetailModal()"
+style="
+margin-top:10px;
+width:100%;
+height:48px;
+border:none;
+border-radius:14px;
+background:#f3f4f6;
+font-weight:600;
+cursor:pointer;
+"
+>
+Tutup
+</button>
+
+</div>
+
+</div>
+
 
 <nav class="bottom-nav">
 
@@ -119,52 +226,32 @@ Belum ada pesanan
 href="seller.html"
 class="nav-item active"
 >
-
 <i class="fa-solid fa-wallet"></i>
-
-<span>
-Saldo
-</span>
-
+<span>Saldo</span>
 </a>
 
 <a
 href="seller-products.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-box"></i>
-
-<span>
-Produk
-</span>
-
+<span>Produk</span>
 </a>
 
 <a
 href="seller-chat.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-comments"></i>
-
-<span>
-Inbox
-</span>
-
+<span>Inbox</span>
 </a>
 
 <a
 href="seller-profile.html"
 class="nav-item"
 >
-
 <i class="fa-solid fa-user-gear"></i>
-
-<span>
-Akun
-</span>
-
+<span>Akun</span>
 </a>
 
 </nav>
