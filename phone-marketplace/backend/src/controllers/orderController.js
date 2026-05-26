@@ -574,3 +574,51 @@ async(req,res)=>{
 
   }
 };
+exports.submitReturnShipment = async (req, res) => {
+  try {
+
+    const order = await Order.findById(
+      req.params.id
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order tidak ditemukan'
+      });
+    }
+
+    order.returnTrackingNumber =
+      req.body.returnTrackingNumber || '';
+
+    order.returnProof =
+      req.body.returnProof || '';
+
+    order.returnStatus =
+      'shipped_by_buyer';
+
+    order.refundStatus =
+      'waiting_admin_refund';
+
+    order.status =
+      'waiting_admin_refund';
+
+    order.returnShippedAt =
+      new Date();
+
+    await order.save();
+
+    res.json(order);
+
+  } catch (error) {
+
+    console.error(
+      'SUBMIT RETURN SHIPMENT ERROR:',
+      error
+    );
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+};
