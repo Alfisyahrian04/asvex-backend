@@ -388,11 +388,9 @@ async(req,res)=>{
     res.json(order);
 
   }catch(error){
-
     res.status(500).json({
       message:error.message
     });
-
   }
 };
 
@@ -421,11 +419,9 @@ async(req,res)=>{
     res.json(order);
 
   }catch(error){
-
     res.status(500).json({
       message:error.message
     });
-
   }
 };
 
@@ -447,6 +443,16 @@ async(req,res)=>{
       });
     }
 
+    let safeVideo = '';
+
+    if(
+      typeof req.body.unboxingVideo
+      === 'string'
+    ){
+      safeVideo =
+        req.body.unboxingVideo;
+    }
+
     order.refundRequest = true;
 
     order.returnStatus =
@@ -455,11 +461,14 @@ async(req,res)=>{
     order.refundStatus =
       'requested';
 
+    order.status =
+      'waiting_seller_refund_approval';
+
     order.refundReason =
       req.body.refundReason || '';
 
     order.unboxingVideo =
-      req.body.unboxingVideo || '';
+      safeVideo;
 
     order.refundBankName =
       req.body.refundBankName || '';
@@ -470,11 +479,19 @@ async(req,res)=>{
     order.refundAccountNumber =
       req.body.refundAccountNumber || '';
 
+    order.refundRequestedAt =
+      new Date();
+
     await order.save();
 
     res.json(order);
 
   }catch(error){
+
+    console.error(
+      'REQUEST RETURN ERROR:',
+      error
+    );
 
     res.status(500).json({
       message:error.message
