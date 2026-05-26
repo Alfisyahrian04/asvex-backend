@@ -58,6 +58,34 @@ return 'Menunggu Konfirmasi Pembayaran';
 }
 
 if(
+order.refundStatus ===
+'requested'
+){
+return 'Pengajuan Refund Masuk';
+}
+
+if(
+order.refundStatus ===
+'approved'
+){
+return 'Menunggu Barang Retur Buyer';
+}
+
+if(
+order.refundStatus ===
+'returned'
+){
+return 'Paket Retur Sudah Sampai';
+}
+
+if(
+order.refundStatus ===
+'waiting_admin_refund'
+){
+return 'Menunggu Refund Admin';
+}
+
+if(
 order.paymentStatus ===
 'paid' &&
 (
@@ -271,6 +299,93 @@ Paket Sudah Dikirim
 
 }
 
+
+/* REFUND PATCH SELLER */
+
+if(
+order.refundRequest === true &&
+order.refundStatus === 'requested'
+){
+
+buttonHtml += `
+
+<div style="
+margin-top:16px;
+padding:16px;
+border-radius:16px;
+background:#fff7ed;
+">
+
+<h4>Pengajuan Refund Buyer</h4>
+
+<p>
+Alasan:
+${order.refundReason || '-'}
+</p>
+
+${
+order.unboxingVideo
+? `
+<video
+controls
+style="
+width:100%;
+margin-top:10px;
+border-radius:12px;
+"
+src="${order.unboxingVideo}"
+></video>
+`
+: ''
+}
+
+<textarea
+id="return-address-${order._id}"
+placeholder="Input alamat retur"
+style="
+width:100%;
+min-height:90px;
+margin-top:12px;
+padding:12px;
+border-radius:12px;
+"
+></textarea>
+
+<button
+onclick="approveRefund('${order._id}')"
+class="password-btn"
+style="
+margin-top:12px;
+height:48px;
+background:#16a34a;
+"
+>
+Setujui Refund & Kirim Alamat Retur
+</button>
+
+</div>
+`;
+}
+
+if(
+order.refundStatus === 'returned'
+){
+
+buttonHtml += `
+<button
+onclick="confirmReturnReceived('${order._id}')"
+class="password-btn"
+style="
+margin-top:14px;
+height:48px;
+background:#2563eb;
+"
+>
+Paket Retur Sudah Diterima
+</button>
+`;
+}
+
 return `
 
 <div class="product-card">
@@ -424,9 +539,7 @@ Authorization:
 },
 
 body:JSON.stringify({
-
 status:'processed'
-
 })
 
 }
@@ -436,14 +549,11 @@ const data =
 await response.json();
 
 if(!response.ok){
-
 alert(
 data.message ||
 'Gagal update status'
 );
-
 return;
-
 }
 
 alert(
@@ -488,19 +598,15 @@ const file =
 input.files[0];
 
 if(!file){
-
 status.innerHTML =
 '❌ Upload gagal';
-
 status.style.color =
 '#ef4444';
-
 return;
 }
 
 preview.src =
 URL.createObjectURL(file);
-
 preview.style.display =
 'block';
 
@@ -548,23 +654,16 @@ const reader =
 new FileReader();
 
 reader.onload =
-()=>resolve(
-reader.result
-);
+()=>resolve(reader.result);
 
 reader.onerror =
 reject;
 
-reader.readAsDataURL(
-file
-);
+reader.readAsDataURL(file);
 
-}
-);
-
+});
 }
 
-const response =
 await fetch(
 `${BASE_URL}/seller/shipping/${orderId}`,
 {
@@ -580,20 +679,6 @@ shippingPhoto
 }
 );
 
-const data =
-await response.json();
-
-if(!response.ok){
-
-alert(
-data.message ||
-'Gagal kirim paket'
-);
-
-return;
-
-}
-
 alert(
 'Paket berhasil dikirim'
 );
@@ -602,13 +687,67 @@ loadSellerOrders();
 
 }catch(error){
 
-console.log(error);
-
-alert(
-'Server error'
-);
+alert('Server error');
 
 }
+
+}
+
+
+/* REFUND ACTION */
+
+async function approveRefund(orderId){
+
+const returnAddress =
+document.getElementById(
+`return-address-${orderId}`
+).value;
+
+if(!returnAddress){
+alert('Alamat retur wajib diisi');
+return;
+}
+
+await fetch(
+`${BASE_URL}/seller/refund/${orderId}/approve`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+returnAddress
+})
+}
+);
+
+alert(
+'Refund disetujui'
+);
+
+loadSellerOrders();
+
+}
+
+async function confirmReturnReceived(orderId){
+
+await fetch(
+`${BASE_URL}/seller/refund/${orderId}/received`,
+{
+method:'PUT',
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+alert(
+'Paket retur diterima'
+);
+
+loadSellerOrders();
 
 }
 
@@ -685,7 +824,6 @@ console.log(error);
 
 }
 
-
 window.processOrder =
 processOrder;
 
@@ -694,6 +832,12 @@ shipOrder;
 
 window.previewShippingPhoto =
 previewShippingPhoto;
+
+window.approveRefund =
+approveRefund;
+
+window.confirmReturnReceived =
+confirmReturnReceived;
 
 loadSellerOrders();
 
