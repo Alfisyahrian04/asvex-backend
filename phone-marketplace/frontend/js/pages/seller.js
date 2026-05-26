@@ -8,19 +8,12 @@ localStorage.getItem(
 )
 );
 
-if(
-!currentUser
-){
-window.location.href =
-'login.html';
+if(!currentUser){
+window.location.href='login.html';
 }
 
-if(
-currentUser.role !==
-'seller'
-){
-window.location.href =
-'index.html';
+if(currentUser.role !== 'seller'){
+window.location.href='index.html';
 }
 
 const sellerUsername =
@@ -54,7 +47,8 @@ if(order.paymentStatus === 'waiting_verification'){
 return 'Menunggu Konfirmasi Pembayaran';
 }
 
-if(order.refundStatus === 'requested' ||
+if(
+order.refundStatus === 'requested' ||
 order.refundStatus === 'waiting_seller_approval'
 ){
 return 'Buyer Mengajukan Refund';
@@ -115,8 +109,7 @@ await fetch(
 `${BASE_URL}/orders/seller-orders`,
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -131,20 +124,16 @@ document.getElementById(
 'pending-orders'
 );
 
-if(!pendingOrders){
-return;
-}
-  if(!orders.length){
+if(!pendingOrders) return;
 
+if(!orders.length){
 pendingOrders.innerHTML =
 `
 <div class="empty-state">
 Belum ada pesanan
 </div>
 `;
-
 return;
-
 }
 
 pendingOrders.innerHTML =
@@ -154,14 +143,14 @@ const canProcess =
 order.paymentStatus === 'paid'
 && order.status !== 'processed'
 && order.status !== 'shipped'
-&& order.status !== 'completed';
+&& order.status !== 'completed'
+&& order.refundRequest !== true;
 
 let buttonHtml = '';
 
 if(canProcess){
 
-buttonHtml =
-`
+buttonHtml = `
 <button
 onclick="processOrder('${order._id}')"
 class="password-btn"
@@ -170,7 +159,6 @@ style="margin-top:12px;height:45px;"
 Proses Pesanan
 </button>
 `;
-
 }
 
 else if(
@@ -181,8 +169,7 @@ order.status === 'pending_payment'
 order.status === 'waiting_confirmation'
 ){
 
-buttonHtml =
-`
+buttonHtml = `
 <button
 disabled
 class="password-btn"
@@ -196,10 +183,8 @@ cursor:not-allowed;
 Menunggu Pembayaran
 </button>
 `;
-
 }
-
-if(
+  if(
 order.status === 'processed'
 ){
 
@@ -276,7 +261,7 @@ Paket Sudah Dikirim
 }
 
 
-/* REFUND CARD PATCH */
+/* REFUND CARD */
 
 if(
 order.refundRequest === true &&
@@ -323,9 +308,8 @@ Lihat Detail Refund
 </div>
 `;
 }
-  if(
-order.refundStatus === 'returned'
-){
+
+if(order.refundStatus === 'returned'){
 
 buttonHtml += `
 <button
@@ -342,6 +326,7 @@ Paket Retur Sudah Diterima
 `;
 }
 
+
 return `
 
 <div class="product-card">
@@ -353,30 +338,11 @@ order.product?.images?.[0] ||
 }"
 >
 
+<div class="product-card-content">
+
 <h3>
 ${order.product?.name || 'Produk'}
 </h3>
-
-<p>
-Kategori:
-${order.product?.category || '-'}
-</p>
-
-<p>
-Berat:
-${order.product?.weight || '-'} gram
-</p>
-
-<p>
-Qty:
-${order.quantity || 1}
-</p>
-
-<p>
-Variant:
-${order.variant?.color || '-'}
-${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
-</p>
 
 <p>
 Rp ${
@@ -391,74 +357,32 @@ Status:
 ${getStatusLabel(order)}
 </p>
 
-<hr
-style="
-margin:12px 0;
-border:none;
-border-top:1px solid #eee;
-"
-/>
+<div
+class="order-detail-toggle"
+onclick="toggleOrderDetail('${order._id}')"
+>
+Lihat Detail Order
+</div>
 
-<p>
-Penerima:
-${order.receiverName || '-'}
-</p>
+<div
+id="detail-${order._id}"
+class="order-detail-box"
+>
 
-<p>
-No Telp:
-${order.receiverPhone || '-'}
-</p>
-
-<p>
-Alamat:
-${order.receiverAddress || '-'}
-</p>
-
-<p>
-Metode Transfer:
-${order.adminPaymentMethod || '-'}
-</p>
-
-<p>
-Bank Pengirim:
-${order.senderBank || '-'}
-</p>
-
-<p>
-Atas Nama:
-${order.senderName || '-'}
-</p>
-
-${
-order.status === 'shipped'
-&& order.trackingNumber
-? `
-<p>
-No Resi:
-${order.trackingNumber}
-</p>
-`
-: ''
-}
-
-${
-order.status === 'shipped'
-&& order.shippingPhoto
-? `
-<img
-src="${order.shippingPhoto}"
-style="
-margin-top:10px;
-border-radius:12px;
-width:100%;
-"
-/>
-`
-: ''
-}
+<p>Kategori: ${order.product?.category || '-'}</p>
+<p>Berat: ${order.product?.weight || '-'} gram</p>
+<p>Qty: ${order.quantity || 1}</p>
+<p>Penerima: ${order.receiverName || '-'}</p>
+<p>No Telp: ${order.receiverPhone || '-'}</p>
+<p>Alamat: ${order.receiverAddress || '-'}</p>
+<p>Metode Transfer: ${order.adminPaymentMethod || '-'}</p>
+<p>Bank Pengirim: ${order.senderBank || '-'}</p>
+<p>Atas Nama: ${order.senderName || '-'}</p>
 
 ${buttonHtml}
 
+</div>
+</div>
 </div>
 
 `;
@@ -485,8 +409,7 @@ await fetch(
 method:'PUT',
 headers:{
 'Content-Type':'application/json',
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
 status:'processed'
@@ -547,15 +470,9 @@ const file =
 input.files[0];
 
 if(!file){
-
-status.innerHTML =
-'❌ Upload gagal';
-
-status.style.color =
-'#ef4444';
-
+status.innerHTML='❌ Upload gagal';
+status.style.color='#ef4444';
 return;
-
 }
 
 preview.src =
@@ -617,14 +534,14 @@ reader.readAsDataURL(file);
 
 });
 }
-  await fetch(
+
+await fetch(
 `${BASE_URL}/seller/shipping/${orderId}`,
 {
 method:'PUT',
 headers:{
 'Content-Type':'application/json',
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
 trackingNumber,
@@ -650,15 +567,14 @@ alert(
 }
 
 
-/* REFUND MODAL ACTION */
+/* REFUND MODAL */
 
 window.openRefundDetailModal =
 function(orderId){
 
 const order =
 sellerOrders.find(
-item =>
-item._id === orderId
+item => item._id === orderId
 );
 
 if(!order) return;
@@ -677,16 +593,11 @@ document.getElementById(
 'refund-detail-video'
 );
 
-if(
-order.unboxingVideo
-){
-video.src =
-order.unboxingVideo;
-video.style.display =
-'block';
+if(order.unboxingVideo){
+video.src = order.unboxingVideo;
+video.style.display = 'block';
 }else{
-video.style.display =
-'none';
+video.style.display = 'none';
 }
 
 document.getElementById(
@@ -699,6 +610,15 @@ document.getElementById(
 ).onclick =
 async function(){
 await approveRefund(
+selectedRefundOrderId
+);
+};
+
+document.getElementById(
+'reject-refund-btn'
+).onclick =
+async function(){
+await rejectRefund(
 selectedRefundOrderId
 );
 };
@@ -716,7 +636,7 @@ document.getElementById(
 };
 
 
-/* REFUND ACTION */
+/* APPROVE REFUND */
 
 async function approveRefund(orderId){
 
@@ -740,8 +660,7 @@ await fetch(
 method:'PUT',
 headers:{
 'Content-Type':'application/json',
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
 returnAddress
@@ -767,6 +686,55 @@ alert(
 
 }
 
+
+/* REJECT REFUND */
+
+async function rejectRefund(orderId){
+
+try{
+
+const reason =
+prompt(
+'Alasan reject refund'
+);
+
+if(!reason) return;
+
+await fetch(
+`${BASE_URL}/seller/refund/${orderId}/reject`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+rejectReason:reason
+})
+}
+);
+
+alert(
+'Refund ditolak'
+);
+
+closeRefundDetailModal();
+
+loadSellerOrders();
+
+}catch(error){
+
+alert(
+'Gagal reject refund'
+);
+
+}
+
+}
+
+
+/* RETURN RECEIVED */
+
 async function confirmReturnReceived(orderId){
 
 await fetch(
@@ -774,8 +742,7 @@ await fetch(
 {
 method:'PUT',
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -789,6 +756,25 @@ loadSellerOrders();
 }
 
 
+/* TOGGLE DETAIL */
+
+window.toggleOrderDetail =
+function(orderId){
+
+const el =
+document.getElementById(
+`detail-${orderId}`
+);
+
+if(!el) return;
+
+el.classList.toggle(
+'active'
+);
+
+};
+
+
 /* LOAD STATS */
 
 async function loadSellerStats(){
@@ -800,8 +786,7 @@ await fetch(
 `${BASE_URL}/orders/seller/stats`,
 {
 headers:{
-Authorization:
-`Bearer ${token}`
+Authorization:`Bearer ${token}`
 }
 }
 );
@@ -825,53 +810,42 @@ document.getElementById(
 );
 
 if(sellerBalance){
-
 sellerBalance.innerText =
 `RP ${Number(
 data.balance || 0
 ).toLocaleString('id-ID')}`;
-
 }
 
 if(monthlyIncome){
-
 monthlyIncome.innerText =
 `RP ${Number(
 data.monthlyRevenue || 0
 ).toLocaleString('id-ID')}`;
-
 }
 
 if(totalOrders){
-
 totalOrders.innerText =
 `${data.totalOrders || 0} UNIT`;
-
 }
 
 }catch(error){
-
 console.log(error);
-
 }
 
 }
 
-window.processOrder =
-processOrder;
 
-window.shipOrder =
-shipOrder;
+/* EXPORT */
 
-window.previewShippingPhoto =
-previewShippingPhoto;
+window.processOrder = processOrder;
+window.shipOrder = shipOrder;
+window.previewShippingPhoto = previewShippingPhoto;
+window.approveRefund = approveRefund;
+window.rejectRefund = rejectRefund;
+window.confirmReturnReceived = confirmReturnReceived;
 
-window.approveRefund =
-approveRefund;
 
-window.confirmReturnReceived =
-confirmReturnReceived;
+/* INIT */
 
 loadSellerOrders();
-
 loadSellerStats();
