@@ -17,6 +17,7 @@ uploadShippingData,
 /* REFUND PATCH */
 getSellerRefundRequests,
 approveRefundRequest,
+rejectRefundRequest,
 confirmReturnPackageReceived
 
 } = require(
