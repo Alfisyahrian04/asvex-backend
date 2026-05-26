@@ -930,18 +930,21 @@ width:100% !important;
 box-sizing:border-box !important;
 min-height:120px !important;
 }
-/* FIX DETAIL ORDER EMPTY LEFT SPACE */
+/* FIX DETAIL ORDER FULL WIDTH UNDER PRODUCT */
 
-.order-detail-dropdown{
-display:block;
-width:100%;
-margin-top:16px;
-padding-top:16px;
-border-top:1px solid #eee;
-clear:both;
+.order-detail-row{
+grid-column: 1 / -1 !important;
+width: 100% !important;
+display: block !important;
+margin-top: 14px;
+padding-top: 14px;
+border-top: 1px solid #eee;
 }
 
-.order-detail-dropdown *{
-width:100%;
-box-sizing:border-box;
+.order-detail-row.hidden{
+display:none;
+}
+
+.order-item{
+align-items:flex-start;
 }
