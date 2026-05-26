@@ -269,7 +269,7 @@ enum:[
 'shipped',
 'completed',
 'waiting_return',
-'waiting_seller_receive_return' 
+'waiting_seller_receive_return',
 'waiting_admin_refund',
 'cancelled',
 ],
