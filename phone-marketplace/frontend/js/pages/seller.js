@@ -882,17 +882,11 @@ window.confirmReturnReceived = confirmReturnReceived;
 window.openSellerAppealModal =
 function(orderId){
 
-const reason =
-prompt(
-'Masukkan alasan banding'
-);
+selectedRefundOrderId = orderId;
 
-if(!reason) return;
-
-submitSellerAppeal(
-orderId,
-reason
-);
+document.getElementById(
+'seller-appeal-modal'
+).style.display = 'flex';
 
 };
 
@@ -931,7 +925,97 @@ alert(
 );
 
 }
+window.closeSellerAppealModal =
+function(){
 
+document.getElementById(
+'seller-appeal-modal'
+).style.display = 'none';
+
+};
+
+
+window.submitSellerAppealForm =
+async function(){
+
+const reason =
+document.getElementById(
+'seller-appeal-reason'
+).value;
+
+const photoInput =
+document.getElementById(
+'seller-appeal-photo'
+);
+
+const videoInput =
+document.getElementById(
+'seller-appeal-video'
+);
+
+if(!reason){
+alert('Alasan banding wajib diisi');
+return;
+}
+
+let appealPhoto = '';
+let appealVideo = '';
+
+if(photoInput?.files?.[0]){
+
+appealPhoto =
+await new Promise((resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+photoInput.files[0]
+);
+
+});
+
+}
+
+if(videoInput?.files?.[0]){
+
+appealVideo =
+await new Promise((resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+videoInput.files[0]
+);
+
+});
+
+}
+
+await submitSellerAppeal(
+selectedRefundOrderId,
+reason,
+appealPhoto,
+appealVideo
+);
+
+closeSellerAppealModal();
+
+};
+  
 }
 loadSellerOrders();
 loadSellerStats();
