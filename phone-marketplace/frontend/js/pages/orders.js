@@ -63,6 +63,9 @@ return 'Pesanan Dikirim';
 case 'waiting_seller_approval':
 return 'Menunggu Persetujuan Seller';
 
+case 'waiting_seller_refund_approval':
+return 'Buyer Mengajukan Refund';
+
 case 'completed':
 return 'Pesanan Selesai';
 
@@ -163,7 +166,6 @@ ${getStatusLabel(order.status || 'pending_payment')}
 Order ID:
 ${order._id}
 </div>
-
 ${
 order.trackingNumber
 ? `
@@ -317,7 +319,6 @@ Ajukan Refund
 
 </div>
 </div>
-
 <div
 id="refund-modal-${order._id}"
 style="
@@ -361,19 +362,31 @@ border-radius:12px;
 <input
 id="refund-bank-${order._id}"
 placeholder="Nama Bank"
-style="width:100%;margin-top:12px;padding:12px;"
+style="
+width:100%;
+margin-top:12px;
+padding:12px;
+"
 />
 
 <input
 id="refund-name-${order._id}"
 placeholder="Atas Nama Rekening"
-style="width:100%;margin-top:12px;padding:12px;"
+style="
+width:100%;
+margin-top:12px;
+padding:12px;
+"
 />
 
 <input
 id="refund-number-${order._id}"
 placeholder="Nomor Rekening Refund"
-style="width:100%;margin-top:12px;padding:12px;"
+style="
+width:100%;
+margin-top:12px;
+padding:12px;
+"
 />
 
 <label
@@ -421,7 +434,10 @@ Kesalahan pengisian rekening refund bukan tanggung jawab platform.
 <button
 onclick="submitRefund('${order._id}')"
 class="payment-submit-btn"
-style="margin-top:12px;background:#ef4444;"
+style="
+margin-top:12px;
+background:#ef4444;
+"
 >
 Kirim Refund
 </button>
@@ -445,14 +461,15 @@ Tutup
 `).join('');
 
 }
-
-window.openRefundModal = function(id){
+window.openRefundModal =
+function(id){
 document.getElementById(
 `refund-modal-${id}`
 ).style.display='block';
 };
 
-window.closeRefundModal = function(id){
+window.closeRefundModal =
+function(id){
 document.getElementById(
 `refund-modal-${id}`
 ).style.display='none';
@@ -472,21 +489,25 @@ document.getElementById(
 );
 
 if(type === 'bank'){
+
 if(bank.value){
 ewallet.value='';
 ewallet.disabled=true;
 }else{
 ewallet.disabled=false;
 }
+
 }
 
 if(type === 'ewallet'){
+
 if(ewallet.value){
 bank.value='';
 bank.disabled=true;
 }else{
 bank.disabled=false;
 }
+
 }
 
 };
@@ -504,7 +525,10 @@ document.getElementById(
 `payment-file-name-${orderId}`
 );
 
-if(input.files && input.files[0]){
+if(
+input.files &&
+input.files[0]
+){
 label.innerHTML =
 `File dipilih: ${input.files[0].name}`;
 }
@@ -524,7 +548,10 @@ document.getElementById(
 `refund-video-name-${orderId}`
 );
 
-if(input.files && input.files[0]){
+if(
+input.files &&
+input.files[0]
+){
 label.innerHTML =
 `Video dipilih: ${input.files[0].name}`;
 }
@@ -569,8 +596,7 @@ const senderName =
 document.getElementById(
 `sender-name-${orderId}`
 ).value;
-
-await submitPayment(
+  await submitPayment(
 orderId,
 {
 receiverName,
@@ -625,12 +651,20 @@ document.getElementById(
 ).value;
 
 if(!refundReason){
-alert('Isi alasan refund dulu');
+alert(
+'Isi alasan refund dulu'
+);
 return;
 }
 
-if(!refundBank || !refundName || !refundNumber){
-alert('Lengkapi data rekening refund');
+if(
+!refundBank ||
+!refundName ||
+!refundNumber
+){
+alert(
+'Lengkapi data rekening refund'
+);
 return;
 }
 
@@ -717,7 +751,9 @@ loadOrders();
 
 console.log(error);
 
-alert('Gagal ajukan refund');
+alert(
+'Gagal ajukan refund'
+);
 
 }
 
