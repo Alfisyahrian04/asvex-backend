@@ -239,84 +239,67 @@ class="nav-item"
 </nav>
 
 <script src="js/pages/seller.js?v=99999"></script>
-<div
-id="seller-appeal-modal"
+<div style="margin-top:14px;">
+
+<label
+for="seller-appeal-photo"
 style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.45);
-z-index:9999;
-justify-content:center;
-align-items:center;
-padding:20px;
+display:block;
+font-size:14px;
+font-weight:600;
+margin-bottom:8px;
+color:#374151;
 "
 >
-
-<div
-style="
-background:#fff;
-width:100%;
-max-width:420px;
-border-radius:20px;
-padding:20px;
-"
->
-
-<h3>Ajukan Banding ke Admin</h3>
-
-<textarea
-id="seller-appeal-reason"
-placeholder="Masukkan alasan banding"
-style="
-width:100%;
-height:100px;
-padding:12px;
-border-radius:12px;
-margin-top:12px;
-"
-></textarea>
+📸 Upload Foto Bukti
+</label>
 
 <input
 type="file"
 accept="image/*"
 id="seller-appeal-photo"
-style="margin-top:12px;width:100%;"
+style="
+width:100%;
+padding:12px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:12px;
+font-size:14px;
+"
 >
+
+</div>
+
+
+<div style="margin-top:14px;">
+
+<label
+for="seller-appeal-video"
+style="
+display:block;
+font-size:14px;
+font-weight:600;
+margin-bottom:8px;
+color:#374151;
+"
+>
+🎥 Upload Video Bukti
+</label>
 
 <input
 type="file"
 accept="video/*"
 id="seller-appeal-video"
-style="margin-top:12px;width:100%;"
->
-
-<button
-onclick="submitSellerAppealForm()"
-class="password-btn"
 style="
 width:100%;
-height:48px;
-margin-top:14px;
-"
->
-Kirim Banding
-</button>
-
-<button
-onclick="closeSellerAppealModal()"
-style="
-width:100%;
-height:44px;
-margin-top:10px;
-border:none;
+padding:12px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
 border-radius:12px;
+font-size:14px;
 "
 >
-Batal
-</button>
 
-</div>
 </div>
 </body>
 </html>
