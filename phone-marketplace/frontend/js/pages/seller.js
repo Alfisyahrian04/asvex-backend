@@ -771,7 +771,7 @@ alert(
 async function confirmReturnReceived(orderId){
 
 await fetch(
-`${BASE_URL}/seller/refund/${orderId}/received`,
+`${BASE_URL}/seller/refund/${orderId}/return-received`
 {
 method:'PUT',
 headers:{
