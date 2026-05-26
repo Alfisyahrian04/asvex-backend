@@ -930,21 +930,35 @@ width:100% !important;
 box-sizing:border-box !important;
 min-height:120px !important;
 }
-/* FIX DETAIL ORDER FULL WIDTH UNDER PRODUCT */
+/* ===== ORDER DETAIL FULL WIDTH FIX ===== */
+
+.product-card{
+display:flex !important;
+flex-wrap:wrap !important;
+align-items:flex-start !important;
+}
+
+.product-card img{
+width:140px !important;
+height:140px !important;
+flex-shrink:0 !important;
+}
+
+.product-card-content{
+flex:1 !important;
+min-width:0 !important;
+}
 
 .order-detail-row{
-grid-column: 1 / -1 !important;
-width: 100% !important;
-display: block !important;
-margin-top: 14px;
-padding-top: 14px;
-border-top: 1px solid #eee;
+width:100% !important;
+flex-basis:100% !important;
+display:block !important;
+margin-top:16px !important;
+padding-top:16px !important;
+padding-left:0 !important;
+border-top:1px solid #eee !important;
 }
 
 .order-detail-row.hidden{
-display:none;
-}
-
-.order-item{
-align-items:flex-start;
+display:none !important;
 }
