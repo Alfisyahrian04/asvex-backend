@@ -1,6 +1,6 @@
 const API_URL =
   window.API_URL ||
-  'https://asvex-backend.vercel.app/api';
+  'https://asvex-backend-production.up.railway.app/api';
 
 protectPage();
 
