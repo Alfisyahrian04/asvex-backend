@@ -68,8 +68,10 @@ if(
   return 'Menunggu Seller Menerima Retur';
 }  
 
-if(order.refundStatus === 'waiting_admin_refund'){
-return 'Menunggu Refund Admin';
+if(order.refundStatus === 'waiting_admin_refund' ||
+  order.status === 'waiting_admin_refund'
+){
+  return 'Menunggu Refund Admin';
 }
 
 if(
@@ -316,7 +318,6 @@ Lihat Detail Refund
 }
 
 if(
-  order.refundStatus === 'returned' ||
   order.status === 'waiting_seller_receive_return'
 ){
 
