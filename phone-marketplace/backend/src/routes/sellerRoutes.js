@@ -81,6 +81,12 @@ approveRefundRequest
 );
 
 router.put(
+'/refund/:id/reject',
+protect,
+rejectRefundRequest
+);
+
+router.put(
 '/refund/:id/return-received',
 protect,
 confirmReturnPackageReceived
