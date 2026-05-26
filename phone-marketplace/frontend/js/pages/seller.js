@@ -363,7 +363,7 @@ onclick="toggleOrderDetail('${order._id}')"
 >
 Lihat Detail Order
 </div>
-
+</div>
 <div
 id="detail-${order._id}"
 class="order-detail-box"
