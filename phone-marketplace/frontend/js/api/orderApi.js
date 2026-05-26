@@ -227,9 +227,9 @@ return response.json();
 
 
 
-/* RETURN ORDER */
+/* RETURN / REFUND PATCH */
 
-async function requestReturn(id){
+async function requestReturn(id,data={}){
 
 const token =
 localStorage.getItem(
@@ -241,14 +241,45 @@ await fetch(
 `${BASE_URL}/${id}/return`,
 {
 method:'PUT',
+
 headers:{
+'Content-Type':
+'application/json',
 Authorization:
 `Bearer ${token}`
-}
+},
+
+body:JSON.stringify({
+refundReason:
+data.refundReason || '',
+
+unboxingVideo:
+data.unboxingVideo || '',
+
+refundBankName:
+data.refundBankName || '',
+
+refundAccountName:
+data.refundAccountName || '',
+
+refundAccountNumber:
+data.refundAccountNumber || ''
+})
+
 }
 );
 
-return response.json();
+const result =
+await response.json();
+
+if(!response.ok){
+throw new Error(
+result.message ||
+'Gagal ajukan refund'
+);
+}
+
+return result;
 
 }
 
