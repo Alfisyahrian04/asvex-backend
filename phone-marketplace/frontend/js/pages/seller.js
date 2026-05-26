@@ -62,6 +62,12 @@ if(order.refundStatus === 'returned'){
 return 'Paket Retur Sudah Sampai';
 }
 
+if(
+  order.status === 'waiting_seller_receive_return'
+){
+  return 'Menunggu Seller Menerima Retur';
+}  
+
 if(order.refundStatus === 'waiting_admin_refund'){
 return 'Menunggu Refund Admin';
 }
@@ -309,20 +315,46 @@ Lihat Detail Refund
 `;
 }
 
-if(order.refundStatus === 'returned'){
+if(
+  order.refundStatus === 'returned' ||
+  order.status === 'waiting_seller_receive_return'
+){
 
 buttonHtml += `
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:14px;
+"
+>
+
 <button
 onclick="confirmReturnReceived('${order._id}')"
 class="password-btn"
 style="
-margin-top:14px;
 height:48px;
 background:#2563eb;
 "
 >
-Paket Retur Sudah Diterima
+Terima Paket Retur
 </button>
+
+<button
+onclick="openSellerAppealModal('${order._id}')"
+class="password-btn"
+style="
+height:48px;
+background:#ef4444;
+"
+>
+Ajukan Banding
+</button>
+
+</div>
+
 `;
 }
 
@@ -846,6 +878,59 @@ window.confirmReturnReceived = confirmReturnReceived;
 
 
 /* INIT */
+window.openSellerAppealModal =
+function(orderId){
 
+const reason =
+prompt(
+'Masukkan alasan banding'
+);
+
+if(!reason) return;
+
+submitSellerAppeal(
+orderId,
+reason
+);
+
+};
+
+
+async function submitSellerAppeal(
+orderId,
+reason
+){
+
+try{
+
+await fetch(
+`${BASE_URL}/seller/refund/${orderId}/appeal`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+appealReason:reason
+})
+}
+);
+
+alert(
+'Banding berhasil dikirim ke admin'
+);
+
+loadSellerOrders();
+
+}catch(error){
+
+alert(
+'Gagal mengirim banding'
+);
+
+}
+
+}
 loadSellerOrders();
 loadSellerStats();
