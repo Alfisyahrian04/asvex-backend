@@ -54,7 +54,9 @@ if(order.paymentStatus === 'waiting_verification'){
 return 'Menunggu Konfirmasi Pembayaran';
 }
 
-if(order.refundStatus === 'requested'){
+if(order.refundStatus === 'requested' ||
+order.refundStatus === 'waiting_seller_approval'
+){
 return 'Buyer Mengajukan Refund';
 }
 
@@ -278,7 +280,10 @@ Paket Sudah Dikirim
 
 if(
 order.refundRequest === true &&
-order.refundStatus === 'requested'
+(
+order.refundStatus === 'requested' ||
+order.refundStatus === 'waiting_seller_approval'
+)
 ){
 
 buttonHtml += `
