@@ -594,13 +594,13 @@ exports.submitReturnShipment = async (req, res) => {
       req.body.returnProof || '';
 
     order.returnStatus =
-      'shipped_by_buyer';
+  'shipped_by_buyer';
 
-    order.refundStatus =
-      'waiting_admin_refund';
+order.refundStatus =
+  'waiting_seller_receive_return';
 
-    order.status =
-      'waiting_admin_refund';
+order.status =
+  'waiting_seller_receive_return';
 
     order.returnShippedAt =
       new Date();
