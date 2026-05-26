@@ -111,9 +111,15 @@ cancelOrder
 /* RETURN */
 
 router.put(
-'/:id/return',
-protect,
-requestReturn
+  '/:id/return',
+  protect,
+  requestReturn
+);
+
+router.put(
+  '/:id/refund',
+  protect,
+  requestReturn
 );
 
 
