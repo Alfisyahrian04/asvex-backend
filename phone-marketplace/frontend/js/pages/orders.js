@@ -66,6 +66,12 @@ return 'Menunggu Persetujuan Seller';
 case 'waiting_seller_refund_approval':
 return 'Buyer Mengajukan Refund';
 
+case 'waiting_return':
+return 'Menunggu Buyer Mengirim Retur';
+
+case 'waiting_admin_refund':
+return 'Menunggu Admin Memproses Refund';
+    
 case 'completed':
 return 'Pesanan Selesai';
 
