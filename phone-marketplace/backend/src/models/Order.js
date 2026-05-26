@@ -268,7 +268,9 @@ enum:[
 'processed',
 'shipped',
 'completed',
-'cancelled'
+'waiting_return',
+'waiting_admin_refund',
+'cancelled',
 ],
 default:'pending'
 }
