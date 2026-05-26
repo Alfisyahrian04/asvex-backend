@@ -2,7 +2,6 @@
 <html lang="id">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta
@@ -10,9 +9,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 >
 
-<title>
-Seller Dashboard
-</title>
+<title>Seller Dashboard</title>
 
 <link
 rel="stylesheet"
@@ -23,7 +20,6 @@ href="css/seller.css?v=99999"
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 >
-
 </head>
 
 <body>
@@ -43,13 +39,12 @@ SELLER
 
 </header>
 
+
 <main class="container">
 
 <div class="dashboard-card">
 
-<p>
-SELLER DASHBOARD
-</p>
+<p>SELLER DASHBOARD</p>
 
 <h1 id="seller-balance">
 RP 0
@@ -69,6 +64,7 @@ RP 0
 
 </div>
 </div>
+
 
 <div class="section-title">
 <div class="line"></div>
@@ -143,7 +139,6 @@ id="seller-return-address"
 placeholder="Input alamat retur seller"
 ></textarea>
 
-
 <button
 id="approve-refund-btn"
 style="
@@ -161,7 +156,6 @@ cursor:pointer;
 >
 Setujui Refund & Kirim Alamat Retur
 </button>
-
 
 <button
 id="reject-refund-btn"
@@ -181,7 +175,6 @@ cursor:pointer;
 Tolak Refund
 </button>
 
-
 <button
 onclick="closeRefundDetailModal()"
 style="
@@ -200,6 +193,157 @@ Tutup
 
 </div>
 </div>
+
+
+
+<!-- SELLER APPEAL MODAL -->
+
+<div
+id="seller-appeal-modal"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.45);
+z-index:99999;
+justify-content:center;
+align-items:center;
+padding:20px;
+"
+>
+
+<div
+style="
+background:#fff;
+width:100%;
+max-width:430px;
+border-radius:24px;
+padding:22px;
+box-sizing:border-box;
+"
+>
+
+<h3
+style="
+font-size:18px;
+font-weight:700;
+margin-bottom:14px;
+"
+>
+Ajukan Banding ke Admin
+</h3>
+
+<textarea
+id="seller-appeal-reason"
+placeholder="Masukkan alasan banding"
+style="
+width:100%;
+height:110px;
+padding:14px;
+border-radius:14px;
+border:1px solid #e5e7eb;
+resize:none;
+font-size:14px;
+box-sizing:border-box;
+"
+></textarea>
+
+
+<div style="margin-top:14px;">
+
+<label
+for="seller-appeal-photo"
+style="
+display:block;
+font-size:14px;
+font-weight:600;
+margin-bottom:8px;
+color:#374151;
+"
+>
+📸 Upload Foto Bukti
+</label>
+
+<input
+type="file"
+accept="image/*"
+id="seller-appeal-photo"
+style="
+width:100%;
+padding:12px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:12px;
+box-sizing:border-box;
+"
+>
+
+</div>
+
+
+<div style="margin-top:14px;">
+
+<label
+for="seller-appeal-video"
+style="
+display:block;
+font-size:14px;
+font-weight:600;
+margin-bottom:8px;
+color:#374151;
+"
+>
+🎥 Upload Video Bukti
+</label>
+
+<input
+type="file"
+accept="video/*"
+id="seller-appeal-video"
+style="
+width:100%;
+padding:12px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:12px;
+box-sizing:border-box;
+"
+>
+
+</div>
+
+
+<button
+onclick="submitSellerAppealForm()"
+class="password-btn"
+style="
+width:100%;
+height:52px;
+margin-top:18px;
+"
+>
+Kirim Banding
+</button>
+
+<button
+onclick="closeSellerAppealModal()"
+style="
+width:100%;
+height:46px;
+margin-top:10px;
+border:none;
+border-radius:14px;
+background:#f3f4f6;
+font-weight:600;
+cursor:pointer;
+"
+>
+Batal
+</button>
+
+</div>
+</div>
+
 
 
 <nav class="bottom-nav">
@@ -239,67 +383,6 @@ class="nav-item"
 </nav>
 
 <script src="js/pages/seller.js?v=99999"></script>
-<div style="margin-top:14px;">
 
-<label
-for="seller-appeal-photo"
-style="
-display:block;
-font-size:14px;
-font-weight:600;
-margin-bottom:8px;
-color:#374151;
-"
->
-📸 Upload Foto Bukti
-</label>
-
-<input
-type="file"
-accept="image/*"
-id="seller-appeal-photo"
-style="
-width:100%;
-padding:12px;
-background:#f9fafb;
-border:1px solid #e5e7eb;
-border-radius:12px;
-font-size:14px;
-"
->
-
-</div>
-
-
-<div style="margin-top:14px;">
-
-<label
-for="seller-appeal-video"
-style="
-display:block;
-font-size:14px;
-font-weight:600;
-margin-bottom:8px;
-color:#374151;
-"
->
-🎥 Upload Video Bukti
-</label>
-
-<input
-type="file"
-accept="video/*"
-id="seller-appeal-video"
-style="
-width:100%;
-padding:12px;
-background:#f9fafb;
-border:1px solid #e5e7eb;
-border-radius:12px;
-font-size:14px;
-"
->
-
-</div>
 </body>
 </html>
