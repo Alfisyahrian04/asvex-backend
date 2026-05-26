@@ -882,11 +882,19 @@ window.confirmReturnReceived = confirmReturnReceived;
 window.openSellerAppealModal =
 function(orderId){
 
-selectedRefundOrderId = orderId;
+selectedRefundOrderId =
+orderId;
 
+const modal =
 document.getElementById(
 'seller-appeal-modal'
-).style.display = 'flex';
+);
+
+modal.style.display =
+'block';
+
+modal.style.pointerEvents =
+'auto';
 
 };
 
