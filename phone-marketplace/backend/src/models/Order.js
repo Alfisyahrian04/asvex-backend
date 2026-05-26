@@ -263,6 +263,7 @@ enum:[
 'waiting_confirmation',
 'waiting_verification',
 'waiting_payment_verification',
+'waiting_seller_refund_approval',
 'paid',
 'processed',
 'shipped',
