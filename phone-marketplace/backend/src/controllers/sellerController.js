@@ -10,10 +10,8 @@ require('../models/Product');
 const Order =
 require('../models/Order');
 
-/* PATCH */
 const User =
 require('../models/User');
-/* PATCH */
 
 exports.getWallet =
 async(req,res)=>{
@@ -22,18 +20,14 @@ try{
 
 let wallet =
 await Wallet.findOne({
-
 user:req.user._id
-
 });
 
 if(!wallet){
 
 wallet =
 await Wallet.create({
-
 user:req.user._id
-
 });
 
 }
@@ -62,9 +56,7 @@ amount
 
 const wallet =
 await Wallet.findOne({
-
 user:req.user._id
-
 });
 
 if(
@@ -74,8 +66,7 @@ wallet.balance < amount
 
 return res.status(400)
 .json({
-message:
-'Saldo tidak cukup'
+message:'Saldo tidak cukup'
 });
 
 }
@@ -86,11 +77,8 @@ await wallet.save();
 
 const payout =
 await Payout.create({
-
 seller:req.user._id,
-
 amount
-
 });
 
 res.status(201)
@@ -114,9 +102,7 @@ try{
 
 const products =
 await Product.find({
-
 seller:req.user._id
-
 })
 .sort({
 createdAt:-1
@@ -142,25 +128,18 @@ try{
 
 const totalProducts =
 await Product.countDocuments({
-
 seller:req.user._id
-
 });
 
 const totalOrders =
 await Order.countDocuments({
-
 seller:req.user._id
-
 });
 
 const completedOrders =
 await Order.find({
-
 seller:req.user._id,
-
 paymentStatus:'paid'
-
 });
 
 const revenue =
@@ -171,11 +150,9 @@ total + item.totalPrice,
 );
 
 res.json({
-
 totalProducts,
 totalOrders,
 revenue
-
 });
 
 }catch(error){
@@ -188,8 +165,6 @@ message:error.message
 }
 
 };
-
-/* PATCH START */
 
 exports.updateSellerProfile =
 async(req,res)=>{
@@ -277,4 +252,131 @@ message:error.message
 
 };
 
-/* PATCH END */
+
+/* REFUND FLOW PATCH */
+
+exports.getSellerRefundRequests =
+async(req,res)=>{
+
+try{
+
+const orders =
+await Order.find({
+seller:req.user._id,
+refundRequest:true
+})
+.populate('buyer')
+.populate('product')
+.sort({
+createdAt:-1
+});
+
+res.json({
+orders
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.approveRefundRequest =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+const seller =
+await User.findById(
+req.user._id
+);
+
+order.sellerRefundApproved =
+true;
+
+order.refundStatus =
+'seller_approved';
+
+order.returnAddress =
+req.body.returnAddress ||
+seller.returnAddress ||
+'';
+
+order.returnReceiverName =
+seller.storeName ||
+seller.username ||
+'';
+
+order.refundApprovedAt =
+new Date();
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
+
+exports.confirmReturnPackageReceived =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.sellerReceivedReturnPackage =
+true;
+
+order.returnStatus =
+'returned_received';
+
+order.refundStatus =
+'waiting_admin_refund';
+
+order.sellerReceivedReturnAt =
+new Date();
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
