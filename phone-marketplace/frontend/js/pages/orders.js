@@ -1,6 +1,6 @@
-const API_URL =
-  window.API_URL ||
-  'https://asvex-backend-production.up.railway.app/api';
+const BASE_URL =
+window.API_URL ||
+'https://asvex-backend-production.up.railway.app/api/v1';
 
 protectPage();
 
