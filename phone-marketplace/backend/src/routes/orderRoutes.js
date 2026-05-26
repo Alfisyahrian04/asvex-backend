@@ -5,7 +5,6 @@ const router =
 express.Router();
 
 const {
-const {
 createOrder,
 getMyOrders,
 getSellerOrders,
