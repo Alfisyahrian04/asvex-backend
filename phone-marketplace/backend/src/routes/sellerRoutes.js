@@ -5,15 +5,19 @@ const router =
 express.Router();
 
 const {
+
 getWallet,
 requestPayout,
 getSellerProducts,
 getSellerAnalytics,
 
-/* PATCH */
 updateSellerProfile,
-uploadShippingData
-/* PATCH */
+uploadShippingData,
+
+/* REFUND PATCH */
+getSellerRefundRequests,
+approveRefundRequest,
+confirmReturnPackageReceived
 
 } = require(
 '../controllers/sellerController'
@@ -46,10 +50,8 @@ getSellerProducts
 router.get(
 '/analytics',
 protect,
-getSellerAnalytics
+getSellerAnalytics'
 );
-
-/* PATCH START */
 
 router.put(
 '/profile',
@@ -63,7 +65,26 @@ protect,
 uploadShippingData
 );
 
-/* PATCH END */
+
+/* REFUND FLOW */
+
+router.get(
+'/refund-requests',
+protect,
+getSellerRefundRequests
+);
+
+router.put(
+'/refund/:id/approve',
+protect,
+approveRefundRequest
+);
+
+router.put(
+'/refund/:id/return-received',
+protect,
+confirmReturnPackageReceived
+);
 
 module.exports =
 router;
