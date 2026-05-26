@@ -901,7 +901,9 @@ modal.style.pointerEvents =
 
 async function submitSellerAppeal(
 orderId,
-reason
+reason,
+appealPhoto='',
+appealVideo=''
 ){
 
 try{
@@ -915,7 +917,9 @@ headers:{
 Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
-appealReason:reason
+appealReason:reason,
+appealPhoto,
+appealVideo
 })
 }
 );
@@ -933,15 +937,24 @@ alert(
 );
 
 }
+
+}
+
+
+/* CLOSE SELLER APPEAL MODAL */
+
 window.closeSellerAppealModal =
 function(){
 
 document.getElementById(
 'seller-appeal-modal'
-).style.display = 'none';
+).style.display =
+'none';
 
 };
 
+
+/* SUBMIT SELLER APPEAL FORM */
 
 window.submitSellerAppealForm =
 async function(){
@@ -962,7 +975,9 @@ document.getElementById(
 );
 
 if(!reason){
-alert('Alasan banding wajib diisi');
+alert(
+'Alasan banding wajib diisi'
+);
 return;
 }
 
@@ -972,7 +987,8 @@ let appealVideo = '';
 if(photoInput?.files?.[0]){
 
 appealPhoto =
-await new Promise((resolve,reject)=>{
+await new Promise(
+(resolve,reject)=>{
 
 const reader =
 new FileReader();
@@ -994,7 +1010,8 @@ photoInput.files[0]
 if(videoInput?.files?.[0]){
 
 appealVideo =
-await new Promise((resolve,reject)=>{
+await new Promise(
+(resolve,reject)=>{
 
 const reader =
 new FileReader();
@@ -1023,7 +1040,5 @@ appealVideo
 closeSellerAppealModal();
 
 };
-  
-}
 loadSellerOrders();
 loadSellerStats();
