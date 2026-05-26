@@ -29,7 +29,6 @@ exports.createOrder = async (req, res) => {
     }
 
     if (variant && product.variants?.length) {
-
       const selectedVariant =
         product.variants.find(
           v =>
@@ -45,7 +44,6 @@ exports.createOrder = async (req, res) => {
           message:'Stock varian tidak cukup'
         });
       }
-
     }
 
     if (product.stock < quantity) {
@@ -85,7 +83,6 @@ exports.createOrder = async (req, res) => {
       variant &&
       product.variants?.length
     ) {
-
       product.variants =
         product.variants.map(v=>{
 
@@ -93,19 +90,16 @@ exports.createOrder = async (req, res) => {
             v._id?.toString() ===
             variant._id?.toString()
           ){
-
             v.stock =
               Math.max(
                 0,
                 (v.stock || 0) - quantity
               );
-
           }
 
           return v;
 
         });
-
     }
 
     await product.save();
@@ -369,6 +363,8 @@ async(req,res)=>{
 };
 
 
+/* COMPLETE ORDER */
+
 exports.completeOrder =
 async(req,res)=>{
   try{
@@ -401,6 +397,8 @@ async(req,res)=>{
 };
 
 
+/* CANCEL ORDER */
+
 exports.cancelOrder =
 async(req,res)=>{
   try{
@@ -432,6 +430,8 @@ async(req,res)=>{
 };
 
 
+/* REFUND RETURN PATCH */
+
 exports.requestReturn =
 async(req,res)=>{
   try{
@@ -447,7 +447,28 @@ async(req,res)=>{
       });
     }
 
-    order.returnStatus='requested';
+    order.refundRequest = true;
+
+    order.returnStatus =
+      'requested';
+
+    order.refundStatus =
+      'requested';
+
+    order.refundReason =
+      req.body.refundReason || '';
+
+    order.unboxingVideo =
+      req.body.unboxingVideo || '';
+
+    order.refundBankName =
+      req.body.refundBankName || '';
+
+    order.refundAccountName =
+      req.body.refundAccountName || '';
+
+    order.refundAccountNumber =
+      req.body.refundAccountNumber || '';
 
     await order.save();
 
@@ -462,6 +483,8 @@ async(req,res)=>{
   }
 };
 
+
+/* DISPUTE */
 
 exports.submitDispute =
 async(req,res)=>{
