@@ -168,6 +168,78 @@ order.totalPrice || 0
 ${getStatusLabel(order.status || 'pending_payment')}
 </div>
 
+${
+order.status === 'waiting_return'
+? `
+<div
+style="
+margin-top:14px;
+padding:14px;
+background:#fff7ed;
+border-radius:14px;
+border:1px solid #fdba74;
+"
+>
+
+<input
+id="return-tracking-${order._id}"
+type="text"
+placeholder="Masukkan nomor resi retur"
+style="
+width:100%;
+height:46px;
+padding:12px;
+border-radius:12px;
+border:1px solid #d1d5db;
+margin-bottom:12px;
+"
+/>
+
+<label
+for="return-proof-${order._id}"
+style="
+display:block;
+padding:14px;
+border:2px dashed #fb923c;
+border-radius:14px;
+text-align:center;
+cursor:pointer;
+margin-bottom:12px;
+"
+>
+📦 Upload Bukti Kirim Paket Retur
+</label>
+
+<input
+type="file"
+accept="image/*"
+id="return-proof-${order._id}"
+style="display:none"
+onchange="previewReturnProof('${order._id}')"
+/>
+
+<div
+id="return-proof-name-${order._id}"
+style="
+font-size:13px;
+color:#2563eb;
+margin-top:6px;
+margin-bottom:12px;
+"
+></div>
+
+<button
+onclick="submitReturnShipment('${order._id}')"
+class="payment-submit-btn"
+>
+Kirim Retur
+</button>
+
+</div>
+`
+: ''
+}
+
 <div class="tracking-number">
 Order ID:
 ${order._id}
@@ -795,5 +867,123 @@ loadOrders();
 );
 
 }
+window.previewReturnProof =
+function(orderId){
 
+const input =
+document.getElementById(
+`return-proof-${orderId}`
+);
+
+const label =
+document.getElementById(
+`return-proof-name-${orderId}`
+);
+
+if(
+input.files &&
+input.files[0]
+){
+label.innerHTML =
+`File dipilih: ${input.files[0].name}`;
+}
+
+};
+
+async function submitReturnShipment(orderId){
+
+try{
+
+const trackingNumber =
+document.getElementById(
+`return-tracking-${orderId}`
+).value;
+
+const proofInput =
+document.getElementById(
+`return-proof-${orderId}`
+);
+
+if(!trackingNumber){
+alert(
+'Nomor resi retur wajib diisi'
+);
+return;
+}
+
+let returnProof = '';
+
+if(
+proofInput &&
+proofInput.files &&
+proofInput.files[0]
+){
+
+returnProof =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+proofInput.files[0]
+);
+
+});
+
+}
+
+const response =
+await fetch(
+`${ORDERS_BASE_URL}/orders/${orderId}/return-shipment`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:
+`Bearer ${localStorage.getItem('token')}`
+},
+body:JSON.stringify({
+returnTrackingNumber:
+trackingNumber,
+returnProof
+})
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+alert(
+data.message ||
+'Gagal kirim retur'
+);
+return;
+}
+
+alert(
+'Data retur berhasil dikirim'
+);
+
+loadOrders();
+
+}catch(error){
+
+console.log(error);
+
+alert(
+'Gagal kirim retur'
+);
+
+}
+
+}
 loadOrders();
