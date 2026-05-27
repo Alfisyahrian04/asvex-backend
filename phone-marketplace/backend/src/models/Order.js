@@ -234,6 +234,28 @@ type:Date,
 default:null
 },
 
+/* SELLER APPEAL */
+
+appealReason:{
+type:String,
+default:''
+},
+
+appealPhoto:{
+type:String,
+default:''
+},
+
+appealVideo:{
+type:String,
+default:''
+},
+
+appealSubmittedAt:{
+type:Date,
+default:null
+},
+
 disputeStatus:{
 type:String,
 default:''
