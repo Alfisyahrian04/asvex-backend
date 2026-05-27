@@ -234,8 +234,37 @@ return;
 }
 
 refundList.innerHTML =
-orders.map(order=>`
+orders.map(order=>{
 
+if(order.status === 'appeal_submitted'){
+return `
+
+<div class="admin-card">
+
+<h3>${order.product?.name || 'Produk'}</h3>
+
+<p>Buyer:
+${order.buyer?.username || '-'}</p>
+
+<p>Seller:
+${order.seller?.storeName || '-'}</p>
+
+<p style="color:#2563eb;font-weight:700;">
+Seller mengajukan banding refund
+</p>
+
+<p>
+Alasan banding:
+${order.sellerAppealReason || '-'}
+</p>
+
+</div>
+
+`;
+}
+
+return `
+  
 <div class="admin-card">
 
 <h3>
@@ -340,7 +369,8 @@ Selesai Refund
 
 </div>
 
-`).join('');
+`;
+}).join('');
 
 }catch(error){
 
