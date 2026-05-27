@@ -965,9 +965,6 @@ async function submitSellerAppeal(
   }
 }
 
-}
-
-
 /* CLOSE SELLER APPEAL MODAL */
 
 window.closeSellerAppealModal =
