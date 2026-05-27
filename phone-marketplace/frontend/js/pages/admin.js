@@ -255,8 +255,39 @@ Seller mengajukan banding refund
 
 <p>
 Alasan banding:
-${order.sellerAppealReason || '-'}
+${order.appealReason || '-'}
 </p>
+
+${
+order.appealPhoto
+? `
+<img
+src="${order.appealPhoto}"
+style="
+width:100%;
+margin-top:12px;
+border-radius:12px;
+"
+/>
+`
+: ''
+}
+
+${
+order.appealVideo
+? `
+<video
+src="${order.appealVideo}"
+controls
+style="
+width:100%;
+margin-top:12px;
+border-radius:12px;
+"
+></video>
+`
+: ''
+}
 
 </div>
 
