@@ -415,11 +415,18 @@ await order.save();
 
 res.json(order);
 
-}catch(error){
+}
+catch(error){
 
-res.status(500).json({
-message:error.message
-});
+  console.error(
+    'SUBMIT REFUND APPEAL ERROR:',
+    error
+  );
+
+  res.status(500).json({
+    message:error.message,
+    stack:error.stack
+  });
 
 }
 
