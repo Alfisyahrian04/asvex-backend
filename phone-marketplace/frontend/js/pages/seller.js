@@ -39,6 +39,14 @@ let selectedRefundOrderId = null;
 
 function getStatusLabel(order){
 
+if(order.refundStatus === 'appealed'){
+  return 'Banding Dikirim ke Admin';
+}
+
+if(order.status === 'appeal_submitted'){
+  return 'Banding Dikirim ke Admin';
+}
+  
 if(order.status === 'waiting_confirmation'){
 return 'Menunggu Konfirmasi Pembayaran';
 }
