@@ -18,7 +18,8 @@ uploadShippingData,
 getSellerRefundRequests,
 approveRefundRequest,
 rejectRefundRequest,
-confirmReturnPackageReceived
+confirmReturnPackageReceived,
+submitRefundAppeal,
 
 } = require(
 '../controllers/sellerController'
