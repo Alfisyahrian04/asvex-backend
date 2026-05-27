@@ -908,42 +908,61 @@ modal.style.pointerEvents =
 
 
 async function submitSellerAppeal(
-orderId,
-reason,
-appealPhoto='',
-appealVideo=''
+  orderId,
+  reason,
+  appealPhoto='',
+  appealVideo=''
 ){
 
-try{
+  try{
 
-await fetch(
-`${BASE_URL}/seller/refund/${orderId}/appeal`,
-{
-method:'PUT',
-headers:{
-'Content-Type':'application/json',
-Authorization:`Bearer ${token}`
-},
-body:JSON.stringify({
-appealReason:reason,
-appealPhoto,
-appealVideo
-})
-}
-);
+    const response =
+    await fetch(
+      `${BASE_URL}/seller/refund/${orderId}/appeal`,
+      {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json',
+          Authorization:`Bearer ${token}`
+        },
+        body:JSON.stringify({
+          appealReason:reason,
+          appealPhoto,
+          appealVideo
+        })
+      }
+    );
 
-alert(
-'Banding berhasil dikirim ke admin'
-);
+    const data =
+    await response.json();
 
-loadSellerOrders();
+    if(!response.ok){
+      alert(
+        data.message ||
+        'Gagal mengirim banding'
+      );
+      return false;
+    }
 
-}catch(error){
+    alert(
+      'Banding berhasil dikirim ke admin'
+    );
 
-alert(
-'Gagal mengirim banding'
-);
+    await loadSellerOrders();
 
+    return true;
+
+  }catch(error){
+
+    console.log(error);
+
+    alert(
+      'Gagal mengirim banding'
+    );
+
+    return false;
+
+  }
 }
 
 }
@@ -1037,15 +1056,17 @@ videoInput.files[0]
 });
 
 }
-
+const success =
 await submitSellerAppeal(
-selectedRefundOrderId,
-reason,
-appealPhoto,
-appealVideo
+  selectedRefundOrderId,
+  reason,
+  appealPhoto,
+  appealVideo
 );
 
-closeSellerAppealModal();
+if(success){
+  closeSellerAppealModal();
+}
 
 };
 loadSellerOrders();
