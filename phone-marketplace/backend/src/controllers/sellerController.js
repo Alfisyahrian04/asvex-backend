@@ -424,3 +424,57 @@ message:error.message
 }
 
 };
+exports.submitRefundAppeal =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+const {
+appealReason,
+appealPhoto,
+appealVideo
+} = req.body;
+
+order.appealReason =
+appealReason || '';
+
+order.appealPhoto =
+appealPhoto || '';
+
+order.appealVideo =
+appealVideo || '';
+
+/* PATCH STATUS */
+order.refundStatus =
+'appealed';
+
+order.status =
+'appeal_submitted';
+
+order.appealSubmittedAt =
+new Date();
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
