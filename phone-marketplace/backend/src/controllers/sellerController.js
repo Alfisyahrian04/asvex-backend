@@ -424,6 +424,7 @@ message:error.message
 }
 
 };
+
 exports.submitRefundAppeal =
 async(req,res)=>{
 
@@ -455,7 +456,12 @@ appealPhoto || '';
 order.appealVideo =
 appealVideo || '';
 
-/* PATCH STATUS */
+/* PATCH */
+order.refundRequest = true;
+
+order.returnStatus =
+'appealed';
+
 order.refundStatus =
 'appealed';
 
@@ -467,7 +473,12 @@ new Date();
 
 await order.save();
 
-res.json(order);
+const updatedOrder =
+await Order.findById(
+req.params.id
+);
+
+res.json(updatedOrder);
 
 }catch(error){
 
@@ -476,5 +487,4 @@ message:error.message
 });
 
 }
-
 };
