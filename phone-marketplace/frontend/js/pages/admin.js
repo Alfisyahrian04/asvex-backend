@@ -250,7 +250,7 @@ ${order.buyer?.username || '-'}</p>
 ${order.seller?.storeName || '-'}</p>
 
 <p style="color:#2563eb;font-weight:700;">
-Seller mengajukan banding refund
+Seller Mengajukan Banding
 </p>
 
 <p>
