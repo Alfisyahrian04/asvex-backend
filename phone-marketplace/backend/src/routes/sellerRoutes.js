@@ -93,5 +93,10 @@ protect,
 confirmReturnPackageReceived
 );
 
-module.exports =
-router;
+router.put(
+'/refund/:id/appeal',
+protect,
+submitRefundAppeal
+);
+
+module.exports = router;
