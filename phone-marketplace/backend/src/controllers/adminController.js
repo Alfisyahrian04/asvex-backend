@@ -241,7 +241,10 @@ try{
 
 const orders =
 await Order.find({
-refundRequest:true
+  $or:[
+    { refundRequest:true },
+    { status:'appeal_submitted' }
+  ]
 })
 .populate('buyer')
 .populate('seller')
