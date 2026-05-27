@@ -449,13 +449,14 @@ message:'Order not found'
 }
 
 const {
-appealReason,
-appealPhoto,
-appealVideo
+  reason,
+  appealReason,
+  appealPhoto,
+  appealVideo
 } = req.body;
 
 order.appealReason =
-appealReason || '';
+  appealReason || reason || '';
 
 order.appealPhoto =
 appealPhoto || '';
