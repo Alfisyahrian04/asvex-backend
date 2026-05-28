@@ -258,36 +258,18 @@ Alasan banding:
 ${order.appealReason || '-'}
 </p>
 
-${
-order.appealPhoto
-? `
-<img
-src="${order.appealPhoto}"
+<button
+onclick="openAppealDetailModal('${order._id}')"
+class="password-btn"
 style="
-width:100%;
 margin-top:12px;
-border-radius:12px;
-"
-/>
-`
-: ''
-}
-
-${
-order.appealVideo
-? `
-<video
-src="${order.appealVideo}"
-controls
-style="
 width:100%;
-margin-top:12px;
-border-radius:12px;
+height:46px;
+background:#2563eb;
 "
-></video>
-`
-: ''
-}
+>
+Lihat Detail Banding
+</button>
 
 </div>
 
