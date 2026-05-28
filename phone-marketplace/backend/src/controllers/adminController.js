@@ -547,6 +547,11 @@ getRefundRequests,
 
 verifyManualPayment,
 approveRefund,
-resolveDispute
+resolveDispute,
+
+approveSellerAppeal,
+rejectSellerAppeal,
+
+};
 
 };
