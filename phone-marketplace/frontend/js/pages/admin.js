@@ -649,6 +649,66 @@ document.getElementById(
 
 };
 
+async function approveSellerAppeal(orderId){
+
+try{
+
+await fetch(
+`${BASE_URL}/admin/appeal/${orderId}/approve`,
+{
+method:'PUT',
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+alert('Banding seller diterima');
+
+closeAppealDetailModal();
+loadRefundRequests();
+
+}catch(error){
+console.log(error);
+}
+
+}
+
+
+async function rejectSellerAppeal(orderId){
+
+try{
+
+const reason =
+prompt('Alasan menolak banding seller');
+
+if(!reason) return;
+
+await fetch(
+`${BASE_URL}/admin/appeal/${orderId}/reject`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+reason
+})
+}
+);
+
+alert('Banding seller ditolak');
+
+closeAppealDetailModal();
+loadRefundRequests();
+
+}catch(error){
+console.log(error);
+}
+
+}
+
 loadUsers();
 loadPendingPayments();
 loadRefundRequests();
