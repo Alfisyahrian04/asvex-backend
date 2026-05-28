@@ -579,8 +579,8 @@ window.openAppealDetailModal =
 function(orderId){
 
 const order =
-refundOrders.find(
-item => item._id === orderId
+orders.find(
+  item => item._id === orderId
 );
 
 if(!order) return;
