@@ -12,6 +12,7 @@ const BASE_URL =
 const token =
 localStorage.getItem('token');
 
+let refundOrders = [];
 
 /* SELLER */
 
@@ -213,6 +214,7 @@ await response.json();
 
 const orders =
 result.orders || [];
+refundOrders = orders;
 
 const refundList =
 document.getElementById(
