@@ -579,7 +579,7 @@ window.openAppealDetailModal =
 function(orderId){
 
 const order =
-orders.find(
+refundOrders.find(
   item => item._id === orderId
 );
 
