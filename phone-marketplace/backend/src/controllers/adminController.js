@@ -452,6 +452,86 @@ message:error.message
 }
 };
 
+/* ==============================
+APPROVE SELLER APPEAL
+============================== */
+
+const approveSellerAppeal =
+async(req,res)=>{
+try{
+
+const order =
+await Order.findById(req.params.id);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.refundStatus = 'appeal_accepted';
+order.returnStatus = 'appeal_accepted';
+order.status = 'cancelled';
+
+/* buyer refund ditolak */
+order.refundRequest = false;
+
+await order.save();
+
+res.status(200).json({
+success:true,
+message:'Banding seller diterima',
+order
+});
+
+}catch(error){
+res.status(500).json({
+message:error.message
+});
+}
+};
+
+
+/* ==============================
+REJECT SELLER APPEAL
+============================== */
+
+const rejectSellerAppeal =
+async(req,res)=>{
+try{
+
+const order =
+await Order.findById(req.params.id);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.adminRejectAppealReason =
+req.body.reason || '';
+
+order.refundStatus = 'appeal_rejected';
+order.returnStatus = 'appeal_rejected';
+
+/* lanjut refund buyer */
+order.status = 'waiting_admin_refund';
+
+await order.save();
+
+res.status(200).json({
+success:true,
+message:'Banding seller ditolak',
+order
+});
+
+}catch(error){
+res.status(500).json({
+message:error.message
+});
+}
+};
 
 module.exports = {
 
