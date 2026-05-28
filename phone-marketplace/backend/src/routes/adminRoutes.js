@@ -16,9 +16,11 @@ approvePayout,
 verifyManualPayment,
 approveRefund,
 resolveDispute,
+approveSellerAppeal,
+rejectSellerAppeal,
 
 getPendingPayments,
-getRefundRequests
+getRefundRequests,
 
 } = require(
 '../controllers/adminController'
@@ -96,6 +98,15 @@ router.put(
 approveRefund
 );
 
+router.put(
+'/appeal/:id/approve',
+approveSellerAppeal
+);
+
+router.put(
+'/appeal/:id/reject',
+rejectSellerAppeal
+);
 
 /* DISPUTE */
 
