@@ -575,6 +575,78 @@ verifySeller;
 window.banUser =
 banUser;
 
+window.openAppealDetailModal =
+function(orderId){
+
+const order =
+refundOrders.find(
+item => item._id === orderId
+);
+
+if(!order) return;
+
+document.getElementById(
+'appeal-detail-reason'
+).innerText =
+'Alasan banding: ' +
+(order.appealReason || '-');
+
+
+const photo =
+document.getElementById(
+'appeal-detail-photo'
+);
+
+if(order.appealPhoto){
+photo.src = order.appealPhoto;
+photo.style.display='block';
+}else{
+photo.style.display='none';
+}
+
+
+const video =
+document.getElementById(
+'appeal-detail-video'
+);
+
+if(order.appealVideo){
+video.src = order.appealVideo;
+video.style.display='block';
+}else{
+video.style.display='none';
+}
+
+
+document.getElementById(
+'approve-appeal-btn'
+).onclick =
+()=>approveSellerAppeal(orderId);
+
+
+document.getElementById(
+'reject-appeal-btn'
+).onclick =
+()=>rejectSellerAppeal(orderId);
+
+
+document.getElementById(
+'appeal-detail-modal'
+).style.display='block';
+
+};
+
+
+
+window.closeAppealDetailModal =
+function(){
+
+document.getElementById(
+'appeal-detail-modal'
+).style.display='none';
+
+};
+
 loadUsers();
 loadPendingPayments();
 loadRefundRequests();
