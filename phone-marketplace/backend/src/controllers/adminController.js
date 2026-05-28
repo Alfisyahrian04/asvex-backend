@@ -553,5 +553,3 @@ approveSellerAppeal,
 rejectSellerAppeal,
 
 };
-
-};
