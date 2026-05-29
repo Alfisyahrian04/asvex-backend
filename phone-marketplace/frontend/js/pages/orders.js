@@ -796,15 +796,17 @@ headers:{
 Authorization:
 `Bearer ${localStorage.getItem('token')}`
 },
-body:JSON.stringify({
-refundRequest:true,
-refundReason,
-refundBank,
-refundName,
-refundNumber,
-unboxingVideo,
-status:'waiting_seller_approval',
-refundStatus:'waiting_seller_approval'
+body: JSON.stringify({
+  refundRequest: true,
+  refundReason,
+
+  refundBankName: refundBank,
+  refundAccountName: refundName,
+  refundAccountNumber: refundNumber,
+
+  unboxingVideo,
+  status: 'waiting_seller_approval',
+  refundStatus: 'waiting_seller_approval'
 })
 }
 );
