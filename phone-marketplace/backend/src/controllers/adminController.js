@@ -246,11 +246,11 @@ await Order.find({
     { status:'appeal_submitted' }
   ]
 })
-.populate('buyer')
-.populate('seller')
+.populate('buyer','username')
+.populate('seller','username storeName')
 .populate('product')
 .sort({
-createdAt:-1
+  createdAt:-1
 });
   
 console.log(
