@@ -311,20 +311,11 @@ Alasan:
 ${order.refundReason || '-'}
 </p>
 
-<p>
-Bank:
-${order.refundBankName || '-'}
-</p>
+<p>Bank: ${order.refundBankName || '-'}</p>
 
-<p>
-Atas Nama:
-${order.refundAccountName || '-'}
-</p>
+<p>Atas Nama: ${order.refundAccountName || '-'}</p>
 
-<p>
-No Rekening:
-${order.refundAccountNumber || '-'}
-</p>
+<p>No Rekening: ${order.refundAccountNumber || '-'}</p>
 
 ${
 order.unboxingVideo
