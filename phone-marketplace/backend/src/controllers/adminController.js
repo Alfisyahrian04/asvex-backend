@@ -252,7 +252,12 @@ await Order.find({
 .sort({
 createdAt:-1
 });
-
+  
+console.log(
+  'REFUND ORDER DEBUG:',
+  JSON.stringify(orders[0], null, 2)
+);
+  
 res.status(200).json({
 success:true,
 orders
