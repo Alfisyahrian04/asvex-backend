@@ -303,7 +303,7 @@ ${order.buyer?.username || '-'}
 
 <p>
 Seller:
-${order.seller?.storeName || '-'}
+${order.seller?.storeName || order.seller?.username || '-'}
 </p>
 
 <p>
