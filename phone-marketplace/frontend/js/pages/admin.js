@@ -238,7 +238,17 @@ return;
 refundList.innerHTML =
 orders.map(order=>{
 
-if(order.status === 'appeal_submitted'){
+  const buyerName =
+    order.buyer?.username ||
+    order.receiverName ||
+    'Buyer tidak ditemukan';
+
+  const sellerName =
+    order.seller?.storeName ||
+    order.seller?.username ||
+    'Seller tidak ditemukan';
+
+  if(order.status === 'appeal_submitted'){
 return `
 
 <div class="admin-card">
@@ -246,10 +256,10 @@ return `
 <h3>${order.product?.name || 'Produk'}</h3>
 
 <p>Buyer:
-${order.buyer?.username || '-'}</p>
+${buyerName}</p>
 
 <p>Seller:
-${order.seller?.storeName || '-'}</p>
+${sellerName}</p>
 
 <p style="color:#2563eb;font-weight:700;">
 Seller Mengajukan Banding
