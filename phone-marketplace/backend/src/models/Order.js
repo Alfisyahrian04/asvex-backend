@@ -294,6 +294,7 @@ enum:[
 'waiting_seller_receive_return',
 'waiting_admin_refund',
 'appeal_submitted',
+'refund_completed',
 'cancelled',
 ],
 default:'pending'
