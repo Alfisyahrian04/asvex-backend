@@ -141,12 +141,37 @@ orders.map(order=>`
 
 <div class="admin-card">
 
+${
+order.paymentProof
+? `
 <img
-src="${
-order.paymentProof ||
-order.product?.images?.[0]
-}"
->
+src="${order.paymentProof}"
+style="
+width:100%;
+max-height:260px;
+object-fit:contain;
+border-radius:12px;
+background:#fff;
+padding:8px;
+margin-bottom:12px;
+"
+onclick="window.open('${order.paymentProof}','_blank')"
+/>
+`
+: `
+<div style="
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#f3f4f6;
+border-radius:12px;
+margin-bottom:12px;
+">
+Belum upload bukti transfer
+</div>
+`
+}
 
 <h3>
 ${order.product?.name || 'Produk'}
@@ -155,6 +180,21 @@ ${order.product?.name || 'Produk'}
 <p>
 Buyer:
 ${order.buyer?.username || '-'}
+</p>
+
+<p>
+Bank Pengirim:
+${order.senderBank || '-'}
+</p>
+
+<p>
+Nama Pengirim:
+${order.senderName || '-'}
+</p>
+
+<p>
+Metode Pembayaran:
+${order.paymentMethod || '-'}
 </p>
 
 <p>
