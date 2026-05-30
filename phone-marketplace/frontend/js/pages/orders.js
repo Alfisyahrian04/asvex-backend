@@ -13,8 +13,20 @@ async function loadOrders(){
 
 try{
 
+const response =
+await fetch(
+`${ORDERS_BASE_URL}/orders/my`,
+{
+headers:{
+Authorization:
+`Bearer ${localStorage.getItem('token')}`
+},
+cache:'no-store'
+}
+);
+
 const orders =
-await fetchMyOrders();
+await response.json();
 
 renderOrders(
 orders
