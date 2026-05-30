@@ -1,93 +1,119 @@
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const orderId =
-params.get('id');
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get('id');
 
 const container =
-document.getElementById(
-'order-detail-container'
-);
+document.getElementById('order-detail-container');
 
-async function loadOrderDetail(){
+async function loadOrderDetail() {
+  try {
 
-try{
+    const response = await fetch(
+      `${window.API_URL}/orders/${orderId}`,
+      {
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
 
-const response =
-await fetch(
-`${window.API_URL}/orders/${orderId}`,
-{
-headers:{
-Authorization:
-`Bearer ${localStorage.getItem('token')}`
-}
-}
-);
+    const data = await response.json();
 
-const data =
-await response.json();
+    const order =
+      data.order || data;
 
-const order =
-data.order;
+    const item =
+      order.items?.[0] || {};
 
-container.innerHTML = `
-<div class="detail-card">
+    const product =
+      item.product || {};
 
-<img
-src="${
-order.product?.images?.[0] ||
-'https://via.placeholder.com/300'
-}"
-style="
-width:100%;
-border-radius:16px;
-margin-bottom:16px;
-"
-/>
+    const image =
+      product.images?.[0] ||
+      'https://via.placeholder.com/300';
 
-<h3>
-${order.product?.name || 'Produk'}
-</h3>
+    container.innerHTML = `
+      <div class="detail-card">
 
-<p>
-Qty: ${order.quantity || 1}
-</p>
+        <div class="detail-section">
+          <h3>Pesanan Selesai</h3>
+        </div>
 
-<p>
-Rp ${Number(
-order.totalPrice || 0
-).toLocaleString('id-ID')}
-</p>
+        <div class="detail-section">
+          <div class="product-row">
 
-${
-order.trackingNumber
-? `
-<p>
-No Resi:
-${order.trackingNumber}
-</p>
-`
-: ''
-}
+            <img
+              src="${image}"
+              class="detail-product-image"
+            />
 
-</div>
-`;
+            <div class="detail-product-info">
+              <h3>${product.name || 'Produk'}</h3>
 
-}catch(error){
+              <p>Qty: ${item.quantity || order.quantity || 1}</p>
 
-console.log(error);
+              <p class="price">
+                Rp ${Number(
+                  item.price || order.totalPrice || 0
+                ).toLocaleString('id-ID')}
+              </p>
+            </div>
 
-container.innerHTML =
-`
-<div class="empty-product">
-Gagal memuat detail pesanan
-</div>
-`;
+          </div>
+        </div>
 
-}
+        <div class="detail-section">
+          <h3>Info Pengiriman</h3>
 
+          <p>
+            Kurir:
+            ${order.shippingCourier || '-'}
+          </p>
+
+          <p>
+            No Resi:
+            ${order.trackingNumber || '-'}
+          </p>
+
+          <p>
+            Alamat:
+            ${order.shippingAddress?.fullName || ''}
+            <br>
+            ${order.shippingAddress?.phone || ''}
+            <br>
+            ${order.shippingAddress?.address || ''}
+          </p>
+        </div>
+
+        <div class="detail-section">
+          <h3>Rincian Pembayaran</h3>
+
+          <p>
+            Metode:
+            ${order.paymentMethod || '-'}
+          </p>
+
+          <p>
+            Total:
+            Rp ${Number(
+              order.totalPrice || 0
+            ).toLocaleString('id-ID')}
+          </p>
+        </div>
+
+      </div>
+    `;
+
+  } catch (error) {
+
+    console.log(error);
+
+    container.innerHTML = `
+      <div class="empty-product">
+        Gagal memuat detail pesanan
+      </div>
+    `;
+  }
 }
 
 loadOrderDetail();
