@@ -51,7 +51,7 @@ case 'pending_payment':
 return 'Menunggu Pembayaran';
 
 case 'waiting_confirmation':
-return 'Menunggu Konfirmasi Admin';
+return 'Sedang Konfirmasi Pembayaran';
 
 case 'waiting_verification':
 return 'Menunggu Verifikasi Pembayaran';
@@ -66,28 +66,28 @@ case 'paid':
 return 'Pembayaran Diterima';
 
 case 'processed':
-return 'Sedang Diproses';
+return 'Sedang Proses Packing';
 
 case 'shipped':
 return 'Pesanan Dikirim';
 
 case 'waiting_seller_approval':
-return 'Menunggu Persetujuan Seller';
+return 'Menunggu Persetujuan';
 
 case 'waiting_seller_refund_approval':
-return 'Buyer Mengajukan Refund';
+return 'Mengajukan Refund';
 
 case 'waiting_return':
-return 'Menunggu Buyer Mengirim Retur';
+return 'Segera Kirim Barang Retur';
 
 case 'waiting_seller_receive_return':
-return 'Menunggu Seller Menerima Retur';        
+return 'Menunggu Toko Menerima Retur';        
 
 case 'waiting_admin_refund':
-  return 'Menunggu Admin Memproses Refund';
+  return 'Menunggu Proses Refund';
 
 case 'refund_completed':
-  return 'Refund ke buyer berhasil';
+  return 'Refund berhasil';
 
 case 'completed':
   return 'Pesanan Selesai';
@@ -553,7 +553,7 @@ padding:12px;
 
 <input
 id="refund-number-${order._id}"
-placeholder="Nomor Rekening Refund"
+placeholder="Nomor Rekening"
 style="
 width:100%;
 margin-top:12px;
@@ -600,7 +600,7 @@ color:#dc2626;
 margin-top:12px;
 "
 >
-Kesalahan pengisian rekening refund bukan tanggung jawab platform.
+Kesalahan pengisian rekening bukan tanggung jawab kami.
 </p>
 
 <button
@@ -783,7 +783,7 @@ paymentProof:'uploaded'
 );
 
 alert(
-'Pembayaran berhasil dikirim, menunggu konfirmasi admin'
+'Pembayaran berhasil dikirim, mohon menunggu untuk dikonfirmasi'
 );
 
 loadOrders();
