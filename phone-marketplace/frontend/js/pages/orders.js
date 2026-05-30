@@ -24,11 +24,17 @@ renderOrders(
 orders
 );
 
-}catch(error){
+}
+catch(error){
 
-console.log(
+console.error(
 'LOAD ORDERS ERROR:',
 error
+);
+
+alert(
+'LOAD ORDERS ERROR: ' +
+(error.message || JSON.stringify(error))
 );
 
 ordersContainer.innerHTML = `
