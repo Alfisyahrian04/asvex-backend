@@ -175,19 +175,6 @@ ${
     `
 }
 : `
-<div style="
-height:180px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#f3f4f6;
-border-radius:12px;
-margin-bottom:12px;
-">
-Belum upload bukti transfer
-</div>
-`
-}
 
 <h3>
 ${order.product?.name || 'Produk'}
