@@ -120,6 +120,25 @@ return order.status || 'Pending';
 
 }
 
+function getStatusClass(order){
+
+  const statusLabel = getStatusLabel(order);
+
+  if(
+    statusLabel === 'Pesanan Selesai' ||
+    statusLabel === 'Proses Refund Berhasil'
+  ){
+    return 'status-success';
+  }
+
+  if(
+    statusLabel === 'Pesanan Dibatalkan'
+  ){
+    return 'status-danger';
+  }
+
+  return 'status-warning';
+}
 
 /* LOAD SELLER ORDERS */
 
@@ -402,7 +421,9 @@ order.totalPrice || 0
 
 <p>
 Status:
+<span class="${getStatusClass(order)}">
 ${getStatusLabel(order)}
+</span>
 </p>
 
 <div
