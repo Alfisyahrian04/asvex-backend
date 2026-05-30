@@ -292,6 +292,40 @@ ${order.trackingNumber}
 }
 
 ${
+order.refundTransferProof
+? `
+<div
+style="
+margin-top:14px;
+padding:12px;
+background:#f9fafb;
+border-radius:14px;
+"
+>
+<p
+style="
+font-size:13px;
+font-weight:700;
+margin-bottom:8px;
+"
+>
+Bukti Transfer Refund:
+</p>
+
+<img
+src="${order.refundTransferProof}"
+style="
+width:100%;
+border-radius:12px;
+border:1px solid #e5e7eb;
+"
+/>
+</div>
+`
+: ''
+}
+
+${
 order.status === 'pending_payment'
 ? `
 <div class="payment-box">
