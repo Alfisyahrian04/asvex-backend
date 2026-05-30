@@ -190,6 +190,30 @@ order.refundCompleted
 : order.status || 'pending_payment'
 )}
 </div>
+${
+order.adminRefundTransferProof &&
+(order.refundCompleted ||
+order.refundStatus === 'refund_completed')
+? `
+<button
+onclick="openRefundProof('${order.adminRefundTransferProof}')"
+style="
+margin-top:12px;
+width:100%;
+height:44px;
+border:none;
+border-radius:12px;
+background:#16a34a;
+color:#fff;
+font-weight:700;
+cursor:pointer;
+"
+>
+Lihat Bukti Transfer Refund
+</button>
+`
+: ''
+}
 
 ${
 order.status === 'waiting_return'
@@ -1058,4 +1082,15 @@ alert(
 }
 
 }
+
+window.openRefundProof =
+function(imageUrl){
+
+window.open(
+imageUrl,
+'_blank'
+);
+
+};
+
 loadOrders();
