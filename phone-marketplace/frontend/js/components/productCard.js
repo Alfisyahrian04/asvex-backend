@@ -37,10 +37,22 @@ Rp ${Number(product.price || 0)
 </div>
 
 <button
-class="add-cart-btn"
-onclick='addToCart(${JSON.stringify(product)})'
+class="${
+Number(product.stock || 0) <= 0
+? 'out-of-stock-btn'
+: 'add-cart-btn'
+}"
+${
+Number(product.stock || 0) <= 0
+? 'disabled'
+: `onclick='addToCart(${JSON.stringify(product)})'`
+}
 >
-Tambah Keranjang
+${
+Number(product.stock || 0) <= 0
+? 'Stok Habis'
+: 'Tambah Keranjang'
+}
 </button>
 
 </div>
