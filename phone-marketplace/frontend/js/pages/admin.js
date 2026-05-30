@@ -234,7 +234,9 @@ document.getElementById(
 
 if(!refundList) return;
 
-if(!orders.length){
+if(!activeRefunds.length &&
+!refundHistory.length
+){
 
 refundList.innerHTML =
 `
@@ -247,7 +249,7 @@ return;
 }
 
 refundList.innerHTML =
-orders.map(order=>{
+activeRefunds.map(order=>{
 
   const buyerName =
     order.buyer?.username ||
