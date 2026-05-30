@@ -1129,3 +1129,8 @@ document.body.appendChild(modal);
 };
 
 loadOrders();
+
+window.openOrderDetail = function(orderId){
+window.location.href =
+`/phone-marketplace/frontend/order-detail.html?id=${orderId}`;
+};
