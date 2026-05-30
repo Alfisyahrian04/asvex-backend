@@ -140,29 +140,40 @@ paymentList.innerHTML =
 orders.map(order=>`
 
 <div class="admin-card">
-
 ${
 order.paymentProof
 ? `
-<a
-  href="${order.paymentProof}"
-  target="_blank"
-  rel="noopener noreferrer"
+<button
+  onclick="showPaymentProof('${order.paymentProof}')"
+  style="
+    width:100%;
+    padding:12px;
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-weight:600;
+    margin-bottom:12px;
+    cursor:pointer;
+  "
 >
-  <img
-    src="${order.paymentProof}"
-    style="
-      width:100%;
-      max-height:260px;
-      object-fit:contain;
-      border-radius:12px;
-      background:#fff;
-      padding:8px;
-      margin-bottom:12px;
-      cursor:pointer;
-    "
-  />
-</a>
+  Lihat Bukti Transfer
+</button>
+`
+: `
+<div style="
+  height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f3f4f6;
+  border-radius:12px;
+  margin-bottom:12px;
+">
+  Belum upload bukti transfer
+</div>
+`
+}
 `
 : `
 <div style="
@@ -923,6 +934,62 @@ function(){
 document.getElementById(
 'transfer-proof-modal'
 ).style.display = 'none';
+
+};
+
+window.showPaymentProof = function(imageUrl){
+
+  const modal =
+  document.createElement('div');
+
+  modal.style = `
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+  `;
+
+  modal.innerHTML = `
+    <div style="position:relative;max-width:95%;">
+      <img
+        src="${imageUrl}"
+        style="
+          max-width:100%;
+          max-height:85vh;
+          border-radius:12px;
+          background:#fff;
+        "
+      />
+
+      <button
+        onclick="this.closest('div').parentElement.remove()"
+        style="
+          position:absolute;
+          top:-12px;
+          right:-12px;
+          width:36px;
+          height:36px;
+          border:none;
+          border-radius:50%;
+          background:red;
+          color:white;
+          font-size:20px;
+          cursor:pointer;
+        "
+      >
+        ×
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
 
 };
 
