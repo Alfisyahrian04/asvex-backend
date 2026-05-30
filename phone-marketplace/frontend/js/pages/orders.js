@@ -13,10 +13,6 @@ async function loadOrders(){
 
 try{
 
-async function loadOrders(){
-
-try{
-
 const orders =
 await fetchMyOrders();
 
