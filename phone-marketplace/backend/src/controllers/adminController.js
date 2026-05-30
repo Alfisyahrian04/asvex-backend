@@ -242,16 +242,21 @@ try{
 const orders =
 await Order.find({
   $or:[
-    { refundRequest:true },
-    { status:'appeal_submitted' }
+    {
+      refundRequest:true,
+      refundStatus:{
+        $ne:'refund_completed'
+      }
+    },
+    {
+      status:'appeal_submitted'
+    }
   ]
 })
 .populate('buyer','username')
 .populate('seller','username storeName')
 .populate('product')
-.sort({
-  createdAt:-1
-});
+.sort({ createdAt:-1 });
   
 console.log(
   'REFUND ORDER DEBUG:',
