@@ -256,6 +256,11 @@ type:Date,
 default:null
 },
 
+rejectionReason:{
+type:String,
+default:''
+},
+
 disputeStatus:{
 type:String,
 default:''
@@ -287,6 +292,7 @@ enum:[
 'waiting_payment_verification',
 'waiting_seller_refund_approval',
 'paid',
+'rejected',
 'processed',
 'shipped',
 'completed',
