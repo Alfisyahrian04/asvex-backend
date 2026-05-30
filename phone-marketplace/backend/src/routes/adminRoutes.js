@@ -72,6 +72,11 @@ router.put(
 approvePayout
 );
 
+router.put(
+'/orders/:id/reject',
+protect,
+rejectPayment
+);
 
 /* PAYMENT */
 
