@@ -149,26 +149,8 @@ line-height:1.8;
 >
 
 <div>
-Kategori:
-<b>${order.product?.category || '-'}</b>
-</div>
-
-<div>
-Berat:
-<b>${order.product?.weight || '-'} gram</b>
-</div>
-
-<div>
 Qty:
 <b>${order.quantity || 1}</b>
-</div>
-
-<div>
-Variant:
-<b>
-${order.variant?.color || '-'}
-${order.variant?.storage ? ` / ${order.variant.storage}` : ''}
-</b>
 </div>
 
 </div>
