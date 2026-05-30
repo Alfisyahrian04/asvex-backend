@@ -387,6 +387,7 @@ order.adminRefundTransferProof =
   req.body.refundTransferProof || '';
 
 order.refundCompleted = true;
+order.refundRequest = false;
 
 order.refundCompletedAt =
   new Date();
