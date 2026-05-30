@@ -1012,3 +1012,30 @@ height:48px !important;
 border-radius:14px !important;
 margin-top:10px !important;
 }
+
+.status-success{
+background:#dcfce7;
+color:#15803d;
+padding:6px 12px;
+border-radius:999px;
+font-weight:600;
+display:inline-block;
+}
+
+.status-warning{
+background:#ffedd5;
+color:#ea580c;
+padding:6px 12px;
+border-radius:999px;
+font-weight:600;
+display:inline-block;
+}
+
+.status-danger{
+background:#fee2e2;
+color:#dc2626;
+padding:6px 12px;
+border-radius:999px;
+font-weight:600;
+display:inline-block;
+}
