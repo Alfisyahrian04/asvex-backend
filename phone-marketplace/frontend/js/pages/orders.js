@@ -183,6 +183,19 @@ border-radius:14px;
 border:1px solid #fdba74;
 "
 >
+<div
+style="
+margin-bottom:12px;
+padding:14px;
+background:#f9fafb;
+border-radius:12px;
+border:1px solid #e5e7eb;
+line-height:1.6;
+"
+>
+<b>📍 Alamat Retur Seller:</b><br>
+${order.returnAddress || '-'}
+</div>
 
 <input
 id="return-tracking-${order._id}"
