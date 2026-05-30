@@ -195,16 +195,25 @@ orders.map(order=>`
 <div class="order-divider"></div>
 
 <!-- FOOTER -->
+${[
+  'paid',
+  'payment_verified',
+  'processed',
+  'shipped',
+  'completed',
+  'refund_completed',
+  'appeal_accepted',
+  'appeal_rejected'
+].includes(order.status)
+? `
 <div class="order-footer">
-
-  <button
-    class="order-detail-btn"
-    onclick="openOrderDetail('${order._id}')"
-  >
-    Cek detail ›
+  <button onclick="openOrderDetail('${order._id}')">
+    Cek detail >
   </button>
-
 </div>
+`
+: ''
+}
 
 ${
 order.adminRefundTransferProof &&
