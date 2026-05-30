@@ -119,7 +119,11 @@ return;
 ordersContainer.innerHTML =
 orders.map(order=>`
 
-<div class="order-card">
+<div class="order-card"
+onclick="openOrderDetail('${order._id}')"
+>
+
+<div class="order-top-row">
 
 <img
 src="${
