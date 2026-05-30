@@ -119,51 +119,69 @@ return;
 ordersContainer.innerHTML =
 orders.map(order=>`
 
-<div class="order-card"
-onclick="openOrderDetail('${order._id}')"
->
+<div class="order-card">
 
-<div class="order-top-row"
-onclick="openOrderDetail('${order._id}')">
+<!-- HEADER -->
+<div class="order-card-header">
 
-<img
-src="${order.product?.images?.[0] || ''}"
-class="order-image"
-/>
+  <div class="order-header-left">
+    🛍️ Belanja
+  </div>
 
-<div class="order-info">
-
-<div class="order-header-row">
-
-<h3>
-${order.product?.name || 'Produk'}
-</h3>
-
-<div class="order-status">
-${getStatusLabel(
-  order.refundCompleted
-    ? 'refund_completed'
-    : order.refundStatus || order.status
-)}
-</div>
+  <div class="order-header-right">
+    <span class="order-status">
+      ${getStatusLabel(
+        order.refundCompleted
+          ? 'refund_completed'
+          : order.refundStatus || order.status
+      )}
+    </span>
+  </div>
 
 </div>
 
-<div class="order-qty">
-Qty: ${order.quantity || 1}
+<div class="order-divider"></div>
+
+<!-- BODY -->
+<div class="order-body">
+
+  <img
+    src="${order.product?.images?.[0] || ''}"
+    class="order-image"
+  />
+
+  <div class="order-info">
+
+    <h3>
+      ${order.product?.name || 'Produk'}
+    </h3>
+
+    <div class="order-qty">
+      Qty: ${order.quantity || 1}
+    </div>
+
+    <div class="order-price">
+      Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
+    </div>
+
+  </div>
+
 </div>
 
-<div class="order-price">
-Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
-</div>
+<div class="order-divider"></div>
+
+<!-- FOOTER -->
+<div class="order-footer">
+
+  <button
+    class="order-detail-btn"
+    onclick="openOrderDetail('${order._id}')"
+  >
+    Cek detail ›
+  </button>
 
 </div>
 
-<div class="order-arrow">
-›
-</div>
-
-</div>
 ${
 order.adminRefundTransferProof &&
 (order.refundCompleted ||
