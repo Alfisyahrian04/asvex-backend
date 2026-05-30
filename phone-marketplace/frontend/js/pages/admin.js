@@ -457,9 +457,7 @@ const reader =
 new FileReader();
 
 reader.onload =
-()=>resolve(
-reader.result
-);
+()=>resolve(reader.result);
 
 reader.onerror =
 reject;
@@ -469,6 +467,7 @@ reader.readAsDataURL(file);
 }
 );
 
+const response =
 await fetch(
 `${BASE_URL}/admin/approve-refund/${orderId}`,
 {
@@ -484,15 +483,33 @@ refundCompleted:true
 }
 );
 
+const data =
+await response.json();
+
+if(!response.ok){
+alert(
+data.message ||
+'Gagal menyelesaikan refund'
+);
+return;
+}
+
 alert(
 'Refund berhasil diselesaikan'
 );
 
-loadRefundRequests();
+await loadRefundRequests();
 
 }catch(error){
 
-console.log(error);
+console.log(
+'COMPLETE REFUND ERROR:',
+error
+);
+
+alert(
+'Terjadi kesalahan saat update refund'
+);
 
 }
 
