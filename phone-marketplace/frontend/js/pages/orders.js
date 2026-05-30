@@ -80,6 +80,9 @@ return 'Menunggu Persetujuan';
 case 'waiting_seller_refund_approval':
 return 'Mengajukan Refund';
 
+case 'requested':
+return 'Mengajukan Refund';
+
 case 'waiting_return':
 return 'Segera Kirim Barang Retur';
 
