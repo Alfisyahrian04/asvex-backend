@@ -40,11 +40,11 @@ let selectedRefundOrderId = null;
 function getStatusLabel(order){
 
 if(order.refundStatus === 'appealed'){
-  return 'Banding Dikirim ke Admin';
+  return 'Banding Dikirim';
 }
 
 if(order.status === 'appeal_submitted'){
-  return 'Banding Dikirim ke Admin';
+  return 'Banding Dikirim';
 }
   
 if(order.status === 'waiting_confirmation'){
@@ -63,7 +63,7 @@ return 'Buyer Mengajukan Refund';
 }
 
 if(order.refundStatus === 'approved'){
-return 'Menunggu Barang Retur Buyer';
+return 'Menunggu Barang Retur Sampai';
 }
 
 if(order.refundStatus === 'returned'){
@@ -73,13 +73,13 @@ return 'Paket Retur Sudah Sampai';
 if(
   order.status === 'waiting_seller_receive_return'
 ){
-  return 'Menunggu Seller Menerima Retur';
+  return 'Menunggu Barang Retur Sampai';
 }  
 
 if(order.refundStatus === 'waiting_admin_refund' ||
   order.status === 'waiting_admin_refund'
 ){
-  return 'Menunggu Refund Admin';
+  return 'Menunggu Refund';
 }
 
 if(
