@@ -243,13 +243,19 @@ const orders =
 await Order.find({
   $or:[
     {
-      refundRequest:true,
-      refundStatus:{
-        $ne:'refund_completed'
-      }
+      refundRequest:true
     },
     {
       status:'appeal_submitted'
+    },
+    {
+      refundCompleted:true
+    },
+    {
+      refundStatus:'refund_completed'
+    },
+    {
+      status:'refund_completed'
     }
   ]
 })
