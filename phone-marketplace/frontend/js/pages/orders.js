@@ -183,7 +183,9 @@ order.totalPrice || 0
 
 <div class="order-status">
 ${getStatusLabel(
-order.refundStatus === 'refund_completed'
+order.refundCompleted
+? 'refund_completed'
+: order.refundStatus === 'refund_completed'
 ? 'refund_completed'
 : order.status || 'pending_payment'
 )}
