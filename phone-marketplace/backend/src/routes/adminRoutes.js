@@ -12,6 +12,7 @@ banUser,
 
 getPayouts,
 approvePayout,
+rejectPayment,
 
 verifyManualPayment,
 approveRefund,
