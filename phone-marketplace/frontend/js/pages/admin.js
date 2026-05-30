@@ -691,15 +691,29 @@ loadPendingPayments();
 
 async function rejectPayment(id){
 
+const reason = prompt(
+'Masukkan alasan penolakan pembayaran:'
+);
+
+if(!reason) return;
+
 await fetch(
 `${BASE_URL}/admin/orders/${id}/reject`,
 {
 method:'PUT',
 headers:{
+'Content-Type':'application/json',
 Authorization:`Bearer ${token}`
-}
+},
+body: JSON.stringify({
+rejectionReason: reason
+})
 }
 );
+
+loadPendingPayments();
+
+}
 
 loadPendingPayments();
 
