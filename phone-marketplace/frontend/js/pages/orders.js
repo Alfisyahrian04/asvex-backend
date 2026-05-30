@@ -760,7 +760,42 @@ const senderName =
 document.getElementById(
 `sender-name-${orderId}`
 ).value;
-  await submitPayment(
+
+const proofInput =
+document.getElementById(
+`payment-proof-${orderId}`
+);
+
+let paymentProof = '';
+
+if(
+proofInput &&
+proofInput.files &&
+proofInput.files[0]
+){
+
+paymentProof =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+proofInput.files[0]
+);
+
+});
+
+}
+
+await submitPayment(
 orderId,
 {
 receiverName,
@@ -768,19 +803,26 @@ receiverAddress,
 receiverPhone,
 senderBank,
 senderName,
+
+paymentMethod:
+adminBank || adminEwallet,
+
 adminPaymentMethod:
 adminBank || adminEwallet,
-paymentProof:'uploaded'
+
+paymentProof
 }
 );
 
 alert(
-'Pembayaran berhasil dikirim, mohon menunggu untuk dikonfirmasi'
+'Pembayaran berhasil dikirim, menunggu verifikasi'
 );
 
 loadOrders();
 
 }catch(error){
+
+console.log(error);
 
 alert(
 'Gagal upload bukti pembayaran'
