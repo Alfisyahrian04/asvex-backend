@@ -740,9 +740,17 @@ label.innerHTML =
 
 };
 
-async function submitPaymentProof(orderId){
+async function submitPaymentProof(orderId, button){
 
 try{
+
+if(button?.disabled) return;
+
+if(button){
+  button.disabled = true;
+  button.innerText = 'Memproses...';
+  button.style.opacity = '0.7';
+}
 
 const receiverName =
 document.getElementById(
