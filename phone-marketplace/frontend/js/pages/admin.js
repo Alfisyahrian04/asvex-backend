@@ -214,6 +214,17 @@ await response.json();
 
 const orders =
 result.orders || [];
+
+const activeRefunds =
+orders.filter(
+order => !order.refundCompleted
+);
+
+const refundHistory =
+orders.filter(
+order => order.refundCompleted
+);
+
 refundOrders = orders;
 
 const refundList =
