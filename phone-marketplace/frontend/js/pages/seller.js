@@ -42,10 +42,6 @@ function getStatusLabel(order){
 if(order.refundStatus === 'appealed'){
   return 'Banding Dikirim';
 }
-
- if(order.refundStatus === 'rejected'){
-return 'Dana Tidak Masuk';
-}
   
 if(order.status === 'appeal_submitted'){
   return 'Banding Dikirim';
@@ -112,6 +108,9 @@ if(order.status === 'shipped'){
 return 'Sedang Dikirim';
 }
 
+if(order.status === 'rejected'){
+  return 'Transaksi Ditolak';
+}
 if(order.status === 'completed'){
 return 'Pesanan Selesai';
 }
