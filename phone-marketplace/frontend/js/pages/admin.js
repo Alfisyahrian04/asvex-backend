@@ -144,19 +144,25 @@ orders.map(order=>`
 ${
 order.paymentProof
 ? `
-<img
-src="${order.paymentProof}"
-style="
-width:100%;
-max-height:260px;
-object-fit:contain;
-border-radius:12px;
-background:#fff;
-padding:8px;
-margin-bottom:12px;
-"
-onclick="location.href=this.src"
-/>
+<a
+  href="${order.paymentProof}"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="${order.paymentProof}"
+    style="
+      width:100%;
+      max-height:260px;
+      object-fit:contain;
+      border-radius:12px;
+      background:#fff;
+      padding:8px;
+      margin-bottom:12px;
+      cursor:pointer;
+    "
+  />
+</a>
 `
 : `
 <div style="
