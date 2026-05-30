@@ -399,7 +399,66 @@ Selesai Refund
 </div>
 
 `;
-}).join('');
+}).join('') +
+
+`
+<h3 style="
+margin-top:24px;
+margin-bottom:14px;
+font-size:18px;
+font-weight:700;
+">
+Riwayat Refund
+</h3>
+
+${
+refundHistory.length
+? refundHistory.map(order=>`
+
+<div class="admin-card">
+
+<h3>
+${order.product?.name || 'Produk'}
+</h3>
+
+<p>
+Buyer:
+${order.buyer?.username || '-'}
+</p>
+
+<p style="
+color:#16a34a;
+font-weight:700;
+margin-top:8px;
+">
+Refund selesai
+</p>
+
+${
+order.refundTransferProof
+? `
+<img
+src="${order.refundTransferProof}"
+style="
+width:100%;
+margin-top:12px;
+border-radius:12px;
+"
+/>
+`
+: ''
+}
+
+</div>
+
+`).join('')
+: `
+<div class="empty-state">
+Belum ada riwayat refund
+</div>
+`
+}
+`;
 
 }catch(error){
 
