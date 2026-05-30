@@ -43,6 +43,10 @@ if(order.refundStatus === 'appealed'){
   return 'Banding Dikirim';
 }
 
+ if(order.refundStatus === 'rejected'){
+return 'Dana Tidak Masuk';
+}
+  
 if(order.status === 'appeal_submitted'){
   return 'Banding Dikirim';
 }
