@@ -426,6 +426,21 @@ Buyer:
 ${order.buyer?.username || '-'}
 </p>
 
+<p style="margin-top:6px;">
+Bank:
+${order.refundBankName || '-'}
+</p>
+
+<p>
+Atas Nama:
+${order.refundAccountName || '-'}
+</p>
+
+<p>
+No Rekening:
+${order.refundAccountNumber || '-'}
+</p>
+
 <p style="
 color:#16a34a;
 font-weight:700;
@@ -435,14 +450,16 @@ Refund selesai
 </p>
 
 ${
-order.refundTransferProof
+order.adminRefundTransferProof
 ? `
 <img
-src="${order.refundTransferProof}"
+src="${order.adminRefundTransferProof}"
 style="
 width:100%;
 margin-top:12px;
 border-radius:12px;
+border:1px solid #e5e7eb;
+object-fit:cover;
 "
 />
 `
