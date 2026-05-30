@@ -415,7 +415,14 @@ ${
 refundHistory.length
 ? refundHistory.map(order=>`
 
-<div class="admin-card">
+<div
+  class="admin-card"
+  style="
+    width:100%;
+    margin-top:14px;
+    box-sizing:border-box;
+  "
+>
 
 <h3>
 ${order.product?.name || 'Produk'}
