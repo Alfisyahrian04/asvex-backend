@@ -37,22 +37,41 @@ Rp ${Number(product.price || 0)
 </div>
 
 <button
-class="${
-Number(product.stock || 0) <= 0
-? 'out-of-stock-btn'
-: 'add-cart-btn'
-}"
-${
-Number(product.stock || 0) <= 0
-? 'disabled'
-: `onclick='addToCart(${JSON.stringify(product)})'`
-}
+  ${
+    Number(product.stock || 0) <= 0
+      ? 'disabled'
+      : `onclick='addToCart(${JSON.stringify(product)})'`
+  }
+  style="
+    width:100%;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:600;
+    cursor:${
+      Number(product.stock || 0) <= 0
+        ? 'not-allowed'
+        : 'pointer'
+    };
+    background:${
+      Number(product.stock || 0) <= 0
+        ? '#e5e7eb'
+        : 'linear-gradient(135deg,#2563eb,#3b82f6)'
+    };
+    color:${
+      Number(product.stock || 0) <= 0
+        ? '#6b7280'
+        : '#fff'
+    };
+    opacity:1;
+  "
 >
-${
-Number(product.stock || 0) <= 0
-? 'Stok Habis'
-: 'Tambah Keranjang'
-}
+  ${
+    Number(product.stock || 0) <= 0
+      ? 'Stok Habis'
+      : 'Tambah Keranjang'
+  }
 </button>
 
 </div>
