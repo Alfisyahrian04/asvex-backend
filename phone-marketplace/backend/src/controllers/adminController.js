@@ -4,6 +4,8 @@ require('../models/User');
 const Order =
 require('../models/Order');
 
+const Product = require('../models/Product');
+
 
 /* ==============================
 GET ALL USERS
@@ -351,6 +353,15 @@ order.paymentStatus = 'rejected';
 
 order.status = 'rejected';
 
+if(order.product){
+  const product = await Product.findById(order.product);
+
+  if(product){
+    product.stock += order.quantity || 1;
+    await product.save();
+  }
+}
+
 order.rejectionReason =
 req.body.rejectionReason || '';
 
@@ -466,6 +477,15 @@ new Date();
 order.updatedAt =
 new Date();
 
+if(order.product){
+  const product = await Product.findById(order.product);
+
+  if(product){
+    product.stock += order.quantity || 1;
+    await product.save();
+  }
+}
+  
 await order.save();
 
 res.status(200).json({
