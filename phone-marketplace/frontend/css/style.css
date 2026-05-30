@@ -1531,3 +1531,19 @@ font-weight:600;
 padding:0;
 color:#111827;
 }
+.order-card{
+  background:#fff !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.order-card:active,
+.order-card:hover,
+.order-card:focus{
+  background:#fff !important;
+}
+
+.order-body,
+.order-card-header,
+.order-footer{
+  background:transparent !important;
+}
