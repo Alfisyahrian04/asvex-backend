@@ -155,7 +155,7 @@ background:#fff;
 padding:8px;
 margin-bottom:12px;
 "
-onclick="window.open('${order.paymentProof}','_blank')"
+onclick="window.open(this.src,'_blank')"
 />
 `
 : `
