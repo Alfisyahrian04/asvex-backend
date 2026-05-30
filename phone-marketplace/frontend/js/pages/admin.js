@@ -469,19 +469,23 @@ margin-top:8px;
 Refund selesai
 </p>
 
-${
-order.adminRefundTransferProof
+${order.adminRefundTransferProof
 ? `
-<img
-src="${order.adminRefundTransferProof}"
+<button onclick="previewTransferProof('${order.adminRefundTransferProof}')"
 style="
 width:100%;
 margin-top:12px;
-border-radius:12px;
-border:1px solid #e5e7eb;
-object-fit:cover;
+height:46px;
+border:none;
+border-radius:14px;
+background:#2563eb;
+color:#fff;
+font-weight:700;
+cursor:pointer;
 "
-/>
+>
+Lihat Bukti Transfer
+</button>
 `
 : ''
 }
@@ -836,6 +840,33 @@ console.log(error);
 }
 
 }
+
+window.previewTransferProof =
+function(imageUrl){
+
+const modal =
+document.getElementById(
+'transfer-proof-modal'
+);
+
+const image =
+document.getElementById(
+'transfer-proof-image'
+);
+
+image.src = imageUrl;
+modal.style.display = 'flex';
+
+};
+
+window.closeTransferProofModal =
+function(){
+
+document.getElementById(
+'transfer-proof-modal'
+).style.display = 'none';
+
+};
 
 loadUsers();
 loadPendingPayments();
