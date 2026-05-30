@@ -487,8 +487,8 @@ Belum ada riwayat refund
 </div>
 `
 }
+</div>
 `;
-  </div>
 
 }catch(error){
 
