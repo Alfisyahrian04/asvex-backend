@@ -141,38 +141,38 @@ orders.map(order=>`
 
 <div class="admin-card">
 ${
-order.paymentProof
-? `
-<button
-  onclick="showPaymentProof('${order.paymentProof}')"
-  style="
-    width:100%;
-    padding:12px;
-    background:#2563eb;
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    font-weight:600;
-    margin-bottom:12px;
-    cursor:pointer;
-  "
->
-  Lihat Bukti Transfer
-</button>
-`
-: `
-<div style="
-  height:180px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f3f4f6;
-  border-radius:12px;
-  margin-bottom:12px;
-">
-  Belum upload bukti transfer
-</div>
-`
+  order.paymentProof
+    ? `
+      <button
+        onclick="showPaymentProof('${order.paymentProof}')"
+        style="
+          width:100%;
+          padding:12px;
+          background:#2563eb;
+          color:#fff;
+          border:none;
+          border-radius:10px;
+          font-weight:600;
+          margin-bottom:12px;
+          cursor:pointer;
+        "
+      >
+        Lihat Bukti Transfer
+      </button>
+    `
+    : `
+      <div style="
+        height:180px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:#f3f4f6;
+        border-radius:12px;
+        margin-bottom:12px;
+      ">
+        Belum upload bukti transfer
+      </div>
+    `
 }
 : `
 <div style="
