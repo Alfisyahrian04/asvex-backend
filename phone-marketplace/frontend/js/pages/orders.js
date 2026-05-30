@@ -73,10 +73,13 @@ case 'waiting_seller_receive_return':
 return 'Menunggu Seller Menerima Retur';        
 
 case 'waiting_admin_refund':
-return 'Menunggu Admin Memproses Refund';
-    
+  return 'Menunggu Admin Memproses Refund';
+
+case 'refund_completed':
+  return 'Refund ke buyer berhasil';
+
 case 'completed':
-return 'Pesanan Selesai';
+  return 'Pesanan Selesai';
 
 case 'cancelled':
 return 'Pesanan Dibatalkan';
