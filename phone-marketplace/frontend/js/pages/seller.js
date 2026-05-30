@@ -136,6 +136,7 @@ function getStatusClass(order){
 
   if(
     statusLabel === 'Pesanan Dibatalkan'
+    statusLabel === 'Transaksi Ditolak'
   ){
     return 'status-danger';
   }
