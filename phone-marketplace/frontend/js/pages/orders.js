@@ -140,7 +140,11 @@ ${order.product?.name || 'Produk'}
 </h3>
 
 <div class="order-status">
-${getStatusLabel(order)}
+${getStatusLabel(
+  order.refundCompleted
+    ? 'refund_completed'
+    : order.refundStatus || order.status
+)}
 </div>
 
 </div>
