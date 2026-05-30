@@ -199,7 +199,6 @@ ${[
   'paid',
   'payment_verified',
   'processed',
-  'shipped',
   'completed',
   'refund_completed',
   'appeal_accepted',
