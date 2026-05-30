@@ -83,6 +83,13 @@ if(order.refundStatus === 'waiting_admin_refund' ||
 }
 
 if(
+  order.refundStatus === 'refund_completed' ||
+  order.status === 'refund_completed'
+){
+  return 'Proses Refund Berhasil';
+}
+
+if(
 order.paymentStatus === 'paid' &&
 (
 order.status === 'paid' ||
