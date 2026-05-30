@@ -614,6 +614,7 @@ Kesalahan pengisian rekening bukan tanggung jawab kami.
 </p>
 
 <button
+id="refund-submit-btn-${order._id}"
 onclick="submitRefund('${order._id}')"
 class="payment-submit-btn"
 style="
@@ -862,6 +863,16 @@ async function submitRefund(orderId){
 
 try{
 
+const refundBtn =
+document.getElementById(
+`refund-submit-btn-${orderId}`
+);
+
+if(refundBtn){
+  refundBtn.disabled = true;
+  refundBtn.innerText = 'Memproses...';
+}
+
 const refundReason =
 document.getElementById(
 `refund-reason-${orderId}`
@@ -972,7 +983,9 @@ data.message ||
 );
 return;
 }
-
+if(refundBtn){
+  refundBtn.innerText = 'Refund Diproses';
+}
 alert(
 'Refund berhasil diajukan, menunggu persetujuan seller'
 );
