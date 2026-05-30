@@ -445,10 +445,10 @@ margin-top:6px;
 ></div>
 
 <button
-onclick="submitPaymentProof('${order._id}')"
-class="payment-submit-btn"
+  onclick="submitPaymentProof('${order._id}', this)"
+  class="payment-submit-btn"
 >
-Konfirmasi Pembayaran
+  Konfirmasi Pembayaran
 </button>
 
 </div>
