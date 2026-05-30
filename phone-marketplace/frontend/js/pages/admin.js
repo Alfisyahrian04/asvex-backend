@@ -410,7 +410,15 @@ font-weight:700;
 ">
 Riwayat Refund
 </h3>
-<div style="width:100%; display:block; clear:both;">
+<div
+style="
+width:100%;
+display:flex;
+flex-direction:column;
+gap:14px;
+clear:both;
+"
+>
 ${
 refundHistory.length
 ? refundHistory.map(order=>`
