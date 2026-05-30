@@ -349,7 +349,7 @@ message:'Order not found'
 
 order.paymentStatus = 'rejected';
 
-order.status = 'Transaksi Ditolak';
+order.status = 'rejected';
 
 order.rejectionReason =
 req.body.rejectionReason || '';
