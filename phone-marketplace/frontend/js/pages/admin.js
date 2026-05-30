@@ -174,7 +174,6 @@ ${
       </div>
     `
 }
-: `
 
 <h3>
 ${order.product?.name || 'Produk'}
