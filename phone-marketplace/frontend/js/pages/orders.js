@@ -65,6 +65,9 @@ return 'Pembayaran Diterima';
 case 'paid':
 return 'Pembayaran Diterima';
 
+case 'rejected':
+return 'Pembayaran Ditolak';
+
 case 'processed':
 return 'Sedang Proses Packing';
 
@@ -94,6 +97,12 @@ case 'completed':
 
 case 'cancelled':
 return 'Pesanan Dibatalkan';
+
+case 'appeal_accepted':
+return 'Banding Diterima';
+
+case 'appeal_rejected':
+return 'Banding Ditolak';
 
 default:
 return status;
