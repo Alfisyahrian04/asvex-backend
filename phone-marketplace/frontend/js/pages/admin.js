@@ -717,8 +717,6 @@ loadPendingPayments();
 
 loadPendingPayments();
 
-}
-
 async function verifySeller(id){
 
 await fetch(
