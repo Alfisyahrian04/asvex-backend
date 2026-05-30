@@ -194,7 +194,7 @@ ${order.senderName || '-'}
 
 <p>
 Metode Pembayaran:
-${order.paymentMethod || '-'}
+${order.adminPaymentMethod || order.paymentMethod || '-'}
 </p>
 
 <p>
