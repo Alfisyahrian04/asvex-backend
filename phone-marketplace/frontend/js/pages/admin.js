@@ -410,18 +410,23 @@ font-weight:700;
 ">
 Riwayat Refund
 </h3>
-
+<div style="width:100%; display:block; clear:both;">
 ${
 refundHistory.length
 ? refundHistory.map(order=>`
 
 <div
-  class="admin-card"
-  style="
-    width:100%;
-    margin-top:14px;
-    box-sizing:border-box;
-  "
+class="admin-card"
+style="
+width:100%;
+margin-top:14px;
+box-sizing:border-box;
+display:block;
+clear:both;
+margin-left:0;
+margin-right:0;
+max-width:100%;
+"
 >
 
 <h3>
@@ -483,6 +488,7 @@ Belum ada riwayat refund
 `
 }
 `;
+  </div>
 
 }catch(error){
 
