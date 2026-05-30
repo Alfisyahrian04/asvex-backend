@@ -924,32 +924,38 @@ document.getElementById(
 
 window.showPaymentProof = function(imageUrl){
 
-  const modal =
-  document.createElement('div');
+  const modal = document.createElement('div');
 
-  modal.style = `
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-    padding:20px;
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 16px;
   `;
 
   modal.innerHTML = `
-    <div style="position:relative;max-width:95%;">
+    <div
+      style="
+        position: relative;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width:100%;
+        height:100%;
+      "
+    >
       <img
         src="${imageUrl}"
         style="
-          max-width:100%;
+          max-width:95%;
           max-height:85vh;
+          object-fit:contain;
           border-radius:12px;
-          background:#fff;
+          background:white;
         "
       />
 
@@ -957,15 +963,16 @@ window.showPaymentProof = function(imageUrl){
         onclick="this.closest('div').parentElement.remove()"
         style="
           position:absolute;
-          top:-12px;
-          right:-12px;
-          width:36px;
-          height:36px;
+          top:20px;
+          right:20px;
+          width:42px;
+          height:42px;
           border:none;
           border-radius:50%;
           background:red;
-          color:white;
-          font-size:20px;
+          color:#fff;
+          font-size:24px;
+          font-weight:bold;
           cursor:pointer;
         "
       >
