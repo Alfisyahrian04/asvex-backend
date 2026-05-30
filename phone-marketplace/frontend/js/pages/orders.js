@@ -43,22 +43,6 @@ Gagal memuat transaksi
 
 }
 
-renderOrders(
-orders
-);
-
-}catch(error){
-
-ordersContainer.innerHTML = `
-<div class="empty-product">
-Gagal memuat transaksi
-</div>
-`;
-
-}
-
-}
-
 function getStatusLabel(status){
 
 switch(status){
