@@ -383,9 +383,25 @@ message:'Order not found'
 });
 }
 
-order.returnStatus='approved';
-order.refundStatus='approved';
-order.status='cancelled';
+order.adminRefundTransferProof =
+  req.body.refundTransferProof || '';
+
+order.refundCompleted = true;
+
+order.refundCompletedAt =
+  new Date();
+
+order.refundTransferredAt =
+  new Date();
+
+order.returnStatus =
+  'refund_completed';
+
+order.refundStatus =
+  'refund_completed';
+
+order.status =
+  'refund_completed';
 
 order.refundApprovedAt =
 new Date();
