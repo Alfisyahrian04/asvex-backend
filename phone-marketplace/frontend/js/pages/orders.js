@@ -123,80 +123,48 @@ orders.map(order=>`
 onclick="openOrderDetail('${order._id}')"
 >
 
-<div class="order-top-row">
+<div class="order-top-row"
+onclick="openOrderDetail('${order._id}')">
 
 <img
-src="${
-order.product?.images?.[0] ||
-'https://via.placeholder.com/300'
-}"
+src="${order.product?.images?.[0] || ''}"
 class="order-image"
 />
 
 <div class="order-info">
 
+<div class="order-header-row">
+
 <h3>
 ${order.product?.name || 'Produk'}
 </h3>
 
-<div
-style="
-font-size:14px;
-color:#6b7280;
-margin-top:8px;
-line-height:1.8;
-"
->
-
-<div>
-Qty:
-<b>${order.quantity || 1}</b>
-</div>
-
-</div>
-
-<p
-style="
-margin-top:12px;
-font-size:18px;
-font-weight:700;
-"
->
-Rp ${Number(
-order.totalPrice || 0
-).toLocaleString('id-ID')}
-</p>
-
 <div class="order-status">
-${getStatusLabel(
-order.refundCompleted
-? 'refund_completed'
-: order.refundStatus === 'refund_completed'
-? 'refund_completed'
-: order.status || 'pending_payment'
-)}
+${getStatusLabel(order)}
+</div>
+
+</div>
+
+<div class="order-qty">
+Qty: ${order.quantity || 1}
+</div>
+
+<div class="order-price">
+Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
+</div>
+
+</div>
+
+<div class="order-arrow">
+›
+</div>
+
 </div>
 ${
 order.adminRefundTransferProof &&
 (order.refundCompleted ||
 order.refundStatus === 'refund_completed')
 ? `
-<button
-onclick="openRefundProof('${order.adminRefundTransferProof}')"
-style="
-margin-top:12px;
-width:100%;
-height:44px;
-border:none;
-border-radius:12px;
-background:#16a34a;
-color:#fff;
-font-weight:700;
-cursor:pointer;
-"
->
-Lihat Bukti Transfer Refund
-</button>
 `
 : ''
 }
