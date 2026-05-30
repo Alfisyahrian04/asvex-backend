@@ -125,8 +125,23 @@ orders.map(order=>`
 <div class="order-card-header">
 
   <div class="order-header-left">
-    🛍️ Belanja
+  <div>🛍️ Belanja</div>
+
+  <div
+    style="
+      font-size:13px;
+      color:#6b7280;
+      margin-top:4px;
+      font-weight:500;
+    "
+  >
+    ${new Date(order.createdAt).toLocaleDateString('id-ID',{
+      day:'numeric',
+      month:'long',
+      year:'numeric'
+    })}
   </div>
+</div>
 
   <div class="order-header-right">
     <span class="order-status">
