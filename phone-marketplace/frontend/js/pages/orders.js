@@ -13,20 +13,33 @@ async function loadOrders(){
 
 try{
 
-const response =
-await fetch(
-`${ORDERS_BASE_URL}/orders/my`,
-{
-headers:{
-Authorization:
-`Bearer ${localStorage.getItem('token')}`
-},
-cache:'no-store'
-}
-);
+async function loadOrders(){
+
+try{
 
 const orders =
-await response.json();
+await fetchMyOrders();
+
+renderOrders(
+orders
+);
+
+}catch(error){
+
+console.log(
+'LOAD ORDERS ERROR:',
+error
+);
+
+ordersContainer.innerHTML = `
+<div class="empty-product">
+Gagal memuat transaksi
+</div>
+`;
+
+}
+
+}
 
 renderOrders(
 orders
