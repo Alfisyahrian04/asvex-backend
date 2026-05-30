@@ -328,6 +328,51 @@ message:error.message
 }
 };
 
+/* ==============================
+REJECT PAYMENT
+============================== */
+
+const rejectPayment =
+async(req,res)=>{
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.paymentStatus = 'rejected';
+
+order.status = 'Transaksi Ditolak';
+
+order.rejectionReason =
+req.body.rejectionReason || '';
+
+order.updatedAt =
+new Date();
+
+await order.save();
+
+res.status(200).json({
+success:true,
+message:'Payment rejected',
+order
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+};
 
 /* ==============================
 VERIFY MANUAL PAYMENT
@@ -579,6 +624,7 @@ getPendingPayments,
 getRefundRequests,
 
 verifyManualPayment,
+rejectPayment,
 approveRefund,
 resolveDispute,
 
