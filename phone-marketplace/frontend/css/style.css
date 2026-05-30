@@ -1400,56 +1400,56 @@ margin-bottom:18px;
 margin-top:8px;
 height:52px;
 }
-/* ORDER CARD TOKOPEDIA STYLE */
 
 .order-card{
-display:flex !important;
-align-items:center !important;
-gap:12px !important;
+display:block !important;
+width:100% !important;
 padding:14px !important;
-background:#fff !important;
-border-radius:16px !important;
 margin-bottom:12px !important;
-box-shadow:none !important;
+border-radius:16px !important;
+background:#fff !important;
+box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
 }
 
 .order-top-row{
 display:flex !important;
-align-items:center !important;
-width:100%;
-gap:12px;
+align-items:flex-start !important;
+gap:12px !important;
 }
 
 .order-image{
 width:72px !important;
 height:72px !important;
-border-radius:10px !important;
-object-fit:cover;
-flex-shrink:0;
+min-width:72px !important;
+object-fit:cover !important;
+border-radius:12px !important;
 }
 
 .order-info{
-flex:1;
-min-width:0;
+flex:1 !important;
 }
 
 .order-info h3{
 font-size:14px !important;
+font-weight:700 !important;
 line-height:1.35 !important;
-font-weight:700;
-margin:0 0 4px;
+margin:0 0 6px !important;
 }
 
-.order-info p{
-font-size:13px;
-margin:0;
-color:#6b7280;
+.order-status{
+display:inline-flex !important;
+font-size:12px !important;
+padding:6px 12px !important;
+border-radius:999px !important;
+margin-top:8px !important;
+}
+
+.payment-submit-btn{
+width:100% !important;
+margin-top:12px !important;
+border-radius:12px !important;
 }
 
 .tracking-number{
 display:none !important;
-}
-
-.order-card button{
-margin-top:8px;
 }
