@@ -66,7 +66,7 @@ case 'paid':
 return 'Pembayaran Diterima';
 
 case 'rejected':
-return 'Pembayaran Ditolak';
+return 'Transaksi Ditolak';
 
 case 'processed':
 return 'Sedang Proses Packing';
