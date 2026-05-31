@@ -1284,7 +1284,7 @@ el.innerText = value;
 
 
 /* CHART */
-Chart.register(ChartDataLabels);
+// Chart.register(ChartDataLabels);
 function renderSalesChart(orders){
 
 const map = {};
@@ -1365,16 +1365,6 @@ responsive:true,
 maintainAspectRatio:false,
 plugins:{
   legend:{display:false},
-
-  datalabels:{
-    anchor:'end',
-    align:'bottom',
-    offset:6,
-    color:'#374151',
-    font:{
-      size:10,
-      weight:'600'
-    },
     formatter:function(value){
       if(value === 0) return '';
       return 'Rp ' + value.toLocaleString('id-ID');
