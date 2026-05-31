@@ -234,6 +234,85 @@ console.log(error);
 }
 
 
+/* ONGOING ORDERS */
+
+async function loadOngoingOrders(){
+
+try{
+
+const response = await fetch(
+`${BASE_URL}/admin/orders`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const result = await response.json();
+
+const orders =
+result.orders || [];
+
+const ongoingOrders =
+orders.filter(order =>
+order.paymentStatus === 'paid' &&
+[
+'processing',
+'shipped',
+'delivered'
+].includes(order.status)
+);
+
+const container =
+document.getElementById(
+'ongoing-orders-list'
+);
+
+if(!container) return;
+
+if(!ongoingOrders.length){
+container.innerHTML =
+`<div class="empty-state">
+Belum ada transaksi berlangsung
+</div>`;
+return;
+}
+
+container.innerHTML =
+ongoingOrders.map(order=>`
+
+<div class="admin-card">
+<h3>${order.product?.name || 'Produk'}</h3>
+
+<p>
+Buyer:
+${order.buyer?.username || '-'}
+</p>
+
+<p>
+Status:
+${order.status || '-'}
+</p>
+
+<p>
+Rp ${Number(
+order.totalPrice || 0
+).toLocaleString('id-ID')}
+</p>
+
+</div>
+
+`).join('');
+
+}catch(error){
+console.log(
+'LOAD ONGOING ORDERS ERROR:',
+error
+);
+}
+
+}
 
 /* REFUND */
 
@@ -990,4 +1069,5 @@ window.showPaymentProof = function(imageUrl){
 
 loadUsers();
 loadPendingPayments();
+loadOngoingOrders();
 loadRefundRequests();
