@@ -303,7 +303,7 @@ message:'Order not found'
 
 order.refundRequest = true;
 
-order.refundStatus = 'rejected';
+order.refundStatus = 'refund_rejected';
 order.returnStatus = 'refund_rejected';
 order.status = 'refund_rejected';
 
