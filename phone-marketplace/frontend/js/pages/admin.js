@@ -258,8 +258,12 @@ const orders =
 result.orders || [];
 
 const activeRefunds =
-orders.filter(
-order => !order.refundCompleted
+orders.filter(order =>
+  !order.refundCompleted &&
+  order.refundRequest === true &&
+  order.refundStatus !== 'rejected' &&
+  order.refundStatus !== 'refund_rejected' &&
+  order.status !== 'refund_rejected'
 );
 
 const refundHistory =
