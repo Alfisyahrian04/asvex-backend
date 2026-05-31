@@ -1336,8 +1336,10 @@ datasets:[
 {
 data: values,
 borderRadius: 8,
-barThickness: 26,
-backgroundColor:'#16a34a'
+backgroundColor:'#16a34a',
+categoryPercentage: 0.9,
+barPercentage: 0.6,
+maxBarThickness: 46
 }
 ]
 },
