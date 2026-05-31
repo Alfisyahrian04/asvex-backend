@@ -339,3 +339,39 @@ padding:16px;
 display:block !important;
 width:100%;
 }
+/* REFUND CARD FIX */
+
+#refund-list{
+display:flex !important;
+flex-direction:column !important;
+gap:16px;
+}
+
+#refund-list .admin-card{
+width:100%;
+max-width:100%;
+box-sizing:border-box;
+padding:16px;
+border-radius:18px;
+}
+
+#refund-list video{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:12px;
+margin-top:12px;
+display:block;
+background:#000;
+}
+
+#refund-list h3{
+font-size:16px;
+margin-bottom:8px;
+}
+
+#refund-list p{
+font-size:13px;
+line-height:1.5;
+margin:4px 0;
+}
