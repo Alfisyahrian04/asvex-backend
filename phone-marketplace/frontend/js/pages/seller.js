@@ -773,22 +773,39 @@ async function rejectRefund(orderId){
 try{
 
 const reason =
-prompt(
-'Alasan reject refund'
-);
+document
+.getElementById('seller-reject-reason')
+.value
+.trim();
 
-if(!reason) return;
+if(!reason){
+  alert('Alasan reject wajib diisi');
+  return;
+}
 
 const bankName =
-prompt('Nama bank pencairan');
+document
+.getElementById('refund-bank-name')
+.value
+.trim();
 
 const accountName =
-prompt('Nama pemilik rekening');
+document
+.getElementById('refund-account-name')
+.value
+.trim();
 
 const accountNumber =
-prompt('Nomor rekening');
+document
+.getElementById('refund-account-number')
+.value
+.trim();
 
-if (!bankName || !accountName || !accountNumber) {
+if(
+  !bankName ||
+  !accountName ||
+  !accountNumber
+){
   alert('Data rekening wajib diisi');
   return;
 }
