@@ -1288,14 +1288,19 @@ el.innerText = value;
 function renderSalesChart(orders){
 
 const map = {};
+const labels = [];
+const values = [];
 
-orders.forEach(order=>{
+for(let i = 6; i >= 0; i--){
 
-if(!order.createdAt) return;
+const d = new Date();
+d.setDate(d.getDate() - i);
 
-const date =
-new Date(order.createdAt)
-.toLocaleDateString(
+const key =
+d.toISOString().split('T')[0];
+
+const label =
+d.toLocaleDateString(
 'id-ID',
 {
 day:'2-digit',
@@ -1303,66 +1308,59 @@ month:'short'
 }
 );
 
-map[date] =
-(map[date] || 0)
-+
-Number(order.totalPrice || 0);
+labels.push(label);
+map[key] = 0;
+
+}
+
+orders.forEach(order=>{
+
+if(!order.createdAt) return;
+
+const key =
+new Date(order.createdAt)
+.toISOString()
+.split('T')[0];
+
+if(map[key] !== undefined){
+map[key] += Number(
+order.totalPrice || 0
+);
+}
 
 });
 
-const labels =
-Object.keys(map).slice(-7);
-
-const values =
-Object.values(map).slice(-7);
+Object.keys(map).forEach(key=>{
+values.push(map[key]);
+});
 
 const canvas =
 document.getElementById('sales-chart');
 
 if(!canvas) return;
 
-const existingChart =
+const oldChart =
 Chart.getChart(canvas);
 
-if(existingChart){
-existingChart.destroy();
+if(oldChart){
+oldChart.destroy();
 }
 
 new Chart(canvas,{
 type:'bar',
 data:{
 labels,
-datasets:[
-{
+datasets:[{
 data: values,
-borderRadius: 8,
 backgroundColor:'#16a34a',
-categoryPercentage: 0.9,
-barPercentage: 0.6,
-maxBarThickness: 46
-}
-]
+borderRadius:8
+}]
 },
 options:{
 responsive:true,
 maintainAspectRatio:false,
 plugins:{
-legend:{
-display:false
-}
-},
-scales:{
-x:{
-grid:{
-display:false
-}
-},
-y:{
-beginAtZero:true,
-grid:{
-color:'#f1f5f9'
-}
-}
+legend:{display:false}
 }
 }
 });
