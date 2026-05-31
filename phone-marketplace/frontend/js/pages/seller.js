@@ -39,6 +39,13 @@ let selectedRefundOrderId = null;
 
 function getStatusLabel(order){
 
+if(
+  order.refundStatus === 'refund_rejected' ||
+  order.status === 'refund_rejected'
+){
+  return 'Refund Ditolak';
+}
+
 if(order.refundStatus === 'appealed'){
   return 'Banding Dikirim';
 }
@@ -190,6 +197,8 @@ order.paymentStatus === 'paid'
 && order.status !== 'processed'
 && order.status !== 'shipped'
 && order.status !== 'completed'
+&& order.status !== 'refund_rejected'
+&& order.refundStatus !== 'refund_rejected'
 && order.refundRequest !== true;
 
 let buttonHtml = '';
