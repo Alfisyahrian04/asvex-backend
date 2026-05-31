@@ -121,6 +121,12 @@ router.put(
 resolveDispute
 );
 
+router.get(
+'/orders',
+protect,
+getAllOrders
+);
+
 
 module.exports =
 router;
