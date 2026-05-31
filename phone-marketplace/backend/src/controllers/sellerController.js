@@ -301,7 +301,7 @@ message:'Order not found'
 });
 }
 
-order.refundRequest = true;
+order.refundRequest = false;
 
 order.refundStatus = 'refund_rejected';
 order.returnStatus = 'refund_rejected';
