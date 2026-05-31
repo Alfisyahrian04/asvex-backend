@@ -1116,56 +1116,55 @@ await ordersRes.json();
 const orders =
 ordersData.orders || [];
 
-const last7Days = [];
-const salesMap = {};
+/* SALES CHART REAL DATA 7 HARI */
 
-for(let i = 6; i >= 0; i--){
-  const d = new Date();
-  d.setDate(d.getDate() - i);
+const salesByDay = {};
+const labels = [];
+const values = [];
 
-  const key =
-    d.toISOString().split('T')[0];
+for (let i = 6; i >= 0; i--) {
+  const date = new Date();
+  date.setDate(date.getDate() - i);
 
-  last7Days.push(key);
-  salesMap[key] = 0;
+  const key = date.toISOString().split('T')[0];
+
+  labels.push(
+    date.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short'
+    })
+  );
+
+  salesByDay[key] = 0;
 }
 
 orders.forEach(order => {
+  if (!order.createdAt) return;
 
-  if(!order.createdAt) return;
-
-  const dateKey =
+  const orderDate =
     new Date(order.createdAt)
     .toISOString()
     .split('T')[0];
 
-  if(salesMap[dateKey] !== undefined){
-    salesMap[dateKey] +=
-      Number(order.totalPrice || 0);
+  if (salesByDay.hasOwnProperty(orderDate)) {
+
+    const amount =
+      Number(
+        order.totalPrice ||
+        order.total ||
+        order.amount ||
+        0
+      );
+
+    salesByDay[orderDate] += amount;
   }
 });
 
-const labels =
-last7Days.map(date =>
-  new Date(date)
-  .toLocaleDateString(
-    'id-ID',
-    {
-      day:'numeric',
-      month:'short'
-    }
-  )
-);
+Object.keys(salesByDay).forEach(date => {
+  values.push(salesByDay[date]);
+});
 
-const values =
-last7Days.map(
-  date => salesMap[date]
-);
-
-renderSalesChart(
-  labels,
-  values
-);
+renderSalesChart(labels, values);
   
 /* USER */
 
