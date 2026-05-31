@@ -574,6 +574,8 @@ async(req,res)=>{
 
   }
 };
+
+
 exports.submitReturnShipment = async (req, res) => {
   try {
 
@@ -587,8 +589,8 @@ exports.submitReturnShipment = async (req, res) => {
       });
     }
 
-    order.returnTrackingNumber =
-      req.body.returnTrackingNumber || '';
+    order.buyerReturnTrackingNumber =
+  req.body.returnTrackingNumber || '';
 
     order.returnProof =
       req.body.returnProof || '';
