@@ -1287,59 +1287,72 @@ el.innerText = value;
 
 function renderSalesChart(labels = [], values = []) {
 
-  const canvas = document.getElementById('sales-chart');
+  const canvas =
+  document.getElementById('sales-chart');
+
   if (!canvas) return;
 
   if (window.salesChart) {
     window.salesChart.destroy();
   }
 
-  const ctx = canvas.getContext('2d');
+  const ctx =
+  canvas.getContext('2d');
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, 260);
-  gradient.addColorStop(0, 'rgba(34,197,94,0.30)');
-  gradient.addColorStop(1, 'rgba(34,197,94,0)');
+  const fixedLabels =
+  labels.map(label =>
+    typeof label === 'string'
+      ? label
+      : new Date(label)
+          .toLocaleDateString(
+            'id-ID',
+            { day:'numeric', month:'short' }
+          )
+  );
 
-  window.salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels:
-        labels.length ? labels : ['Hari ini'],
+  const candleData =
+  values.map(v => ({
+    x: v,
+    o: v * 0.96,
+    h: v * 1.05,
+    l: v * 0.94,
+    c: v
+  }));
 
-      datasets: [{
-        data:
-          values.length ? values : [0],
-
-        borderColor: '#22c55e',
-        backgroundColor: gradient,
-
-        fill: true,
-        tension: 0.45,
-        borderWidth: 3,
-
-        pointRadius: 4,
-        pointHoverRadius: 6,
-      }]
+  window.salesChart =
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: fixedLabels,
+      datasets:[
+        {
+          label:'Sales',
+          data: values,
+          backgroundColor:'#22c55e',
+          borderRadius:6,
+          borderSkipped:false,
+          barThickness:12
+        }
+      ]
     },
-
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-
-      plugins: {
-        legend: {
-          display: false
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{
+          display:false
         }
       },
-
-      scales: {
-        x: {
-          grid: { display: false }
+      scales:{
+        x:{
+          grid:{
+            display:false
+          }
         },
-        y: {
-          beginAtZero: true,
-          grid: {
-            color: 'rgba(0,0,0,.05)'
+        y:{
+          beginAtZero:true,
+          grid:{
+            color:'rgba(0,0,0,.05)'
           }
         }
       }
