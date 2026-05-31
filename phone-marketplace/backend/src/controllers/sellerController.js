@@ -301,11 +301,26 @@ message:'Order not found'
 });
 }
 
-order.refundRequest = false;
+order.refundRequest = true;
+
 order.refundStatus = 'rejected';
+order.returnStatus = 'refund_rejected';
+order.status = 'refund_rejected';
+
 order.refundRejectedBySeller = true;
+
 order.rejectReason =
 req.body.rejectReason || '';
+
+order.sellerRefundBankName =
+req.body.bankName || '';
+
+order.sellerRefundAccountName =
+req.body.accountName || '';
+
+order.sellerRefundAccountNumber =
+req.body.accountNumber || '';
+
 order.refundRejectedAt =
 new Date();
 
