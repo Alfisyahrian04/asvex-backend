@@ -311,6 +311,7 @@ enum:[
 'processed',
 'shipped',
 'completed',
+'refund_rejected',
 'waiting_return',
 'waiting_seller_receive_return',
 'waiting_admin_refund',
