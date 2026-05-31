@@ -331,6 +331,12 @@ default:'pending'
 timestamps:true
 });
 
+OrderSchema.index({ seller: 1 });
+OrderSchema.index({ buyer: 1 });
+OrderSchema.index({ status: 1 });
+OrderSchema.index({ paymentStatus: 1 });
+OrderSchema.index({ createdAt: -1 });
+
 module.exports =
 mongoose.model(
 'Order',
