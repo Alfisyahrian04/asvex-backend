@@ -1344,6 +1344,15 @@ Chart.getChart(canvas);
 if(oldChart){
 oldChart.destroy();
 }
+const ctx = canvas.getContext('2d');
+
+const gradient =
+ctx.createLinearGradient(
+  0,0,0,260
+);
+
+gradient.addColorStop(0,'#22c55e');
+gradient.addColorStop(1,'#16a34a');
 
 new Chart(canvas,{
 type:'bar',
@@ -1366,11 +1375,6 @@ plugins:{
   legend:{
     display:false
   }
-}
-    formatter:function(value){
-      if(value === 0) return '';
-      return 'Rp ' + value.toLocaleString('id-ID');
-    }
 }
 
 loadUsers();
