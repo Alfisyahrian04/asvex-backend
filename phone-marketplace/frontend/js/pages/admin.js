@@ -467,8 +467,12 @@ src="${order.unboxingVideo}"
 controls
 style="
 width:100%;
+height:220px;
+object-fit:cover;
 margin-top:12px;
 border-radius:12px;
+background:#000;
+display:block;
 "
 ></video>
 `
