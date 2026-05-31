@@ -773,6 +773,15 @@ prompt(
 
 if(!reason) return;
 
+const bankName =
+prompt('Nama bank pencairan');
+
+const accountName =
+prompt('Nama pemilik rekening');
+
+const accountNumber =
+prompt('Nomor rekening');
+
 await fetch(
 `${BASE_URL}/seller/refund/${orderId}/reject`,
 {
@@ -782,7 +791,10 @@ headers:{
 Authorization:`Bearer ${token}`
 },
 body:JSON.stringify({
-rejectReason:reason
+  rejectReason: reason,
+  bankName,
+  accountName,
+  accountNumber
 })
 }
 );
