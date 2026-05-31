@@ -251,18 +251,10 @@ Authorization:`Bearer ${token}`
 
 const result = await response.json();
 
+console.log('ALL ADMIN ORDERS:', result);
+
 const orders =
 result.orders || [];
-
-const ongoingOrders =
-orders.filter(order =>
-order.paymentStatus === 'paid' &&
-[
-'processing',
-'shipped',
-'delivered'
-].includes(order.status)
-);
 
 const container =
 document.getElementById(
@@ -271,19 +263,25 @@ document.getElementById(
 
 if(!container) return;
 
-if(!ongoingOrders.length){
-container.innerHTML =
-`<div class="empty-state">
+if(!orders.length){
+
+container.innerHTML = `
+<div class="empty-state">
 Belum ada transaksi berlangsung
-</div>`;
+</div>
+`;
+
 return;
 }
 
 container.innerHTML =
-ongoingOrders.map(order=>`
+orders.map(order=>`
 
 <div class="admin-card">
-<h3>${order.product?.name || 'Produk'}</h3>
+
+<h3>
+${order.product?.name || 'Produk'}
+</h3>
 
 <p>
 Buyer:
@@ -293,6 +291,11 @@ ${order.buyer?.username || '-'}
 <p>
 Status:
 ${order.status || '-'}
+</p>
+
+<p>
+Payment:
+${order.paymentStatus || '-'}
 </p>
 
 <p>
@@ -306,10 +309,12 @@ order.totalPrice || 0
 `).join('');
 
 }catch(error){
+
 console.log(
 'LOAD ONGOING ORDERS ERROR:',
 error
 );
+
 }
 
 }
