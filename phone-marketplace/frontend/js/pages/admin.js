@@ -1116,7 +1116,57 @@ await ordersRes.json();
 const orders =
 ordersData.orders || [];
 
+const last7Days = [];
+const salesMap = {};
 
+for(let i = 6; i >= 0; i--){
+  const d = new Date();
+  d.setDate(d.getDate() - i);
+
+  const key =
+    d.toISOString().split('T')[0];
+
+  last7Days.push(key);
+  salesMap[key] = 0;
+}
+
+orders.forEach(order => {
+
+  if(!order.createdAt) return;
+
+  const dateKey =
+    new Date(order.createdAt)
+    .toISOString()
+    .split('T')[0];
+
+  if(salesMap[dateKey] !== undefined){
+    salesMap[dateKey] +=
+      Number(order.totalPrice || 0);
+  }
+});
+
+const labels =
+last7Days.map(date =>
+  new Date(date)
+  .toLocaleDateString(
+    'id-ID',
+    {
+      day:'numeric',
+      month:'short'
+    }
+  )
+);
+
+const values =
+last7Days.map(
+  date => salesMap[date]
+);
+
+renderSalesChart(
+  labels,
+  values
+);
+  
 /* USER */
 
 const buyers =
@@ -1286,78 +1336,58 @@ el.innerText = value;
 /* CHART */
 
 function renderSalesChart(labels = [], values = []) {
+function renderSalesChart(labels, values){
 
-  const canvas =
-  document.getElementById('sales-chart');
+const canvas =
+document.getElementById(
+'sales-chart'
+);
 
-  if (!canvas) return;
+if(!canvas) return;
 
-  if (window.salesChart) {
-    window.salesChart.destroy();
-  }
+if(window.salesChart){
+window.salesChart.destroy();
+}
 
-  const ctx =
-  canvas.getContext('2d');
+window.salesChart =
+new Chart(canvas,{
+type:'bar',
 
-  const fixedLabels =
-  labels.map(label =>
-    typeof label === 'string'
-      ? label
-      : new Date(label)
-          .toLocaleDateString(
-            'id-ID',
-            { day:'numeric', month:'short' }
-          )
-  );
+data:{
+labels,
+datasets:[
+{
+label:'Penjualan',
+data:values,
+backgroundColor:'#22c55e',
+borderRadius:8,
+barThickness:16
+}
+]
+},
 
-  const candleData =
-  values.map(v => ({
-    x: v,
-    o: v * 0.96,
-    h: v * 1.05,
-    l: v * 0.94,
-    c: v
-  }));
+options:{
+responsive:true,
+maintainAspectRatio:false,
 
-  window.salesChart =
-  new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels: fixedLabels,
-      datasets:[
-        {
-          label:'Sales',
-          data: values,
-          backgroundColor:'#22c55e',
-          borderRadius:6,
-          borderSkipped:false,
-          barThickness:12
-        }
-      ]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{
-        legend:{
-          display:false
-        }
-      },
-      scales:{
-        x:{
-          grid:{
-            display:false
-          }
-        },
-        y:{
-          beginAtZero:true,
-          grid:{
-            color:'rgba(0,0,0,.05)'
-          }
-        }
-      }
-    }
-  });
+plugins:{
+legend:{
+display:false
+}
+},
+
+scales:{
+x:{
+grid:{
+display:false
+}
+},
+y:{
+beginAtZero:true
+}
+}
+}
+});
 }
 loadUsers();
 loadPendingPayments();
