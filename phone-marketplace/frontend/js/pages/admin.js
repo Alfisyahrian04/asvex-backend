@@ -1285,97 +1285,67 @@ el.innerText = value;
 
 /* CHART */
 
-function renderSalesChart(labels, values){
+function renderSalesChart(labels = [], values = []) {
 
-const canvas =
-document.getElementById('sales-chart');
+  const canvas = document.getElementById('sales-chart');
+  if (!canvas) return;
 
-if(!canvas) return;
+  if (window.salesChart) {
+    window.salesChart.destroy();
+  }
 
-if(window.salesChart){
-  window.salesChart.destroy();
+  const ctx = canvas.getContext('2d');
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+  gradient.addColorStop(0, 'rgba(34,197,94,0.30)');
+  gradient.addColorStop(1, 'rgba(34,197,94,0)');
+
+  window.salesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels:
+        labels.length ? labels : ['Hari ini'],
+
+      datasets: [{
+        data:
+          values.length ? values : [0],
+
+        borderColor: '#22c55e',
+        backgroundColor: gradient,
+
+        fill: true,
+        tension: 0.45,
+        borderWidth: 3,
+
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+
+      scales: {
+        x: {
+          grid: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(0,0,0,.05)'
+          }
+        }
+      }
+    }
+  });
 }
-
-const ctx =
-canvas.getContext('2d');
-
-const gradient =
-ctx.createLinearGradient(
-0,0,0,300
-);
-
-gradient.addColorStop(
-0,
-'rgba(34,197,94,.35)'
-);
-
-gradient.addColorStop(
-1,
-'rgba(34,197,94,0)'
-);
-
-window.salesChart =
-new Chart(ctx,{
-type:'line',
-data:{
-labels,
-datasets:[
-{
-label:'Sales',
-data:values,
-
-borderColor:'#22c55e',
-backgroundColor:gradient,
-
-fill:true,
-tension:.45,
-
-borderWidth:3,
-
-pointRadius:0,
-pointHoverRadius:5,
-
-pointBackgroundColor:'#22c55e'
-}
-]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-
-interaction:{
-intersect:false,
-mode:'index'
-},
-
-plugins:{
-legend:{
-display:false
-}
-},
-
-scales:{
-x:{
-grid:{
-display:false
-},
-ticks:{
-color:'#94a3b8'
-}
-},
-y:{
-grid:{
-color:'rgba(148,163,184,.08)'
-},
-ticks:{
-color:'#94a3b8'
-}
-}
-}
-}
-});
-}
-
 loadUsers();
 loadPendingPayments();
 loadOngoingOrders();
