@@ -1271,6 +1271,151 @@ buyers.length
 );
 
 setText(
+/* ==============================
+DASHBOARD STATS
+============================== */
+
+async function loadDashboardStats(){
+
+try{
+
+const usersRes = await fetch(
+`${BASE_URL}/admin/users`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const usersData =
+await usersRes.json();
+
+const users =
+usersData.users || [];
+
+
+const ordersRes = await fetch(
+`${BASE_URL}/admin/orders`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const ordersData =
+await ordersRes.json();
+
+const orders =
+ordersData.orders || [];
+
+
+/* USER */
+
+const buyers =
+users.filter(
+u => u.role === 'buyer'
+);
+
+const sellers =
+users.filter(
+u => u.role === 'seller'
+);
+
+const verifiedSeller =
+sellers.filter(
+u => u.isVerifiedSeller
+);
+
+const pendingSeller =
+sellers.filter(
+u => !u.isVerifiedSeller
+);
+
+const bannedUser =
+users.filter(
+u => u.isBanned
+);
+
+
+/* ORDER */
+
+const waitingPayment =
+orders.filter(
+o =>
+o.paymentStatus === 'waiting_verification'
+);
+
+const completedOrder =
+orders.filter(
+o =>
+o.status === 'completed'
+);
+
+const refundRequest =
+orders.filter(
+o =>
+o.refundRequest === true
+);
+
+const refundRejected =
+orders.filter(
+o =>
+o.refundStatus === 'rejected'
+);
+
+
+/* REVENUE */
+
+const grossRevenue =
+orders.reduce(
+(sum,order)=>
+sum + Number(order.totalPrice || 0),
+0
+);
+
+const marketplaceFee =
+grossRevenue * 0.03;
+
+
+/* SET HTML */
+
+setText(
+'total-users',
+users.length
+);
+
+setText(
+'total-sellers',
+sellers.length
+);
+
+setText(
+'total-orders',
+orders.length
+);
+
+setText(
+'total-revenue',
+'Rp ' +
+grossRevenue.toLocaleString('id-ID')
+);
+
+setText(
+'marketplace-fee',
+'Rp ' +
+Math.round(
+marketplaceFee
+).toLocaleString('id-ID')
+);
+
+setText(
+'buyer-count',
+buyers.length
+);
+
+setText(
 'seller-pending',
 pendingSeller.length
 );
@@ -1334,59 +1479,71 @@ el.innerText = value;
 
 /* CHART */
 
-function renderSalesChart(labels = [], values = []) {
-function renderSalesChart(labels, values){
+function renderSalesChart(orders){
+
+const map = {};
+
+orders.forEach(order=>{
+
+if(!order.createdAt) return;
+
+const date =
+new Date(
+order.createdAt
+).toLocaleDateString(
+'id-ID',
+{
+day:'2-digit',
+month:'short'
+}
+);
+
+map[date] =
+(map[date] || 0)
++
+Number(
+order.totalPrice || 0
+);
+
+});
+
+const labels =
+Object.keys(map).slice(-7);
+
+const values =
+Object.values(map).slice(-7);
 
 const canvas =
 document.getElementById(
-'sales-chart'
+'salesChart'
 );
 
 if(!canvas) return;
 
-if(window.salesChart){
-window.salesChart.destroy();
-}
-
-window.salesChart =
 new Chart(canvas,{
-type:'bar',
-
+type:'line',
 data:{
 labels,
 datasets:[
 {
-label:'Penjualan',
+label:'Sales',
 data:values,
-backgroundColor:'#22c55e',
-borderRadius:8,
-barThickness:16
+borderWidth:3,
+tension:.35,
+fill:false
 }
 ]
 },
-
 options:{
 responsive:true,
-maintainAspectRatio:false,
-
 plugins:{
 legend:{
 display:false
 }
-},
-
-scales:{
-x:{
-grid:{
-display:false
-}
-},
-y:{
-beginAtZero:true
-}
 }
 }
 });
+
 }
 loadUsers();
 loadPendingPayments();
