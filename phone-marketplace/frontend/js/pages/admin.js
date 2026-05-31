@@ -1077,7 +1077,275 @@ window.showPaymentProof = function(imageUrl){
 
 };
 
+/* ==============================
+DASHBOARD STATS
+============================== */
+
+async function loadDashboardStats(){
+
+try{
+
+const usersRes = await fetch(
+`${BASE_URL}/admin/users`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const usersData =
+await usersRes.json();
+
+const users =
+usersData.users || [];
+
+
+const ordersRes = await fetch(
+`${BASE_URL}/admin/orders`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const ordersData =
+await ordersRes.json();
+
+const orders =
+ordersData.orders || [];
+
+
+/* USER */
+
+const buyers =
+users.filter(
+u => u.role === 'buyer'
+);
+
+const sellers =
+users.filter(
+u => u.role === 'seller'
+);
+
+const verifiedSeller =
+sellers.filter(
+u => u.isVerifiedSeller
+);
+
+const pendingSeller =
+sellers.filter(
+u => !u.isVerifiedSeller
+);
+
+const bannedUser =
+users.filter(
+u => u.isBanned
+);
+
+
+/* ORDER */
+
+const waitingPayment =
+orders.filter(
+o =>
+o.paymentStatus === 'waiting_verification'
+);
+
+const completedOrder =
+orders.filter(
+o =>
+o.status === 'completed'
+);
+
+const refundRequest =
+orders.filter(
+o =>
+o.refundRequest === true
+);
+
+const refundRejected =
+orders.filter(
+o =>
+o.refundStatus === 'rejected'
+);
+
+
+/* REVENUE */
+
+const revenue =
+orders.reduce(
+(sum,order)=>
+sum +
+Number(
+order.totalPrice || 0
+),
+0
+);
+
+
+/* SET HTML */
+
+setText(
+'total-users',
+users.length
+);
+
+setText(
+'total-sellers',
+sellers.length
+);
+
+setText(
+'total-orders',
+orders.length
+);
+
+setText(
+'total-revenue',
+'Rp ' +
+revenue.toLocaleString('id-ID')
+);
+
+setText(
+'buyer-count',
+buyers.length
+);
+
+setText(
+'seller-pending',
+pendingSeller.length
+);
+
+setText(
+'seller-verified',
+verifiedSeller.length
+);
+
+setText(
+'banned-user',
+bannedUser.length
+);
+
+setText(
+'waiting-payment',
+waitingPayment.length
+);
+
+setText(
+'completed-order',
+completedOrder.length
+);
+
+setText(
+'refund-count',
+refundRequest.length
+);
+
+setText(
+'refund-rejected',
+refundRejected.length
+);
+
+
+renderSalesChart(orders);
+
+}catch(error){
+
+console.log(
+'DASHBOARD ERROR:',
+error
+);
+
+}
+
+}
+
+
+function setText(id,value){
+
+const el =
+document.getElementById(id);
+
+if(el){
+el.innerText = value;
+}
+
+}
+
+
+/* CHART */
+
+function renderSalesChart(orders){
+
+const map = {};
+
+orders.forEach(order=>{
+
+if(!order.createdAt) return;
+
+const date =
+new Date(
+order.createdAt
+).toLocaleDateString(
+'id-ID',
+{
+day:'2-digit',
+month:'short'
+}
+);
+
+map[date] =
+(map[date] || 0)
++
+Number(
+order.totalPrice || 0
+);
+
+});
+
+const labels =
+Object.keys(map).slice(-7);
+
+const values =
+Object.values(map).slice(-7);
+
+const canvas =
+document.getElementById(
+'salesChart'
+);
+
+if(!canvas) return;
+
+new Chart(canvas,{
+type:'line',
+data:{
+labels,
+datasets:[
+{
+label:'Sales',
+data:values,
+borderWidth:3,
+tension:.35,
+fill:false
+}
+]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{
+display:false
+}
+}
+}
+});
+
+}
+
 loadUsers();
 loadPendingPayments();
 loadOngoingOrders();
 loadRefundRequests();
+loadDashboardStats();
