@@ -1371,12 +1371,8 @@ plugins:{
       if(value === 0) return '';
       return 'Rp ' + value.toLocaleString('id-ID');
     }
-  }
 }
-}
-});
 
-}
 loadUsers();
 loadPendingPayments();
 loadOngoingOrders();
