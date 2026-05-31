@@ -1174,15 +1174,15 @@ o.refundStatus === 'rejected'
 
 /* REVENUE */
 
-const revenue =
+const grossRevenue =
 orders.reduce(
 (sum,order)=>
-sum +
-Number(
-order.totalPrice || 0
-),
+sum + Number(order.totalPrice || 0),
 0
 );
+
+const marketplaceFee =
+grossRevenue * 0.03;
 
 
 /* SET HTML */
