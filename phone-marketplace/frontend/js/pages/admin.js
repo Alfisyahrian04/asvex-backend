@@ -1369,12 +1369,16 @@ datasets:[{
 }]
 },
 options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{
-  legend:{
-    display:false
+  responsive:true,
+  maintainAspectRatio:false,
+  plugins:{
+    legend:{
+      display:false
+    }
   }
+}
+});
+
 }
 
 loadUsers();
