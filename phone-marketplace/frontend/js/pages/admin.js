@@ -1355,6 +1355,7 @@ gradient.addColorStop(0,'#22c55e');
 gradient.addColorStop(1,'#16a34a');
 
 new Chart(canvas,{
+plugins:[ChartDataLabels],
 type:'bar',
 data:{
 labels,
@@ -1365,20 +1366,44 @@ datasets:[{
   borderSkipped: false,
   maxBarThickness: 18,
   barPercentage: 0.45,
-  categoryPercentage: 0.65
+  categoryPercentage: 0.65,
+
+  datalabels:{
+    anchor:'end',
+    align:'top',
+    color:'#111827',
+    font:{
+      weight:'bold',
+      size:11
+    },
+    formatter:(value)=>{
+      if(!value) return '';
+      return 'Rp ' + value.toLocaleString('id-ID');
+    }
+  }
+
 }]
-},
 options:{
   responsive:true,
   maintainAspectRatio:false,
   plugins:{
     legend:{
       display:false
+    },
+    tooltip:{
+      callbacks:{
+        label:function(context){
+          return 'Rp ' +
+          context.raw.toLocaleString('id-ID');
+        }
+      }
+    }
+  },
+  scales:{
+    y:{
+      beginAtZero:true
     }
   }
-}
-});
-
 }
 
 loadUsers();
