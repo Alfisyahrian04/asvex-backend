@@ -45,77 +45,72 @@ Gagal memuat transaksi
 
 function getStatusLabel(status){
 
-if (status === 'rejected') {
-  return 'Refund Ditolak';
-}
-}
-  
-switch(status){
+  if (status === 'rejected') {
+    return 'Refund Ditolak';
+  }
 
-case 'pending_payment':
-return 'Menunggu Pembayaran';
+  switch(status){
 
-case 'waiting_confirmation':
-return 'Sedang Konfirmasi Pembayaran';
+    case 'pending_payment':
+      return 'Menunggu Pembayaran';
 
-case 'waiting_verification':
-return 'Menunggu Verifikasi Pembayaran';
+    case 'waiting_confirmation':
+      return 'Sedang Konfirmasi Pembayaran';
 
-case 'waiting_payment_verification':
-return 'Menunggu Verifikasi Pembayaran';
+    case 'waiting_verification':
+      return 'Menunggu Verifikasi Pembayaran';
 
-case 'payment_verified':
-return 'Pembayaran Diterima';
+    case 'waiting_payment_verification':
+      return 'Menunggu Verifikasi Pembayaran';
 
-case 'paid':
-return 'Pembayaran Diterima';
+    case 'payment_verified':
+      return 'Pembayaran Diterima';
 
-case 'rejected':
-return 'Transaksi Ditolak';
+    case 'paid':
+      return 'Pembayaran Diterima';
 
-case 'processed':
-return 'Sedang Proses Packing';
+    case 'processed':
+      return 'Sedang Proses Packing';
 
-case 'shipped':
-return 'Pesanan Dikirim';
+    case 'shipped':
+      return 'Pesanan Dikirim';
 
-case 'waiting_seller_approval':
-return 'Menunggu Persetujuan';
+    case 'waiting_seller_approval':
+      return 'Menunggu Persetujuan';
 
-case 'waiting_seller_refund_approval':
-return 'Mengajukan Refund';
+    case 'waiting_seller_refund_approval':
+      return 'Mengajukan Refund';
 
-case 'requested':
-return 'Mengajukan Refund';
+    case 'requested':
+      return 'Mengajukan Refund';
 
-case 'waiting_return':
-return 'Segera Kirim Barang Retur';
+    case 'waiting_return':
+      return 'Segera Kirim Barang Retur';
 
-case 'waiting_seller_receive_return':
-return 'Menunggu Toko Menerima Retur';        
+    case 'waiting_seller_receive_return':
+      return 'Menunggu Toko Menerima Retur';
 
-case 'waiting_admin_refund':
-  return 'Menunggu Proses Refund';
+    case 'waiting_admin_refund':
+      return 'Menunggu Proses Refund';
 
-case 'refund_completed':
-  return 'Refund berhasil';
+    case 'refund_completed':
+      return 'Refund Berhasil';
 
-case 'completed':
-  return 'Pesanan Selesai';
+    case 'completed':
+      return 'Pesanan Selesai';
 
-case 'cancelled':
-return 'Pesanan Dibatalkan';
+    case 'cancelled':
+      return 'Pesanan Dibatalkan';
 
-case 'appeal_accepted':
-return 'Banding Diterima';
+    case 'appeal_accepted':
+      return 'Banding Diterima';
 
-case 'appeal_rejected':
-return 'Banding Ditolak';
+    case 'appeal_rejected':
+      return 'Banding Ditolak';
 
-default:
-return status;
-
-}
+    default:
+      return status;
+  }
 
 }
 
