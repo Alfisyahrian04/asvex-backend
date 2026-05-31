@@ -788,6 +788,11 @@ prompt('Nama pemilik rekening');
 const accountNumber =
 prompt('Nomor rekening');
 
+if (!bankName || !accountName || !accountNumber) {
+  alert('Data rekening wajib diisi');
+  return;
+}
+
 await fetch(
 `${BASE_URL}/seller/refund/${orderId}/reject`,
 {
