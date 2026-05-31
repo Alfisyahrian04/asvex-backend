@@ -896,7 +896,7 @@ try{
 
 const response =
 await fetch(
-`${BASE_URL}/orders/seller/stats`,
+`${BASE_URL}/seller/stats`
 {
 headers:{
 Authorization:`Bearer ${token}`
