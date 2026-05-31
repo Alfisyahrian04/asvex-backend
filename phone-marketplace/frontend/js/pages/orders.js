@@ -462,6 +462,8 @@ margin-top:6px;
 
 ${
 order.status === 'shipped'
+&& order.refundStatus !== 'refund_rejected'
+&& !order.refundRequest
 ? `
 <button
 onclick="handleCompleteOrder('${order._id}')"
