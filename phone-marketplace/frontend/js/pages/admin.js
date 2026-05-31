@@ -1363,7 +1363,10 @@ options:{
 responsive:true,
 maintainAspectRatio:false,
 plugins:{
-  legend:{display:false},
+  legend:{
+    display:false
+  }
+}
     formatter:function(value){
       if(value === 0) return '';
       return 'Rp ' + value.toLocaleString('id-ID');
