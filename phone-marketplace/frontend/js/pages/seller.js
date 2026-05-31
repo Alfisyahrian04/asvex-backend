@@ -193,13 +193,10 @@ pendingOrders.innerHTML =
 orders.map(order=>{
 
 const canProcess =
-order.paymentStatus === 'paid'
-&& order.status !== 'processed'
-&& order.status !== 'shipped'
-&& order.status !== 'completed'
-&& order.status !== 'refund_rejected'
-&& order.refundStatus !== 'refund_rejected'
-&& order.refundRequest !== true;
+  order.paymentStatus === 'paid'
+  && order.status === 'paid'
+  && !order.refundRequest
+  && !order.refundStatus;
 
 let buttonHtml = '';
 
