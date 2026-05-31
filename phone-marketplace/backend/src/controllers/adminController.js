@@ -356,8 +356,11 @@ message:'Order not found'
 }
 
 order.paymentStatus = 'rejected';
-
 order.status = 'rejected';
+
+order.paymentProof = '';
+order.senderBank = '';
+order.senderName = '';
 
 if(order.product){
   const product = await Product.findById(order.product);
