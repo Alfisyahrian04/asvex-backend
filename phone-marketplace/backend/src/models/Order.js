@@ -217,6 +217,11 @@ type:String,
 default:''
 },
 
+returnProof:{
+  type:String,
+  default:''
+},
+
 sellerReceivedReturnPackage:{
 type:Boolean,
 default:false
