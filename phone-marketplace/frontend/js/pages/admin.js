@@ -1351,9 +1351,13 @@ type:'bar',
 data:{
 labels,
 datasets:[{
-data: values,
-backgroundColor:'#16a34a',
-borderRadius:8
+  data: values,
+  backgroundColor: gradient,
+  borderRadius: 12,
+  borderSkipped: false,
+  maxBarThickness: 18,
+  barPercentage: 0.45,
+  categoryPercentage: 0.65
 }]
 },
 options:{
