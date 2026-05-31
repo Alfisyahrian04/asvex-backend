@@ -45,10 +45,9 @@ Gagal memuat transaksi
 
 function getStatusLabel(status){
 
-  if (status === 'rejected') {
-    return 'Refund Ditolak';
-  }
-
+  if (status === 'refund_rejected') {
+  return 'Refund Ditolak';
+}
   switch(status){
 
     case 'pending_payment':
@@ -68,6 +67,9 @@ function getStatusLabel(status){
 
     case 'paid':
       return 'Pembayaran Diterima';
+
+    case 'rejected':
+      return 'Transaksi Ditolak';
 
     case 'processed':
       return 'Sedang Proses Packing';
