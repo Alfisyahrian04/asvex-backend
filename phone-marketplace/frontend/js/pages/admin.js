@@ -1348,4 +1348,6 @@ loadUsers();
 loadPendingPayments();
 loadOngoingOrders();
 loadRefundRequests();
-loadDashboardStats();
+if(document.getElementById('total-users')){
+  loadDashboardStats();
+}
