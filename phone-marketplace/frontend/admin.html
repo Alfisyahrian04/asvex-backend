@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
 
 <meta charset="UTF-8">
@@ -8,24 +7,23 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
->
+/>
 
-<title>
-Admin Dashboard
-</title>
+<title>Admin Dashboard</title>
 
 <link
 rel="stylesheet"
 href="css/admin.css"
->
+/>
 
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
->
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
-
 <body>
 
 <header class="admin-topbar">
@@ -40,33 +38,102 @@ SUPER ADMIN
 
 </header>
 
+
 <main class="admin-container">
 
 <h1 class="admin-title">
 Dashboard Admin
 </h1>
 
-<!-- PAYMENT VALIDATION -->
+
+<!-- STATS -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-label">👥 Total User</div>
+<div
+id="total-users"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">🏪 Total Seller</div>
+<div
+id="total-sellers"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">📦 Total Order</div>
+<div
+id="total-orders"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">💰 Revenue</div>
+<div
+id="total-revenue"
+class="stat-value"
+>Rp 0</div>
+</div>
+
+</div>
+
+
+<!-- ORDER SUMMARY -->
 
 <div class="admin-section">
 
 <div class="section-header">
-
 <div class="line"></div>
-
-<h2>
-Validasi Pembayaran
-</h2>
-
+<h2>Ringkasan Order</h2>
 </div>
 
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-label">
+⏳ Menunggu Pembayaran
+</div>
 <div
-id="payment-list"
-class="admin-grid"
->
+id="waiting-payment"
+class="stat-value"
+>0</div>
+</div>
 
-<div class="empty-state">
-Belum ada pembayaran
+<div class="stat-card">
+<div class="stat-label">
+✅ Selesai
+</div>
+<div
+id="completed-order"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">
+↩ Refund Request
+</div>
+<div
+id="refund-count"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">
+❌ Refund Ditolak
+</div>
+<div
+id="refund-rejected"
+class="stat-value"
+>0</div>
 </div>
 
 </div>
@@ -74,76 +141,79 @@ Belum ada pembayaran
 </div>
 
 
-
-<!-- PAYOUT -->
+<!-- USER ACTIVITY -->
 
 <div class="admin-section">
 
 <div class="section-header">
-
 <div class="line"></div>
-
-<h2>
-Payout Requests
-</h2>
-
+<h2>User Activity</h2>
 </div>
 
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-label">
+👤 Buyer
+</div>
 <div
-id="payout-list"
-class="admin-grid"
->
-
-</div>
+id="buyer-count"
+class="stat-value"
+>0</div>
 </div>
 
-<!-- TRANSAKSI BERLANGSUNG -->
-<div class="admin-section">
-
-  <div class="section-header">
-    <div class="line"></div>
-    <h2>Transaksi Berlangsung</h2>
-  </div>
-
-  <div
-    id="ongoing-orders-list"
-    class="admin-grid"
-  >
-    <div class="empty-state">
-      Belum ada transaksi berlangsung
-    </div>
-  </div>
-
+<div class="stat-card">
+<div class="stat-label">
+📝 Seller Pending
 </div>
-
-
-<!-- REFUND REQUESTS PATCH -->
-<div class="admin-section">
-
-<div class="section-header">
-
-<div class="line"></div>
-
-<h2>
-Refund Requests
-</h2>
-
-</div>
-
 <div
-id="refund-list"
-class="admin-grid"
->
+id="seller-pending"
+class="stat-value"
+>0</div>
+</div>
 
-<div class="empty-state">
-Belum ada refund request
+<div class="stat-card">
+<div class="stat-label">
+✔ Seller Verified
+</div>
+<div
+id="seller-verified"
+class="stat-value"
+>0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-label">
+🚫 User Banned
+</div>
+<div
+id="banned-user"
+class="stat-value"
+>0</div>
 </div>
 
 </div>
+
+</div>
+
+
+<!-- CHART -->
+
+<div class="chart-card">
+
+<h3>
+📈 Grafik Penjualan 7 Hari Terakhir
+</h3>
+
+<canvas
+id="salesChart"
+></canvas>
 
 </div>
 
 </main>
+
+
 
 <nav class="admin-nav">
 
@@ -151,205 +221,45 @@ Belum ada refund request
 href="admin.html"
 class="admin-nav-item active"
 >
-
 <i class="fa-solid fa-chart-line"></i>
-
-<span>
-Dashboard
-</span>
-
+<span>Dashboard</span>
 </a>
 
 <a
 href="admin-transaksi.html"
 class="admin-nav-item"
 >
-
 <i class="fa-solid fa-money-check-dollar"></i>
-
-<span>
-Transaksi
-</span>
-
+<span>Transaksi</span>
 </a>
 
 <a
 href="admin-seller.html"
 class="admin-nav-item"
 >
-
 <i class="fa-solid fa-store"></i>
-
-<span>
-Seller
-</span>
-
+<span>Seller</span>
 </a>
 
 <a
 href="#"
 class="admin-nav-item"
 >
-
 <i class="fa-solid fa-headset"></i>
-
-<span>
-CS
-</span>
-
+<span>CS</span>
 </a>
 
 <a
 href="admin-profile.html"
 class="admin-nav-item"
 >
-
 <i class="fa-solid fa-user-shield"></i>
-
-<span>
-Akun
-</span>
-
+<span>Akun</span>
 </a>
 
 </nav>
 
-<div
-id="appeal-detail-modal"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.55);
-z-index:9999;
-padding:20px;
-overflow:auto;
-"
->
-
-<div
-style="
-background:#fff;
-border-radius:18px;
-padding:18px;
-max-width:500px;
-margin:40px auto;
-"
->
-
-<h3>Detail Banding Seller</h3>
-
-<p id="appeal-detail-reason"></p>
-
-<details style="margin-top:12px;">
-  <summary>Detail Foto ▼</summary>
-  <img
-    id="appeal-detail-photo"
-    style="
-      width:100%;
-      display:none;
-      border-radius:12px;
-      margin-top:12px;
-    "
-  >
-</details>
-
-<details style="margin-top:12px;">
-  <summary>Detail Video ▼</summary>
-  <video
-    id="appeal-detail-video"
-    controls
-    style="
-      width:100%;
-      display:none;
-      border-radius:12px;
-      margin-top:12px;
-    "
-  ></video>
-</details>
-
-
-<div
-style="
-display:flex;
-gap:12px;
-margin-top:16px;
-"
->
-
-<button
-id="approve-appeal-btn"
-class="password-btn"
-style="
-flex:1;
-background:#16a34a;
-height:46px;
-"
->
-ACC Banding
-</button>
-
-
-<button
-id="reject-appeal-btn"
-class="password-btn"
-style="
-flex:1;
-background:#ef4444;
-height:46px;
-"
->
-Reject Banding
-</button>
-
-</div>
-
-
-<button
-onclick="closeAppealDetailModal()"
-style="
-margin-top:14px;
-width:100%;
-height:44px;
-border:none;
-border-radius:12px;
-"
->
-Tutup
-</button>
-
-</div>
-</div>
-
-<div
-id="transfer-proof-modal"
-onclick="closeTransferProofModal()"
-style="
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.65);
-z-index:99999;
-justify-content:center;
-align-items:center;
-padding:20px;
-"
->
-
-<img
-id="transfer-proof-image"
-style="
-max-width:100%;
-max-height:90vh;
-border-radius:16px;
-background:#fff;
-"
-/>
-
-</div>
-  
 <script src="./js/pages/admin.js?v=10001"></script>
 
 </body>
-
 </html>
