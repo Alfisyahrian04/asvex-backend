@@ -9,6 +9,7 @@ const {
 getAllUsers,
 verifySeller,
 banUser,
+getAllOrders,
 
 getPayouts,
 approvePayout,
