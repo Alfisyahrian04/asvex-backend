@@ -366,12 +366,11 @@ Alasan:
 ${order.refundReason || '-'}
 </p>
 
-<p>Bank: ${order.refundBankName || '-'}</p>
+<p>Bank: ${order.sellerRefundBankName || '-'}</p>
 
-<p>Atas Nama: ${order.refundAccountName || '-'}</p>
+<p>Atas Nama: ${order.sellerRefundAccountName || '-'}</p>
 
-<p>No Rekening: ${order.refundAccountNumber || '-'}</p>
-
+<p>No Rekening: ${order.sellerRefundAccountNumber || '-'}</p>
 ${
 order.unboxingVideo
 ? `
