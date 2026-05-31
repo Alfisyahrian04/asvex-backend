@@ -159,12 +159,27 @@ orders.map(order=>`
 
   <div class="order-header-right">
     <span class="order-status">
-      ${getStatusLabel(
-        order.refundCompleted
-          ? 'refund_completed'
-          : order.refundStatus || order.status
-      )}
-    </span>
+${getStatusLabel(
+  order.refundCompleted
+  ? 'refund_completed'
+  : order.refundStatus || order.status
+)}
+</span>
+
+${
+order.rejectReason
+? `
+<div style="
+margin-top:8px;
+font-size:12px;
+color:#d32f2f;
+font-weight:500;
+">
+Alasan ditolak: ${order.rejectReason}
+</div>
+`
+: ''
+}
   </div>
 
 </div>
