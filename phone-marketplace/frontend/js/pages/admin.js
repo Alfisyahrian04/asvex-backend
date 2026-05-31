@@ -1321,7 +1321,7 @@ Object.values(map).slice(-7);
 
 const canvas =
 document.getElementById(
-'salesChart'
+'sales-chart'
 );
 
 if(!canvas) return;
