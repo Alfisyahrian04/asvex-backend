@@ -1405,7 +1405,7 @@ options:{
     }
   }
 }
-});
+);
 }
 
 loadUsers();
