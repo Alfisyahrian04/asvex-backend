@@ -175,6 +175,21 @@ type:String,
 default:''
 },
 
+sellerRefundBankName:{
+type:String,
+default:''
+},
+
+sellerRefundAccountName:{
+type:String,
+default:''
+},
+
+sellerRefundAccountNumber:{
+type:String,
+default:''
+},
+
 /* SELLER RETURN FLOW */
 
 sellerRefundApproved:{
