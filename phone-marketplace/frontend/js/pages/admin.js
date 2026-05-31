@@ -462,19 +462,20 @@ ${order.refundReason || '-'}
 ${
 order.unboxingVideo
 ? `
-<video
-src="${order.unboxingVideo}"
-controls
-style="
-width:100%;
-height:220px;
-object-fit:cover;
-margin-top:12px;
-border-radius:12px;
-background:#000;
-display:block;
-"
-></video>
+<details class="refund-video-dropdown">
+
+  <summary>
+    🎥 Lihat Video Unboxing
+  </summary>
+
+  <video
+    src="${order.unboxingVideo}"
+    controls
+    preload="metadata"
+    class="refund-video"
+  ></video>
+
+</details>
 `
 : ''
 }
