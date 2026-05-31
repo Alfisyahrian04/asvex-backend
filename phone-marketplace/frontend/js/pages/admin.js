@@ -1284,7 +1284,6 @@ el.innerText = value;
 
 
 /* CHART */
-// Chart.register(ChartDataLabels);
 function renderSalesChart(orders){
 
 const map = {};
