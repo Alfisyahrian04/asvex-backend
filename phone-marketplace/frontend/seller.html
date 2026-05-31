@@ -131,7 +131,24 @@ cursor:pointer;
 >
 Setujui Refund & Kirim Alamat Retur
 </button>
-
+  
+<div style="margin-top:12px;">
+  <textarea
+    id="seller-reject-reason"
+    placeholder="Tulis alasan menolak refund..."
+    style="
+      width:100%;
+      min-height:90px;
+      padding:12px;
+      border:1px solid #ddd;
+      border-radius:12px;
+      box-sizing:border-box;
+      resize:none;
+      font-size:14px;
+    "
+  ></textarea>
+</div>
+ 
 <button
 id="reject-refund-btn"
 style="
@@ -149,7 +166,7 @@ cursor:pointer;
 >
 Tolak Refund
 </button>
-
+  
 <button
 onclick="closeRefundDetailModal()"
 style="
