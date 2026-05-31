@@ -1285,48 +1285,37 @@ el.innerText = value;
 
 /* CHART */
 
-function renderSalesChart(orders){
-
-const map = {};
-
-orders.forEach(order=>{
-
-if(!order.createdAt) return;
-
-const date =
-new Date(
-order.createdAt
-).toLocaleDateString(
-'id-ID',
-{
-day:'2-digit',
-month:'short'
-}
-);
-
-map[date] =
-(map[date] || 0)
-+
-Number(
-order.totalPrice || 0
-);
-
-});
-
-const labels =
-Object.keys(map).slice(-7);
-
-const values =
-Object.values(map).slice(-7);
+function renderSalesChart(labels, values){
 
 const canvas =
-document.getElementById(
-'salesChart'
-);
+document.getElementById('sales-chart');
 
 if(!canvas) return;
 
-new Chart(canvas,{
+if(window.salesChart){
+  window.salesChart.destroy();
+}
+
+const ctx =
+canvas.getContext('2d');
+
+const gradient =
+ctx.createLinearGradient(
+0,0,0,300
+);
+
+gradient.addColorStop(
+0,
+'rgba(34,197,94,.35)'
+);
+
+gradient.addColorStop(
+1,
+'rgba(34,197,94,0)'
+);
+
+window.salesChart =
+new Chart(ctx,{
 type:'line',
 data:{
 labels,
@@ -1334,22 +1323,57 @@ datasets:[
 {
 label:'Sales',
 data:values,
+
+borderColor:'#22c55e',
+backgroundColor:gradient,
+
+fill:true,
+tension:.45,
+
 borderWidth:3,
-tension:.35,
-fill:false
+
+pointRadius:0,
+pointHoverRadius:5,
+
+pointBackgroundColor:'#22c55e'
 }
 ]
 },
 options:{
 responsive:true,
+maintainAspectRatio:false,
+
+interaction:{
+intersect:false,
+mode:'index'
+},
+
 plugins:{
 legend:{
 display:false
 }
+},
+
+scales:{
+x:{
+grid:{
+display:false
+},
+ticks:{
+color:'#94a3b8'
+}
+},
+y:{
+grid:{
+color:'rgba(148,163,184,.08)'
+},
+ticks:{
+color:'#94a3b8'
+}
+}
 }
 }
 });
-
 }
 
 loadUsers();
