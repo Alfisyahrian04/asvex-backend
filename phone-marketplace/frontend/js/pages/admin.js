@@ -1294,9 +1294,8 @@ orders.forEach(order=>{
 if(!order.createdAt) return;
 
 const date =
-new Date(
-order.createdAt
-).toLocaleDateString(
+new Date(order.createdAt)
+.toLocaleDateString(
 'id-ID',
 {
 day:'2-digit',
@@ -1307,9 +1306,7 @@ month:'short'
 map[date] =
 (map[date] || 0)
 +
-Number(
-order.totalPrice || 0
-);
+Number(order.totalPrice || 0);
 
 });
 
@@ -1320,31 +1317,49 @@ const values =
 Object.values(map).slice(-7);
 
 const canvas =
-document.getElementById(
-'sales-chart'
-);
+document.getElementById('sales-chart');
 
 if(!canvas) return;
 
+const existingChart =
+Chart.getChart(canvas);
+
+if(existingChart){
+existingChart.destroy();
+}
+
 new Chart(canvas,{
-type:'line',
+type:'bar',
 data:{
 labels,
 datasets:[
 {
-label:'Sales',
-data:values,
-borderWidth:3,
-tension:.35,
-fill:false
+data: values,
+borderRadius: 8,
+barThickness: 26,
+backgroundColor:'#16a34a'
 }
 ]
 },
 options:{
 responsive:true,
+maintainAspectRatio:false,
 plugins:{
 legend:{
 display:false
+}
+},
+scales:{
+x:{
+grid:{
+display:false
+}
+},
+y:{
+beginAtZero:true,
+grid:{
+color:'#f1f5f9'
+}
 }
 }
 }
