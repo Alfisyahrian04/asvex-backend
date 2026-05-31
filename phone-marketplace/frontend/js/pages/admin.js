@@ -1357,11 +1357,11 @@ new Chart(ctx,{
     datasets:[{
       data:values,
       backgroundColor:gradient,
-      borderRadius:12,
+      borderRadius:0,
       borderSkipped:false,
-      maxBarThickness:18,
-      barPercentage:0.45,
-      categoryPercentage:0.65
+      maxBarThickness:30,
+      barPercentage:0.7,
+      categoryPercentage:0.7
     }]
   },
 
