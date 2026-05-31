@@ -1292,45 +1292,38 @@ const values = [];
 
 for(let i = 6; i >= 0; i--){
 
-const d = new Date();
-d.setDate(d.getDate() - i);
+  const d = new Date();
+  d.setDate(d.getDate() - i);
 
-const key =
-d.toISOString().split('T')[0];
+  const key = d.toISOString().split('T')[0];
 
-const label =
-d.toLocaleDateString(
-'id-ID',
-{
-day:'2-digit',
-month:'short'
-}
-);
+  labels.push(
+    d.toLocaleDateString('id-ID',{
+      day:'2-digit',
+      month:'short'
+    })
+  );
 
-labels.push(label);
-map[key] = 0;
-
+  map[key] = 0;
 }
 
 orders.forEach(order=>{
 
-if(!order.createdAt) return;
+  if(!order.createdAt) return;
 
-const key =
-new Date(order.createdAt)
-.toISOString()
-.split('T')[0];
+  const key =
+  new Date(order.createdAt)
+  .toISOString()
+  .split('T')[0];
 
-if(map[key] !== undefined){
-map[key] += Number(
-order.totalPrice || 0
-);
-}
+  if(map[key] !== undefined){
+    map[key] += Number(order.totalPrice || 0);
+  }
 
 });
 
 Object.keys(map).forEach(key=>{
-values.push(map[key]);
+  values.push(map[key]);
 });
 
 const canvas =
@@ -1342,70 +1335,61 @@ const oldChart =
 Chart.getChart(canvas);
 
 if(oldChart){
-oldChart.destroy();
+  oldChart.destroy();
 }
-const ctx = canvas.getContext('2d');
+
+const ctx =
+canvas.getContext('2d');
 
 const gradient =
 ctx.createLinearGradient(
-  0,0,0,260
+0,0,0,260
 );
 
 gradient.addColorStop(0,'#22c55e');
 gradient.addColorStop(1,'#16a34a');
 
-new Chart(canvas,{
-plugins:[ChartDataLabels],
-type:'bar',
-data:{
-labels,
-datasets:[{
-  data: values,
-  backgroundColor: gradient,
-  borderRadius: 12,
-  borderSkipped: false,
-  maxBarThickness: 18,
-  barPercentage: 0.45,
-  categoryPercentage: 0.65,
+new Chart(ctx,{
+  type:'bar',
 
-  datalabels:{
-    anchor:'end',
-    align:'top',
-    color:'#111827',
-    font:{
-      weight:'bold',
-      size:11
-    },
-    formatter:(value)=>{
-      if(!value) return '';
-      return 'Rp ' + value.toLocaleString('id-ID');
-    }
-  }
+  data:{
+    labels:labels,
+    datasets:[{
+      data:values,
+      backgroundColor:gradient,
+      borderRadius:12,
+      borderSkipped:false,
+      maxBarThickness:18,
+      barPercentage:0.45,
+      categoryPercentage:0.65
+    }]
+  },
 
-}],
-options:{
-  responsive:true,
-  maintainAspectRatio:false,
-  plugins:{
-    legend:{
-      display:false
-    },
-    tooltip:{
-      callbacks:{
-        label:function(context){
-          return 'Rp ' +
-          context.raw.toLocaleString('id-ID');
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        display:false
+      },
+      tooltip:{
+        callbacks:{
+          label:function(context){
+            return 'Rp ' +
+            Number(context.raw)
+            .toLocaleString('id-ID');
+          }
         }
       }
-    }
-  },
-  scales:{
-    y:{
-      beginAtZero:true
+    },
+    scales:{
+      y:{
+        beginAtZero:true
+      }
     }
   }
-}
-);
+});
+
 }
 
 loadUsers();
