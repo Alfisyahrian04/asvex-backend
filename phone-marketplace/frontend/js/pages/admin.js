@@ -1205,7 +1205,15 @@ orders.length
 setText(
 'total-revenue',
 'Rp ' +
-revenue.toLocaleString('id-ID')
+grossRevenue.toLocaleString('id-ID')
+);
+
+setText(
+'marketplace-fee',
+'Rp ' +
+Math.round(
+marketplaceFee
+).toLocaleString('id-ID')
 );
 
 setText(
