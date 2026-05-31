@@ -45,6 +45,10 @@ Gagal memuat transaksi
 
 function getStatusLabel(status){
 
+if (order.refundStatus === 'rejected') {
+  return 'Refund Ditolak';
+}
+  
 switch(status){
 
 case 'pending_payment':
