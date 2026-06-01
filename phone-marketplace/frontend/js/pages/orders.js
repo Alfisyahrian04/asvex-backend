@@ -522,7 +522,7 @@ Ajukan Refund
 
 </div>
 </div>
-<div
+/* <div
 id="refund-modal-${order._id}"
 style="
 display:none;
@@ -660,7 +660,7 @@ Tutup
 </button>
 
 </div>
-</div>
+</div> */
 
 `).join('');
 
