@@ -322,6 +322,7 @@ enum:[
 'waiting_admin_refund',
 'appeal_submitted',
 'refund_completed',
+'appealed',
 'cancelled',
 ],
 default:'pending'
