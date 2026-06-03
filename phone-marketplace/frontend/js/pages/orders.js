@@ -110,6 +110,9 @@ function getStatusLabel(status){
     case 'appeal_rejected':
       return 'Banding Ditolak';
 
+    case 'appealed':
+  return 'Seller Mengajukan Banding';
+
     default:
       return status;
   }
