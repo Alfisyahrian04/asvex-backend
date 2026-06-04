@@ -872,29 +872,34 @@ document.getElementById(
 (order.appealReason || '-');
 
 
-const photo =
+const photoBtn =
 document.getElementById(
-'appeal-detail-photo'
+'appeal-detail-photo-btn'
 );
 
 if(order.appealPhoto){
-photo.src = order.appealPhoto;
-photo.style.display='block';
+photoBtn.style.display='block';
+
+photoBtn.onclick = ()=>{
+window.open(order.appealPhoto,'_blank');
+};
 }else{
-photo.style.display='none';
+photoBtn.style.display='none';
 }
 
-
-const video =
+const videoBtn =
 document.getElementById(
-'appeal-detail-video'
+'appeal-detail-video-btn'
 );
 
 if(order.appealVideo){
-video.src = order.appealVideo;
-video.style.display='block';
+videoBtn.style.display='block';
+
+videoBtn.onclick = ()=>{
+window.open(order.appealVideo,'_blank');
+};
 }else{
-video.style.display='none';
+videoBtn.style.display='none';
 }
 
 
