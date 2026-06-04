@@ -888,9 +888,13 @@ if(order.appealPhoto){
 photoBtn.style.display='block';
 
 photoBtn.onclick = ()=>{
-window.open(order.appealPhoto,'_blank');
+openAppealMediaViewer(
+'photo',
+order.appealPhoto);
 };
-}else{
+}
+
+else{
 photoBtn.style.display='none';
 }
 
@@ -903,9 +907,13 @@ if(order.appealVideo){
 videoBtn.style.display='block';
 
 videoBtn.onclick = ()=>{
-window.open(order.appealVideo,'_blank');
+openAppealMediaViewer(
+'video',
+order.appealVideo);
 };
-}else{
+}
+
+else{
 videoBtn.style.display='none';
 }
 
