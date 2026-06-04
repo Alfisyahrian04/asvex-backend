@@ -928,14 +928,73 @@ document.getElementById(
 
 };
 
-
-
 window.closeAppealDetailModal =
 function(){
 
 document.getElementById(
 'appeal-detail-modal'
 ).style.display='none';
+
+};
+
+window.openAppealMediaViewer =
+function(type,src){
+
+const modal =
+document.getElementById(
+'appeal-media-viewer'
+);
+
+const content =
+document.getElementById(
+'appeal-media-content'
+);
+
+if(type === 'photo'){
+
+content.innerHTML = `
+<img
+src="${src}"
+style="
+width:100%;
+max-height:85vh;
+object-fit:contain;
+border-radius:16px;
+"
+/>
+`;
+
+}else{
+
+content.innerHTML = `
+<video
+src="${src}"
+controls
+autoplay
+style="
+width:100%;
+max-height:85vh;
+border-radius:16px;
+"
+></video>
+`;
+
+}
+
+modal.style.display='flex';
+
+};
+
+window.closeAppealMediaViewer =
+function(){
+
+document.getElementById(
+'appeal-media-viewer'
+).style.display='none';
+
+document.getElementById(
+'appeal-media-content'
+).innerHTML='';
 
 };
 
