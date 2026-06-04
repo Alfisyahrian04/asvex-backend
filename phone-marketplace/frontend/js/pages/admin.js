@@ -865,6 +865,13 @@ refundOrders.find(
 
 if(!order) return;
 
+console.log('ORDER APPEAL DATA', {
+  appealPhoto: order.appealPhoto,
+  appealVideo: order.appealVideo,
+  unboxingVideo: order.unboxingVideo,
+  returnProof: order.returnProof
+});
+
 document.getElementById(
 'appeal-detail-reason'
 ).innerText =
