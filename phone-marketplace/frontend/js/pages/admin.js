@@ -917,7 +917,7 @@ document.getElementById(
 
 document.getElementById(
 'appeal-detail-modal'
-).style.display='block';
+).style.display='flex';
 
 };
 
