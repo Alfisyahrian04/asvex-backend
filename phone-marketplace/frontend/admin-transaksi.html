@@ -253,6 +253,52 @@ class="admin-nav-item">
 </a>
 
 </nav>
+  
+<div
+id="appeal-media-viewer"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+z-index:100000;
+justify-content:center;
+align-items:center;
+padding:20px;
+"
+>
+
+<div
+style="
+position:relative;
+width:100%;
+max-width:800px;
+"
+>
+
+<button
+onclick="closeAppealMediaViewer()"
+style="
+position:absolute;
+top:-55px;
+right:0;
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+background:#fff;
+font-size:18px;
+font-weight:bold;
+"
+>
+✕
+</button>
+
+<div id="appeal-media-content"></div>
+
+</div>
+
+</div>
 
 <script src="./js/pages/admin.js?v=10001"></script>
 
