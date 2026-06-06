@@ -511,3 +511,50 @@ message:error.message
 
 }
 };
+
+exports.requestAppealPayout =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order not found'
+});
+}
+
+order.payoutRequest = true;
+
+order.payoutBankName =
+req.body.bankName || '';
+
+order.payoutAccountName =
+req.body.accountName || '';
+
+order.payoutAccountNumber =
+req.body.accountNumber || '';
+
+order.fundStatus =
+'waiting_admin_payout';
+
+await order.save();
+
+res.json({
+success:true,
+order
+});
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
