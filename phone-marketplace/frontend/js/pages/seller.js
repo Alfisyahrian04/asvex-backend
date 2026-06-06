@@ -61,6 +61,12 @@ if(
 }
 
 if(
+  order.fundStatus === 'payout_completed'
+){
+  return 'Dana Sudah Dicairkan';
+}
+
+if(
   order.status === 'appeal_accepted' ||
   order.refundStatus === 'appeal_accepted'
 ){
