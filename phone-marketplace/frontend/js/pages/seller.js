@@ -1110,6 +1110,7 @@ window.previewShippingPhoto = previewShippingPhoto;
 window.approveRefund = approveRefund;
 window.rejectRefund = rejectRefund;
 window.confirmReturnReceived = confirmReturnReceived;
+window.requestAppealPayout = requestAppealPayout;
 
 
 /* INIT */
