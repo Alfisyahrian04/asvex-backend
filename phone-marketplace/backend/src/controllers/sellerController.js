@@ -542,6 +542,9 @@ req.body.accountNumber || '';
 order.fundStatus =
 'waiting_admin_payout';
 
+order.payoutStatus =
+'requested';
+
 await order.save();
 
 res.json({
