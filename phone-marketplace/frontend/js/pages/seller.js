@@ -417,6 +417,80 @@ Ajukan Banding
 `;
 }
 
+if(
+  order.status === 'appeal_accepted' &&
+  order.fundStatus === 'ready_for_payout'
+){
+
+const payoutAmount =
+Math.floor(
+  Number(order.totalPrice || 0) * 0.97
+);
+
+buttonHtml += `
+
+<div
+style="
+margin-top:14px;
+padding:14px;
+background:#ecfdf5;
+border-radius:14px;
+"
+>
+
+<p>
+Dana Bersih:
+Rp ${payoutAmount.toLocaleString('id-ID')}
+</p>
+
+<input
+id="bank-${order._id}"
+placeholder="Nama Bank"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+>
+
+<input
+id="name-${order._id}"
+placeholder="Nama Pemilik Rekening"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+>
+
+<input
+id="number-${order._id}"
+placeholder="Nomor Rekening"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+>
+
+<button
+onclick="requestPayout('${order._id}')"
+class="password-btn"
+style="
+margin-top:12px;
+height:48px;
+background:#16a34a;
+"
+>
+Ajukan Pencairan Dana
+</button>
+
+</div>
+
+`;
+
+}
+
 
 return `
 
