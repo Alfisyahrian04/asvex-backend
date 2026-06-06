@@ -578,10 +578,12 @@ message:'Order not found'
 
 order.refundStatus = 'appeal_accepted';
 order.returnStatus = 'appeal_accepted';
-order.status = 'cancelled';
 
-/* buyer refund ditolak */
+order.status = 'appeal_accepted';
+
 order.refundRequest = false;
+
+order.fundStatus = 'ready_for_payout';
 
 await order.save();
 
