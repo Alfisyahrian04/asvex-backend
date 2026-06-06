@@ -55,6 +55,12 @@ if(order.status === 'appeal_submitted'){
 }
 
 if(
+  order.fundStatus === 'waiting_admin_payout'
+){
+  return 'Mengajukan Pencairan Dana';
+}
+
+if(
   order.status === 'appeal_accepted' ||
   order.refundStatus === 'appeal_accepted'
 ){
