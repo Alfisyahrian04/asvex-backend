@@ -315,6 +315,11 @@ order.payoutStatus='paid';
 
 order.payoutPaidAt =
 new Date();
+order.fundStatus =
+'payout_completed';
+
+order.status =
+'payout_completed';
 
 order.updatedAt =
 new Date();
