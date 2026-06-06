@@ -959,6 +959,8 @@ window.verifySeller =
 verifySeller;
 window.banUser =
 banUser;
+window.approvePayoutRequest =
+approvePayoutRequest;
 
 window.openAppealDetailModal =
 function(orderId){
@@ -1620,6 +1622,7 @@ loadUsers();
 loadPendingPayments();
 loadOngoingOrders();
 loadRefundRequests();
+loadPayoutRequests();
 if(document.getElementById('total-users')){
   loadDashboardStats();
 }
