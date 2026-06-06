@@ -1296,6 +1296,8 @@ alert(
 );
 
 loadPayoutRequests();
+loadOngoingOrders();
+loadRefundRequests();
 
 }catch(error){
 
