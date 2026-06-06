@@ -53,6 +53,20 @@ if(order.refundStatus === 'appealed'){
 if(order.status === 'appeal_submitted'){
   return 'Banding Dikirim';
 }
+
+if(
+  order.status === 'appeal_accepted' ||
+  order.refundStatus === 'appeal_accepted'
+){
+  return 'Banding Diterima';
+}
+
+if(
+  order.status === 'appeal_rejected' ||
+  order.refundStatus === 'appeal_rejected'
+){
+  return 'Banding Ditolak';
+}
   
 if(order.status === 'waiting_confirmation'){
 return 'Menunggu Konfirmasi Pembayaran';
