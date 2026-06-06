@@ -286,6 +286,26 @@ type:String,
 default:''
 },
 
+payoutRequest:{
+  type:Boolean,
+  default:false
+},
+
+payoutBankName:{
+  type:String,
+  default:''
+},
+
+payoutAccountName:{
+  type:String,
+  default:''
+},
+
+payoutAccountNumber:{
+  type:String,
+  default:''
+},
+  
 fundStatus:{
 type:String,
 default:'hold'
