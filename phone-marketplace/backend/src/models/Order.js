@@ -323,6 +323,8 @@ enum:[
 'appeal_submitted',
 'refund_completed',
 'appealed',
+'appeal_accepted',
+'appeal_rejected',
 'cancelled',
 ],
 default:'pending'
