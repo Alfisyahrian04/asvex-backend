@@ -319,6 +319,111 @@ error
 
 }
 
+/* PAYOUT */
+
+async function loadPayoutRequests(){
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/admin/payouts`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const result =
+await response.json();
+
+const payouts =
+result.payouts || [];
+
+const payoutList =
+document.getElementById(
+'payout-list'
+);
+
+if(!payoutList) return;
+
+if(!payouts.length){
+
+payoutList.innerHTML =
+`
+<div class="empty-state">
+Belum ada payout request
+</div>
+`;
+
+return;
+}
+
+payoutList.innerHTML =
+payouts.map(order=>`
+
+<div class="admin-card">
+
+<h3>
+${order.seller?.storeName ||
+order.seller?.username ||
+'Seller'}
+</h3>
+
+<p>
+Bank:
+${order.payoutBankName || '-'}
+</p>
+
+<p>
+Atas Nama:
+${order.payoutAccountName || '-'}
+</p>
+
+<p>
+No Rekening:
+${order.payoutAccountNumber || '-'}
+</p>
+
+<p>
+Dana Dicairkan:
+Rp ${Math.floor(
+Number(order.totalPrice || 0) * 0.97
+).toLocaleString('id-ID')}
+</p>
+
+<button
+onclick="approvePayoutRequest('${order._id}')"
+style="
+width:100%;
+height:48px;
+border:none;
+border-radius:14px;
+background:#16a34a;
+color:white;
+font-weight:700;
+margin-top:12px;
+"
+>
+Cairkan Dana
+</button>
+
+</div>
+
+`).join('');
+
+}catch(error){
+
+console.log(
+'LOAD PAYOUT ERROR:',
+error
+);
+
+}
+
+}
+
 /* REFUND */
 
 async function loadRefundRequests(){
@@ -1156,9 +1261,49 @@ window.showPaymentProof = function(imageUrl){
 
 };
 
-/* ==============================
-DASHBOARD STATS
-============================== */
+/* APPROVE PAYOUT */
+
+async function approvePayoutRequest(orderId){
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/admin/approve-payout/${orderId}`,
+{
+method:'PUT',
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+alert(
+data.message ||
+'Gagal mencairkan dana'
+);
+return;
+}
+
+alert(
+'Dana seller berhasil dicairkan'
+);
+
+loadPayoutRequests();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+/* DASHBOARD STATS */
 
 async function loadDashboardStats(){
 
