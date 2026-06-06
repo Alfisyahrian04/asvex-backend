@@ -105,7 +105,7 @@ function getStatusLabel(status){
       return 'Pesanan Dibatalkan';
 
     case 'appeal_accepted':
-      return 'Banding Diterima';
+  return 'Refund Ditolak';
 
     case 'appeal_rejected':
       return 'Banding Ditolak';
