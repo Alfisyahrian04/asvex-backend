@@ -474,7 +474,7 @@ margin-top:10px;
 >
 
 <button
-onclick="requestPayout('${order._id}')"
+onclick="requestAppealPayout('${order._id}')"
 class="password-btn"
 style="
 margin-top:12px;
@@ -955,6 +955,8 @@ alert(
 loadSellerOrders();
 
 }
+
+/* REQUEST PAYOUT */
 
 async function requestAppealPayout(orderId){
 
