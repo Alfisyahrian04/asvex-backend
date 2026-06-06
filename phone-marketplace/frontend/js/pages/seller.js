@@ -956,6 +956,72 @@ loadSellerOrders();
 
 }
 
+async function requestAppealPayout(orderId){
+
+const bankName =
+document.getElementById(
+`bank-${orderId}`
+).value;
+
+const accountName =
+document.getElementById(
+`name-${orderId}`
+).value;
+
+const accountNumber =
+document.getElementById(
+`number-${orderId}`
+).value;
+
+if(
+!bankName ||
+!accountName ||
+!accountNumber
+){
+alert('Lengkapi data rekening');
+return;
+}
+
+try{
+
+const response =
+await fetch(
+`${BASE_URL}/seller/appeal-payout/${orderId}`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+bankName,
+accountName,
+accountNumber
+})
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+alert(data.message || 'Gagal mengajukan pencairan');
+return;
+}
+
+alert('Pengajuan pencairan dikirim');
+
+loadSellerOrders();
+
+}catch(error){
+
+console.log(error);
+
+alert('Server error');
+
+}
+
+}
 
 /* TOGGLE DETAIL */
 
