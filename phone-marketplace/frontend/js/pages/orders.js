@@ -1331,6 +1331,48 @@ window.location.href =
 `payment.html?id=${orderId}`;
 
 }
+
+async function cancelOrder(
+orderId
+){
+
+if(
+!confirm(
+'Batalkan pesanan ini?'
+)
+){
+return;
+}
+
+try{
+
+await fetch(
+`${ORDERS_BASE_URL}/orders/${orderId}/cancel`,
+{
+method:'PUT',
+headers:{
+Authorization:
+`Bearer ${localStorage.getItem('token')}`
+}
+}
+);
+
+alert(
+'Pesanan dibatalkan'
+);
+
+loadOrders();
+
+}catch(error){
+
+alert(
+'Gagal membatalkan pesanan'
+);
+
+}
+
+}
+
 loadOrders();
 
 window.openOrderDetail = function(orderId){
