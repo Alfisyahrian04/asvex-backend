@@ -413,7 +413,21 @@ type="file"
 accept="image/*"
 id="payout-proof-${order._id}"
 style="display:none"
+onchange="
+document.getElementById(
+'proof-status-${order._id}'
+).innerHTML='✅ Bukti transfer dipilih';
+"
 />
+
+<div
+id="proof-status-${order._id}"
+style="
+margin-top:8px;
+font-weight:600;
+color:#16a34a;
+"
+></div>
 
 <button
 onclick="approvePayoutRequest('${order._id}')"
