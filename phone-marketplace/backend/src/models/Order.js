@@ -310,6 +310,11 @@ payoutAccountNumber:{
   type:String,
   default:''
 },
+
+payoutProof:{
+  type:String,
+  default:''
+},
   
 fundStatus:{
 type:String,
