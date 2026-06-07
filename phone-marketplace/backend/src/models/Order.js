@@ -350,6 +350,7 @@ enum:[
 'appealed',
 'appeal_accepted',
 'appeal_rejected',
+'payout_completed',
 'cancelled',
 ],
 default:'pending'
