@@ -291,6 +291,11 @@ payoutRequest:{
   default:false
 },
 
+payoutStatus:{
+  type:String,
+  default:''
+},
+
 payoutBankName:{
   type:String,
   default:''
