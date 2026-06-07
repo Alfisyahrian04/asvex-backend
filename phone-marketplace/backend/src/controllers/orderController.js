@@ -69,7 +69,8 @@ exports.createOrder = async (req, res) => {
         shippingCourier: shippingCourier || '',
         shippingCost: Number(shippingCost || 0),
         variant: variant || {},
-        status:'pending_payment',
+        variant: variant || {},
+        status:'waiting_shipping_quote',
         paymentStatus:'pending'
       });
 
