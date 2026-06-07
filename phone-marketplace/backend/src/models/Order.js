@@ -62,6 +62,21 @@ type:Number,
 default:0
 },
 
+shippingQuotes:{
+jne:{
+type:Number,
+default:0
+},
+jnt:{
+type:Number,
+default:0
+},
+sicepat:{
+type:Number,
+default:0
+}
+},
+
 variant:{
 color:{
 type:String,
