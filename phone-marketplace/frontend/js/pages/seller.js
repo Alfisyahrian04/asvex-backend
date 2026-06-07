@@ -526,7 +526,7 @@ ${
 order.payoutProof
 ? `
 <button
-onclick="window.open('${order.payoutProof}')"
+onclick="showPayoutProof('${order._id}')"
 class="password-btn"
 style="
 margin-top:12px;
@@ -1096,6 +1096,36 @@ el.classList.toggle(
 
 };
 
+function showPayoutProof(orderId){
+
+const order =
+sellerOrders.find(
+item => item._id === orderId
+);
+
+if(!order || !order.payoutProof){
+alert('Bukti transfer tidak ditemukan');
+return;
+}
+
+const win =
+window.open();
+
+win.document.write(`
+<html>
+<body style="margin:0">
+<img
+src="${order.payoutProof}"
+style="
+width:100%;
+height:auto;
+"
+>
+</body>
+</html>
+`);
+
+}
 
 /* LOAD STATS */
 
@@ -1166,6 +1196,7 @@ window.approveRefund = approveRefund;
 window.rejectRefund = rejectRefund;
 window.confirmReturnReceived = confirmReturnReceived;
 window.requestAppealPayout = requestAppealPayout;
+window.showPayoutProof = showPayoutProof;
 
 
 /* INIT */
