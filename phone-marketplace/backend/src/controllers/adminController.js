@@ -311,6 +311,8 @@ message:'Order tidak ditemukan'
 });
 }
 
+order.payoutProof =
+req.body.payoutProof || '';
 order.payoutStatus='paid';
 
 order.payoutPaidAt =
