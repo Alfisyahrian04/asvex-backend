@@ -1457,5 +1457,54 @@ if(success){
 }
 
 };
+
+async function submitShippingQuote(orderId){
+
+const jne =
+document.getElementById(
+`jne-${orderId}`
+).value;
+
+const jnt =
+document.getElementById(
+`jnt-${orderId}`
+).value;
+
+const sicepat =
+document.getElementById(
+`sicepat-${orderId}`
+).value;
+
+const response =
+await fetch(
+`${BASE_URL}/seller/shipping-quote/${orderId}`,
+{
+method:'PUT',
+headers:{
+'Content-Type':'application/json',
+Authorization:`Bearer ${token}`
+},
+body:JSON.stringify({
+jne,
+jnt,
+sicepat
+})
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok){
+alert(data.message);
+return;
+}
+
+alert('Ongkir berhasil dikirim');
+
+loadSellerOrders();
+
+}
+
 loadSellerOrders();
 loadSellerStats();
