@@ -360,6 +360,8 @@ enum:[
 'rejected',
 'processed',
 'shipped',
+'waiting_shipping_quote',
+'waiting_payment',
 'completed',
 'refund_rejected',
 'waiting_return',
