@@ -61,6 +61,13 @@ protect,
 updateOrderStatus
 );
 
+/* SELECT COURIER */
+
+router.put(
+'/:id/select-courier',
+protect,
+selectCourier
+);
 
 /* PAYMENT SUBMIT */
 
