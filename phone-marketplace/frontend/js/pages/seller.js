@@ -503,6 +503,47 @@ Ajukan Pencairan Dana
 
 }
 
+if(
+  order.fundStatus === 'payout_completed'
+){
+
+buttonHtml += `
+
+<div
+style="
+margin-top:14px;
+padding:14px;
+background:#ecfdf5;
+border-radius:14px;
+"
+>
+
+<p>
+✅ Dana sudah dicairkan
+</p>
+
+${
+order.payoutProof
+? `
+<button
+onclick="window.open('${order.payoutProof}')"
+class="password-btn"
+style="
+margin-top:12px;
+background:#2563eb;
+"
+>
+Lihat Bukti Transfer
+</button>
+`
+: ''
+}
+
+</div>
+
+`;
+
+}
 
 return `
 
