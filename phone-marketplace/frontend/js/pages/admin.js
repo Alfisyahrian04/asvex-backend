@@ -1291,14 +1291,53 @@ async function approvePayoutRequest(orderId){
 
 try{
 
+const input =
+document.getElementById(
+`payout-proof-${orderId}`
+);
+
+if(
+!input.files ||
+!input.files[0]
+){
+alert(
+'Upload bukti transfer wajib diisi'
+);
+return;
+}
+
+const payoutProof =
+await new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(
+input.files[0]
+);
+
+}
+);
+
 const response =
 await fetch(
 `${BASE_URL}/admin/approve-payout/${orderId}`,
 {
 method:'PUT',
 headers:{
+'Content-Type':'application/json',
 Authorization:`Bearer ${token}`
-}
+},
+body:JSON.stringify({
+payoutProof
+})
 }
 );
 
