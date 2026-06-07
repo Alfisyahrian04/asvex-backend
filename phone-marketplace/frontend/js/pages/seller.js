@@ -226,6 +226,67 @@ const canProcess =
 
 let buttonHtml = '';
 
+if(
+order.status === 'waiting_shipping_quote'
+){
+
+buttonHtml = `
+
+<div style="
+margin-top:14px;
+padding:14px;
+background:#f9fafb;
+border-radius:14px;
+">
+
+<input
+id="jne-${order._id}"
+placeholder="JNE REG"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+/>
+
+<input
+id="jnt-${order._id}"
+placeholder="J&T EZ"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+/>
+
+<input
+id="sicepat-${order._id}"
+placeholder="SiCepat REG"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+/>
+
+<button
+onclick="submitShippingQuote('${order._id}')"
+class="password-btn"
+style="
+margin-top:12px;
+height:48px;
+background:#16a34a;
+"
+>
+Kirim Ongkir
+</button>
+
+</div>
+
+`;
+
+}
+
 if(canProcess){
 
 buttonHtml = `
