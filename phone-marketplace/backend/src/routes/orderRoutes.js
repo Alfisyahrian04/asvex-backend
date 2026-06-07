@@ -16,7 +16,8 @@ completeOrder,
 cancelOrder,
 requestReturn,
 submitReturnShipment,
-submitDispute
+submitDispute,
+selectCourier
 } = require(
 '../controllers/orderController'
 );
