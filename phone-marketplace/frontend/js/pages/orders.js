@@ -1305,6 +1305,32 @@ document.body.appendChild(modal);
 
 };
 
+
+async function continuePayment(
+orderId
+){
+
+const courier =
+document.getElementById(
+`courier-${orderId}`
+).value;
+
+if(!courier){
+alert(
+'Pilih ekspedisi dulu'
+);
+return;
+}
+
+localStorage.setItem(
+'selectedCourier',
+courier
+);
+
+window.location.href =
+`payment.html?id=${orderId}`;
+
+}
 loadOrders();
 
 window.openOrderDetail = function(orderId){
