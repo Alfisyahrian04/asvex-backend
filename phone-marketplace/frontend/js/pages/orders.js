@@ -384,11 +384,64 @@ border:1px solid #e5e7eb;
 : ''
 }
 
-if(
+${
 order.status === 'waiting_payment'
-){
+? `
+<div class="payment-box">
 
-return `
+<h4>Pilih Ekspedisi</h4>
+
+<select
+id="courier-${order._id}"
+>
+
+<option value="">
+Pilih Ekspedisi
+</option>
+
+<option value="jne">
+JNE REG -
+Rp ${Number(order.shippingQuotes?.jne || 0).toLocaleString('id-ID')}
+</option>
+
+<option value="jnt">
+J&T EZ -
+Rp ${Number(order.shippingQuotes?.jnt || 0).toLocaleString('id-ID')}
+</option>
+
+<option value="sicepat">
+SiCepat REG -
+Rp ${Number(order.shippingQuotes?.sicepat || 0).toLocaleString('id-ID')}
+</option>
+
+</select>
+
+<button
+onclick="continuePayment('${order._id}')"
+class="payment-submit-btn"
+>
+Lanjutkan Pembayaran
+</button>
+
+<button
+onclick="cancelOrder('${order._id}')"
+style="
+margin-top:10px;
+width:100%;
+height:48px;
+background:#dc2626;
+color:white;
+border:none;
+border-radius:12px;
+"
+>
+Batalkan Pesanan
+</button>
+
+</div>
+`
+: ''
+}
 
 <div class="product-card">
 
