@@ -113,6 +113,9 @@ function getStatusLabel(status){
     case 'appealed':
   return 'Seller Mengajukan Banding';
 
+    case 'waiting_shipping_quote':
+return 'Proses Cek Ongkos kirim';
+
     default:
       return status;
   }
