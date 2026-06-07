@@ -21,6 +21,7 @@ rejectRefundRequest,
 confirmReturnPackageReceived,
 submitRefundAppeal,
 requestAppealPayout,
+submitShippingQuote,
 
 } = require(
 '../controllers/sellerController'
@@ -105,6 +106,12 @@ router.put(
 '/appeal-payout/:id',
 protect,
 requestAppealPayout
+);
+
+router.put(
+'/shipping-quote/:id',
+protect,
+submitShippingQuote
 );
 
 module.exports = router;
