@@ -561,3 +561,42 @@ message:error.message
 }
 
 };
+
+exports.submitShippingQuote =
+async(req,res)=>{
+
+try{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+order.shippingQuotes = {
+jne:Number(req.body.jne || 0),
+jnt:Number(req.body.jnt || 0),
+sicepat:Number(req.body.sicepat || 0)
+};
+
+order.status =
+'waiting_payment';
+
+await order.save();
+
+res.json(order);
+
+}catch(error){
+
+res.status(500).json({
+message:error.message
+});
+
+}
+
+};
