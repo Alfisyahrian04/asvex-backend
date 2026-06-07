@@ -384,6 +384,88 @@ border:1px solid #e5e7eb;
 : ''
 }
 
+if(
+order.status === 'waiting_payment'
+){
+
+return `
+
+<div class="product-card">
+
+<h3>
+${order.product?.name || 'Produk'}
+</h3>
+
+<p>
+Status:
+Menunggu Pembayaran
+</p>
+
+<p>
+Silakan pilih ekspedisi
+</p>
+
+<select
+id="courier-${order._id}"
+style="
+width:100%;
+height:45px;
+margin-top:10px;
+"
+>
+
+<option value="">
+Pilih Ekspedisi
+</option>
+
+<option value="jne">
+JNE REG -
+Rp ${Number(
+order.shippingQuotes?.jne || 0
+).toLocaleString('id-ID')}
+</option>
+
+<option value="jnt">
+J&T EZ -
+Rp ${Number(
+order.shippingQuotes?.jnt || 0
+).toLocaleString('id-ID')}
+</option>
+
+<option value="sicepat">
+SiCepat REG -
+Rp ${Number(
+order.shippingQuotes?.sicepat || 0
+).toLocaleString('id-ID')}
+</option>
+
+</select>
+
+<button
+onclick="continuePayment('${order._id}')"
+class="password-btn"
+style="margin-top:12px;"
+>
+Lanjutkan Pembayaran
+</button>
+
+<button
+onclick="cancelOrder('${order._id}')"
+class="password-btn"
+style="
+margin-top:10px;
+background:#dc2626;
+"
+>
+Batalkan Pesanan
+</button>
+
+</div>
+
+`;
+
+}
+
 ${
 order.status === 'pending_payment'
 ? `
