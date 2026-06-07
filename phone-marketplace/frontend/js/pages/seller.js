@@ -509,17 +509,37 @@ if(
 
 buttonHtml += `
 
-<div
-style="
-margin-top:14px;
+<div style="
+background:#e8f8ee;
 padding:14px;
-background:#ecfdf5;
-border-radius:14px;
-"
->
+border-radius:12px;
+margin-top:12px;
+">
 
 <p>
 ✅ Dana sudah dicairkan
+</p>
+
+<p>
+<b>Nominal:</b>
+Rp ${Math.floor(
+Number(order.totalPrice || 0) * 0.97
+).toLocaleString('id-ID')}
+</p>
+
+<p>
+<b>Nama Bank:</b>
+${order.payoutBankName || '-'}
+</p>
+
+<p>
+<b>Nama Rekening:</b>
+${order.payoutAccountName || '-'}
+</p>
+
+<p>
+<b>No Rekening:</b>
+${order.payoutAccountNumber || '-'}
 </p>
 
 ${
@@ -528,10 +548,7 @@ order.payoutProof
 <button
 onclick="showPayoutProof('${order._id}')"
 class="password-btn"
-style="
-margin-top:12px;
-background:#2563eb;
-"
+style="margin-top:12px;"
 >
 Lihat Bukti Transfer
 </button>
