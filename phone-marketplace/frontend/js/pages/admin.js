@@ -393,6 +393,28 @@ Number(order.totalPrice || 0) * 0.97
 ).toLocaleString('id-ID')}
 </p>
 
+<label
+for="payout-proof-${order._id}"
+style="
+display:block;
+margin-top:12px;
+padding:14px;
+border-radius:14px;
+border:2px dashed #16a34a;
+text-align:center;
+cursor:pointer;
+"
+>
+Upload Bukti Transfer
+</label>
+
+<input
+type="file"
+accept="image/*"
+id="payout-proof-${order._id}"
+style="display:none"
+/>
+
 <button
 onclick="approvePayoutRequest('${order._id}')"
 style="
@@ -406,7 +428,7 @@ font-weight:700;
 margin-top:12px;
 "
 >
-Cairkan Dana
+Upload Bukti Pencairan Dana
 </button>
 
 </div>
