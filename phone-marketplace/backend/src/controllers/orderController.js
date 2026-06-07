@@ -625,3 +625,56 @@ order.status =
 
   }
 };
+
+exports.selectCourier =
+async(req,res)=>{
+
+const order =
+await Order.findById(
+req.params.id
+);
+
+if(!order){
+return res.status(404).json({
+message:'Order tidak ditemukan'
+});
+}
+
+const courier =
+req.body.courier;
+
+let shippingCost = 0;
+
+if(courier === 'jne'){
+shippingCost =
+order.shippingQuotes.jne;
+}
+
+if(courier === 'jnt'){
+shippingCost =
+order.shippingQuotes.jnt;
+}
+
+if(courier === 'sicepat'){
+shippingCost =
+order.shippingQuotes.sicepat;
+}
+
+order.shippingCourier =
+courier;
+
+order.shippingCost =
+shippingCost;
+
+order.totalPrice =
+Number(order.totalPrice) +
+Number(shippingCost);
+
+order.status =
+'pending_payment';
+
+await order.save();
+
+res.json(order);
+
+};
