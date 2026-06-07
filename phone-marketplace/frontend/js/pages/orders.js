@@ -1293,57 +1293,55 @@ document.getElementById(
 ).value;
 
 if(!courier){
+
 alert(
 'Pilih ekspedisi dulu'
 );
+
 return;
-}
 
-localStorage.setItem(
-'selectedCourier',
-courier
-);
-
-window.location.href =
-`payment.html?id=${orderId}`;
-
-}
-
-async function cancelOrder(
-orderId
-){
-
-if(
-!confirm(
-'Batalkan pesanan ini?'
-)
-){
-return;
 }
 
 try{
 
+const response =
 await fetch(
-`${ORDERS_BASE_URL}/orders/${orderId}/cancel`,
+`${ORDERS_BASE_URL}/orders/${orderId}/select-courier`,
 {
 method:'PUT',
 headers:{
+'Content-Type':'application/json',
 Authorization:
 `Bearer ${localStorage.getItem('token')}`
-}
+},
+body:JSON.stringify({
+courier
+})
 }
 );
 
+const data =
+await response.json();
+
+if(!response.ok){
+
 alert(
-'Pesanan dibatalkan'
+data.message ||
+'Gagal memilih ekspedisi'
 );
+
+return;
+
+}
 
 loadOrders();
 
 }catch(error){
 
+console.log(error);
+
 alert(
-'Gagal membatalkan pesanan'
+'Server error'
 );
 
 }
