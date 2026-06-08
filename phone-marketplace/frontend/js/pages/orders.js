@@ -466,7 +466,7 @@ Pilih metode pembayaran
 
 <select
 id="admin-bank-${order._id}"
-onchange="handlePaymentMethodChange('${order._id}',bank')"
+onchange="handlePaymentMethodChange('${order._id}','bank')"
 >
 <option value="">Pilih Rekening Admin</option>
 <option>BCA - ALFI SYAHRIAN - 1234567890</option>
