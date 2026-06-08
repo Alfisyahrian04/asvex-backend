@@ -451,6 +451,16 @@ order.status === 'pending_payment'
 ? `
 <div class="payment-box">
 
+<p
+style="
+font-size:14px;
+font-weight:600;
+color:#374151;
+margin-bottom:16px;
+"
+>
+Pilih metode pembayaran
+</p>
 
 <h4 class="payment-title">Bank Transfer</h4>
 
@@ -502,12 +512,53 @@ Rp ${Number(order.shippingCost || 0).toLocaleString('id-ID')}
 </div>
 
 <div class="payment-total">
+
 <span>Total Bayar</span>
+
+<div
+style="
+display:flex;
+align-items:center;
+gap:10px;
+"
+>
+
 <b>
 Rp ${Number(
 order.totalPrice || 0
 ).toLocaleString('id-ID')}
 </b>
+
+<button
+type="button"
+onclick="navigator.clipboard.writeText('${order.totalPrice || 0}')"
+style="
+padding:6px 10px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+font-size:12px;
+"
+>
+Salin
+</button>
+
+</div>
+
+</div>
+
+<div
+id="payment-info-${order._id}"
+style="
+margin:16px 0 20px;
+padding:14px;
+background:#f8fafc;
+border-radius:12px;
+border:1px solid #e5e7eb;
+display:none;
+"
+>
 </div>
 
 </div>
@@ -797,13 +848,88 @@ document.getElementById(
 `admin-ewallet-${orderId}`
 );
 
+const info =
+document.getElementById(
+`payment-info-${orderId}`
+);
+
 if(type === 'bank'){
 
 if(bank.value){
-ewallet.value='';
-ewallet.disabled=true;
+
+ewallet.value = '';
+ewallet.disabled = true;
+
+const parts =
+bank.value.split(' - ');
+
+const bankName =
+parts[0] || '-';
+
+const accountName =
+parts[1] || '-';
+
+const accountNumber =
+parts[2] || '-';
+
+info.style.display = 'block';
+
+info.innerHTML = `
+<div style="
+font-weight:700;
+margin-bottom:10px;
+">
+Segera transfer ke
+</div>
+
+<div style="
+font-size:18px;
+font-weight:800;
+margin-bottom:10px;
+">
+${bankName}
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+">
+<span>${accountNumber}</span>
+
+<button
+type="button"
+onclick="navigator.clipboard.writeText('${accountNumber}')"
+style="
+padding:6px 12px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:#fff;
+"
+>
+Salin
+</button>
+
+</div>
+
+<div style="
+margin-top:8px;
+color:#6b7280;
+">
+${accountName}
+</div>
+`;
+
 }else{
-ewallet.disabled=false;
+
+ewallet.disabled = false;
+
+if(!ewallet.value){
+info.style.display = 'none';
+}
+
 }
 
 }
@@ -811,10 +937,80 @@ ewallet.disabled=false;
 if(type === 'ewallet'){
 
 if(ewallet.value){
-bank.value='';
-bank.disabled=true;
+
+bank.value = '';
+bank.disabled = true;
+
+const parts =
+ewallet.value.split(' - ');
+
+const walletName =
+parts[0] || '-';
+
+const walletNumber =
+parts[1] || '-';
+
+const walletOwner =
+parts[2] || '-';
+
+info.style.display = 'block';
+
+info.innerHTML = `
+<div style="
+font-weight:700;
+margin-bottom:10px;
+">
+Segera transfer ke
+</div>
+
+<div style="
+font-size:18px;
+font-weight:800;
+margin-bottom:10px;
+">
+${walletName}
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+">
+<span>${walletNumber}</span>
+
+<button
+type="button"
+onclick="navigator.clipboard.writeText('${walletNumber}')"
+style="
+padding:6px 12px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:#fff;
+"
+>
+Salin
+</button>
+
+</div>
+
+<div style="
+margin-top:8px;
+color:#6b7280;
+">
+${walletOwner}
+</div>
+`;
+
 }else{
-bank.disabled=false;
+
+bank.disabled = false;
+
+if(!bank.value){
+info.style.display = 'none';
+}
+
 }
 
 }
