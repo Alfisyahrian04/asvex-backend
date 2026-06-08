@@ -469,10 +469,10 @@ id="admin-bank-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','bank')"
 >
 <option value="">Pilih Rekening Admin</option>
-<option>BCA - ALFI SYAHRIAN - 1234567890</option>
-<option>Mandiri - ALFI SYAHRIAN - 9876543210</option>
-<option>BNI - ALFI SYAHRIAN - 4567891230</option>
-<option>BRI - ALFI SYAHRIAN - 3216549870</option>
+<option>BCA - 1234567890 - ALFI SYAHRIAN</option>
+<option>Mandiri - 9876543210 - ALFI SYAHRIAN</option>
+<option>BNI - 4567891230 - ALFI SYAHRIAN</option>
+<option>BRI - 3216549870 - ALFI SYAHRIAN</option>
 </select>
 
 <h4 class="payment-title">E-Wallet</h4>
@@ -482,10 +482,10 @@ id="admin-ewallet-${order._id}"
 onchange="handlePaymentMethodChange('${order._id}','ewallet')"
 >
 <option value="">Pilih E-Wallet Admin</option>
-<option>GoPay - 0818-1888-8856 Alfi Syahrian</option>
-<option>DANA - 0818-1888-8856 Alfi Syahrian</option>
-<option>OVO - 0818-1888-8856 - Alfi Syahrian</option>
-<option>ShopeePay - 0818-1888-8856 - Alfi Syahrian</option>
+<option>GoPay - 081818888856 - Alfi Syahrian</option>
+<option>DANA - 081818888856 - Alfi Syahrian</option>
+<option>OVO - 081818888856 - Alfi Syahrian</option>
+<option>ShopeePay - 081818888856 - Alfi Syahrian</option>
 </select>
 
 <h4 class="payment-title">
