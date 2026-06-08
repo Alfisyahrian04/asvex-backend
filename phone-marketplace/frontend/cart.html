@@ -69,25 +69,16 @@ id="receiver-phone"
 placeholder="No Telpon"
 />
 
-</div>
-
-<div class="checkout-bar">
-
-<p>Total</p>
-
-<h2 id="total-price">
-Rp 0
-</h2>
-
 <button
 class="checkout-btn"
 id="checkout-btn"
+style="
+margin-top:16px;
+width:100%;
+"
 >
-
 <i class="fa-solid fa-bag-shopping"></i>
-
-Cek Ongkos Kirim
-
+Proses Pesanan
 </button>
 
 </div>
@@ -511,7 +502,7 @@ receiverAddress
 cartStore.clearCart();
 
 alert(
-'Checkout berhasil'
+'Pesanan di proses, tunggu proses selesai dan segera lakukan pembayaran.'
 );
 
 window.location.href =
