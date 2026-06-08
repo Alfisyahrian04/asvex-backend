@@ -915,13 +915,10 @@ font-weight:700;
 }
 
 .checkout-bar{
-position:relative;
-left:auto;
-bottom:auto;
-transform:none;
-
-width:calc(100% - 32px);
 margin:16px;
+
+width:auto !important;
+max-width:none !important;
 
 background:#fff;
 padding:22px;
@@ -932,6 +929,7 @@ box-sizing:border-box;
 box-shadow:
 0 10px 35px rgba(0,0,0,.08);
 }
+
 .checkout-bar h2{
 
 font-size:2.4rem;
