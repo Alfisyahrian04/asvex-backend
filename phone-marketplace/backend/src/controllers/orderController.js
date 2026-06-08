@@ -64,6 +64,11 @@ exports.createOrder = async (req, res) => {
         buyer:req.user._id,
         seller:product.seller,
         product:product._id,
+
+        receiverName: receiverName || '',
+        receiverAddress: receiverAddress || '',
+        receiverPhone: receiverPhone || '',
+        
         quantity,
         totalPrice,
         shippingAddress: shippingAddress || '',
