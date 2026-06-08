@@ -438,23 +438,6 @@ border-radius:12px;
 Batalkan Pesanan
 </button>
 
-<button
-onclick="cancelOrder('${order._id}')"
-style="
-margin-top:10px;
-width:100%;
-height:52px;
-border:none;
-border-radius:14px;
-background:#dc2626;
-color:white;
-font-size:15px;
-font-weight:700;
-"
->
-Batalkan Pesanan
-</button>
-
 </div>
 `
 : ''
@@ -470,7 +453,7 @@ order.status === 'pending_payment'
 
 <select
 id="admin-bank-${order._id}"
-onchange="handlePaymentMethodChange('${order._id}','bank')"
+onchange="handlePaymentMethodChange('${order._id}',bank')"
 >
 <option value="">Pilih Rekening Admin</option>
 <option>BCA - ALFI SYAHRIAN - 1234567890</option>
@@ -570,6 +553,21 @@ margin-top:6px;
   class="payment-submit-btn"
 >
   Konfirmasi Pembayaran
+</button>
+
+<button
+onclick="cancelOrder('${order._id}')"
+style="
+margin-top:10px;
+width:100%;
+height:48px;
+background:#dc2626;
+color:white;
+border:none;
+border-radius:12px;
+"
+>
+Batalkan Pesanan
 </button>
 
 </div>
