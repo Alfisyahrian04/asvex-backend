@@ -918,15 +918,6 @@ font-weight:700;
 
 margin:16px;
 
-width:calc(100% - 32px);
-
-box-sizing:border-box;
-
-position:relative;
-left:auto;
-bottom:auto;
-transform:none;
-
 padding:22px;
 
 background:#fff;
@@ -1559,7 +1550,7 @@ color:#111827;
 background:#fff;
 padding:18px;
 border-radius:24px;
-margin-top:18px;
+margin:16px;
 box-shadow:0 4px 14px rgba(0,0,0,.06);
 }
 
