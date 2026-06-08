@@ -915,27 +915,20 @@ font-weight:700;
 }
 
 .checkout-bar{
+position:relative;
+left:auto;
+bottom:auto;
+transform:none;
 
-position:fixed;
-
-left:50%;
-bottom:120px;
-
-transform:
-translateX(-50%);
-
-width:calc(100% - 30px);
+width:calc(100% - 32px);
+margin:20px 16px 30px;
 
 background:white;
-
 padding:22px;
-
 border-radius:34px;
 
 box-shadow:
-0 10px 35px
-rgba(0,0,0,.08);
-
+0 10px 35px rgba(0,0,0,.08);
 }
 
 .checkout-bar h2{
@@ -1554,4 +1547,39 @@ color:#111827;
   pointer-events:none;
   cursor:not-allowed;
   opacity:.85;
+}
+
+.receiver-card{
+background:#fff;
+padding:18px;
+border-radius:24px;
+margin-top:18px;
+box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+
+.receiver-card h3{
+font-size:22px;
+font-weight:800;
+margin-bottom:16px;
+}
+
+.receiver-card label{
+display:block;
+font-weight:600;
+margin-top:12px;
+margin-bottom:6px;
+}
+
+.receiver-card input,
+.receiver-card textarea{
+width:100%;
+padding:14px;
+border:1px solid #e5e7eb;
+border-radius:14px;
+font-size:15px;
+}
+
+.receiver-card textarea{
+height:110px;
+resize:none;
 }
