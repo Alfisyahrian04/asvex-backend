@@ -531,7 +531,7 @@ order.totalPrice || 0
 
 <button
 type="button"
-onclick="navigator.clipboard.writeText('${accountNumber}')"
+onclick="navigator.clipboard.writeText('${order.totalPrice || 0}')"
 style="
 width:40px;
 height:40px;
@@ -547,7 +547,6 @@ justify-content:center;
 >
 ⧉
 </button>
-
 </div>
 
 </div>
