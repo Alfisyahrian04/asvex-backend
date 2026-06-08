@@ -211,8 +211,11 @@ Alasan ditolak: ${order.rejectReason}
     </div>
 
     <div class="order-price">
-      Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
-    </div>
+  Rp ${Number(
+    (order.totalPrice || 0) -
+    (order.shippingCost || 0)
+  ).toLocaleString('id-ID')}
+</div>
 
   </div>
 
