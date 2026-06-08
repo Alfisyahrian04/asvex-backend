@@ -915,18 +915,22 @@ font-weight:700;
 }
 
 .checkout-bar{
+position:relative;
+left:auto;
+bottom:auto;
+transform:none;
 
+width:calc(100% - 32px);
 margin:16px;
 
-padding:22px;
-
 background:#fff;
-
+padding:22px;
 border-radius:24px;
+
+box-sizing:border-box;
 
 box-shadow:
 0 10px 35px rgba(0,0,0,.08);
-
 }
 .checkout-bar h2{
 
@@ -1550,7 +1554,7 @@ color:#111827;
 background:#fff;
 padding:18px;
 border-radius:24px;
-margin:16px;
+margin-top:18px;
 box-shadow:0 4px 14px rgba(0,0,0,.06);
 }
 
