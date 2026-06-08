@@ -448,24 +448,6 @@ order.status === 'pending_payment'
 ? `
 <div class="payment-box">
 
-<h4 class="payment-title">Data Penerima</h4>
-
-<input
-id="receiver-name-${order._id}"
-type="text"
-placeholder="Nama Penerima"
-/>
-
-<textarea
-id="receiver-address-${order._id}"
-placeholder="Detail Alamat Lengkap"
-></textarea>
-
-<input
-id="receiver-phone-${order._id}"
-type="text"
-placeholder="No Telpon Penerima"
-/>
 
 <h4 class="payment-title">Bank Transfer</h4>
 
@@ -492,6 +474,38 @@ onchange="handlePaymentMethodChange('${order._id}','ewallet')"
 <option>OVO - 0818-1888-8856 - Alfi Syahrian</option>
 <option>ShopeePay - 0818-1888-8856 - Alfi Syahrian</option>
 </select>
+
+<h4 class="payment-title">
+Rincian Pembayaran
+</h4>
+
+<div class="payment-summary">
+
+<div>
+<span>Harga Produk</span>
+<b>
+Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
+</b>
+</div>
+
+<div>
+<span>Ongkos Kirim</span>
+<b>
+Rp ${Number(order.shippingCost || 0).toLocaleString('id-ID')}
+</b>
+</div>
+
+<div class="payment-total">
+<span>Total Bayar</span>
+<b>
+Rp ${Number(
+(order.totalPrice || 0) +
+(order.shippingCost || 0)
+).toLocaleString('id-ID')}
+</b>
+</div>
+
+</div>
 
 <input
 id="sender-bank-${order._id}"
