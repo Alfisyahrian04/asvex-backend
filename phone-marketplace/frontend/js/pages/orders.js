@@ -484,7 +484,10 @@ Rincian Pembayaran
 <div>
 <span>Harga Produk</span>
 <b>
-Rp ${Number(order.totalPrice || 0).toLocaleString('id-ID')}
+Rp ${Number(
+(order.totalPrice || 0) -
+(order.shippingCost || 0)
+).toLocaleString('id-ID')}
 </b>
 </div>
 
@@ -499,8 +502,7 @@ Rp ${Number(order.shippingCost || 0).toLocaleString('id-ID')}
 <span>Total Bayar</span>
 <b>
 Rp ${Number(
-(order.totalPrice || 0) +
-(order.shippingCost || 0)
+order.totalPrice || 0
 ).toLocaleString('id-ID')}
 </b>
 </div>
