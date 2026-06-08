@@ -576,7 +576,7 @@ display:none;
 <input
 id="sender-bank-${order._id}"
 type="text"
-placeholder="Bank Pengirim"
+placeholder="Bank / E-Wallet Pengirim"
 />
 
 <input
@@ -588,7 +588,7 @@ placeholder="Atas Nama Pengirim"
 <input
 id="sender-account-${order._id}"
 type="text"
-placeholder="Nomor Rekening Pengirim"
+placeholder="Nomor Rekening / E-Wallet Pengirim"
 />
 
 <label
