@@ -6,6 +6,9 @@ exports.createOrder = async (req, res) => {
     const {
       productId,
       quantity,
+      receiverName,
+      receiverAddress,
+      receiverPhone,
       shippingAddress,
       paymentMethod,
       paymentProof,
