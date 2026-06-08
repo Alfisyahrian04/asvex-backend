@@ -167,13 +167,24 @@ Keranjang kosong
 </div>
 `;
 
-totalPrice.innerText =
-'Rp 0';
+document.querySelector(
+'.receiver-card'
+)?.style.setProperty(
+'display',
+'none'
+);
+
+document.querySelector(
+'.checkout-bar'
+)?.style.setProperty(
+'display',
+'none'
+);
 
 return;
 
 }
-
+  
 cartContainer.innerHTML =
 cart.map(item=>`
 
