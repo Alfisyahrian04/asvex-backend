@@ -184,6 +184,20 @@ document.querySelector(
 return;
 
 }
+
+document.querySelector(
+'.receiver-card'
+)?.style.setProperty(
+'display',
+'block'
+);
+
+document.querySelector(
+'.checkout-bar'
+)?.style.setProperty(
+'display',
+'block'
+);
   
 cartContainer.innerHTML =
 cart.map(item=>`
