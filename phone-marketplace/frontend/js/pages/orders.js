@@ -438,6 +438,23 @@ border-radius:12px;
 Batalkan Pesanan
 </button>
 
+<button
+onclick="cancelOrder('${order._id}')"
+style="
+margin-top:10px;
+width:100%;
+height:52px;
+border:none;
+border-radius:14px;
+background:#dc2626;
+color:white;
+font-size:15px;
+font-weight:700;
+"
+>
+Batalkan Pesanan
+</button>
+
 </div>
 `
 : ''
