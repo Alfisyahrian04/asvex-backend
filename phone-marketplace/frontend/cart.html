@@ -175,31 +175,6 @@ function renderCart(){
 const cart =
 cartStore.getCart();
 
-const receiverName =
-document.getElementById(
-'receiver-name'
-).value;
-
-const receiverAddress =
-document.getElementById(
-'receiver-address'
-).value;
-
-const receiverPhone =
-document.getElementById(
-'receiver-phone'
-).value;
-
-if(
-!receiverName ||
-!receiverAddress ||
-!receiverPhone
-){
-alert(
-'Lengkapi data penerima'
-);
-return;
-}
 
 if(!cart.length){
 
@@ -446,6 +421,32 @@ try{
 
 const cart =
 cartStore.getCart();
+
+const receiverName =
+document.getElementById(
+'receiver-name'
+).value;
+
+const receiverAddress =
+document.getElementById(
+'receiver-address'
+).value;
+
+const receiverPhone =
+document.getElementById(
+'receiver-phone'
+).value;
+
+if(
+!receiverName ||
+!receiverAddress ||
+!receiverPhone
+){
+alert(
+'Lengkapi data penerima'
+);
+return;
+}
 
 if(!cart.length){
 alert('Keranjang kosong');
