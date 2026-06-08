@@ -531,15 +531,22 @@ order.totalPrice || 0
 
 <button
 type="button"
-onclick="navigator.clipboard.writeText('${order.totalPrice || 0}')"
+onclick="
+navigator.clipboard.writeText('${order.totalPrice || 0}');
+this.innerHTML='✓';
+setTimeout(()=>{
+this.innerHTML='⧉';
+},1500);
+"
 style="
-width:40px;
-height:40px;
+width:36px;
+height:36px;
 border:none;
 border-radius:10px;
-background:#2563eb;
-color:white;
-font-size:18px;
+background:#fff;
+box-shadow:0 2px 8px rgba(0,0,0,.12);
+cursor:pointer;
+font-size:16px;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -903,16 +910,29 @@ gap:10px;
 
 <button
 type="button"
-onclick="navigator.clipboard.writeText('${accountNumber}')"
+onclick="
+navigator.clipboard.writeText('${accountNumber}');
+this.innerHTML='✓';
+setTimeout(()=>{
+this.innerHTML='⧉';
+},1500);
+"
 style="
-padding:6px 12px;
+width:36px;
+height:36px;
 border:none;
-border-radius:8px;
-background:#2563eb;
-color:#fff;
+border-radius:10px;
+background:#fff;
+box-shadow:0 2px 8px rgba(0,0,0,.12);
+cursor:pointer;
+font-size:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
 "
 >
-Salin
+⧉
 </button>
 
 </div>
@@ -984,16 +1004,29 @@ gap:10px;
 
 <button
 type="button"
-onclick="navigator.clipboard.writeText('${walletNumber}')"
+onclick="
+navigator.clipboard.writeText('${walletNumber}');
+this.innerHTML='✓';
+setTimeout(()=>{
+this.innerHTML='⧉';
+},1500);
+"
 style="
-padding:6px 12px;
+width:36px;
+height:36px;
 border:none;
-border-radius:8px;
-background:#2563eb;
-color:#fff;
+border-radius:10px;
+background:#fff;
+box-shadow:0 2px 8px rgba(0,0,0,.12);
+cursor:pointer;
+font-size:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-shrink:0;
 "
 >
-Salin
+⧉
 </button>
 
 </div>
