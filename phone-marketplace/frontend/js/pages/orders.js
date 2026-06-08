@@ -519,6 +519,12 @@ type="text"
 placeholder="Atas Nama Pengirim"
 />
 
+<input
+id="sender-account-${order._id}"
+type="text"
+placeholder="Nomor Rekening Pengirim"
+/>
+
 <label
 for="payment-proof-${order._id}"
 class="payment-upload-label"
@@ -857,7 +863,7 @@ const receiverName =
 document.getElementById(
 `receiver-name-${orderId}`
 ).value;
-
+  
 const receiverAddress =
 document.getElementById(
 `receiver-address-${orderId}`
@@ -886,6 +892,11 @@ document.getElementById(
 const senderName =
 document.getElementById(
 `sender-name-${orderId}`
+).value;
+
+const senderAccount =
+document.getElementById(
+`sender-account-${orderId}`
 ).value;
 
 const proofInput =
