@@ -24,7 +24,6 @@ Authorization:
 },
 
 body:JSON.stringify({
-body:JSON.stringify({
 
 productId:
 data.productId,
