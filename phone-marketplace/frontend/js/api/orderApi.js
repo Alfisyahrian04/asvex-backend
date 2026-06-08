@@ -24,12 +24,22 @@ Authorization:
 },
 
 body:JSON.stringify({
+body:JSON.stringify({
 
 productId:
 data.productId,
 
 quantity:
 data.quantity || 1,
+
+receiverName:
+data.receiverName || '',
+
+receiverAddress:
+data.receiverAddress || '',
+
+receiverPhone:
+data.receiverPhone || '',
 
 shippingAddress:
 data.shippingAddress || '',
@@ -53,7 +63,6 @@ variant:
 data.variant || {}
 
 })
-
 }
 );
 
