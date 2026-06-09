@@ -204,14 +204,20 @@ async(req,res)=>{
       });
     }
 
-    order.receiverName =
-      req.body.receiverName || '';
+    if(req.body.receiverName){
+  order.receiverName =
+  req.body.receiverName;
+}
 
-    order.receiverAddress =
-      req.body.receiverAddress || '';
+if(req.body.receiverAddress){
+  order.receiverAddress =
+  req.body.receiverAddress;
+}
 
-    order.receiverPhone =
-      req.body.receiverPhone || '';
+if(req.body.receiverPhone){
+  order.receiverPhone =
+  req.body.receiverPhone;
+}
 
     order.senderBank =
       req.body.senderBank || '';
