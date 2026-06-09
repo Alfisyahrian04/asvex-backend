@@ -198,6 +198,11 @@ await response.json();
 
 sellerOrders = orders;
 
+console.log(
+'PRODUCT DATA',
+orders[0]?.product
+);
+
 const pendingOrders =
 document.getElementById(
 'pending-orders'
