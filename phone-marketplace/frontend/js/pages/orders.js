@@ -1111,20 +1111,6 @@ if(button){
   button.style.opacity = '0.7';
 }
 
-const receiverName =
-document.getElementById(
-`receiver-name-${orderId}`
-)?.value || '';
-
-const receiverAddress =
-document.getElementById(
-`receiver-address-${orderId}`
-)?.value || '';
-
-const receiverPhone =
-document.getElementById(
-`receiver-phone-${orderId}`
-)?.value || '';
 
 const adminBank =
 document.getElementById(
@@ -1188,9 +1174,6 @@ proofInput.files[0]
 await submitPayment(
 orderId,
 {
-receiverName,
-receiverAddress,
-receiverPhone,
 senderBank,
 senderName,
 senderAccount,
