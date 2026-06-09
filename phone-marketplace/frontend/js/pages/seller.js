@@ -674,8 +674,7 @@ class="order-detail-box"
 <p>No Telp: ${order.receiverPhone || '-'}</p>
 <p>Alamat: ${order.receiverAddress || '-'}</p>
 <p>Metode Transfer: ${order.adminPaymentMethod || '-'}</p>
-<p>Bank Pengirim: ${order.senderBank || '-'}</p>
-<p>Atas Nama: ${order.senderName || '-'}</p>
+
 
 ${buttonHtml}
 
