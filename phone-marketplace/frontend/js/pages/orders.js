@@ -1114,17 +1114,17 @@ if(button){
 const receiverName =
 document.getElementById(
 `receiver-name-${orderId}`
-).value;
-  
+)?.value || '';
+
 const receiverAddress =
 document.getElementById(
 `receiver-address-${orderId}`
-).value;
+)?.value || '';
 
 const receiverPhone =
 document.getElementById(
 `receiver-phone-${orderId}`
-).value;
+)?.value || '';
 
 const adminBank =
 document.getElementById(
