@@ -171,7 +171,7 @@ async(req,res)=>{
       await Order.find({
         seller:req.user._id
       })
-      .populate('product', 'name price images')
+      .populate('product','name price images category weight')
       .populate('buyer','username')
       .sort({createdAt:-1});
 
