@@ -1602,3 +1602,16 @@ border-top:1px solid #e5e7eb;
 font-size:18px;
 font-weight:700;
 }
+
+
+@media (min-width: 992px){
+  .product-grid{
+    grid-template-columns:repeat(4,1fr) !important;
+  }
+}
+
+@media (min-width: 1200px){
+  .product-grid{
+    grid-template-columns:repeat(6,1fr) !important;
+  }
+}
