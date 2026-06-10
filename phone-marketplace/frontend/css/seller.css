@@ -1039,3 +1039,15 @@ border-radius:999px;
 font-weight:600;
 display:inline-block;
 }
+
+@media (min-width: 992px){
+  .product-grid{
+    grid-template-columns:repeat(4,1fr) !important;
+  }
+}
+
+@media (min-width: 1200px){
+  .product-grid{
+    grid-template-columns:repeat(6,1fr) !important;
+  }
+}
